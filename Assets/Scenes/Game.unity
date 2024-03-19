@@ -168,7 +168,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825c2a798268d5047b5b08f9389ff3e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TankPrefab: {fileID: 2571957331697108734, guid: 3bae44273630bc94fb6b126d49c2ec17,
+  m_TankData: {fileID: 11400000, guid: 0677f758e72acb045bf21101182b6f3d, type: 2}
+  m_TankViewPrefab: {fileID: 17056773906127175, guid: 3bae44273630bc94fb6b126d49c2ec17,
     type: 3}
 --- !u!850595691 &934916653
 LightingSettings:
