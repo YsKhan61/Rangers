@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_TankViewPrefab: {fileID: 17056773906127175, guid: 3bae44273630bc94fb6b126d49c2ec17,
     type: 3}
+  m_MoveSpeed: 20
+  m_RotateSpeed: 30

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8606235021615285385}
   - component: {fileID: 17056773906127175}
+  - component: {fileID: 4761740404829176107}
+  - component: {fileID: 4410209405603289284}
   m_Layer: 0
   m_Name: Green Tank
   m_TagString: Untagged
@@ -45,6 +47,55 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28b22bdc0180f3648a87ee18d0c95ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Rigidbody: {fileID: 4761740404829176107}
+--- !u!54 &4761740404829176107
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2571957331697108734}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 80
+  m_CollisionDetection: 0
+--- !u!65 &4410209405603289284
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2571957331697108734}
+  m_Material: {fileID: 13400000, guid: 7fc62ec1a15dd4b488544ea39cad0ffd, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5762529, y: 1.9491222, z: 2.1270828}
+  m_Center: {x: 0.00847432, y: 0.9152254, z: 0.012711525}
 --- !u!1001 &1654959186902509959
 PrefabInstance:
   m_ObjectHideFlags: 0

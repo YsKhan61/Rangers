@@ -1,6 +1,8 @@
 public class TankModel
 {
     private TankDataSO m_TankData;
+    public TankDataSO TankData => m_TankData;
+
     private TankController m_TankController;
 
     public TankModel(TankDataSO m_TankData, TankController controller)
