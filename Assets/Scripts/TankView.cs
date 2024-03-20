@@ -4,6 +4,7 @@ public class TankView : MonoBehaviour
 {
     [SerializeField]
     Rigidbody m_Rigidbody;
+    public Rigidbody RigidBody => m_Rigidbody;
 
     private TankController m_TankController;
 
@@ -12,9 +13,8 @@ public class TankView : MonoBehaviour
         m_TankController = controller;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        m_Rigidbody.angularVelocity += m_TankController.AngularVelocity * Time.fixedDeltaTime;
-        m_Rigidbody.velocity += m_TankController.MoveVelocity * Time.fixedDeltaTime;
+        m_TankController.Move();
     }
 }
