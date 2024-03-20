@@ -15,6 +15,7 @@ MonoBehaviour:
   m_ID: 2
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 864fa32bc455b864cb075d87e9cfafcb,
     type: 3}
-  m_MoveSpeed: 20
-  m_RotateSpeed: 40
+  m_MoveSpeed: 17
+  m_RotateSpeed: 30
   m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}
+  m_FireRate: 4

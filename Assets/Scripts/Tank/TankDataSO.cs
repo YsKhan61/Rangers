@@ -18,4 +18,7 @@ public class TankDataSO : ScriptableObject
 
     [SerializeField] private TankProjectileDataSO m_projectileData;
     public TankProjectileDataSO ProjectileData => m_projectileData;
+
+    [SerializeField] private float m_FireRate;
+    public float FireRate => m_FireRate;
 }

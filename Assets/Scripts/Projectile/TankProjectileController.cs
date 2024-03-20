@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TankProjectileController
@@ -9,15 +7,15 @@ public class TankProjectileController
 
     public Transform Transform => m_ProjectileView.transform;
 
-    public void Update()
-    {
-
-    }
-
     public TankProjectileController(TankProjectileDataSO projectileData)
     {
         m_ProjectileModel = new TankProjectileModel(projectileData, this);
         m_ProjectileView = Object.Instantiate(projectileData.ProjectileViewPrefab);
         m_ProjectileView.SetController(this);
+    }
+
+    public void AddImpulseForce()
+    {
+        m_ProjectileView.Rigidbody.AddForce(m_ProjectileView.transform.forward * m_ProjectileModel.Data.InitialSpeed, ForceMode.Impulse);
     }
 }

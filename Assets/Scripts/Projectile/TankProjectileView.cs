@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class TankProjectileView : MonoBehaviour
 {
+    [SerializeField] Rigidbody m_Rigidbody;
+    public Rigidbody Rigidbody => m_Rigidbody;
+
     TankProjectileController m_Controller;
 
-    private void Update()
-    {
-        m_Controller.Update();
-    }
 
     public void SetController(TankProjectileController controller)
     {

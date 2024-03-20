@@ -12,8 +12,6 @@ public class TankController
 
     public Transform Transform => m_TankView.transform;
 
-    
-
     // cache
     private InputAction m_MoveInputAction;
     private InputAction m_RotateInputAction;
@@ -63,12 +61,12 @@ public class TankController
 
     private void OnFireInputActionStarted(InputAction.CallbackContext context)
     {
-        m_TankModel.ToggleFiring(true);
+        m_TankModel.IsFiring = true;
     }
 
     private void OnFireInputActionCanceled(InputAction.CallbackContext context)
     {
-        m_TankModel.ToggleFiring(false);
+        m_TankModel.IsFiring = false;
     }
 
     private void Move()
@@ -85,8 +83,14 @@ public class TankController
         if (!m_TankModel.IsFiring)
             return;
 
+        if (Time.time - m_TankModel.LastFireTime < m_TankModel.TankData.FireRate)
+            return;
+
         TankProjectileController projectileController = m_ProjectilePool.GetProjectile();
         projectileController.Transform.position = m_TankView.FirePoint.position;
         projectileController.Transform.rotation = m_TankView.FirePoint.rotation;
+        projectileController.AddImpulseForce();
+
+        m_TankModel.LastFireTime = Time.time;
     }
 }
