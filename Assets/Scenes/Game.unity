@@ -237,7 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 825c2a798268d5047b5b08f9389ff3e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TankData: {fileID: 11400000, guid: 0677f758e72acb045bf21101182b6f3d, type: 2}
+  m_TankData: {fileID: 11400000, guid: 0ca898b414ba0674ba6cc146c15d806f, type: 2}
   m_PVC1: {fileID: 1894154697}
 --- !u!850595691 &934916653
 LightingSettings:

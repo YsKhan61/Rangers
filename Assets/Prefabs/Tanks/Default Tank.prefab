@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4761740404829176107}
   - component: {fileID: 4410209405603289284}
   m_Layer: 0
-  m_Name: Green Tank
+  m_Name: Default Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
