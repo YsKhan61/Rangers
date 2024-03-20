@@ -5,6 +5,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
 public class TankDataSO : ScriptableObject
 {
+    [SerializeField]
+    private int m_ID;
+    public int ID => m_ID;
+
     [SerializeField] private TankView m_TankViewPrefab;
     public TankView TankViewPrefab => m_TankViewPrefab;
 

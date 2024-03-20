@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46f03ec6b60c01444ad1ba4942255c58, type: 3}
   m_Name: RedTankData
   m_EditorClassIdentifier: 
+  m_ID: 1
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 391f4fd004d1b9a49be031b9f94cd476,
     type: 3}
   m_MoveSpeed: 15
