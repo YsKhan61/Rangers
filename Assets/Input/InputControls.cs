@@ -44,6 +44,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""91d32747-cb4d-4177-b20e-ec38f9916d9d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""action"": ""RotateAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da78f13f-d6cb-41b3-be30-e6353f4ccb9e"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -122,6 +142,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveAction = m_Player.FindAction("MoveAction", throwIfNotFound: true);
         m_Player_RotateAction = m_Player.FindAction("RotateAction", throwIfNotFound: true);
+        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -185,12 +206,14 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_MoveAction;
     private readonly InputAction m_Player_RotateAction;
+    private readonly InputAction m_Player_Fire;
     public struct PlayerActions
     {
         private @InputControls m_Wrapper;
         public PlayerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveAction => m_Wrapper.m_Player_MoveAction;
         public InputAction @RotateAction => m_Wrapper.m_Player_RotateAction;
+        public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -206,6 +229,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @RotateAction.started += instance.OnRotateAction;
             @RotateAction.performed += instance.OnRotateAction;
             @RotateAction.canceled += instance.OnRotateAction;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -216,6 +242,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @RotateAction.started -= instance.OnRotateAction;
             @RotateAction.performed -= instance.OnRotateAction;
             @RotateAction.canceled -= instance.OnRotateAction;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -237,5 +266,6 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     {
         void OnMoveAction(InputAction.CallbackContext context);
         void OnRotateAction(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
     }
 }

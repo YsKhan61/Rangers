@@ -17,3 +17,4 @@ MonoBehaviour:
     type: 3}
   m_MoveSpeed: 20
   m_RotateSpeed: 45
+  m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}

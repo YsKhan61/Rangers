@@ -6,10 +6,13 @@ public class TankController
     // dependencies
     private TankModel m_TankModel;
     private TankView m_TankView;
-    private InputControls m_inputControls;
+    private TankProjectilePool m_ProjectilePool;
+    private InputControls m_InputControls;
     private Rigidbody m_Rigidbody;
 
     public Transform Transform => m_TankView.transform;
+
+    
 
     // cache
     private InputAction m_MoveInputAction;
@@ -26,6 +29,8 @@ public class TankController
         m_TankView = Object.Instantiate(tankData.TankViewPrefab);
         m_TankView.SetController(this);
 
+        m_ProjectilePool = new TankProjectilePool(tankData.ProjectileData);
+
         m_Rigidbody = m_TankView.RigidBody;
 
         ConfigureInputs();
@@ -33,25 +38,55 @@ public class TankController
 
     ~TankController()
     {
-        m_inputControls.Player.Disable();
+        m_InputControls.Player.Fire.started -= OnFireInputActionStarted;
+        m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
+        m_InputControls.Player.Disable();
+    }
+
+    public void Update()
+    {
+        Move();
+        Fire();
     }
 
     private void ConfigureInputs()
     {
-        m_inputControls = new InputControls();
-        m_inputControls.Enable();
-        m_inputControls.Player.Enable();
+        m_InputControls = new InputControls();
+        m_InputControls.Enable();
+        m_InputControls.Player.Enable();
 
-        m_MoveInputAction = m_inputControls.Player.MoveAction;
-        m_RotateInputAction = m_inputControls.Player.RotateAction;
+        m_MoveInputAction = m_InputControls.Player.MoveAction;
+        m_RotateInputAction = m_InputControls.Player.RotateAction;
+        m_InputControls.Player.Fire.started += OnFireInputActionStarted;
+        m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
     }
 
-    public void Move()
+    private void OnFireInputActionStarted(InputAction.CallbackContext context)
+    {
+        m_TankModel.ToggleFiring(true);
+    }
+
+    private void OnFireInputActionCanceled(InputAction.CallbackContext context)
+    {
+        m_TankModel.ToggleFiring(false);
+    }
+
+    private void Move()
     {
         m_MoveInputValue = m_MoveInputAction.ReadValue<float>();
         m_DeltaPosition = m_Rigidbody.position + m_TankView.transform.forward * m_TankModel.TankData.MoveSpeed * m_MoveInputValue * Time.deltaTime;
         m_RotateAngle = m_TankModel.TankData.RotateSpeed * m_RotateInputAction.ReadValue<float>() * Time.deltaTime * (m_MoveInputValue > 0 ? 1 : (m_MoveInputValue < 0 ? - 1 : 0));
         m_DeltaRotation = m_Rigidbody.rotation * Quaternion.Euler(0, m_RotateAngle, 0);
         m_Rigidbody.Move(m_DeltaPosition, m_DeltaRotation);
+    }
+
+    private void Fire()
+    {
+        if (!m_TankModel.IsFiring)
+            return;
+
+        TankProjectileController projectileController = m_ProjectilePool.GetProjectile();
+        projectileController.Transform.position = m_TankView.FirePoint.position;
+        projectileController.Transform.rotation = m_TankView.FirePoint.rotation;
     }
 }

@@ -6,6 +6,10 @@ public class TankView : MonoBehaviour
     Rigidbody m_Rigidbody;
     public Rigidbody RigidBody => m_Rigidbody;
 
+    [SerializeField]
+    Transform m_FirePoint;
+    public Transform FirePoint => m_FirePoint;
+
     private TankController m_TankController;
 
     public void SetController(TankController controller)
@@ -15,6 +19,6 @@ public class TankView : MonoBehaviour
 
     private void Update()
     {
-        m_TankController.Move();
+        m_TankController.Update();
     }
 }
