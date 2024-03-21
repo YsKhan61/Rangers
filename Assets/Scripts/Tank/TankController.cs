@@ -6,7 +6,7 @@ public class TankController
     // dependencies
     private TankModel m_TankModel;
     private TankView m_TankView;
-    private TankFiring m_TankFiring;
+    private TankChargedFiring m_TankFiring;
 
     private InputControls m_InputControls;
     public InputControls InputControls => m_InputControls;
@@ -14,7 +14,7 @@ public class TankController
     private Rigidbody m_Rigidbody;
     public Rigidbody Rigidbody => m_Rigidbody;
 
-    public Transform Transform => m_TankView.transform;
+    public Transform CameraTarget => m_TankView.CameraTarget;
 
     // cache
     private InputAction m_MoveInputAction;
@@ -31,7 +31,7 @@ public class TankController
         m_TankModel = new TankModel(tankData, this);
         m_TankView = Object.Instantiate(tankData.TankViewPrefab);
         m_TankView.SetController(this);
-        m_TankFiring = new TankFiring(m_TankModel, m_InputControls, m_TankView);
+        m_TankFiring = new TankChargedFiring(m_TankModel, m_InputControls, m_TankView);
         m_Rigidbody = m_TankView.RigidBody;
     }
 

@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TankFiring
+/// <summary>
+/// Firing happens by charging the projectile and releasing it.
+/// </summary>
+public class TankChargedFiring
 {
     // dependencies
     TankModel m_Model;
@@ -9,7 +12,7 @@ public class TankFiring
     TankView m_View;
     TankProjectilePool m_ProjectilePool;
 
-    public TankFiring(TankModel model, InputControls inputControls, TankView view)
+    public TankChargedFiring(TankModel model, InputControls inputControls, TankView view)
     {
         m_Model = model;
         m_InputControls = inputControls;
@@ -25,7 +28,7 @@ public class TankFiring
         UpdateChargeAmount();
     }
 
-    ~TankFiring()
+    ~TankChargedFiring()
     {
         m_InputControls.Player.Fire.started -= OnFireInputActionStarted;
         m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
@@ -40,7 +43,7 @@ public class TankFiring
     {
         m_Model.IsFiring = false;
         SpawnProjectile();
-        m_Model.ChargeAmount = 0f;
+        ResetChargedAmount();
     }
 
     private void UpdateChargeAmount()
@@ -50,6 +53,13 @@ public class TankFiring
 
         m_Model.ChargeAmount += Time.deltaTime / m_Model.TankData.ChargeTime;
         m_Model.ChargeAmount = Mathf.Clamp01(m_Model.ChargeAmount);
+        m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
+    }
+
+    private void ResetChargedAmount()
+    {
+        m_Model.ChargeAmount = 0f;
+        m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
     }
 
     private void SpawnProjectile()

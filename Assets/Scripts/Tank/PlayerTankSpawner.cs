@@ -18,7 +18,7 @@ public class PlayerTankSpawner : MonoBehaviour
             return;
 
         TankController controller = new TankController(tankDataToSpawn);
-        m_PVC1.Follow = controller.Transform;
+        m_PVC1.Follow = controller.CameraTarget;
     }
 
     bool TryGetTankById(in int id, out TankDataSO tankData)

@@ -8,6 +8,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1513099028726498197, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_Value
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1654959186904412641, guid: 3bae44273630bc94fb6b126d49c2ec17,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -28,10 +33,40 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ff21ff0ea9b18924bb1fdfbb0e58f5cb, type: 2}
+    - target: {fileID: 1670546383762186327, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.9960785
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670546383762186327, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.5411765
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670546383762186327, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.09411766
+      objectReference: {fileID: 0}
+    - target: {fileID: 1670546383762186327, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: 036ca1cd42528d64299d8fb1021b1b5a, type: 2}
     - target: {fileID: 2571957331697108734, guid: 3bae44273630bc94fb6b126d49c2ec17,
         type: 3}
       propertyPath: m_Name
       value: Blue Tank Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 4919592688639893304, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4919592688639893304, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8606235021615285385, guid: 3bae44273630bc94fb6b126d49c2ec17,
         type: 3}
