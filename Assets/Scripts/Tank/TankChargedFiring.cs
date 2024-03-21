@@ -36,30 +36,34 @@ public class TankChargedFiring
 
     private void OnFireInputActionStarted(InputAction.CallbackContext context)
     {
-        m_Model.IsFiring = true;
+        m_Model.IsCharging = true;
+        m_View.TankAudio.PlayChargingClip(m_Model.TankData.ShotChargingClip);
     }
 
     private void OnFireInputActionCanceled(InputAction.CallbackContext context)
     {
-        m_Model.IsFiring = false;
+        m_Model.IsCharging = false;
         SpawnProjectile();
+        m_View.TankAudio.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
         ResetChargedAmount();
     }
 
     private void UpdateChargeAmount()
     {
-        if (!m_Model.IsFiring)
+        if (!m_Model.IsCharging)
             return;
 
         m_Model.ChargeAmount += Time.deltaTime / m_Model.TankData.ChargeTime;
         m_Model.ChargeAmount = Mathf.Clamp01(m_Model.ChargeAmount);
         m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
+        m_View.TankAudio.UpdateChargingClipPitch(m_Model.ChargeAmount);
     }
 
     private void ResetChargedAmount()
     {
         m_Model.ChargeAmount = 0f;
         m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
+        m_View.TankAudio.StopChargingClip();
     }
 
     private void SpawnProjectile()

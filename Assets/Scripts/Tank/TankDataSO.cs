@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
 public class TankDataSO : ScriptableObject
@@ -10,8 +11,11 @@ public class TankDataSO : ScriptableObject
     [SerializeField] private TankView m_TankViewPrefab;
     public TankView TankViewPrefab => m_TankViewPrefab;
 
-    [SerializeField] private float m_MoveSpeed;
-    public float MoveSpeed => m_MoveSpeed;
+    [SerializeField, FormerlySerializedAs("m_MoveSpeed")] private float m_Acceleration;
+    public float Acceleration => m_Acceleration;
+
+    [SerializeField] private float m_MaxSpeed;
+    public float MaxSpeed => m_MaxSpeed;
 
     [SerializeField] private float m_RotateSpeed;
     public float RotateSpeed => m_RotateSpeed;
@@ -21,4 +25,20 @@ public class TankDataSO : ScriptableObject
 
     [SerializeField] private float m_ChargeTime;
     public float ChargeTime => m_ChargeTime;
+
+    [SerializeField]
+    private AudioClip m_EngineIdleClip;
+    public AudioClip EngineIdleClip => m_EngineIdleClip;
+
+    [SerializeField]
+    private AudioClip m_EngineDrivingClip;
+    public AudioClip EngineDrivingClip => m_EngineDrivingClip;
+
+    [SerializeField]
+    private AudioClip m_ShotFiringClip;
+    public AudioClip ShotFiringClip => m_ShotFiringClip;
+
+    [SerializeField]
+    private AudioClip m_ShotChargingClip;
+    public AudioClip ShotChargingClip => m_ShotChargingClip;
 }

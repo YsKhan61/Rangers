@@ -15,7 +15,12 @@ MonoBehaviour:
   m_ID: 2
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 864fa32bc455b864cb075d87e9cfafcb,
     type: 3}
-  m_MoveSpeed: 17
+  m_Acceleration: 18
+  m_MaxSpeed: 20
   m_RotateSpeed: 30
   m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}
   m_ChargeTime: 2.7
+  m_EngineIdleClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
+  m_EngineDrivingClip: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
+  m_ShotFiringClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}

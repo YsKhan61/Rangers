@@ -6,7 +6,7 @@ public class TankModel
     private TankController m_TankController;
 
     public float CurrentMoveSpeed => m_TankController.Rigidbody.velocity.magnitude;
-    public bool IsFiring;
+    public bool IsCharging;
 
     public float ChargeAmount;
 

@@ -17,8 +17,22 @@ public class TankView : MonoBehaviour
     [SerializeField]
     TankUI m_TankUI;
 
+    [SerializeField]
+    TankAudio m_TankAudio;
+    public TankAudio TankAudio => m_TankAudio;
+
     // dependencies
     private TankController m_TankController;
+
+    private void FixedUpdate()
+    {
+        m_TankController.FixedUpdate();
+    }
+
+    private void Update()
+    {
+        m_TankController.Update();
+    }
 
     public void SetController(TankController controller)
     {
@@ -28,10 +42,5 @@ public class TankView : MonoBehaviour
     public void UpdateChargedAmountUI(float chargeAmount)
     {
         m_TankUI.UpdateChargedAmountUI(chargeAmount);
-    }
-
-    private void Update()
-    {
-        m_TankController.Update();
     }
 }
