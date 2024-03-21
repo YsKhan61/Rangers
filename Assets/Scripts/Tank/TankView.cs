@@ -34,6 +34,11 @@ public class TankView : MonoBehaviour
         m_TankController.Update();
     }
 
+    private void OnDestroy()
+    {
+        m_TankController.OnDestroy();
+    }
+
     public void SetController(TankController controller)
     {
         m_TankController = controller;

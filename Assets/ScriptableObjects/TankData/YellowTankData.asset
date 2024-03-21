@@ -18,7 +18,7 @@ MonoBehaviour:
   m_Acceleration: 18
   m_MaxSpeed: 20
   m_RotateSpeed: 30
-  m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}
+  m_projectileData: {fileID: 11400000, guid: 3a5610939348f554ab74c53850fbe7c8, type: 2}
   m_ChargeTime: 2.7
   m_EngineIdleClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
   m_EngineDrivingClip: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}

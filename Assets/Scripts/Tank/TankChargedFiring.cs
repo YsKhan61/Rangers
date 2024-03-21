@@ -28,7 +28,7 @@ public class TankChargedFiring
         UpdateChargeAmount();
     }
 
-    ~TankChargedFiring()
+    public void OnDestroy()
     {
         m_InputControls.Player.Fire.started -= OnFireInputActionStarted;
         m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;

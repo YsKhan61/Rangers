@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
+  m_Name: BlueTankProjectileData
+  m_EditorClassIdentifier: 
+  m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: ce41a5ebe35273f4d8bdb604138cf4ae,
+    type: 3}
+  m_MinInitialSpeed: 10
+  m_MaxInitialSpeed: 30

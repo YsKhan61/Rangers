@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TankProjectileView : MonoBehaviour
 {
     [SerializeField] Rigidbody m_Rigidbody;
     public Rigidbody Rigidbody => m_Rigidbody;
+
+    [SerializeField] ParticleSystem m_TrailParticles;
 
     TankProjectileController m_Controller;
 

@@ -45,10 +45,6 @@ public class TankController
         OnTankStateChangedToIdle();
     }
 
-    ~TankController()
-    {
-        m_InputControls.Player.Disable();
-    }
 
     public void FixedUpdate()
     {
@@ -64,6 +60,12 @@ public class TankController
         m_TankFiring.Update();
 
         UpdateMoveSound();
+    }
+
+    public void OnDestroy()
+    {
+        m_TankFiring.OnDestroy();
+        m_InputControls.Player.Disable();
     }
 
     private void ConfigureInputs()

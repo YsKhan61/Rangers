@@ -46,6 +46,7 @@ public class TankAudio : MonoBehaviour
 
     public void PlayShotFiringClip(AudioClip clip)
     {
+        m_ShootingAudioSource.pitch = 1f;
         m_ShootingAudioSource.PlayOneShot(clip);
     }
 }
