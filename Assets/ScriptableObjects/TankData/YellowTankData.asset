@@ -18,4 +18,4 @@ MonoBehaviour:
   m_MoveSpeed: 17
   m_RotateSpeed: 30
   m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}
-  m_FireRate: 4
+  m_ChargeTime: 2.7

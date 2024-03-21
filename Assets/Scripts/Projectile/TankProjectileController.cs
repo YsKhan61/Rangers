@@ -14,8 +14,8 @@ public class TankProjectileController
         m_ProjectileView.SetController(this);
     }
 
-    public void AddImpulseForce()
+    public void AddImpulseForce(float initialSpeed)
     {
-        m_ProjectileView.Rigidbody.AddForce(m_ProjectileView.transform.forward * m_ProjectileModel.Data.InitialSpeed, ForceMode.Impulse);
+        m_ProjectileView.Rigidbody.AddForce(m_ProjectileView.transform.forward * initialSpeed, ForceMode.Impulse);
     }
 }

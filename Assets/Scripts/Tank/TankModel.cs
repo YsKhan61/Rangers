@@ -5,8 +5,10 @@ public class TankModel
 
     private TankController m_TankController;
 
+    public float CurrentMoveSpeed => m_TankController.Rigidbody.velocity.magnitude;
     public bool IsFiring;
-    public float LastFireTime;
+
+    public float ChargeAmount;
 
     public TankModel(TankDataSO m_TankData, TankController controller)
     {

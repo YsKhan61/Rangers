@@ -6,6 +6,9 @@ public class TankProjectileDataSO : ScriptableObject
     [SerializeField] private TankProjectileView m_ProjectileViewPrefab;
     public TankProjectileView ProjectileViewPrefab => m_ProjectileViewPrefab;
 
-    [SerializeField] private float m_InitialSpeed;
-    public float InitialSpeed => m_InitialSpeed;
+    [SerializeField] private float m_MinInitialSpeed;
+    public float MinInitialSpeed => m_MinInitialSpeed;
+
+    [SerializeField] private float m_MaxInitialSpeed;
+    public float MaxInitialSpeed => m_MaxInitialSpeed;
 }
