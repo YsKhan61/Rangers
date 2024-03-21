@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,8 @@ public class TankChargedFiring
     InputControls m_InputControls;
     TankView m_View;
     TankProjectilePool m_ProjectilePool;
+
+    public event Action<float> OnTankShoot;
 
     public TankChargedFiring(TankModel model, InputControls inputControls, TankView view)
     {
@@ -30,6 +33,9 @@ public class TankChargedFiring
 
     public void OnDestroy()
     {
+        // Remove all the event listeners of OnTankShoot
+        OnTankShoot = null;
+
         m_InputControls.Player.Fire.started -= OnFireInputActionStarted;
         m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
     }
@@ -44,6 +50,7 @@ public class TankChargedFiring
     {
         m_Model.IsCharging = false;
         SpawnProjectile();
+        OnTankShoot?.Invoke(m_Model.ChargeAmount);
         m_View.TankAudio.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
         ResetChargedAmount();
     }

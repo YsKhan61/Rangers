@@ -13,6 +13,7 @@ public class TankController
     private TankModel m_TankModel;
     private TankView m_TankView;
     private TankChargedFiring m_TankFiring;
+    public TankChargedFiring TankFiring => m_TankFiring;
 
     private InputControls m_InputControls;
     public InputControls InputControls => m_InputControls;
