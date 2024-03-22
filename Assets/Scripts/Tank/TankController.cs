@@ -14,22 +14,18 @@ public class TankController
     private TankView m_TankView;
     private TankChargedFiring m_TankFiring;
     public TankChargedFiring TankFiring => m_TankFiring;
-
-    /*private InputControls m_InputControls;
-    public InputControls InputControls => m_InputControls;*/
+    private TankUltimateController m_TankUltimateController;
+    public TankUltimateController TankUltimateController => m_TankUltimateController;
 
     private Rigidbody m_Rigidbody;
     public Rigidbody Rigidbody => m_Rigidbody;
 
     public Transform CameraTarget => m_TankView.CameraTarget;
 
-    // cache
-    /*private InputAction m_MoveInputAction;
-    private InputAction m_RotateInputAction;*/
-
     public float MoveInputValue;
     public float RotateInputValue;
 
+    // cached values
     private float m_AccelerationMagnitude;
     private float m_RotateAngle;
     private Quaternion m_DeltaRotation;
@@ -41,6 +37,8 @@ public class TankController
         m_TankView = Object.Instantiate(tankData.TankViewPrefab);
         m_TankView.SetController(this);
         m_TankFiring = new TankChargedFiring(m_TankModel, m_TankView);
+        m_TankUltimateController = new TankUltimateController(m_TankModel.TankData.UltimateActionFactory.CreateUltimateAction());
+
         m_Rigidbody = m_TankView.RigidBody;
 
         m_State = TankState.Idle;

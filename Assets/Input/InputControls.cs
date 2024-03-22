@@ -53,6 +53,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UltimateAction"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b001b9c-4fed-48ac-8bfc-c684da2caf4b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e71ad6ba-0b01-44ac-9ea5-abd25b5d1064"",
+                    ""path"": ""<Keyboard>/z"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UltimateAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         m_Player_MoveAction = m_Player.FindAction("MoveAction", throwIfNotFound: true);
         m_Player_RotateAction = m_Player.FindAction("RotateAction", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+        m_Player_UltimateAction = m_Player.FindAction("UltimateAction", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MoveAction;
     private readonly InputAction m_Player_RotateAction;
     private readonly InputAction m_Player_Fire;
+    private readonly InputAction m_Player_UltimateAction;
     public struct PlayerActions
     {
         private @InputControls m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         public InputAction @MoveAction => m_Wrapper.m_Player_MoveAction;
         public InputAction @RotateAction => m_Wrapper.m_Player_RotateAction;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
+        public InputAction @UltimateAction => m_Wrapper.m_Player_UltimateAction;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @UltimateAction.started += instance.OnUltimateAction;
+            @UltimateAction.performed += instance.OnUltimateAction;
+            @UltimateAction.canceled += instance.OnUltimateAction;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -245,6 +271,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @UltimateAction.started -= instance.OnUltimateAction;
+            @UltimateAction.performed -= instance.OnUltimateAction;
+            @UltimateAction.canceled -= instance.OnUltimateAction;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -267,5 +296,6 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         void OnMoveAction(InputAction.CallbackContext context);
         void OnRotateAction(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnUltimateAction(InputAction.CallbackContext context);
     }
 }

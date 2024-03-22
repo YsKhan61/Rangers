@@ -26,6 +26,7 @@ public class PlayerInputs
 
         m_InputControls.Player.Fire.started += OnFireInputStarted;
         m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
+        m_InputControls.Player.UltimateAction.performed += OnUltimateInputPerformed;
     }
     
 
@@ -37,6 +38,10 @@ public class PlayerInputs
 
     public void OnDestroy()
     {
+        m_InputControls.Player.Fire.started -= OnFireInputStarted;
+        m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
+        m_InputControls.Player.UltimateAction.performed -= OnUltimateInputPerformed;
+
         m_InputControls.Player.Disable();
         m_InputControls.Disable();
     }
@@ -49,5 +54,10 @@ public class PlayerInputs
     private void OnFireInputActionCanceled(InputAction.CallbackContext context)
     {
         m_TankController.TankFiring.OnFireEnded();
+    }
+
+    private void OnUltimateInputPerformed(InputAction.CallbackContext context)
+    {
+        m_TankController.TankUltimateController.ExecuteUltimateAction();
     }
 }

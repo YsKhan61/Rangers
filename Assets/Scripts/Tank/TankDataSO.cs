@@ -41,4 +41,8 @@ public class TankDataSO : ScriptableObject
     [SerializeField]
     private AudioClip m_ShotChargingClip;
     public AudioClip ShotChargingClip => m_ShotChargingClip;
+
+    [SerializeField]
+    private UltimateActionFactorySO m_UltimateActionFactory;
+    public UltimateActionFactorySO UltimateActionFactory => m_UltimateActionFactory;
 }
