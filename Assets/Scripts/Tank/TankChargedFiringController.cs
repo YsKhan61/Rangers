@@ -13,7 +13,7 @@ namespace BTG.Tank
         // dependencies
         TankModel m_Model;
         TankView m_View;
-        TankProjectilePool m_ProjectilePool;
+        ProjectilePool m_ProjectilePool;
 
         public event Action<float> OnTankShoot;
 
@@ -21,7 +21,7 @@ namespace BTG.Tank
         {
             m_Model = model;
             m_View = view;
-            m_ProjectilePool = new TankProjectilePool(m_Model.TankData.ProjectileData);
+            m_ProjectilePool = new ProjectilePool(m_Model.TankData.ProjectileData);
         }
 
         public void Update()
@@ -73,7 +73,7 @@ namespace BTG.Tank
             if (m_Model.ChargeAmount <= 0f)
                 return;
 
-            TankProjectileController projectileController = m_ProjectilePool.GetProjectile();
+            ProjectileController projectileController = m_ProjectilePool.GetProjectile();
             projectileController.Transform.position = m_View.FirePoint.position;
             projectileController.Transform.rotation = m_View.FirePoint.rotation;
             projectileController.AddImpulseForce(CalculateProjectileInitialSpeed());

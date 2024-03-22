@@ -3,17 +3,17 @@ using UnityEngine;
 
 namespace BTG.Tank.Projectile
 {
-    public class TankProjectileView : MonoBehaviour
+    public class ProjectileView : MonoBehaviour
     {
         [SerializeField] Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
         [SerializeField] ParticleSystem m_TrailParticles;
 
-        TankProjectileController m_Controller;
+        ProjectileController m_Controller;
 
 
-        public void SetController(TankProjectileController controller)
+        public void SetController(ProjectileController controller)
         {
             m_Controller = controller;
         }

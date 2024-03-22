@@ -24,8 +24,8 @@ namespace BTG.Tank
         [SerializeField] private float m_RotateSpeed;
         public float RotateSpeed => m_RotateSpeed;
 
-        [SerializeField] private TankProjectileDataSO m_projectileData;
-        public TankProjectileDataSO ProjectileData => m_projectileData;
+        [SerializeField] private ProjectileDataSO m_projectileData;
+        public ProjectileDataSO ProjectileData => m_projectileData;
 
         [SerializeField] private float m_ChargeTime;
         public float ChargeTime => m_ChargeTime;

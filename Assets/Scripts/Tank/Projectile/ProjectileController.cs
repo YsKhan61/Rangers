@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace BTG.Tank.Projectile
 {
-    public class TankProjectileController
+    public class ProjectileController
     {
-        private TankProjectileModel m_ProjectileModel;
-        private TankProjectileView m_ProjectileView;
+        private ProjectileModel m_ProjectileModel;
+        private ProjectileView m_ProjectileView;
 
         public Transform Transform => m_ProjectileView.transform;
 
-        public TankProjectileController(TankProjectileDataSO projectileData)
+        public ProjectileController(ProjectileDataSO projectileData)
         {
-            m_ProjectileModel = new TankProjectileModel(projectileData, this);
+            m_ProjectileModel = new ProjectileModel(projectileData, this);
             m_ProjectileView = Object.Instantiate(projectileData.ProjectileViewPrefab);
             m_ProjectileView.SetController(this);
         }
