@@ -15,8 +15,8 @@ public class TankController
     private TankChargedFiring m_TankFiring;
     public TankChargedFiring TankFiring => m_TankFiring;
 
-    private InputControls m_InputControls;
-    public InputControls InputControls => m_InputControls;
+    /*private InputControls m_InputControls;
+    public InputControls InputControls => m_InputControls;*/
 
     private Rigidbody m_Rigidbody;
     public Rigidbody Rigidbody => m_Rigidbody;
@@ -24,9 +24,12 @@ public class TankController
     public Transform CameraTarget => m_TankView.CameraTarget;
 
     // cache
-    private InputAction m_MoveInputAction;
-    private InputAction m_RotateInputAction;
-    private float m_MoveInputValue;
+    /*private InputAction m_MoveInputAction;
+    private InputAction m_RotateInputAction;*/
+
+    public float MoveInputValue;
+    public float RotateInputValue;
+
     private float m_AccelerationMagnitude;
     private float m_RotateAngle;
     private Quaternion m_DeltaRotation;
@@ -34,12 +37,10 @@ public class TankController
 
     public TankController(TankDataSO tankData)
     {
-        ConfigureInputs();
-
         m_TankModel = new TankModel(tankData, this);
         m_TankView = Object.Instantiate(tankData.TankViewPrefab);
         m_TankView.SetController(this);
-        m_TankFiring = new TankChargedFiring(m_TankModel, m_InputControls, m_TankView);
+        m_TankFiring = new TankChargedFiring(m_TankModel, m_TankView);
         m_Rigidbody = m_TankView.RigidBody;
 
         m_State = TankState.Idle;
@@ -66,18 +67,6 @@ public class TankController
     public void OnDestroy()
     {
         m_TankFiring.OnDestroy();
-        m_InputControls.Player.Disable();
-    }
-
-    private void ConfigureInputs()
-    {
-        m_InputControls = new InputControls();
-        m_InputControls.Enable();
-        m_InputControls.Player.Enable();
-
-        m_MoveInputAction = m_InputControls.Player.MoveAction;
-        m_RotateInputAction = m_InputControls.Player.RotateAction;
-        
     }
 
     private void UpdateState()
@@ -109,12 +98,10 @@ public class TankController
 
     private void Rotate()
     {
-        m_MoveInputValue = m_MoveInputAction.ReadValue<float>();
-
-        m_RotateAngle = m_TankModel.TankData.RotateSpeed * m_RotateInputAction.ReadValue<float>() * 
+        m_RotateAngle = m_TankModel.TankData.RotateSpeed * RotateInputValue * 
             Time.deltaTime * 
-            (m_MoveInputValue > 0 ? 1 : 
-                (m_MoveInputValue < 0 ? -1 : 0)
+            (MoveInputValue > 0 ? 1 : 
+                (MoveInputValue < 0 ? -1 : 0)
                     );
 
         m_DeltaRotation = Quaternion.Euler(0, m_RotateAngle, 0);
@@ -123,7 +110,8 @@ public class TankController
 
     private void CalculateInputSpeed()
     {
-        m_AccelerationMagnitude = m_TankModel.TankData.Acceleration * m_MoveInputValue;
+        // MoveInputValue = m_MoveInputAction.ReadValue<float>();
+        m_AccelerationMagnitude = m_TankModel.TankData.Acceleration * MoveInputValue;
     }
 
     private void UpdateMoveSound()

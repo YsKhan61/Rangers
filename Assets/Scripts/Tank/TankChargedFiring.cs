@@ -9,21 +9,16 @@ public class TankChargedFiring
 {
     // dependencies
     TankModel m_Model;
-    InputControls m_InputControls;
     TankView m_View;
     TankProjectilePool m_ProjectilePool;
 
     public event Action<float> OnTankShoot;
 
-    public TankChargedFiring(TankModel model, InputControls inputControls, TankView view)
+    public TankChargedFiring(TankModel model, TankView view)
     {
         m_Model = model;
-        m_InputControls = inputControls;
         m_View = view;
         m_ProjectilePool = new TankProjectilePool(m_Model.TankData.ProjectileData);
-
-        m_InputControls.Player.Fire.started += OnFireInputActionStarted;
-        m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
     }
 
     public void Update()
@@ -35,18 +30,15 @@ public class TankChargedFiring
     {
         // Remove all the event listeners of OnTankShoot
         OnTankShoot = null;
-
-        m_InputControls.Player.Fire.started -= OnFireInputActionStarted;
-        m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
     }
 
-    private void OnFireInputActionStarted(InputAction.CallbackContext context)
+    public void OnFireStarted()
     {
         m_Model.IsCharging = true;
         m_View.TankAudio.PlayChargingClip(m_Model.TankData.ShotChargingClip);
     }
 
-    private void OnFireInputActionCanceled(InputAction.CallbackContext context)
+    public void OnFireEnded()
     {
         m_Model.IsCharging = false;
         SpawnProjectile();

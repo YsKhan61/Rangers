@@ -6,13 +6,30 @@ public class PlayerTankSpawner : MonoBehaviour
     [SerializeField] TankDataContainerSO m_TankDataList;
     [SerializeField] PlayerVirualCameraController m_PVCController;
 
+    private PlayerInputs m_PlayerInputs;
+
     // Start is called before the first frame update
     void Start()
     {
-        if (TryCreatePlayerTank(out TankController controller))
+        if (!TryCreatePlayerTank(out TankController controller))
         {
-            ConfigurePlayerCameraWithController(controller);
+            enabled = false;
+            return;
         }
+
+        ConfigurePlayerCameraWithController(controller);
+        m_PlayerInputs = new PlayerInputs(controller);
+        m_PlayerInputs.Start();
+    }
+
+    private void Update()
+    {
+        m_PlayerInputs.Update();
+    }
+
+    private void OnDestroy()
+    {
+        m_PlayerInputs.OnDestroy();
     }
 
     private bool TryCreatePlayerTank(out TankController controller)
