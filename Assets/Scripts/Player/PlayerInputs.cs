@@ -53,17 +53,17 @@ namespace BTG.Player
 
         private void OnFireInputStarted(InputAction.CallbackContext context)
         {
-            m_TankController.TankFiring.OnFireStarted();
+            m_TankController.StartTankFiring();
         }
 
         private void OnFireInputActionCanceled(InputAction.CallbackContext context)
         {
-            m_TankController.TankFiring.OnFireEnded();
+            m_TankController.EndTankFiring();
         }
 
         private void OnUltimateInputPerformed(InputAction.CallbackContext context)
         {
-            m_TankController.TankUltimateController.ExecuteUltimateAction();
+            m_TankController.ExecuteUltimateAction();
         }
     }
 }

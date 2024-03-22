@@ -57,13 +57,16 @@ namespace BTG.Player
         private void ConfigurePlayerCameraWithController(in TankController controller)
         {
             m_PVCController.Initialize(controller.CameraTarget);
-            controller.TankFiring.OnTankShoot += m_PVCController.ShakeCameraOnPlayerTankShoot;
-            controller.TankUltimateController.OnUltimateExecuted += m_PVCController.ShakeCameraOnUltimateExecution;
+            controller.SubscribeToOnTankShootEvent(m_PVCController.ShakeCameraOnPlayerTankShoot);
+            controller.SubscribeToUltimateExecutedEvent(m_PVCController.ShakeCameraOnUltimateExecution);
         }
 
         private void ConfigureUltimateUIWithController(in TankController controller)
         {
-            
+            controller.SubscribeToUltimateActionAssignedEvent(m_UltimatePanel.AssignUltimateActionName);
+            controller.SubscribeToChargeUpdatedEvent(m_UltimatePanel.UpdateChargeAmount);
+            controller.SubscribeToFullyChargedEvent(m_UltimatePanel.OnFullyCharged);
+            controller.SubscribeToUltimateExecutedEvent(m_UltimatePanel.OnUltimateExecuted);
         }
 
         private bool TryGetTankById(in int id, out TankDataSO tankData)

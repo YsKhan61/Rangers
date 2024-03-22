@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 
 namespace BTG.Tank
@@ -6,6 +8,7 @@ namespace BTG.Tank
     /// <summary>
     /// The main controller for the tank. It handles the communications between Model, View and other controllers such as 
     /// TankMovementController, TankFiringController and TankUltimateController.
+    /// It is like a Facade for the tank.
     /// </summary>
     public class TankController
     {
@@ -19,12 +22,9 @@ namespace BTG.Tank
         private TankModel m_Model;
         public TankModel TankModel => m_Model;
         private TankView m_View;
-        public TankView TankView => m_View;
         private TankMovementController m_MovementController;
         private TankChargedFiringController m_Firing;
-        public TankChargedFiringController TankFiring => m_Firing;
         private TankUltimateController m_UltimateController;
-        public TankUltimateController TankUltimateController => m_UltimateController;
 
         public Transform Transform => m_View.transform;
         public Rigidbody Rigidbody => m_View.RigidBody;
@@ -74,6 +74,46 @@ namespace BTG.Tank
         public void SetRotateValue(float value)
         {
             m_Model.RotateInputValue = value;
+        }
+
+        public void StartTankFiring()
+        {
+            m_Firing.OnFireStarted();
+        }
+
+        public void EndTankFiring()
+        {
+            m_Firing.OnFireEnded();
+        }
+
+        public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
+        {
+            m_Firing.OnTankShoot += onTankShoot;
+        }
+
+        public void SubscribeToUltimateActionAssignedEvent(Action<string> onUltimateActionAssigned)
+        {
+            m_UltimateController.SubscribeToUltimateActionAssignedEvent(onUltimateActionAssigned);
+        }
+
+        public void SubscribeToUltimateExecutedEvent(Action<float> onUltimateExecuted)
+        {
+            m_UltimateController.SubscribeToUltimateExecutedEvent(onUltimateExecuted);
+        }
+
+        public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated)
+        {
+            m_UltimateController.SubscribeToChargeUpdatedEvent(onChargeUpdated);
+        }
+
+        public void SubscribeToFullyChargedEvent(Action onFullyCharged)
+        {
+            m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
+        }
+
+        public void ExecuteUltimateAction()
+        {
+            m_UltimateController.ExecuteUltimateAction();
         }
 
         private void UpdateState()

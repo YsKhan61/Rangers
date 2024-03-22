@@ -22,20 +22,27 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateActionData = airStrikeData;
             m_CancellationTokenSource = new CancellationTokenSource();
+
+            Charge(-FULL_CHARGE);
+
+            RaiseUltimateActionAssignedEvent();
         }
 
         public override bool TryExecute(TankUltimateController controller)
         {
-            if (IsFullyCharged)
+            if (!IsFullyCharged)
             {
                 return false;
             }
 
-            Debug.Log("Ultimate: AirStrike executed");
             SpawnVFX(controller.Transform);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
             _ = DestroyAfterDuration(m_CancellationTokenSource.Token);
+
+            RaiseUltimateExecutedEvent(m_AirStrikeData.Duration);
+
+            Charge(-FULL_CHARGE);
 
             return true;
         }
@@ -43,6 +50,7 @@ namespace BTG.Tank.UltimateAction
         public override void OnDestroy()
         {
             m_CancellationTokenSource.Cancel();
+            base.OnDestroy();
         }
 
         private void SpawnVFX(Transform parent)

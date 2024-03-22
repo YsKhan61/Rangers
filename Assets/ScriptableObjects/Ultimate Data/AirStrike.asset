@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65322fb48778ea3489f19cc858bbb35e, type: 3}
-  m_Name: AirStrikeData
+  m_Name: AirStrike
   m_EditorClassIdentifier: 
+  m_Duration: 5
+  m_ChargeRate: 10
   m_AirStrikeViewPrefab: {fileID: 8090411631913802834, guid: 4fe2abfb32f65a74db707302e6fb8973,
     type: 3}
-  m_Duration: 5

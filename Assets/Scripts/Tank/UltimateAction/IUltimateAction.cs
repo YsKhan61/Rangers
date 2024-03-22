@@ -3,7 +3,10 @@ namespace BTG.Tank.UltimateAction
 {
     public interface IUltimateAction
     {
-        public const int FULL_CHARGE = 100;
+        public event System.Action<string> OnUltimateActionAssigned;
+        public event System.Action<float> OnUltimateExecuted;
+        public event System.Action<int> OnChargeUpdated;
+        public event System.Action OnFullyCharged;
 
         public string Name { get; }
         public float Duration { get; }

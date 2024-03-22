@@ -17,8 +17,6 @@ namespace BTG.Tank
 
         public Transform Transform => m_Controller.Transform;
 
-        public event Action<float> OnUltimateExecuted;          // float is duration of the ultimate action
-
         public float Duration => m_UltimateAction.Duration;
 
         public TankUltimateController(TankController controller, IUltimateAction action)
@@ -39,9 +37,28 @@ namespace BTG.Tank
         public void ExecuteUltimateAction()
         {
             m_UltimateAction.TryExecute(this);
-            OnUltimateExecuted?.Invoke(Duration);
 
             _ = AutoChargeUltimate(m_CancellationTokenSource.Token);
+        }
+
+        public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
+        {
+            m_UltimateAction.OnUltimateActionAssigned += action;
+        }
+
+        public void SubscribeToUltimateExecutedEvent(Action<float> action)
+        {
+            m_UltimateAction.OnUltimateExecuted += action;
+        }
+
+        public void SubscribeToChargeUpdatedEvent(Action<int> action)
+        {
+            m_UltimateAction.OnChargeUpdated += action;
+        }
+
+        public void SubscribeToFullyChargedEvent(Action action)
+        {
+            m_UltimateAction.OnFullyCharged += action;
         }
 
         private async Task AutoChargeUltimate(CancellationToken token)
