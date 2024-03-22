@@ -1,15 +1,18 @@
 using BTG.Tank;
+using BTG.UI;
 using UnityEngine;
 
 
 namespace BTG.Player
 {
-    public class PlayerTankSpawnerAndWrapper : MonoBehaviour
+    public class PlayerService : MonoBehaviour
     {
         [SerializeField] private int m_TestTankID; // This is for test purpose, so that we dont have to go to MainMenu and then select the tank
 
         [SerializeField] TankDataContainerSO m_TankDataList;
         [SerializeField] PlayerVirualCameraController m_PVCController;
+
+        [SerializeField] private UltimateUI m_UltimatePanel;
 
         private PlayerInputs m_PlayerInputs;
 
@@ -23,6 +26,7 @@ namespace BTG.Player
             }
 
             ConfigurePlayerCameraWithController(controller);
+            ConfigureUltimateUIWithController(controller);
             m_PlayerInputs = new PlayerInputs(controller);
             m_PlayerInputs.Start();
         }
@@ -55,6 +59,11 @@ namespace BTG.Player
             m_PVCController.Initialize(controller.CameraTarget);
             controller.TankFiring.OnTankShoot += m_PVCController.ShakeCameraOnPlayerTankShoot;
             controller.TankUltimateController.OnUltimateExecuted += m_PVCController.ShakeCameraOnUltimateExecution;
+        }
+
+        private void ConfigureUltimateUIWithController(in TankController controller)
+        {
+            
         }
 
         private bool TryGetTankById(in int id, out TankDataSO tankData)

@@ -7,34 +7,40 @@ using Object = UnityEngine.Object;
 
 namespace BTG.Tank.UltimateAction
 {
-    public class AirStrike : IUltimateAction
+    public class AirStrike : UltimateAction
     {
-        private AirStrikeDataSO m_AirStrikeData;
+        private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
 
         private AirStrikeView m_View;
 
-        private float m_TimeElapsed;
+        private float m_TimeElapsedSinceExecution;
 
         private CancellationTokenSource m_CancellationTokenSource;
 
+        // Create constructor
         public AirStrike(AirStrikeDataSO airStrikeData)
         {
-            m_AirStrikeData = airStrikeData;
+            m_UltimateActionData = airStrikeData;
             m_CancellationTokenSource = new CancellationTokenSource();
         }
 
-        public float Duration => m_AirStrikeData.Duration;
-
-        public void Execute(TankUltimateController controller)
+        public override bool TryExecute(TankUltimateController controller)
         {
+            if (IsFullyCharged)
+            {
+                return false;
+            }
+
             Debug.Log("Ultimate: AirStrike executed");
             SpawnVFX(controller.Transform);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
             _ = DestroyAfterDuration(m_CancellationTokenSource.Token);
+
+            return true;
         }
 
-        public void OnDestroy()
+        public override void OnDestroy()
         {
             m_CancellationTokenSource.Cancel();
         }
@@ -48,19 +54,19 @@ namespace BTG.Tank.UltimateAction
 
         private async Task DestroyAfterDuration(CancellationToken cancellationToken)
         {
-            m_TimeElapsed = 0;
+            m_TimeElapsedSinceExecution = 0;
 
             try
             {
-                while (m_TimeElapsed < m_AirStrikeData.Duration)
+                while (m_TimeElapsedSinceExecution < m_AirStrikeData.Duration)
                 {
-                    await Task.Delay(1000);
-                    m_TimeElapsed += 1;
+                    await Task.Delay(1000, cancellationToken);
+                    m_TimeElapsedSinceExecution += 1;
                 }
 
                 m_View.StopParticleSystem();
                 m_View.StopAudio();
-                Object.Destroy(m_View.gameObject);
+                Object.Destroy(m_View.gameObject);  
                 m_View = null;
             }
             catch (TaskCanceledException)
