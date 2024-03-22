@@ -7,6 +7,11 @@ namespace BTG.Tank
 
         private TankController m_TankController;
 
+        public TankController.TankState State;
+
+        public float MoveInputValue;
+        public float RotateInputValue;
+
         public float CurrentMoveSpeed => m_TankController.Rigidbody.velocity.magnitude;
         public bool IsCharging;
 

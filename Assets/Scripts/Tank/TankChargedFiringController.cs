@@ -8,7 +8,7 @@ namespace BTG.Tank
     /// <summary>
     /// Firing happens by charging the projectile and releasing it.
     /// </summary>
-    public class TankChargedFiring
+    public class TankChargedFiringController
     {
         // dependencies
         TankModel m_Model;
@@ -17,7 +17,7 @@ namespace BTG.Tank
 
         public event Action<float> OnTankShoot;
 
-        public TankChargedFiring(TankModel model, TankView view)
+        public TankChargedFiringController(TankModel model, TankView view)
         {
             m_Model = model;
             m_View = view;

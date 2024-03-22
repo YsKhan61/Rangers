@@ -37,8 +37,8 @@ namespace BTG.Player
 
         public void Update()
         {
-            m_TankController.MoveInputValue = m_MoveInputAction.ReadValue<float>();
-            m_TankController.RotateInputValue = m_RotateInputAction.ReadValue<float>();
+            m_TankController.SetMoveValue(m_MoveInputAction.ReadValue<float>());
+            m_TankController.SetRotateValue(m_RotateInputAction.ReadValue<float>());
         }
 
         public void OnDestroy()
