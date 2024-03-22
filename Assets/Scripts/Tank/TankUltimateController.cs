@@ -1,14 +1,21 @@
-public class TankUltimateController
+using BTG.Tank.UltimateAction;
+
+namespace BTG.Tank
 {
-    private IUltimateAction m_UltimateAction;
-
-    public TankUltimateController(IUltimateAction action)
+    public class TankUltimateController
     {
-        m_UltimateAction = action;
-    }
+        private IUltimateAction m_UltimateAction;
 
-    public void ExecuteUltimateAction()
-    {
-        m_UltimateAction.Execute();
+        public TankUltimateController(IUltimateAction action)
+        {
+            m_UltimateAction = action;
+        }
+
+        public void ExecuteUltimateAction()
+        {
+            m_UltimateAction.Execute();
+        }
     }
 }
+
+

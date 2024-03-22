@@ -1,13 +1,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TankUI : MonoBehaviour
+namespace BTG.Tank
 {
-    [SerializeField]
-    Slider m_ChargeSlider;
-
-    public void UpdateChargedAmountUI(float value)
+    public class TankUI : MonoBehaviour
     {
-        m_ChargeSlider.value = value;
+        [SerializeField]
+        Slider m_ChargeSlider;
+
+        public void UpdateChargedAmountUI(float value)
+        {
+            m_ChargeSlider.value = value;
+        }
     }
 }
+

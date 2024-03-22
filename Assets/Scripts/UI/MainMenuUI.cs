@@ -1,27 +1,32 @@
 using UnityEngine;
 
-public class MainMenuUI : MonoBehaviour
+
+namespace BTG.UI
 {
-    [SerializeField]
-    private string _gameSceneName = "Game";
-
-    public void TankIDSelect(int id)
+    public class MainMenuUI : MonoBehaviour
     {
-        PlayerPrefs.SetInt("TankID", id);
-    }
+        [SerializeField]
+        private string _gameSceneName = "Game";
 
-    public void StartGame()
-    {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(_gameSceneName);
-    }
+        public void TankIDSelect(int id)
+        {
+            PlayerPrefs.SetInt("TankID", id);
+        }
 
-    public void QuitGame()
-    {
+        public void StartGame()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(_gameSceneName);
+        }
+
+        public void QuitGame()
+        {
 #if UNITY_EDITOR
-        if (UnityEditor.EditorApplication.isPlaying)
-            UnityEditor.EditorApplication.isPlaying = false;
+            if (UnityEditor.EditorApplication.isPlaying)
+                UnityEditor.EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif
+        }
     }
 }
+

@@ -1,51 +1,55 @@
 using UnityEngine;
 
-public class TankView : MonoBehaviour
+namespace BTG.Tank
 {
-    [SerializeField]
-    Transform m_CameraTarget;
-    public Transform CameraTarget => m_CameraTarget;
-
-    [SerializeField]
-    Rigidbody m_Rigidbody;
-    public Rigidbody RigidBody => m_Rigidbody;
-
-    [SerializeField]
-    Transform m_FirePoint;
-    public Transform FirePoint => m_FirePoint;
-
-    [SerializeField]
-    TankUI m_TankUI;
-
-    [SerializeField]
-    TankAudio m_TankAudio;
-    public TankAudio TankAudio => m_TankAudio;
-
-    // dependencies
-    private TankController m_TankController;
-
-    private void FixedUpdate()
+    public class TankView : MonoBehaviour
     {
-        m_TankController.FixedUpdate();
-    }
+        [SerializeField]
+        Transform m_CameraTarget;
+        public Transform CameraTarget => m_CameraTarget;
 
-    private void Update()
-    {
-        m_TankController.Update();
-    }
+        [SerializeField]
+        Rigidbody m_Rigidbody;
+        public Rigidbody RigidBody => m_Rigidbody;
 
-    private void OnDestroy()
-    {
-        m_TankController.OnDestroy();
-    }
+        [SerializeField]
+        Transform m_FirePoint;
+        public Transform FirePoint => m_FirePoint;
 
-    public void SetController(TankController controller)
-    {
-        m_TankController = controller;
-    }
+        [SerializeField]
+        TankUI m_TankUI;
 
-    public void UpdateChargedAmountUI(float chargeAmount)
-    {
-        m_TankUI.UpdateChargedAmountUI(chargeAmount);
+        [SerializeField]
+        TankAudio m_TankAudio;
+        public TankAudio TankAudio => m_TankAudio;
+
+        // dependencies
+        private TankController m_TankController;
+
+        private void FixedUpdate()
+        {
+            m_TankController.FixedUpdate();
+        }
+
+        private void Update()
+        {
+            m_TankController.Update();
+        }
+
+        private void OnDestroy()
+        {
+            m_TankController.OnDestroy();
+        }
+
+        public void SetController(TankController controller)
+        {
+            m_TankController = controller;
+        }
+
+        public void UpdateChargedAmountUI(float chargeAmount)
+        {
+            m_TankUI.UpdateChargedAmountUI(chargeAmount);
+        }
     }
 }
+

@@ -15,12 +15,14 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public partial class @InputControls: IInputActionCollection2, IDisposable
+namespace BTG.Inputs
 {
-    public InputActionAsset asset { get; }
-    public @InputControls()
+    public partial class @InputControls : IInputActionCollection2, IDisposable
     {
-        asset = InputActionAsset.FromJson(@"{
+        public InputActionAsset asset { get; }
+        public @InputControls()
+        {
+            asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputControls"",
     ""maps"": [
         {
@@ -158,144 +160,147 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     ],
     ""controlSchemes"": []
 }");
+            // Player
+            m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
+            m_Player_MoveAction = m_Player.FindAction("MoveAction", throwIfNotFound: true);
+            m_Player_RotateAction = m_Player.FindAction("RotateAction", throwIfNotFound: true);
+            m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
+            m_Player_UltimateAction = m_Player.FindAction("UltimateAction", throwIfNotFound: true);
+        }
+
+        public void Dispose()
+        {
+            UnityEngine.Object.Destroy(asset);
+        }
+
+        public InputBinding? bindingMask
+        {
+            get => asset.bindingMask;
+            set => asset.bindingMask = value;
+        }
+
+        public ReadOnlyArray<InputDevice>? devices
+        {
+            get => asset.devices;
+            set => asset.devices = value;
+        }
+
+        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+        public bool Contains(InputAction action)
+        {
+            return asset.Contains(action);
+        }
+
+        public IEnumerator<InputAction> GetEnumerator()
+        {
+            return asset.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public void Enable()
+        {
+            asset.Enable();
+        }
+
+        public void Disable()
+        {
+            asset.Disable();
+        }
+
+        public IEnumerable<InputBinding> bindings => asset.bindings;
+
+        public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
+        {
+            return asset.FindAction(actionNameOrId, throwIfNotFound);
+        }
+
+        public int FindBinding(InputBinding bindingMask, out InputAction action)
+        {
+            return asset.FindBinding(bindingMask, out action);
+        }
+
         // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_MoveAction = m_Player.FindAction("MoveAction", throwIfNotFound: true);
-        m_Player_RotateAction = m_Player.FindAction("RotateAction", throwIfNotFound: true);
-        m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
-        m_Player_UltimateAction = m_Player.FindAction("UltimateAction", throwIfNotFound: true);
-    }
-
-    public void Dispose()
-    {
-        UnityEngine.Object.Destroy(asset);
-    }
-
-    public InputBinding? bindingMask
-    {
-        get => asset.bindingMask;
-        set => asset.bindingMask = value;
-    }
-
-    public ReadOnlyArray<InputDevice>? devices
-    {
-        get => asset.devices;
-        set => asset.devices = value;
-    }
-
-    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-    public bool Contains(InputAction action)
-    {
-        return asset.Contains(action);
-    }
-
-    public IEnumerator<InputAction> GetEnumerator()
-    {
-        return asset.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
-
-    public void Enable()
-    {
-        asset.Enable();
-    }
-
-    public void Disable()
-    {
-        asset.Disable();
-    }
-
-    public IEnumerable<InputBinding> bindings => asset.bindings;
-
-    public InputAction FindAction(string actionNameOrId, bool throwIfNotFound = false)
-    {
-        return asset.FindAction(actionNameOrId, throwIfNotFound);
-    }
-
-    public int FindBinding(InputBinding bindingMask, out InputAction action)
-    {
-        return asset.FindBinding(bindingMask, out action);
-    }
-
-    // Player
-    private readonly InputActionMap m_Player;
-    private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_MoveAction;
-    private readonly InputAction m_Player_RotateAction;
-    private readonly InputAction m_Player_Fire;
-    private readonly InputAction m_Player_UltimateAction;
-    public struct PlayerActions
-    {
-        private @InputControls m_Wrapper;
-        public PlayerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @MoveAction => m_Wrapper.m_Player_MoveAction;
-        public InputAction @RotateAction => m_Wrapper.m_Player_RotateAction;
-        public InputAction @Fire => m_Wrapper.m_Player_Fire;
-        public InputAction @UltimateAction => m_Wrapper.m_Player_UltimateAction;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
-        public void Enable() { Get().Enable(); }
-        public void Disable() { Get().Disable(); }
-        public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void AddCallbacks(IPlayerActions instance)
+        private readonly InputActionMap m_Player;
+        private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
+        private readonly InputAction m_Player_MoveAction;
+        private readonly InputAction m_Player_RotateAction;
+        private readonly InputAction m_Player_Fire;
+        private readonly InputAction m_Player_UltimateAction;
+        public struct PlayerActions
         {
-            if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @MoveAction.started += instance.OnMoveAction;
-            @MoveAction.performed += instance.OnMoveAction;
-            @MoveAction.canceled += instance.OnMoveAction;
-            @RotateAction.started += instance.OnRotateAction;
-            @RotateAction.performed += instance.OnRotateAction;
-            @RotateAction.canceled += instance.OnRotateAction;
-            @Fire.started += instance.OnFire;
-            @Fire.performed += instance.OnFire;
-            @Fire.canceled += instance.OnFire;
-            @UltimateAction.started += instance.OnUltimateAction;
-            @UltimateAction.performed += instance.OnUltimateAction;
-            @UltimateAction.canceled += instance.OnUltimateAction;
-        }
+            private @InputControls m_Wrapper;
+            public PlayerActions(@InputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @MoveAction => m_Wrapper.m_Player_MoveAction;
+            public InputAction @RotateAction => m_Wrapper.m_Player_RotateAction;
+            public InputAction @Fire => m_Wrapper.m_Player_Fire;
+            public InputAction @UltimateAction => m_Wrapper.m_Player_UltimateAction;
+            public InputActionMap Get() { return m_Wrapper.m_Player; }
+            public void Enable() { Get().Enable(); }
+            public void Disable() { Get().Disable(); }
+            public bool enabled => Get().enabled;
+            public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
+            public void AddCallbacks(IPlayerActions instance)
+            {
+                if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
+                @MoveAction.started += instance.OnMoveAction;
+                @MoveAction.performed += instance.OnMoveAction;
+                @MoveAction.canceled += instance.OnMoveAction;
+                @RotateAction.started += instance.OnRotateAction;
+                @RotateAction.performed += instance.OnRotateAction;
+                @RotateAction.canceled += instance.OnRotateAction;
+                @Fire.started += instance.OnFire;
+                @Fire.performed += instance.OnFire;
+                @Fire.canceled += instance.OnFire;
+                @UltimateAction.started += instance.OnUltimateAction;
+                @UltimateAction.performed += instance.OnUltimateAction;
+                @UltimateAction.canceled += instance.OnUltimateAction;
+            }
 
-        private void UnregisterCallbacks(IPlayerActions instance)
-        {
-            @MoveAction.started -= instance.OnMoveAction;
-            @MoveAction.performed -= instance.OnMoveAction;
-            @MoveAction.canceled -= instance.OnMoveAction;
-            @RotateAction.started -= instance.OnRotateAction;
-            @RotateAction.performed -= instance.OnRotateAction;
-            @RotateAction.canceled -= instance.OnRotateAction;
-            @Fire.started -= instance.OnFire;
-            @Fire.performed -= instance.OnFire;
-            @Fire.canceled -= instance.OnFire;
-            @UltimateAction.started -= instance.OnUltimateAction;
-            @UltimateAction.performed -= instance.OnUltimateAction;
-            @UltimateAction.canceled -= instance.OnUltimateAction;
-        }
+            private void UnregisterCallbacks(IPlayerActions instance)
+            {
+                @MoveAction.started -= instance.OnMoveAction;
+                @MoveAction.performed -= instance.OnMoveAction;
+                @MoveAction.canceled -= instance.OnMoveAction;
+                @RotateAction.started -= instance.OnRotateAction;
+                @RotateAction.performed -= instance.OnRotateAction;
+                @RotateAction.canceled -= instance.OnRotateAction;
+                @Fire.started -= instance.OnFire;
+                @Fire.performed -= instance.OnFire;
+                @Fire.canceled -= instance.OnFire;
+                @UltimateAction.started -= instance.OnUltimateAction;
+                @UltimateAction.performed -= instance.OnUltimateAction;
+                @UltimateAction.canceled -= instance.OnUltimateAction;
+            }
 
-        public void RemoveCallbacks(IPlayerActions instance)
-        {
-            if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
-                UnregisterCallbacks(instance);
-        }
+            public void RemoveCallbacks(IPlayerActions instance)
+            {
+                if (m_Wrapper.m_PlayerActionsCallbackInterfaces.Remove(instance))
+                    UnregisterCallbacks(instance);
+            }
 
-        public void SetCallbacks(IPlayerActions instance)
-        {
-            foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
-                UnregisterCallbacks(item);
-            m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
-            AddCallbacks(instance);
+            public void SetCallbacks(IPlayerActions instance)
+            {
+                foreach (var item in m_Wrapper.m_PlayerActionsCallbackInterfaces)
+                    UnregisterCallbacks(item);
+                m_Wrapper.m_PlayerActionsCallbackInterfaces.Clear();
+                AddCallbacks(instance);
+            }
         }
-    }
-    public PlayerActions @Player => new PlayerActions(this);
-    public interface IPlayerActions
-    {
-        void OnMoveAction(InputAction.CallbackContext context);
-        void OnRotateAction(InputAction.CallbackContext context);
-        void OnFire(InputAction.CallbackContext context);
-        void OnUltimateAction(InputAction.CallbackContext context);
+        public PlayerActions @Player => new PlayerActions(this);
+        public interface IPlayerActions
+        {
+            void OnMoveAction(InputAction.CallbackContext context);
+            void OnRotateAction(InputAction.CallbackContext context);
+            void OnFire(InputAction.CallbackContext context);
+            void OnUltimateAction(InputAction.CallbackContext context);
+        }
     }
 }
+
+

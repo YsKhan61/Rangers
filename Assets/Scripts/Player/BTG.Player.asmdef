@@ -1,0 +1,19 @@
+{
+    "name": "BTG.Player",
+    "rootNamespace": "",
+    "references": [
+        "GUID:dfb78632e9bfdc649943860eb5b54466",
+        "GUID:4307f53044263cf4b835bd812fc161a4",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:0d4e6f139c28b45469d79a061684c314"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

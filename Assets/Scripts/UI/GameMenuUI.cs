@@ -1,11 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class GameMenuUI : MonoBehaviour
+
+namespace BTG.UI
 {
-    public void GoToMainMenu()
+    public class GameMenuUI : MonoBehaviour
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        public void GoToMainMenu()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
+        }
     }
 }
+
