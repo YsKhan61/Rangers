@@ -4,8 +4,10 @@ using UnityEngine;
 
 namespace BTG.Player
 {
-    public class PlayerTankSpawner : MonoBehaviour
+    public class PlayerTankSpawnerAndWrapper : MonoBehaviour
     {
+        [SerializeField] private int m_TestTankID; // This is for test purpose, so that we dont have to go to MainMenu and then select the tank
+
         [SerializeField] TankDataContainerSO m_TankDataList;
         [SerializeField] PlayerVirualCameraController m_PVCController;
 
@@ -33,13 +35,14 @@ namespace BTG.Player
         private void OnDestroy()
         {
             m_PlayerInputs.OnDestroy();
+            m_PlayerInputs = null;
         }
 
         private bool TryCreatePlayerTank(out TankController controller)
         {
             controller = null;
 
-            if (!TryGetTankById(PlayerPrefs.GetInt("TankID", 1), out TankDataSO tankDataToSpawn))
+            if (!TryGetTankById(PlayerPrefs.GetInt("TankID", m_TestTankID), out TankDataSO tankDataToSpawn))            // m_TankID is for test purpose
                 return false;
 
             controller = new TankController(tankDataToSpawn);
@@ -49,8 +52,9 @@ namespace BTG.Player
 
         private void ConfigurePlayerCameraWithController(in TankController controller)
         {
-            m_PVCController.SetFollow(controller.CameraTarget);
-            controller.TankFiring.OnTankShoot += m_PVCController.ShakeCamera;
+            m_PVCController.Initialize(controller.CameraTarget);
+            controller.TankFiring.OnTankShoot += m_PVCController.ShakeCameraOnPlayerTankShoot;
+            controller.TankUltimateController.OnUltimateExecuted += m_PVCController.ShakeCameraOnUltimateExecution;
         }
 
         private bool TryGetTankById(in int id, out TankDataSO tankData)

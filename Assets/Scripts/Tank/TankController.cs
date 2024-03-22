@@ -4,7 +4,8 @@ using UnityEngine;
 namespace BTG.Tank
 {
     /// <summary>
-    /// The main controller for the tank. It handles the communications between Model, View and other controllers such as TankFiring and TankUltimateController.
+    /// The main controller for the tank. It handles the communications between Model, View and other controllers such as 
+    /// TankMovementController, TankFiringController and TankUltimateController.
     /// </summary>
     public class TankController
     {
@@ -22,18 +23,13 @@ namespace BTG.Tank
         private TankMovementController m_MovementController;
         private TankChargedFiringController m_Firing;
         public TankChargedFiringController TankFiring => m_Firing;
-        private TankUltimateController m_TankUltimateController;
-        public TankUltimateController TankUltimateController => m_TankUltimateController;
+        private TankUltimateController m_UltimateController;
+        public TankUltimateController TankUltimateController => m_UltimateController;
 
         public Transform Transform => m_View.transform;
         public Rigidbody Rigidbody => m_View.RigidBody;
 
         public Transform CameraTarget => m_View.CameraTarget;
-
-        // cached values
-        private float m_AccelerationMagnitude;
-        private float m_RotateAngle;
-        private Quaternion m_DeltaRotation;
 
         public TankController(TankDataSO tankData)
         {
@@ -42,7 +38,7 @@ namespace BTG.Tank
             m_View.SetController(this);
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
-            m_TankUltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory.CreateUltimateAction());
+            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory.CreateUltimateAction());
 
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
@@ -67,6 +63,7 @@ namespace BTG.Tank
         public void OnDestroy()
         {
             m_Firing.OnDestroy();
+            m_UltimateController.OnDestroy();
         }
 
         public void SetMoveValue(float value)
