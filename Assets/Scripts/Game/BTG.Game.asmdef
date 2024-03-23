@@ -1,0 +1,19 @@
+{
+    "name": "BTG.Game",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e467f712023d4e945a5089624b530858",
+        "GUID:b2145a4258701264d90cbc9ba54f8f92",
+        "GUID:0d4e6f139c28b45469d79a061684c314",
+        "GUID:d915bcb3ae6b73544b054fa965902cd4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

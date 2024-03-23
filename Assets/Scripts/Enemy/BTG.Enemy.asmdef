@@ -1,0 +1,16 @@
+{
+    "name": "BTG.Enemy",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0d4e6f139c28b45469d79a061684c314"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
