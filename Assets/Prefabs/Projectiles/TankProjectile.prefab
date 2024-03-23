@@ -45,10 +45,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6716461089659070449}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: adbcc70c08005eb48b9240fe3859215c, type: 3}
+  m_Script: {fileID: 11500000, guid: af7dc84744838ed4cab767cbbd3d40eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Rigidbody: {fileID: 8701921482695587310}
+  m_TrailParticles: {fileID: 3081770636050898198}
 --- !u!54 &8701921482695587310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -222,6 +223,12 @@ PrefabInstance:
 --- !u!4 &3081770636035692782 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 496482, guid: 6d6cb70d5afe00a41ba010f6dc43fe2d,
+    type: 3}
+  m_PrefabInstance: {fileID: 3081770636035787660}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3081770636050898198 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 19895962, guid: 6d6cb70d5afe00a41ba010f6dc43fe2d,
     type: 3}
   m_PrefabInstance: {fileID: 3081770636035787660}
   m_PrefabAsset: {fileID: 0}
