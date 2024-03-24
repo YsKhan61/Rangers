@@ -5,6 +5,10 @@ using UnityEngine;
 
 namespace BTG.Player
 {
+    /// <summary>
+    /// We need to create separate EventBus
+    /// where we can subscribe to the events and call the methods of the PlayerVirualCameraController
+    /// </summary>
     public class PlayerVirualCameraController : MonoBehaviour
     {
         [SerializeField] CinemachineVirtualCamera m_PVC1;

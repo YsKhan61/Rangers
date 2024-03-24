@@ -1,7 +1,6 @@
 using BTG.Tank.UltimateAction;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BTG.Tank
@@ -13,7 +12,6 @@ namespace BTG.Tank
     {
         private IUltimateAction m_UltimateAction;
         private TankController m_Controller;
-        private CancellationTokenSource m_CancellationTokenSource;
 
         public Transform Transform => m_Controller.Transform;
 
@@ -21,12 +19,10 @@ namespace BTG.Tank
 
         public TankUltimateController(TankController controller, IUltimateAction action)
         {
-            m_CancellationTokenSource = new CancellationTokenSource();
-
             m_UltimateAction = action;
             m_Controller = controller;
 
-            _ = AutoChargeUltimate(m_CancellationTokenSource.Token);
+            m_UltimateAction.AutoCharge();
         }
 
         public void OnDestroy()
@@ -37,8 +33,6 @@ namespace BTG.Tank
         public void ExecuteUltimateAction()
         {
             m_UltimateAction.TryExecute(this);
-
-            _ = AutoChargeUltimate(m_CancellationTokenSource.Token);
         }
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
@@ -46,9 +40,14 @@ namespace BTG.Tank
             m_UltimateAction.OnUltimateActionAssigned += action;
         }
 
-        public void SubscribeToUltimateExecutedEvent(Action<float> action)
+        public void SubscribeToUltimateExecutedEvent(Action action)
         {
-            m_UltimateAction.OnUltimateExecuted += action;
+            m_UltimateAction.OnUltimateActionExecuted += action;
+        }
+
+        public void SubscribeToCameraShakeEvent(Action<float> action)
+        {
+            m_UltimateAction.OnExecuteCameraShake += action;
         }
 
         public void SubscribeToChargeUpdatedEvent(Action<int> action)
@@ -61,20 +60,14 @@ namespace BTG.Tank
             m_UltimateAction.OnFullyCharged += action;
         }
 
-        private async Task AutoChargeUltimate(CancellationToken token)
+        public void ShowTankView()
         {
-            try
-            {
-                while (!m_UltimateAction.IsFullyCharged)
-                {
-                    m_UltimateAction.Charge(m_UltimateAction.ChargeRate);
-                    await Task.Delay(1000, token);
-                }
-            }
-            catch (TaskCanceledException)
-            {
-                // Task was cancelled
-            }
+            m_Controller.ShowView();
+        }
+
+        public void HideTankView()
+        {
+            m_Controller.HideView();
         }
     }
 }

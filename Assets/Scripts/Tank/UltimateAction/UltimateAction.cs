@@ -1,4 +1,6 @@
 
+using System.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 namespace BTG.Tank.UltimateAction
@@ -10,10 +12,14 @@ namespace BTG.Tank.UltimateAction
         public event System.Action<string> OnUltimateActionAssigned;
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnFullyCharged;
-        public event System.Action<float> OnUltimateExecuted;
+        public event System.Action<float> OnExecuteCameraShake;
+        public event System.Action OnUltimateActionExecuted;
 
         protected UltimateActionDataSO m_UltimateActionData;
+        protected CancellationTokenSource m_CancellationTokenSource;
+
         private float m_ChargedAmount;
+
 
         public string Name => m_UltimateActionData.name;
 
@@ -22,6 +28,11 @@ namespace BTG.Tank.UltimateAction
         public float ChargeRate => m_UltimateActionData.ChargeRate;
 
         public bool IsFullyCharged => m_ChargedAmount >= FULL_CHARGE;
+
+        public void AutoCharge()
+        {
+            _ = AutoChargeAsync(m_CancellationTokenSource.Token);
+        }
 
         public virtual void Charge(float amount)
         {
@@ -39,14 +50,26 @@ namespace BTG.Tank.UltimateAction
 
         public virtual void OnDestroy()
         {
+            m_CancellationTokenSource.Cancel();
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
             OnFullyCharged = null;
-            OnUltimateExecuted = null;
+            OnExecuteCameraShake = null;
         }
 
-        protected void RaiseUltimateActionAssignedEvent()
+        protected virtual void Start()
         {
+            m_CancellationTokenSource = new CancellationTokenSource();
+
+            Charge(-FULL_CHARGE);
+
+            RaiseUltimateActionAssignedEvent();
+        }
+
+        protected async void RaiseUltimateActionAssignedEvent()
+        {
+            // wait for 1 frame to ensure that the event is subscribed to
+            await Task.Yield();
             OnUltimateActionAssigned?.Invoke(Name);
         }
 
@@ -55,9 +78,45 @@ namespace BTG.Tank.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        protected void RaiseUltimateExecutedEvent(float duration)
+        protected void RaiseCameraShakeEvent(float duration)
         {
-            OnUltimateExecuted?.Invoke(duration);
+            OnExecuteCameraShake?.Invoke(duration);
+        }
+
+        protected void RaiseUltimateActionExecutedEvent()
+        {
+            OnUltimateActionExecuted?.Invoke();
+        }
+
+        protected async Task ResetAfterDuration(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await Task.Delay((int)(m_UltimateActionData.Duration * 1000), cancellationToken);
+                Reset();
+            }
+            catch (TaskCanceledException)
+            {
+                // Do nothing
+            }
+        }
+
+        protected abstract void Reset();
+
+        private async Task AutoChargeAsync(CancellationToken token)
+        {
+            try
+            {
+                while (!IsFullyCharged)
+                {
+                    Charge(ChargeRate);
+                    await Task.Delay(1000, token);
+                }
+            }
+            catch (TaskCanceledException)
+            {
+                // Task was cancelled
+            }
         }
     }
 }

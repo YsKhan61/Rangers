@@ -10,6 +10,7 @@ namespace BTG.Tank.UltimateAction
         public SelfShield(SelfShieldDataSO selfShieldData)
         {
             m_UltimateActionData = selfShieldData;
+            Start();
         }
 
         public override bool TryExecute(TankUltimateController controller)
@@ -21,6 +22,11 @@ namespace BTG.Tank.UltimateAction
         public override void OnDestroy()
         {
             Debug.Log("Ultimate: Self Shield destroyed");
+        }
+
+        protected override void Reset()
+        {
+            
         }
     }
 }

@@ -36,6 +36,7 @@ namespace BTG.Tank
             m_Model = new TankModel(tankData, this);
             m_View = Object.Instantiate(tankData.TankViewPrefab);
             m_View.SetController(this);
+
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory.CreateUltimateAction());
@@ -47,23 +48,23 @@ namespace BTG.Tank
 
         public void FixedUpdate()
         {
-            m_MovementController.FixedUpdate();
+            m_MovementController?.FixedUpdate();
         }
 
         public void Update()
         {
             UpdateState();
 
-            m_MovementController.Update();
-            m_Firing.Update();
+            m_MovementController?.Update();
+            m_Firing?.Update();
 
             UpdateMoveSound();
         }
 
         public void OnDestroy()
         {
-            m_Firing.OnDestroy();
-            m_UltimateController.OnDestroy();
+            m_Firing?.OnDestroy();
+            m_UltimateController?.OnDestroy();
         }
 
         public void SetMoveValue(float value)
@@ -96,9 +97,14 @@ namespace BTG.Tank
             m_UltimateController.SubscribeToUltimateActionAssignedEvent(onUltimateActionAssigned);
         }
 
-        public void SubscribeToUltimateExecutedEvent(Action<float> onUltimateExecuted)
+        public void SubscribeToUltimateExecutedEvent(Action onUltimateExecuted)
         {
             m_UltimateController.SubscribeToUltimateExecutedEvent(onUltimateExecuted);
+        }
+
+        public void SubscribeToCameraShakeEvent(Action<float> onCameraShake)
+        {
+            m_UltimateController.SubscribeToCameraShakeEvent(onCameraShake);
         }
 
         public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated)
@@ -114,6 +120,16 @@ namespace BTG.Tank
         public void ExecuteUltimateAction()
         {
             m_UltimateController.ExecuteUltimateAction();
+        }
+
+        public void ShowView()
+        {
+            m_View.Show();
+        }
+
+        public void HideView()
+        {
+            m_View.Hide();
         }
 
         private void UpdateState()

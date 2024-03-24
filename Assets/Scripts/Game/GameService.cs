@@ -24,8 +24,8 @@ namespace BTG.Game
             m_PlayerService = new PlayerService();
             TankFactory tankFactory = new TankFactory(m_TankDataList);
             int tankId = PlayerPrefs.GetInt("TankID", m_TestTankID);
-            m_PlayerService.ConfigurePlayer(tankId, tankFactory, m_PVCController, m_UltimatePanel);
-            new EnemyService(tankFactory).ConfigureEnemy(m_TestEnemyID);
+            m_PlayerService.ConfigurePlayerTank(tankId, tankFactory, m_PVCController, m_UltimatePanel);
+            new EnemyService(tankFactory).ConfigureEnemyTank(m_TestEnemyID);
         }
 
         private void Update()

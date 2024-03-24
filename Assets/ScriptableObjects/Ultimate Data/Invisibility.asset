@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 63d98cacdd9d0b24f8be76bc5f520226, type: 3}
-  m_Name: Invisibility Factory
+  m_Script: {fileID: 11500000, guid: 948960abcc4dd77488c6400f53dc2b96, type: 3}
+  m_Name: Invisibility
   m_EditorClassIdentifier: 
-  m_InvisibilityData: {fileID: 11400000, guid: 5702fde524e327147bbd5e8d86c08ed3, type: 2}
+  m_Duration: 5
+  m_ChargeRate: 10
+  m_InvisibilityViewPrefab: {fileID: 6390171717747272922, guid: 782109b464729f94e8df3bfe179effc1,
+    type: 3}

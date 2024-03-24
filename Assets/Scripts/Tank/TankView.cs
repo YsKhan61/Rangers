@@ -9,6 +9,9 @@ namespace BTG.Tank
         public Transform CameraTarget => m_CameraTarget;
 
         [SerializeField]
+        Transform m_Graphics;
+
+        [SerializeField]
         Rigidbody m_Rigidbody;
         public Rigidbody RigidBody => m_Rigidbody;
 
@@ -49,6 +52,16 @@ namespace BTG.Tank
         public void UpdateChargedAmountUI(float chargeAmount)
         {
             m_TankUI.UpdateChargedAmountUI(chargeAmount);
+        }
+
+        public void Show()
+        {
+            m_Graphics.gameObject.SetActive(true);
+        }
+
+        public void Hide()
+        {
+            m_Graphics.gameObject.SetActive(false);
         }
     }
 }

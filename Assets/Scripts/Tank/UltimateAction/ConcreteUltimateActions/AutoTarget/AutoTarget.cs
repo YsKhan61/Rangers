@@ -10,6 +10,7 @@ namespace BTG.Tank.UltimateAction
         public AutoTarget(AutoTargetDataSO autoTargetData)
         {
             m_UltimateActionData = autoTargetData;
+            Start();
         }
 
         public override bool TryExecute(TankUltimateController controller)
@@ -21,6 +22,11 @@ namespace BTG.Tank.UltimateAction
         public override void OnDestroy()
         {
             Debug.Log("Ultimate: Auto Target destroyed");
+        }
+
+        protected override void Reset()
+        {
+            
         }
     }
 }
