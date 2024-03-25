@@ -6,6 +6,8 @@ namespace BTG.Tank.UltimateAction
 {
     public class Invisibility : UltimateAction
     {
+        public event System.Action<float> OnExecuteCameraShake;
+
         private InvisibilityDataSO m_InvisibilityData => m_UltimateActionData as InvisibilityDataSO;
 
         private InvisibilityView m_View;
@@ -65,7 +67,7 @@ namespace BTG.Tank.UltimateAction
 
                 Charge(-FULL_CHARGE);
                 AutoCharge();
-                RaiseCameraShakeEvent(1f);
+                OnExecuteCameraShake?.Invoke(1f);
             }
             catch (TaskCanceledException)
             {

@@ -3,8 +3,10 @@ using UnityEngine;
 
 namespace BTG.Tank.UltimateAction
 {
-    public class AirStrike : UltimateAction
+    public class AirStrike : UltimateAction, ICameraShakeUltimateAction
     {
+        public event System.Action<float> OnExecuteCameraShake;
+
         private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
 
         private AirStrikeView m_View;
@@ -28,7 +30,7 @@ namespace BTG.Tank.UltimateAction
             m_View.PlayAudio();
             _ = ResetAfterDuration(m_CancellationTokenSource.Token);
 
-            RaiseCameraShakeEvent(m_AirStrikeData.Duration);
+            OnExecuteCameraShake?.Invoke(Duration);
 
             return true;
         }

@@ -12,7 +12,7 @@ namespace BTG.Tank.UltimateAction
         public event System.Action<string> OnUltimateActionAssigned;
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnFullyCharged;
-        public event System.Action<float> OnExecuteCameraShake;
+        
         public event System.Action OnUltimateActionExecuted;
 
         protected UltimateActionDataSO m_UltimateActionData;
@@ -54,7 +54,6 @@ namespace BTG.Tank.UltimateAction
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
             OnFullyCharged = null;
-            OnExecuteCameraShake = null;
         }
 
         protected virtual void Start()
@@ -76,11 +75,6 @@ namespace BTG.Tank.UltimateAction
         protected void RaiseFullyChargedEvent()
         {
             OnFullyCharged?.Invoke();
-        }
-
-        protected void RaiseCameraShakeEvent(float duration)
-        {
-            OnExecuteCameraShake?.Invoke(duration);
         }
 
         protected void RaiseUltimateActionExecutedEvent()

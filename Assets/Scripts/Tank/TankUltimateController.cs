@@ -15,8 +15,6 @@ namespace BTG.Tank
 
         public Transform Transform => m_Controller.Transform;
 
-        public float Duration => m_UltimateAction.Duration;
-
         public TankUltimateController(TankController controller, IUltimateAction action)
         {
             m_UltimateAction = action;
@@ -47,7 +45,10 @@ namespace BTG.Tank
 
         public void SubscribeToCameraShakeEvent(Action<float> action)
         {
-            m_UltimateAction.OnExecuteCameraShake += action;
+            if (m_UltimateAction is ICameraShakeUltimateAction camShakeUltAction)
+            {
+                camShakeUltAction.OnExecuteCameraShake += action;
+            }
         }
 
         public void SubscribeToChargeUpdatedEvent(Action<int> action)

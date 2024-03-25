@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Tank.UltimateAction
 {
-    [CreateAssetMenu(fileName = "AirStrikeData", menuName = "ScriptableObjects/UltimateAction/AirStrikeDataSO")]
+    [CreateAssetMenu(fileName = "AirStrike", menuName = "ScriptableObjects/UltimateAction/AirStrikeDataSO")]
     public class AirStrikeDataSO : UltimateActionDataSO
     {
         [SerializeField] private AirStrikeView m_AirStrikeViewPrefab;

@@ -563,8 +563,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be6083ff43087c4bb13c92f9271afb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TestTankID: 1
-  m_TestEnemyID: 4
+  m_TestPlayerTankID: {fileID: 11400000, guid: 23e95a801641b10468d524c8be3c57df, type: 2}
+  m_TestEnemyTankID: {fileID: 11400000, guid: 40bf2ea54f9aca84dad4bbb4d0795e01, type: 2}
   m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
   m_PVCController: {fileID: 1894154699}
   m_UltimatePanel: {fileID: 223905666}

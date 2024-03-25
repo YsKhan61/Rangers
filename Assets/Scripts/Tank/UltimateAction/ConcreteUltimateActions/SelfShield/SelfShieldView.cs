@@ -10,6 +10,13 @@ namespace BTG.Tank.UltimateAction
         [SerializeField]
         private AudioSource m_AudioSource;
 
+        public void SetParticleSystem(float duration)
+        {
+            ParticleSystem.MainModule mainModule = m_ParticleSystem.main;
+            mainModule.duration = duration;
+            mainModule.startLifetime = duration;
+        }
+
         public void PlayParticleSystem()
         {
             m_ParticleSystem.Play();
@@ -23,11 +30,6 @@ namespace BTG.Tank.UltimateAction
         public void PlayAudio()
         {
             m_AudioSource.Play();
-        }
-
-        public void StopAudio()
-        {
-            m_AudioSource.Stop();
         }
     }
 }

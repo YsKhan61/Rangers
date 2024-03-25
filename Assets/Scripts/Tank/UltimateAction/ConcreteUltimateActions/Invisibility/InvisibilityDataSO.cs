@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Tank.UltimateAction
 {
-    [CreateAssetMenu(fileName = "InvisibilityData", menuName = "ScriptableObjects/UltimateAction/InvisibilityDataSO")]
+    [CreateAssetMenu(fileName = "Invisibility", menuName = "ScriptableObjects/UltimateAction/InvisibilityDataSO")]
     public class InvisibilityDataSO : UltimateActionDataSO
     {
         [SerializeField] private InvisibilityView m_InvisibilityViewPrefab;
