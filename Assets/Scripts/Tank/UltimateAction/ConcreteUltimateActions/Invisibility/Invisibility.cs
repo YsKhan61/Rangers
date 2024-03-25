@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using UnityEngine;
-
+using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -21,10 +21,12 @@ namespace BTG.Tank.UltimateAction
 
         public override bool TryExecute()
         {
-            if (!IsFullyCharged)
+            if (CurrentState != State.FullyCharged)
             {
                 return false;
             }
+
+            ChangeState(State.Executing);
 
             SpawnView(m_UltimateController.TankTransform);
             m_View.PlayDisappearPS();
@@ -58,10 +60,13 @@ namespace BTG.Tank.UltimateAction
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
                 m_UltimateController.TankController.ShowGraphics();
+                OnExecuteCameraShake?.Invoke(1f);
 
+                RaiseUltimateActionExecutedEvent();
+
+                ChangeState(State.Charging);
                 Charge(-FULL_CHARGE);
                 AutoCharge();
-                OnExecuteCameraShake?.Invoke(1f);
             }
             catch (TaskCanceledException)
             {

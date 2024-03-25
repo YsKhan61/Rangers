@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -18,7 +18,7 @@ namespace BTG.Tank.UltimateAction
 
         public override bool TryExecute()
         {
-            if (!IsFullyCharged)
+            if (CurrentState != State.FullyCharged)
             {
                 return false;
             }
@@ -38,6 +38,9 @@ namespace BTG.Tank.UltimateAction
             Object.Destroy(m_View.gameObject);
             m_View = null;
 
+            RaiseUltimateActionExecutedEvent();
+
+            ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
         }

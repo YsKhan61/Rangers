@@ -9,6 +9,13 @@ namespace BTG.Tank.UltimateAction
 
     public interface IUltimateAction
     {
+        public enum State
+        {
+            Charging,
+            FullyCharged,
+            Executing
+        }
+
         public event System.Action<string> OnUltimateActionAssigned;
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnFullyCharged;
@@ -18,7 +25,9 @@ namespace BTG.Tank.UltimateAction
 
         public float ChargeRate { get; }
 
-        public bool IsFullyCharged { get; }
+        // public bool IsFullyCharged { get; }
+
+        public void ChangeState(State newState);
 
         public void AutoCharge();
 

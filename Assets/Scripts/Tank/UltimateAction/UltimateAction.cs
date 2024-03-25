@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
+using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -25,7 +26,13 @@ namespace BTG.Tank.UltimateAction
 
         public float ChargeRate => m_UltimateActionData.ChargeRate;
 
-        public bool IsFullyCharged => m_ChargedAmount >= FULL_CHARGE;
+        public State CurrentState { get; protected set; }
+        // public bool IsFullyCharged => m_ChargedAmount >= FULL_CHARGE;
+
+        public void ChangeState(State newState)
+        {
+            CurrentState = newState;
+        }
 
         public void AutoCharge()
         {
@@ -34,12 +41,16 @@ namespace BTG.Tank.UltimateAction
 
         public virtual void Charge(float amount)
         {
+            if (CurrentState != State.Charging)
+                return;
+
             m_ChargedAmount += amount;
             m_ChargedAmount = Mathf.Clamp(m_ChargedAmount, 0, FULL_CHARGE);
             OnChargeUpdated?.Invoke((int)m_ChargedAmount);
 
-            if (IsFullyCharged)
+            if (m_ChargedAmount >= FULL_CHARGE)
             {
+                ChangeState(State.FullyCharged);
                 RaiseFullyChargedEvent();
             }
         }
@@ -58,6 +69,7 @@ namespace BTG.Tank.UltimateAction
         {
             m_CancellationTokenSource = new CancellationTokenSource();
 
+            ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
 
             RaiseUltimateActionAssignedEvent();
@@ -99,7 +111,9 @@ namespace BTG.Tank.UltimateAction
         {
             try
             {
-                while (!IsFullyCharged)
+                ChangeState(State.Charging);
+
+                while (CurrentState == State.Charging)
                 {
                     Charge(ChargeRate);
                     await Task.Delay(1000, token);

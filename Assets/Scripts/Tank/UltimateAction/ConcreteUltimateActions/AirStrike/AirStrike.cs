@@ -1,4 +1,5 @@
 using UnityEngine;
+using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 
 namespace BTG.Tank.UltimateAction
@@ -21,10 +22,12 @@ namespace BTG.Tank.UltimateAction
 
         public override bool TryExecute()
         {
-            if (!IsFullyCharged)
+            if (CurrentState != State.FullyCharged)
             {
                 return false;
             }
+
+            ChangeState(State.Executing);
 
             SpawnView(m_UltimateController.TankTransform);
             m_View.PlayParticleSystem();
@@ -43,7 +46,10 @@ namespace BTG.Tank.UltimateAction
             Object.Destroy(m_View.gameObject);
             m_View = null;
 
-            Charge(-FULL_CHARGE);
+            RaiseUltimateActionExecutedEvent();
+
+            ChangeState(State.Executing);
+            Charge(-FULL_CHARGE);               // Reset charge
             AutoCharge();
         }
 

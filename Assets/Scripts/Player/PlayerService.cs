@@ -55,7 +55,7 @@ namespace BTG.Player
             controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.AssignUltimateActionName);
             controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
             controller.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
-            controller.SubscribeToCameraShakeEvent(ultimateUI.OnUltimateExecuted);
+            controller.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
         }
     }
 }

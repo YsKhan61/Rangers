@@ -16,9 +16,9 @@ MonoBehaviour:
   m_TargetLayer:
     serializedVersion: 2
     m_Bits: 64
-  m_CenterOffset: 10
-  m_ImpactRadius: 9
+  m_CenterOffset: 12
+  m_ImpactRadius: 15
   m_FireRate: 2
   m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
     type: 3}
-  m_ProjectileSpeed: 4
+  m_ProjectileSpeed: 7

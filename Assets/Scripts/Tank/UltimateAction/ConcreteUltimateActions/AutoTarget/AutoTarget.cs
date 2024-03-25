@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
-
+using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -20,13 +20,15 @@ namespace BTG.Tank.UltimateAction
 
         public override bool TryExecute()
         {
-            if (!IsFullyCharged)
+            if (CurrentState != State.FullyCharged)
                 return false;
 
             if (!TryGetNearbyTanks(out TankView[] tanks))
                 return false;
 
-            _ = FireAsync(tanks);
+            ChangeState(State.Executing);
+
+            _ = FireSequenceAsync(tanks);
 
             return true;
         }
@@ -41,6 +43,7 @@ namespace BTG.Tank.UltimateAction
         {
             RaiseUltimateActionExecutedEvent();
 
+            ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
         }
@@ -86,7 +89,7 @@ namespace BTG.Tank.UltimateAction
             views = temp.Where(item => item != null).ToArray();
         }
 
-        private async Task FireAsync(TankView[] tanks)
+        private async Task FireSequenceAsync(TankView[] tanks)
         {
             try
             {

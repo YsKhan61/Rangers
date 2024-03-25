@@ -34,7 +34,7 @@ namespace BTG.UI
             m_ReadyImage.gameObject.SetActive(true);
         }
 
-        public void OnUltimateExecuted(float _)
+        public void OnUltimateExecuted()
         {
             m_ReadyImage.gameObject.SetActive(false);
             m_UnreadyImage.gameObject.SetActive(true);

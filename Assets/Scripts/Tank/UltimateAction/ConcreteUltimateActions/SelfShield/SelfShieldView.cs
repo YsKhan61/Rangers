@@ -5,31 +5,71 @@ namespace BTG.Tank.UltimateAction
     public class SelfShieldView : MonoBehaviour
     {
         [SerializeField]
-        private ParticleSystem m_ParticleSystem;
+        private ParticleSystem[] m_ParticleSystems;
 
         [SerializeField]
         private AudioSource m_AudioSource;
 
         public void SetParticleSystem(float duration)
         {
-            ParticleSystem.MainModule mainModule = m_ParticleSystem.main;
-            mainModule.duration = duration;
-            mainModule.startLifetime = duration;
+            if (IsParticlesNull())
+            {
+                return;
+            }
+
+            foreach (ParticleSystem particleSystem in m_ParticleSystems)
+            {
+                SetParticleSystemDuration(particleSystem, duration);
+            }
         }
 
         public void PlayParticleSystem()
         {
-            m_ParticleSystem.Play();
+            if (IsParticlesNull())
+            {
+                return;
+            }
+
+            foreach (ParticleSystem particleSystem in m_ParticleSystems)
+            {
+                particleSystem.Play();
+            }
         }
 
         public void StopParticleSystem()
         {
-            m_ParticleSystem.Stop();
+            if (IsParticlesNull())
+            {
+                return;
+            }
+
+            foreach (ParticleSystem particleSystem in m_ParticleSystems)
+            {
+                particleSystem.Stop();
+            }
         }
 
         public void PlayAudio()
         {
             m_AudioSource.Play();
+        }
+
+        private void SetParticleSystemDuration(ParticleSystem particleSystem, float duration)
+        {
+            ParticleSystem.MainModule mainModule = particleSystem.main;
+            mainModule.duration = duration;
+            mainModule.startLifetime = duration;
+        }
+
+        private bool IsParticlesNull()
+        {
+            if (m_ParticleSystems == null || m_ParticleSystems.Length == 0)
+            {
+                Debug.LogError("No particle systems assigned to the view");
+                return true;
+            }
+            
+            return false;
         }
     }
 }
