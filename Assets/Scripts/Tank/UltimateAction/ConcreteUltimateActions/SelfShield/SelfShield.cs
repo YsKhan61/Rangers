@@ -9,24 +9,25 @@ namespace BTG.Tank.UltimateAction
 
         private SelfShieldView m_View;
 
-        public SelfShield(SelfShieldDataSO selfShieldData)
+        public SelfShield(TankUltimateController controller, SelfShieldDataSO selfShieldData)
         {
+            m_UltimateController = controller;
             m_UltimateActionData = selfShieldData;
             Start();
         }
 
-        public override bool TryExecute(TankUltimateController controller)
+        public override bool TryExecute()
         {
             if (!IsFullyCharged)
             {
                 return false;
             }
 
-            SpawnView(controller.Transform);
+            SpawnView(m_UltimateController.TankTransform);
             m_View.SetParticleSystem(m_SelfShieldData.Duration);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
-            _ = ResetAfterDuration(m_CancellationTokenSource.Token);
+            _ = ResetAfterDuration(m_SelfShieldData.Duration, m_CancellationTokenSource.Token);
 
             return true;
         }

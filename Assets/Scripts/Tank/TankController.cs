@@ -31,6 +31,8 @@ namespace BTG.Tank
 
         public Transform CameraTarget => m_View.CameraTarget;
 
+        public Transform FirePoint => m_View.FirePoint;
+
         public TankController(TankDataSO tankData)
         {
             m_Model = new TankModel(tankData, this);
@@ -39,7 +41,7 @@ namespace BTG.Tank
 
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
-            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory.CreateUltimateAction());
+            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
 
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
@@ -122,12 +124,12 @@ namespace BTG.Tank
             m_UltimateController.ExecuteUltimateAction();
         }
 
-        public void ShowView()
+        public void ShowGraphics()
         {
             m_View.Show();
         }
 
-        public void HideView()
+        public void HideGraphics()
         {
             m_View.Hide();
         }

@@ -8,9 +8,9 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private InvisibilityDataSO m_InvisibilityData;
 
-        public override IUltimateAction CreateUltimateAction()
+        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
         {
-            return new Invisibility(m_InvisibilityData);
+            return new Invisibility(controller, m_InvisibilityData);
         }
     }
 

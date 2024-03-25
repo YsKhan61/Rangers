@@ -15,7 +15,6 @@ namespace BTG.Tank.UltimateAction
         public event System.Action OnUltimateActionExecuted;
 
         public string Name { get; }
-        public float Duration { get; }
 
         public float ChargeRate { get; }
 
@@ -25,7 +24,7 @@ namespace BTG.Tank.UltimateAction
 
         public void Charge(float amount);
 
-        public bool TryExecute(TankUltimateController controller);
+        public bool TryExecute();
 
         public void OnDestroy();
     }

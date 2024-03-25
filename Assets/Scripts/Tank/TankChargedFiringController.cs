@@ -44,7 +44,13 @@ namespace BTG.Tank
         public void OnFireEnded()
         {
             m_Model.IsCharging = false;
-            SpawnProjectile();
+
+            if (m_Model.ChargeAmount <= 0f)
+                return;
+
+            SpawnProjectile(out ProjectileController projectile);
+            projectile.AddImpulseForce(CalculateProjectileInitialSpeed());
+
             OnTankShoot?.Invoke(m_Model.ChargeAmount);
             m_View.TankAudio.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
             ResetChargedAmount();
@@ -68,15 +74,11 @@ namespace BTG.Tank
             m_View.TankAudio.StopChargingClip();
         }
 
-        private void SpawnProjectile()
+        private void SpawnProjectile(out ProjectileController projectile)
         {
-            if (m_Model.ChargeAmount <= 0f)
-                return;
-
-            ProjectileController projectileController = m_ProjectilePool.GetProjectile();
-            projectileController.Transform.position = m_View.FirePoint.position;
-            projectileController.Transform.rotation = m_View.FirePoint.rotation;
-            projectileController.AddImpulseForce(CalculateProjectileInitialSpeed());
+            projectile = m_ProjectilePool.GetProjectile();
+            projectile.Transform.position = m_View.FirePoint.position;
+            projectile.Transform.rotation = m_View.FirePoint.rotation;
         }
 
         private float CalculateProjectileInitialSpeed()

@@ -5,7 +5,7 @@ namespace BTG.Tank.UltimateAction
 {
     public abstract class UltimateActionFactorySO : ScriptableObject
     {
-        public abstract IUltimateAction CreateUltimateAction();
+        public abstract IUltimateAction CreateUltimateAction(TankUltimateController controller);
     }
 
 }

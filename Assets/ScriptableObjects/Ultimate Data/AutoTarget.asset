@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628c5f15370d6dd43aad0e685b1b1527, type: 3}
+  m_Name: AutoTarget
+  m_EditorClassIdentifier: 
+  m_ChargeRate: 10
+  m_TargetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  m_CenterOffset: 10
+  m_ImpactRadius: 9
+  m_FireRate: 2
+  m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
+    type: 3}
+  m_ProjectileSpeed: 4

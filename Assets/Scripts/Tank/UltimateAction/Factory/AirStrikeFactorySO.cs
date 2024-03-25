@@ -8,9 +8,9 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private AirStrikeDataSO m_AirStrikeData;
 
-        public override IUltimateAction CreateUltimateAction()
+        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
         {
-            return new AirStrike(m_AirStrikeData);
+            return new AirStrike(controller, m_AirStrikeData);
         }
     }
 }

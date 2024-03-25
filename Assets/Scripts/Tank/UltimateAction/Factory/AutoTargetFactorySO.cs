@@ -7,9 +7,9 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private AutoTargetDataSO m_AutoTargetData;
 
-        public override IUltimateAction CreateUltimateAction()
+        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
         {
-            return new AutoTarget(m_AutoTargetData);
+            return new AutoTarget(controller, m_AutoTargetData);
         }
     }
 }

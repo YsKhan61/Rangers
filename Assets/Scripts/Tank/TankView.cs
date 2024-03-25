@@ -27,26 +27,28 @@ namespace BTG.Tank
         public TankAudio TankAudio => m_TankAudio;
 
         // dependencies
-        private TankController m_TankController;
+        private TankController m_Controller;
+        public TankController Controller => m_Controller;
+
 
         private void FixedUpdate()
         {
-            m_TankController.FixedUpdate();
+            m_Controller.FixedUpdate();
         }
 
         private void Update()
         {
-            m_TankController.Update();
+            m_Controller.Update();
         }
 
         private void OnDestroy()
         {
-            m_TankController.OnDestroy();
+            m_Controller.OnDestroy();
         }
 
         public void SetController(TankController controller)
         {
-            m_TankController = controller;
+            m_Controller = controller;
         }
 
         public void UpdateChargedAmountUI(float chargeAmount)

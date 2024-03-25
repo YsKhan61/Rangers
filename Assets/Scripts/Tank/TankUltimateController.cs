@@ -12,12 +12,15 @@ namespace BTG.Tank
     {
         private IUltimateAction m_UltimateAction;
         private TankController m_Controller;
+        public TankController TankController => m_Controller;
 
-        public Transform Transform => m_Controller.Transform;
+        public Transform TankTransform => m_Controller.Transform;
 
-        public TankUltimateController(TankController controller, IUltimateAction action)
+        public Transform FirePoint => m_Controller.FirePoint;
+
+        public TankUltimateController(TankController controller, UltimateActionFactorySO ultimateFactoryData)
         {
-            m_UltimateAction = action;
+            m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
             m_Controller = controller;
 
             m_UltimateAction.AutoCharge();
@@ -30,7 +33,7 @@ namespace BTG.Tank
 
         public void ExecuteUltimateAction()
         {
-            m_UltimateAction.TryExecute(this);
+            m_UltimateAction.TryExecute();
         }
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
@@ -59,16 +62,6 @@ namespace BTG.Tank
         public void SubscribeToFullyChargedEvent(Action action)
         {
             m_UltimateAction.OnFullyCharged += action;
-        }
-
-        public void ShowTankView()
-        {
-            m_Controller.ShowView();
-        }
-
-        public void HideTankView()
-        {
-            m_Controller.HideView();
         }
     }
 }

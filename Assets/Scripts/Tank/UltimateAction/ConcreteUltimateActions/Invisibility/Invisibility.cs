@@ -12,31 +12,25 @@ namespace BTG.Tank.UltimateAction
 
         private InvisibilityView m_View;
 
-        private TankUltimateController m_Controller;
-
-        public Invisibility(InvisibilityDataSO invisibilityData)
+        public Invisibility(TankUltimateController controller, InvisibilityDataSO invisibilityData)
         {
+            m_UltimateController = controller;
             m_UltimateActionData = invisibilityData;
             Start();
         }
 
-        public override bool TryExecute(TankUltimateController controller)
+        public override bool TryExecute()
         {
             if (!IsFullyCharged)
             {
                 return false;
             }
 
-            if (m_Controller == null || m_Controller != controller)
-            {
-                m_Controller = controller;
-            }
-
-            SpawnView(controller.Transform);
+            SpawnView(m_UltimateController.TankTransform);
             m_View.PlayDisappearPS();
             m_View.PlayDisappearAudio();
-            controller.HideTankView();
-            _ = ResetAfterDuration(m_CancellationTokenSource.Token);
+            m_UltimateController.TankController.HideGraphics();
+            _ = ResetAfterDuration(m_InvisibilityData.Duration, m_CancellationTokenSource.Token);
 
             return true;
         }
@@ -63,7 +57,7 @@ namespace BTG.Tank.UltimateAction
                 await Task.Delay((int)(m_View.AppearPSDuration * 1000), token);
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
-                m_Controller.ShowTankView();
+                m_UltimateController.TankController.ShowGraphics();
 
                 Charge(-FULL_CHARGE);
                 AutoCharge();

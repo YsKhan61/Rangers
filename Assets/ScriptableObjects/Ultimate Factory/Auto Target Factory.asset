@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b5a82a0fc48274cb55b8ef6597cf15, type: 3}
   m_Name: Auto Target Factory
   m_EditorClassIdentifier: 
+  m_AutoTargetData: {fileID: 11400000, guid: 08d2d91b85932b24f9aa4d83a9fe4c09, type: 2}

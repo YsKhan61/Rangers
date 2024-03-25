@@ -8,9 +8,9 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private SelfShieldDataSO m_SelfShieldData;
 
-        public override IUltimateAction CreateUltimateAction()
+        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
         {
-            return new SelfShield(m_SelfShieldData);
+            return new SelfShield(controller, m_SelfShieldData);
         }
     }
 }

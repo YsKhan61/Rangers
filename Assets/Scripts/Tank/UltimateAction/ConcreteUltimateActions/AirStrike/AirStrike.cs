@@ -12,25 +12,26 @@ namespace BTG.Tank.UltimateAction
         private AirStrikeView m_View;
 
         // Create constructor
-        public AirStrike(AirStrikeDataSO airStrikeData)
+        public AirStrike(TankUltimateController controller, AirStrikeDataSO airStrikeData)
         {
+            m_UltimateController = controller;
             m_UltimateActionData = airStrikeData;
             Start();
         }
 
-        public override bool TryExecute(TankUltimateController controller)
+        public override bool TryExecute()
         {
             if (!IsFullyCharged)
             {
                 return false;
             }
 
-            SpawnView(controller.Transform);
+            SpawnView(m_UltimateController.TankTransform);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
-            _ = ResetAfterDuration(m_CancellationTokenSource.Token);
+            _ = ResetAfterDuration(m_AirStrikeData.Duration, m_CancellationTokenSource.Token);
 
-            OnExecuteCameraShake?.Invoke(Duration);
+            OnExecuteCameraShake?.Invoke(m_AirStrikeData.Duration);
 
             return true;
         }
@@ -44,6 +45,12 @@ namespace BTG.Tank.UltimateAction
 
             Charge(-FULL_CHARGE);
             AutoCharge();
+        }
+
+        public override void OnDestroy()
+        {
+            OnExecuteCameraShake = null;
+            base.OnDestroy();
         }
 
         private void SpawnView(Transform parent)

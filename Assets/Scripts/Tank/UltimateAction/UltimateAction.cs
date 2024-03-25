@@ -12,9 +12,9 @@ namespace BTG.Tank.UltimateAction
         public event System.Action<string> OnUltimateActionAssigned;
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnFullyCharged;
-        
         public event System.Action OnUltimateActionExecuted;
 
+        protected TankUltimateController m_UltimateController;
         protected UltimateActionDataSO m_UltimateActionData;
         protected CancellationTokenSource m_CancellationTokenSource;
 
@@ -22,8 +22,6 @@ namespace BTG.Tank.UltimateAction
 
 
         public string Name => m_UltimateActionData.name;
-
-        public float Duration => m_UltimateActionData.Duration;
 
         public float ChargeRate => m_UltimateActionData.ChargeRate;
 
@@ -46,7 +44,7 @@ namespace BTG.Tank.UltimateAction
             }
         }
 
-        public abstract bool TryExecute(TankUltimateController controller);
+        public abstract bool TryExecute();
 
         public virtual void OnDestroy()
         {
@@ -82,11 +80,11 @@ namespace BTG.Tank.UltimateAction
             OnUltimateActionExecuted?.Invoke();
         }
 
-        protected async Task ResetAfterDuration(CancellationToken cancellationToken)
+        protected async Task ResetAfterDuration(float duration, CancellationToken cancellationToken)
         {
             try
             {
-                await Task.Delay((int)(m_UltimateActionData.Duration * 1000), cancellationToken);
+                await Task.Delay((int)(duration * 1000), cancellationToken);
                 Reset();
             }
             catch (TaskCanceledException)
