@@ -27,6 +27,7 @@ namespace BTG.Tank.Projectile
         public void OnDisable()
         {
             m_Cts.Cancel();
+            m_Cts.Dispose();
         }
 
         public void AddImpulseForce(float initialSpeed)
@@ -53,7 +54,6 @@ namespace BTG.Tank.Projectile
             {
                 return;
             }
-            finally { m_Cts.Dispose(); }
 
             m_Pool.ReturnProjectile(this);
         }
