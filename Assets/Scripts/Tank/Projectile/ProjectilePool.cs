@@ -16,7 +16,12 @@ namespace BTG.Tank.Projectile
             return GetItem();
         }
 
-        protected override ProjectileController CreateItem() => new ProjectileController(m_ProjectileData);
+        public void ReturnProjectile(ProjectileController projectile)
+        {
+            ReturnItem(projectile);
+        }
+
+        protected override ProjectileController CreateItem() => new ProjectileController(m_ProjectileData, this);
     }
 }
 

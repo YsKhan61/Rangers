@@ -1,8 +1,9 @@
+using BTG.Utilities;
 using UnityEngine;
 
 namespace BTG.Tank
 {
-    public class TankView : MonoBehaviour
+    public class TankView : MonoBehaviour, IDamageable
     {
         [SerializeField]
         Transform m_CameraTarget;
@@ -49,6 +50,11 @@ namespace BTG.Tank
         public void SetController(TankController controller)
         {
             m_Controller = controller;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            m_Controller.TakeDamage(damage);
         }
 
         public void UpdateChargedAmountUI(float chargeAmount)

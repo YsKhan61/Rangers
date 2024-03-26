@@ -27,8 +27,8 @@ namespace BTG.Tank
         [SerializeField] private ProjectileDataSO m_projectileData;
         public ProjectileDataSO ProjectileData => m_projectileData;
 
-        [SerializeField] private float m_ChargeTime;
-        public float ChargeTime => m_ChargeTime;
+        [SerializeField] private int m_ChargeTime;
+        public int ChargeTime => m_ChargeTime;
 
         [SerializeField]
         private AudioClip m_EngineIdleClip;
@@ -49,6 +49,9 @@ namespace BTG.Tank
         [SerializeField]
         private UltimateActionFactorySO m_UltimateActionFactory;
         public UltimateActionFactorySO UltimateActionFactory => m_UltimateActionFactory;
+
+        [SerializeField] private int m_MaxHealth;
+        public int MaxHealth => m_MaxHealth;
     }
 }
 

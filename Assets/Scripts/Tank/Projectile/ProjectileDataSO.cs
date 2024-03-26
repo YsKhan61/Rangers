@@ -14,6 +14,12 @@ namespace BTG.Tank.Projectile
 
         [SerializeField] private float m_MaxInitialSpeed;
         public float MaxInitialSpeed => m_MaxInitialSpeed;
+
+        [SerializeField] private int m_Damage;
+        public int Damage => m_Damage;
+
+        [SerializeField] private AudioClip m_ExplosionSound;
+        public AudioClip ExplosionSound => m_ExplosionSound;
     }
 }
 

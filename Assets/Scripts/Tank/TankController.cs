@@ -25,6 +25,7 @@ namespace BTG.Tank
         private TankMovementController m_MovementController;
         private TankChargedFiringController m_Firing;
         private TankUltimateController m_UltimateController;
+        private TankHealthController m_HealthController;
 
         public Transform Transform => m_View.transform;
         public Rigidbody Rigidbody => m_View.RigidBody;
@@ -42,6 +43,7 @@ namespace BTG.Tank
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
+            m_HealthController = new TankHealthController(m_Model);
 
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
@@ -87,6 +89,11 @@ namespace BTG.Tank
         public void EndTankFiring()
         {
             m_Firing.OnFireEnded();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            m_HealthController.TakeDamage(damage);
         }
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)

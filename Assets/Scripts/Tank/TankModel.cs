@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BTG.Tank
 {
     public class TankModel
@@ -17,10 +19,20 @@ namespace BTG.Tank
 
         public float ChargeAmount;
 
+        private int m_CurrentHealth;
+        public int CurrentHealth => m_CurrentHealth;
+        public string Name => m_TankData.name;
+
         public TankModel(TankDataSO m_TankData, TankController controller)
         {
             this.m_TankData = m_TankData;
             m_TankController = controller;
+        }
+
+        public void AddHealthData(int health)
+        {
+            m_CurrentHealth += health;
+            Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);
         }
     }
 }

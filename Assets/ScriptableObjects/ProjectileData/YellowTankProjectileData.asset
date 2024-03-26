@@ -15,4 +15,6 @@ MonoBehaviour:
   m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: e0afc9f2171777d43a8a5bf3e09e4ed9,
     type: 3}
   m_MinInitialSpeed: 10
-  m_MaxInitialSpeed: 30
+  m_MaxInitialSpeed: 60
+  m_Damage: 10
+  m_ExplosionSound: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
