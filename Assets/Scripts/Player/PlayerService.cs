@@ -15,7 +15,7 @@ namespace BTG.Player
             in PlayerVirualCameraController pvc, 
             in UltimateUI ultimateUI)
         {
-            if (!tankFactory.TryCreatePlayerTank(in tankId, out TankController controller))
+            if (!tankFactory.TryGetTank(tankId, out TankController controller))
             {
                 return;
             }

@@ -34,11 +34,18 @@ namespace BTG.Tank
 
         public Transform FirePoint => m_View.FirePoint;
 
-        public TankController(TankDataSO tankData)
+
+        private TankPool m_Pool;
+
+
+        public TankController(TankDataSO tankData, TankPool pool)
         {
+            m_Pool = pool;
+
             m_Model = new TankModel(tankData, this);
-            m_View = Object.Instantiate(tankData.TankViewPrefab);
+            m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
             m_View.SetController(this);
+
 
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
@@ -47,6 +54,11 @@ namespace BTG.Tank
 
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
+        }
+
+        public void Init()
+        {
+            m_View.gameObject.SetActive(true);
         }
 
 

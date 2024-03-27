@@ -16,7 +16,7 @@ namespace BTG.Enemy
         public void SpawnEnemyTank(
             in int tankId)
         {
-            m_TankFactory.TryCreatePlayerTank(in tankId, out TankController controller);
+            m_TankFactory.TryGetTank(tankId, out TankController controller);
             controller.Transform.position = new UnityEngine.Vector3(-5, 0, 0);
         }
     }

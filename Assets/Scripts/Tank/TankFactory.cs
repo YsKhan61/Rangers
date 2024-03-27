@@ -1,38 +1,42 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BTG.Tank
 {
     public class TankFactory
     {
-        private TankDataContainerSO m_TankDataList;
+        private TankDataContainerSO m_TankDataContainer;
 
-        public TankFactory(TankDataContainerSO tankDataList)
+        private List<TankPoolItem> m_Pools;
+
+        public TankFactory(TankDataContainerSO container)
         {
-            m_TankDataList = tankDataList;
+            m_TankDataContainer = container;
+            CreatePoolItems();
         }
 
-        public bool TryCreatePlayerTank(in int tankId, out TankController controller)
+        public bool TryGetTank(int tankId, out TankController controller)
         {
             controller = null;
 
-            if (!TryGetTankById(tankId, out TankDataSO tankDataToSpawn))            // m_TankID is for test purpose
+            if (!TryGetTankDataById(tankId, out TankDataSO tankDataToSpawn))            // m_TankID is for test purpose
                 return false;
 
-            controller = new TankController(tankDataToSpawn);
+            controller = m_Pools.Find(pool => pool.Id == tankId).Pool.GetTank();
             return true;
         }
 
-        private bool TryGetTankById(in int id, out TankDataSO tankData)
+        private bool TryGetTankDataById(in int id, out TankDataSO tankData)
         {
             tankData = null;
 
-            if (m_TankDataList == null || m_TankDataList.TankDataList.Length == 0)
+            if (m_TankDataContainer == null || m_TankDataContainer.TankDataList.Length == 0)
             {
                 Debug.LogError("TankDataList is not set or empty in PlayerTankSpawner");
                 return false;
             }
 
-            foreach (var tank in m_TankDataList.TankDataList)
+            foreach (var tank in m_TankDataContainer.TankDataList)
             {
                 if (tank.ID == id)
                 {
@@ -41,6 +45,27 @@ namespace BTG.Tank
                 }
             }
             return false;
+        }
+
+        private void CreatePoolItems()
+        {
+            m_Pools = new List<TankPoolItem>();
+            foreach (var tankData in m_TankDataContainer.TankDataList)
+            {
+                TankPool pool = new TankPool(tankData);
+                TankPoolItem poolItem = new TankPoolItem
+                {
+                    Pool = pool,
+                    Id = tankData.ID
+                };
+                m_Pools.Add(poolItem);
+            }
+        }
+
+        internal class TankPoolItem
+        {
+            public TankPool Pool;
+            public int Id;
         }
     }
 }
