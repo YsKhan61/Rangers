@@ -17,5 +17,5 @@ MonoBehaviour:
     type: 3}
   m_MinInitialSpeed: 10
   m_MaxInitialSpeed: 50
-  m_Damage: 20
+  m_Damage: 100
   m_ExplosionSound: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}

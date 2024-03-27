@@ -48,7 +48,7 @@ namespace BTG.Tank.Projectile
 
         public void ResetProjectile()
         {
-            m_View.Rigidbody.velocity = Vector3.zero;
+             m_View.Rigidbody.velocity = Vector3.zero;
             m_View.Rigidbody.angularVelocity = Vector3.zero;
             m_View.transform.position = Vector3.zero;
             m_View.transform.rotation = Quaternion.identity;

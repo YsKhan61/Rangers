@@ -24,9 +24,12 @@ namespace BTG.Game
         {
             m_PlayerService = new PlayerService();
             TankFactory tankFactory = new TankFactory(m_TankDataList);
-            int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);
-            m_PlayerService.ConfigurePlayerTank(tankId, tankFactory, m_PVCController, m_UltimatePanel);
-            new EnemyService(tankFactory).SpawnEnemyTank(m_TestEnemyTankID);
+            
+            int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
+            m_PlayerService.SpawnPlayerTank(tankId, tankFactory, m_PVCController, m_UltimatePanel);
+            
+            tankId = m_TestEnemyTankID > 0 ? m_TestEnemyTankID : 0;         // test purpose
+            new EnemyService(tankFactory).SpawnEnemyTank(tankId);
         }
 
         private void Update()

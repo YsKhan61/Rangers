@@ -2,7 +2,8 @@
     "name": "BTG.Tank",
     "rootNamespace": "",
     "references": [
-        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256"
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:4454828dde2e78846a3d1d550ce7a43d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

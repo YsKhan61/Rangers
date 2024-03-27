@@ -1,3 +1,4 @@
+using BTG.EventSystem;
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -21,7 +22,7 @@ namespace BTG.Tank
 
         // dependencies
         private TankModel m_Model;
-        public TankModel TankModel => m_Model;
+        public TankModel Model => m_Model;
         private TankView m_View;
         private TankMovementController m_MovementController;
         private TankChargedFiringController m_Firing;
@@ -60,6 +61,7 @@ namespace BTG.Tank
         public void Init()
         {
             m_View.gameObject.SetActive(true);
+            m_Model.State = TankState.Idle;
         }
 
 
@@ -214,6 +216,7 @@ namespace BTG.Tank
         private void OnTankStateChangedToDead()
         {
             m_View.TankAudio.StopEngineAudio();
+            EventService.Instance.OnTankDead?.InvokeEvent(m_Model.IsPlayer);
         }
     }
 }

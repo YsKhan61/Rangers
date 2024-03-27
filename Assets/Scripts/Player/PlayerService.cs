@@ -9,7 +9,7 @@ namespace BTG.Player
     {
         private PlayerInputs m_PlayerInputs;
 
-        public void ConfigurePlayerTank(
+        public void SpawnPlayerTank(
             in int tankId,
             in TankFactory tankFactory,
             in PlayerVirualCameraController pvc, 
@@ -20,6 +20,7 @@ namespace BTG.Player
                 return;
             }
 
+            controller.Model.IsPlayer = true;
             ConfigurePlayerCameraWithController(pvc, controller);
             ConfigureUltimateUIWithController(ultimateUI, controller);
 

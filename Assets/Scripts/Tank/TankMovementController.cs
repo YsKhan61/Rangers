@@ -23,7 +23,7 @@ namespace BTG.Tank
         public TankMovementController(TankMainController controller)
         {
             m_Controller = controller;
-            m_TankModel = controller.TankModel;
+            m_TankModel = controller.Model;
             m_Rigidbody = controller.Rigidbody;
         }
 

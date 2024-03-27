@@ -2,7 +2,8 @@
     "name": "BTG.Enemy",
     "rootNamespace": "",
     "references": [
-        "GUID:0d4e6f139c28b45469d79a061684c314"
+        "GUID:0d4e6f139c28b45469d79a061684c314",
+        "GUID:4454828dde2e78846a3d1d550ce7a43d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

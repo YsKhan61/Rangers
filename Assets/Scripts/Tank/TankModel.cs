@@ -4,6 +4,8 @@ namespace BTG.Tank
 {
     public class TankModel
     {
+        public bool IsPlayer = false;
+
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
