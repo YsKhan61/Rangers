@@ -24,12 +24,15 @@ namespace BTG.Tank.Projectile
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
             {
                 m_Controller.OnHitDamageable(damageable);
+                return;
             }
+
+            m_Controller.ResetProjectile();
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
-            m_Controller.OnDisable();
+            m_Controller.OnDestroy();
         }
 
         public void PlayExplosionSound(AudioClip clip)

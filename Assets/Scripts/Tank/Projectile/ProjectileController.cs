@@ -9,22 +9,27 @@ namespace BTG.Tank.Projectile
     public class ProjectileController
     {
         private ProjectileDataSO m_Data;
-        private ProjectileView m_ProjectileView;
+        private ProjectileView m_View;
         private ProjectilePool m_Pool;
         private CancellationTokenSource m_Cts;
 
-        public Transform Transform => m_ProjectileView.transform;
+        public Transform Transform => m_View.transform;
 
         public ProjectileController(ProjectileDataSO projectileData, ProjectilePool pool)
         {
             m_Cts = new CancellationTokenSource();
             m_Data = projectileData;
-            m_ProjectileView = Object.Instantiate(projectileData.ProjectileViewPrefab);
-            m_ProjectileView.SetController(this);
             m_Pool = pool;
+            m_View = Object.Instantiate(projectileData.ProjectileViewPrefab, m_Pool.ProjectileContainer);
+            m_View.SetController(this);
         }
 
-        public void OnDisable()
+        public void Init()
+        {
+            m_View.gameObject.SetActive(true);
+        }
+
+        public void OnDestroy()
         {
             m_Cts.Cancel();
             m_Cts.Dispose();
@@ -32,7 +37,7 @@ namespace BTG.Tank.Projectile
 
         public void AddImpulseForce(float initialSpeed)
         {
-            m_ProjectileView.Rigidbody.AddForce(m_ProjectileView.transform.forward * initialSpeed, ForceMode.Impulse);
+            m_View.Rigidbody.AddForce(m_View.transform.forward * initialSpeed, ForceMode.Impulse);
         }
 
         public void OnHitDamageable(IDamageable damageable)
@@ -41,21 +46,30 @@ namespace BTG.Tank.Projectile
             _ = Explode();
         }
 
+        public void ResetProjectile()
+        {
+            m_View.Rigidbody.velocity = Vector3.zero;
+            m_View.Rigidbody.angularVelocity = Vector3.zero;
+            m_View.transform.position = Vector3.zero;
+            m_View.transform.rotation = Quaternion.identity;
+            m_View.gameObject.SetActive(false);
+            m_Pool.ReturnProjectile(this);
+        }
+
         private async Task Explode()
         {
-            m_ProjectileView.PlayExplosionParticle();
-            m_ProjectileView.PlayExplosionSound(m_Data.ExplosionSound);
+            m_View.PlayExplosionParticle();
+            m_View.PlayExplosionSound(m_Data.ExplosionSound);
 
             try
             {
-                await Task.Delay((int)(m_ProjectileView.ExplosionDuration * 1000), m_Cts.Token);
+                await Task.Delay((int)(m_View.ExplosionDuration * 1000), m_Cts.Token);
+                ResetProjectile();
             }
             catch (TaskCanceledException)
             {
-                return;
-            }
 
-            m_Pool.ReturnProjectile(this);
+            }
         }
     }
 }
