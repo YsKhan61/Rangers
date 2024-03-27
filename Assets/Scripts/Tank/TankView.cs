@@ -28,8 +28,8 @@ namespace BTG.Tank
         public TankAudio TankAudio => m_TankAudio;
 
         // dependencies
-        private TankController m_Controller;
-        public TankController Controller => m_Controller;
+        private TankMainController m_Controller;
+        public TankMainController Controller => m_Controller;
 
 
         private void FixedUpdate()
@@ -47,7 +47,7 @@ namespace BTG.Tank
             m_Controller.OnDestroy();
         }
 
-        public void SetController(TankController controller)
+        public void SetController(TankMainController controller)
         {
             m_Controller = controller;
         }

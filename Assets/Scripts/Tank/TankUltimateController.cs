@@ -11,14 +11,14 @@ namespace BTG.Tank
     public class TankUltimateController
     {
         private IUltimateAction m_UltimateAction;
-        private TankController m_Controller;
-        public TankController TankController => m_Controller;
+        private TankMainController m_Controller;
+        public TankMainController TankController => m_Controller;
 
         public Transform TankTransform => m_Controller.Transform;
 
         public Transform FirePoint => m_Controller.FirePoint;
 
-        public TankUltimateController(TankController controller, UltimateActionFactorySO ultimateFactoryData)
+        public TankUltimateController(TankMainController controller, UltimateActionFactorySO ultimateFactoryData)
         {
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
             m_Controller = controller;

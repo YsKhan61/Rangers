@@ -26,8 +26,10 @@ namespace BTG.Tank.Projectile
                 m_Controller.OnHitDamageable(damageable);
                 return;
             }
-
-            m_Controller.ResetProjectile();
+            else
+            {
+                m_Controller.ResetProjectile();
+            }
         }
 
         private void OnDestroy()

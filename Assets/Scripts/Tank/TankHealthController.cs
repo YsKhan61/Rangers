@@ -5,10 +5,12 @@ namespace BTG.Tank
     public class TankHealthController
     {
         private TankModel m_Model;
+        private TankMainController m_MainController;
 
-        public TankHealthController(TankModel model)
+        public TankHealthController(TankModel model, TankMainController controller)
         {
             m_Model = model;
+            m_MainController = controller;
             model.AddHealthData(model.TankData.MaxHealth);
         }
 
@@ -25,6 +27,7 @@ namespace BTG.Tank
             if (m_Model.CurrentHealth <= 0)
             {
                 Debug.Log("Tank is dead: " + m_Model.Name);
+                m_MainController.OnDead();
             }
         }
     }

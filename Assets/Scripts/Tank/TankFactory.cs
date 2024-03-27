@@ -15,7 +15,7 @@ namespace BTG.Tank
             CreatePoolItems();
         }
 
-        public bool TryGetTank(int tankId, out TankController controller)
+        public bool TryGetTank(int tankId, out TankMainController controller)
         {
             controller = null;
 

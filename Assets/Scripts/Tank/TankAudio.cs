@@ -17,6 +17,11 @@ namespace BTG.Tank
             m_EngineAudioSource.Play();
         }
 
+        public void StopEngineAudio()
+        {
+            m_EngineAudioSource.Stop();
+        }
+
         public void PlayEngineDrivingClip(AudioClip clip)
         {
             m_EngineAudioSource.clip = clip;

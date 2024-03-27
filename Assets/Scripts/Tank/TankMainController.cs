@@ -10,12 +10,13 @@ namespace BTG.Tank
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
-    public class TankController
+    public class TankMainController
     {
         public enum TankState
         {
             Idle,
-            Driving
+            Driving,
+            Dead
         }
 
         // dependencies
@@ -38,7 +39,7 @@ namespace BTG.Tank
         private TankPool m_Pool;
 
 
-        public TankController(TankDataSO tankData, TankPool pool)
+        public TankMainController(TankDataSO tankData, TankPool pool)
         {
             m_Pool = pool;
 
@@ -50,7 +51,7 @@ namespace BTG.Tank
             m_MovementController = new TankMovementController(this);
             m_Firing = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
-            m_HealthController = new TankHealthController(m_Model);
+            m_HealthController = new TankHealthController(m_Model, this);
 
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
@@ -81,6 +82,18 @@ namespace BTG.Tank
         {
             m_Firing?.OnDestroy();
             m_UltimateController?.OnDestroy();
+        }
+
+        public void OnDead()
+        {
+            m_Firing?.OnDestroy();
+            m_UltimateController?.OnDestroy();
+            m_View.gameObject.SetActive(false);
+
+            SetState(TankState.Dead);
+            OnTankStateChangedToDead();
+
+            m_Pool.ReturnTank(this);
         }
 
         public void SetMoveValue(float value)
@@ -160,18 +173,23 @@ namespace BTG.Tank
                 case TankState.Idle:
                     if (Rigidbody.velocity.sqrMagnitude > 0.05f)
                     {
-                        m_Model.State = TankState.Driving;
+                        SetState(TankState.Driving);
                         OnTankStateChangedToDriving();
                     }
                     break;
                 case TankState.Driving:
                     if (Rigidbody.velocity.sqrMagnitude <= 0.05f)
                     {
-                        m_Model.State = TankState.Idle;
+                        SetState(TankState.Idle);
                         OnTankStateChangedToIdle();
                     }
                     break;
             }
+        }
+
+        private void SetState(TankState state)
+        {
+            m_Model.State = state;
         }
 
         private void UpdateMoveSound()
@@ -191,6 +209,11 @@ namespace BTG.Tank
         private void OnTankStateChangedToDriving()
         {
             m_View.TankAudio.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
+        }
+
+        private void OnTankStateChangedToDead()
+        {
+            m_View.TankAudio.StopEngineAudio();
         }
     }
 }

@@ -15,7 +15,7 @@ namespace BTG.Player
             in PlayerVirualCameraController pvc, 
             in UltimateUI ultimateUI)
         {
-            if (!tankFactory.TryGetTank(tankId, out TankController controller))
+            if (!tankFactory.TryGetTank(tankId, out TankMainController controller))
             {
                 return;
             }
@@ -41,7 +41,7 @@ namespace BTG.Player
 
         private void ConfigurePlayerCameraWithController(
             in PlayerVirualCameraController pvc,
-            in TankController controller)
+            in TankMainController controller)
         {
             pvc.Initialize(controller.CameraTarget);
             controller.SubscribeToOnTankShootEvent(pvc.ShakeCameraOnPlayerTankShoot);
@@ -50,7 +50,7 @@ namespace BTG.Player
 
         private void ConfigureUltimateUIWithController(
             in UltimateUI ultimateUI,
-            in TankController controller)
+            in TankMainController controller)
         {
             controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.AssignUltimateActionName);
             controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);

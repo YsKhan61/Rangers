@@ -13,9 +13,9 @@ namespace BTG.Player
         private InputAction m_MoveInputAction;
         private InputAction m_RotateInputAction;
 
-        private TankController m_TankController;
+        private TankMainController m_TankController;
 
-        public PlayerInputs(TankController tankController)
+        public PlayerInputs(TankMainController tankController)
         {
             m_TankController = tankController;
         }

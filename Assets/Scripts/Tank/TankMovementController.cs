@@ -11,7 +11,7 @@ namespace BTG.Tank
 
         // dependencies
         private TankModel m_TankModel;
-        private TankController m_Controller;
+        private TankMainController m_Controller;
 
         private Rigidbody m_Rigidbody;
 
@@ -20,7 +20,7 @@ namespace BTG.Tank
         private float m_RotateAngle;
         private Quaternion m_DeltaRotation;
 
-        public TankMovementController(TankController controller)
+        public TankMovementController(TankMainController controller)
         {
             m_Controller = controller;
             m_TankModel = controller.TankModel;

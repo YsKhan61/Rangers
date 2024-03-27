@@ -7,9 +7,9 @@ namespace BTG.Tank
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
-        private TankController m_TankController;
+        private TankMainController m_TankController;
 
-        public TankController.TankState State;
+        public TankMainController.TankState State;
 
         public float MoveInputValue;
         public float RotateInputValue;
@@ -23,7 +23,7 @@ namespace BTG.Tank
         public int CurrentHealth => m_CurrentHealth;
         public string Name => m_TankData.name;
 
-        public TankModel(TankDataSO m_TankData, TankController controller)
+        public TankModel(TankDataSO m_TankData, TankMainController controller)
         {
             this.m_TankData = m_TankData;
             m_TankController = controller;
