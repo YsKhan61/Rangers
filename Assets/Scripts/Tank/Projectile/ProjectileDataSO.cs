@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -6,6 +7,9 @@ namespace BTG.Tank.Projectile
     [CreateAssetMenu(fileName = "ProjectileData", menuName = "ScriptableObjects/ProjectileDataSO")]
     public class ProjectileDataSO : ScriptableObject
     {
+        [SerializeField] private TagSO m_Tag;
+        public TagSO Tag => m_Tag;
+
         [SerializeField] private ProjectileView m_ProjectileViewPrefab;
         public ProjectileView ProjectileViewPrefab => m_ProjectileViewPrefab;
 

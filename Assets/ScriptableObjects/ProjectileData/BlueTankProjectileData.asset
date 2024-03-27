@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
   m_Name: BlueTankProjectileData
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
   m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: ce41a5ebe35273f4d8bdb604138cf4ae,
     type: 3}
   m_MinInitialSpeed: 10

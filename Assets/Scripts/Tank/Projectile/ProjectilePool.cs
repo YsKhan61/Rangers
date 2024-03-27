@@ -12,7 +12,7 @@ namespace BTG.Tank.Projectile
         public ProjectilePool(ProjectileDataSO projectileData)
         {
             m_ProjectileData = projectileData;
-            m_ProjectileContainer = new GameObject("ProjectileContainer").transform;
+            m_ProjectileContainer = new GameObject("ProjectileContainer of " + projectileData.name).transform;
         }
 
         public ProjectileController GetProjectile()

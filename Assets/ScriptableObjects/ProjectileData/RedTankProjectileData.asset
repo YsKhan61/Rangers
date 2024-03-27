@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
   m_Name: RedTankProjectileData
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: c09a98fe3871c07468a2af0f8c3a0f46, type: 2}
   m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: 00ef609b0ff56dd429d1b0fa7f7b2782,
     type: 3}
   m_MinInitialSpeed: 10

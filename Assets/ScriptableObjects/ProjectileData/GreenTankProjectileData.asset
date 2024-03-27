@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
   m_Name: GreenTankProjectileData
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: b9b6749c45132b8448b6b892992dd585, type: 2}
   m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: bc01b63fb333be84ea7a2b43d3e28a0f,
     type: 3}
   m_MinInitialSpeed: 10

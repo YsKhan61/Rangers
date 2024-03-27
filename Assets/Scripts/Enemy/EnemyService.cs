@@ -13,7 +13,7 @@ namespace BTG.Enemy
             m_TankFactory = tankFactory;
         }
 
-        public void ConfigureEnemyTank(
+        public void SpawnEnemyTank(
             in int tankId)
         {
             m_TankFactory.TryCreatePlayerTank(in tankId, out TankController controller);
