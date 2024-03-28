@@ -1,9 +1,9 @@
 using BTG.EventSystem;
 using BTG.Tank;
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 
 namespace BTG.Enemy
@@ -11,14 +11,15 @@ namespace BTG.Enemy
     public class EnemyService
     {
         private TankFactory m_TankFactory;
-
+        private WaveConfigSO m_EnemyWaves;
         private CancellationTokenSource m_Cts;
 
-        public EnemyService(TankFactory tankFactory)
+        public EnemyService(TankFactory tankFactory, WaveConfigSO enemyWaves)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
+            m_EnemyWaves = enemyWaves;
         }
 
         ~EnemyService()
@@ -30,29 +31,67 @@ namespace BTG.Enemy
             m_Cts.Dispose();
         }
 
-        public void SpawnEnemyTank(
-            int tankId)
+        public void StartNextWave()
+        {
+            if (!m_EnemyWaves.GetTanksForNextWave(out int[] tankIDs))
+            {
+                Debug.Log("No more waves");
+                return;
+            }
+
+            if (tankIDs == null)
+            {
+                Debug.Log("No more waves");
+                return;
+            }
+
+            foreach (int tankId in tankIDs)
+            {
+                SpawnEnemyTank(tankId);
+            }
+        }
+
+        public void SpawnEnemyTank(int tankId)
         {
             if (!m_TankFactory.TryGetTank(tankId, out TankMainController controller))
             {
                 if (!m_TankFactory.TryGetRandomTank(out controller))
                 {
-                    Debug.WriteLine("Failed to spawn enemy tank");
+                    Debug.Log("Failed to spawn enemy tank");
                     return;
                 }
             }
             
-            controller.Transform.position = new UnityEngine.Vector3(-5, 0, 0);
+            Pose pose = m_EnemyWaves.GetRandomSpawnPose();
+            controller.Transform.position = pose.position;
+            controller.Transform.rotation = pose.rotation;
+
             controller.Model.IsPlayer = false;
         }
 
         private void OnTankDead(bool isPlayer)
         {
-            if (isPlayer) return;
-
-            _ = InvokeAsync(3, () =>
+            if (isPlayer)
             {
-                SpawnEnemyTank(0);
+                // Game Over logics
+            }
+            else
+            {
+                OnEnemyTankDead();
+            }
+        }
+
+        private void OnEnemyTankDead() 
+        {
+            m_EnemyWaves.TankCountInCurrentWave--;
+            if (m_EnemyWaves.TankCountInCurrentWave > 0)
+            {
+                return;
+            }
+
+            _ = InvokeAsync(m_EnemyWaves.Interval, () =>
+            {
+                StartNextWave();
             });
         }
 

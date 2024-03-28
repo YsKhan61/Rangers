@@ -10,7 +10,7 @@ namespace BTG.Game
     public class GameService : MonoBehaviour
     {
         [SerializeField] private IntDataSO m_TestPlayerTankID; // This is for test purpose, so that we dont have to go to MainMenu and then select the tank
-        [SerializeField] private IntDataSO m_TestEnemyTankID; // This is for test purpose, so that we dont have to go to MainMenu and then select the enemy
+        [SerializeField] private WaveConfigSO m_EnemyWaves;
 
         [SerializeField] TankDataContainerSO m_TankDataList;
         [SerializeField] PlayerVirualCameraController m_PVCController;
@@ -28,8 +28,7 @@ namespace BTG.Game
             int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
             m_PlayerService.SpawnPlayerTank(tankId, tankFactory, m_PVCController, m_UltimatePanel);
             
-            tankId = m_TestEnemyTankID > 0 ? m_TestEnemyTankID : 0;         // test purpose
-            new EnemyService(tankFactory).SpawnEnemyTank(tankId);
+            new EnemyService(tankFactory, m_EnemyWaves).StartNextWave();
         }
 
         private void Update()
