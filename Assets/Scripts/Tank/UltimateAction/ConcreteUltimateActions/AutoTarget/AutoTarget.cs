@@ -1,5 +1,5 @@
 using BTG.Utilities;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using State = BTG.Tank.UltimateAction.IUltimateAction.State;
@@ -9,6 +9,7 @@ namespace BTG.Tank.UltimateAction
     public class AutoTarget : UltimateAction, ICameraShakeUltimateAction
     {
         public event System.Action<float> OnExecuteCameraShake;
+        public override event System.Action<IUltimateAction> OnFullyCharged;
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
@@ -24,18 +25,22 @@ namespace BTG.Tank.UltimateAction
             if (CurrentState != State.FullyCharged)
                 return false;
 
-            if (!TryGetNearbyTanks(out TankView[] tanks))
+            if (!ScanForNearbyColliders(out Collider[] results))
                 return false;
+
+            FilterDamageables(results, out List<IDamageable> damageables);
+            if (damageables.Count == 0) return false;
 
             ChangeState(State.Executing);
 
-            _ = FireSequenceAsync(tanks);
+            _ = FireSequenceAsync(damageables);
 
             return true;
         }
 
         public override void OnDestroy()
         {
+            OnFullyCharged = null;
             OnExecuteCameraShake = null;
             base.OnDestroy();
         }
@@ -57,55 +62,55 @@ namespace BTG.Tank.UltimateAction
             }
         }
 
-        private bool TryGetNearbyTanks(out TankView[] views)
+        protected override void RaiseFullyChargedEvent()
         {
-            views = null;
+            OnFullyCharged?.Invoke(this);
+        }
 
-            Collider[] results = new Collider[10];
+        private bool ScanForNearbyColliders(out Collider[] results)
+        {
+            results = new Collider[10];
             int count = Physics.OverlapSphereNonAlloc(
                 (m_UltimateController.TankTransform.position + m_UltimateController.TankTransform.forward * m_AutoTargetData.CenterOffset),
                 m_AutoTargetData.ImpactRadius,
                 results,
-                m_AutoTargetData.TargetLayer,
+                m_UltimateController.LayerMask,
                 QueryTriggerInteraction.Ignore);
 
-            if (count < 0)
-                return false;
-
-            FilterTankViews(count, results, out views);
-            if (views.Length <= 0)
+            if (count <= 0)
                 return false;
 
             return true;
         }
 
-        private void FilterTankViews(in int count, in Collider[] results, out TankView[] views)
+        private void FilterDamageables(in Collider[] results, out List<IDamageable> damageables)
         {
-            TankView[] temp = new TankView[count];
+            damageables = new List<IDamageable>();
 
-            for (int i = 0; i < count; i++)
+            for (int i = 0, count = results.Length; i < count; i++)
             {
-                if (results[i].TryGetComponent(out TankView tankView))
+                if (results[i] == null)
+                    continue;
+
+                if (results[i].TryGetComponent(out IDamageable damageable))
                 {
-                    if (tankView.Controller == m_UltimateController.TankController)
+                    if (damageable == m_UltimateController.Damageable)
                     {
                         continue;
                     }
-                    temp[i] = tankView;
+                    damageables.Add(damageable);
                 }
             }
-
-            views = temp.Where(item => item != null).ToArray();
         }
 
-        private async Task FireSequenceAsync(TankView[] tanks)
+        private async Task FireSequenceAsync(List<IDamageable> damageables)
         {
             try
             {
-                foreach (TankView tank in tanks)
+                foreach (IDamageable damageable in damageables)
                 {
                     SpawnAutoTargetProjectile(out AutoTargetView projectile);
-                    projectile.Configure(this, tank.transform, m_AutoTargetData.ProjectileSpeed);
+                    projectile.Configure(this, damageable.Transform, m_AutoTargetData.ProjectileSpeed);
                     projectile.Launch();
                     OnExecuteCameraShake?.Invoke(1f);
                     // Do audio and visual effects here

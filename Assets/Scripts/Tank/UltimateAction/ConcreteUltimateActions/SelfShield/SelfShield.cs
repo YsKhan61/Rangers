@@ -5,6 +5,8 @@ namespace BTG.Tank.UltimateAction
 {
     public class SelfShield : UltimateAction
     {
+        public override event System.Action<IUltimateAction> OnFullyCharged;
+
         private SelfShieldDataSO m_SelfShieldData => m_UltimateActionData as SelfShieldDataSO;
 
         private SelfShieldView m_View;
@@ -32,6 +34,12 @@ namespace BTG.Tank.UltimateAction
             return true;
         }
 
+        public override void OnDestroy()
+        {
+            OnFullyCharged = null;
+            base.OnDestroy();
+        }
+
         protected override void Reset()
         {
             m_View.StopParticleSystem();
@@ -43,6 +51,11 @@ namespace BTG.Tank.UltimateAction
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
+        }
+
+        protected override void RaiseFullyChargedEvent()
+        {
+            OnFullyCharged?.Invoke(this);
         }
 
         private void SpawnView(Transform parent)

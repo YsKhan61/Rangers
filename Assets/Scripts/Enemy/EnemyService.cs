@@ -17,12 +17,26 @@ namespace BTG.Enemy
         private int m_NextWaveIndex = 0;
         private int m_TankCountInCurrentWave = 0;
 
-        public EnemyService(TankFactory tankFactory, WaveConfigSO enemyWaves)
+        private EnemyAI m_EnemyAI;
+
+        private int m_PlayerLayer;
+        private int m_EnemyLayer;
+
+        public EnemyService(
+            TankFactory tankFactory, 
+            WaveConfigSO enemyWaves,
+            int playerLayer,
+            int enemyLayer)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
             m_EnemyWaves = enemyWaves;
+
+            m_PlayerLayer = playerLayer;
+            m_EnemyLayer = enemyLayer;
+
+            m_EnemyAI = new EnemyAI();
 
             m_NextWaveIndex = 0;
         }
@@ -68,18 +82,16 @@ namespace BTG.Enemy
             controller.Transform.rotation = pose.rotation;
 
             controller.Model.IsPlayer = false;
+            controller.SetLayers(m_EnemyLayer, m_PlayerLayer);
+            controller.SubscribeToFullyChargedEvent(m_EnemyAI.OnUltimateFullyCharged);
         }
 
         private void OnTankDead(bool isPlayer)
         {
             if (isPlayer)
-            {
-                // Game Over logics
-            }
-            else
-            {
-                OnEnemyTankDead();
-            }
+                return;
+
+            OnEnemyTankDead();
         }
 
         private void OnEnemyTankDead() 

@@ -1,4 +1,5 @@
 using BTG.EventSystem;
+using BTG.Tank.UltimateAction;
 using BTG.Utilities;
 using System;
 using UnityEngine;
@@ -26,9 +27,14 @@ namespace BTG.Tank
         public TankModel Model => m_Model;
         private TankView m_View;
         private TankMovementController m_MovementController;
-        private TankChargedFiringController m_Firing;
+        private TankChargedFiringController m_FiringController;
+        public TankChargedFiringController FiringController => m_FiringController;
+
         private TankUltimateController m_UltimateController;
+        public TankUltimateController UltimateController => m_UltimateController;
+
         private TankHealthController m_HealthController;
+        public TankHealthController HealthController => m_HealthController;
 
         public Transform Transform => m_View.transform;
         public Rigidbody Rigidbody => m_View.RigidBody;
@@ -38,10 +44,17 @@ namespace BTG.Tank
         public Transform FirePoint => m_View.FirePoint;
 
         public IDamageable Damageable => m_View;
+        public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
 
         private TankPool m_Pool;
 
-
+        /// <summary>
+        /// This constructor creates all the respective properties of the tank that are mandatory
+        /// for the tank to function properly.
+        /// TankView, TankModel, TankMovementController, TankFiringController, TankUltimateController, TankHealthController
+        /// </summary>
+        /// <param name="tankData"></param>
+        /// <param name="pool"></param>
         public TankMainController(TankDataSO tankData, TankPool pool)
         {
             m_Pool = pool;
@@ -52,18 +65,23 @@ namespace BTG.Tank
 
 
             m_MovementController = new TankMovementController(this);
-            m_Firing = new TankChargedFiringController(m_Model, m_View);
+            m_FiringController = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
-
-            m_Model.State = TankState.Idle;
-            OnTankStateChangedToIdle();
         }
 
         public void Init()
         {
-            m_View.gameObject.SetActive(true);
             m_Model.State = TankState.Idle;
+            OnTankStateChangedToIdle();
+
+            m_View.gameObject.SetActive(true);
+        }
+
+        public void SetLayers(int selfLayer, int oppositionLayer)
+        {
+            m_View.gameObject.layer = selfLayer;
+            m_Model.OppositionLayer = 1 << oppositionLayer;
         }
 
 
@@ -77,20 +95,20 @@ namespace BTG.Tank
             UpdateState();
 
             m_MovementController?.Update();
-            m_Firing?.Update();
+            m_FiringController?.Update();
 
             UpdateMoveSound();
         }
 
         public void OnDestroy()
         {
-            m_Firing?.OnDestroy();
+            m_FiringController?.OnDestroy();
             m_UltimateController?.OnDestroy();
         }
 
         public void OnDead()
         {
-            m_Firing?.OnDestroy();
+            m_FiringController?.OnDestroy();
             m_UltimateController?.OnDestroy();
             m_View.gameObject.SetActive(false);
 
@@ -114,24 +132,9 @@ namespace BTG.Tank
             m_Model.RotateInputValue = value;
         }
 
-        public void StartTankFiring()
-        {
-            m_Firing.OnFireStarted();
-        }
-
-        public void EndTankFiring()
-        {
-            m_Firing.OnFireEnded();
-        }
-
-        public void TakeDamage(int damage)
-        {
-            m_HealthController.TakeDamage(damage);
-        }
-
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
         {
-            m_Firing.OnTankShoot += onTankShoot;
+            m_FiringController.OnTankShoot += onTankShoot;
         }
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> onUltimateActionAssigned)
@@ -154,24 +157,18 @@ namespace BTG.Tank
             m_UltimateController.SubscribeToChargeUpdatedEvent(onChargeUpdated);
         }
 
-        public void SubscribeToFullyChargedEvent(Action onFullyCharged)
+        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> onFullyCharged)
         {
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
         }
 
-        public void ExecuteUltimateAction()
+        /// <summary>
+        /// True - Make tank visible, False - Make tank invisible
+        /// </summary>
+        /// <param name="value"></param>
+        public void ToggleTankVisibility(bool value)
         {
-            m_UltimateController.ExecuteUltimateAction();
-        }
-
-        public void ShowGraphics()
-        {
-            m_View.Show();
-        }
-
-        public void HideGraphics()
-        {
-            m_View.Hide();
+            m_View.ToggleVisible(value);
         }
 
         private void UpdateState()

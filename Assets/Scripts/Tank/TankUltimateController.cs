@@ -12,6 +12,8 @@ namespace BTG.Tank
     public class TankUltimateController
     {
         private IUltimateAction m_UltimateAction;
+        public IUltimateAction UltimateAction => m_UltimateAction;
+
         private TankMainController m_Controller;
         public TankMainController TankController => m_Controller;
 
@@ -20,6 +22,7 @@ namespace BTG.Tank
         public Transform FirePoint => m_Controller.FirePoint;
 
         public IDamageable Damageable => m_Controller.Damageable;
+        public LayerMask LayerMask => m_Controller.OppositionLayerMask;
 
         public TankUltimateController(
             TankMainController controller, 
@@ -35,11 +38,6 @@ namespace BTG.Tank
         public void OnDestroy()
         {
             m_UltimateAction.OnDestroy();
-        }
-
-        public void ExecuteUltimateAction()
-        {
-            m_UltimateAction.TryExecute();
         }
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
@@ -65,7 +63,7 @@ namespace BTG.Tank
             m_UltimateAction.OnChargeUpdated += action;
         }
 
-        public void SubscribeToFullyChargedEvent(Action action)
+        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> action)
         {
             m_UltimateAction.OnFullyCharged += action;
         }

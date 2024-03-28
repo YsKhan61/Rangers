@@ -17,6 +17,9 @@ namespace BTG.Tank
         public Rigidbody RigidBody => m_Rigidbody;
 
         [SerializeField]
+        Collider m_Collider;
+
+        [SerializeField]
         Transform m_FirePoint;
         public Transform FirePoint => m_FirePoint;
 
@@ -30,6 +33,8 @@ namespace BTG.Tank
         // dependencies
         private TankMainController m_Controller;
         public TankMainController Controller => m_Controller;
+
+        public Transform Transform => transform;
 
 
         private void FixedUpdate()
@@ -54,7 +59,7 @@ namespace BTG.Tank
 
         public void TakeDamage(int damage)
         {
-            m_Controller.TakeDamage(damage);
+            m_Controller.HealthController.TakeDamage(damage);
         }
 
         public void UpdateChargedAmountUI(float chargeAmount)
@@ -62,14 +67,11 @@ namespace BTG.Tank
             m_TankUI.UpdateChargedAmountUI(chargeAmount);
         }
 
-        public void Show()
+        public void ToggleVisible(bool value)
         {
-            m_Graphics.gameObject.SetActive(true);
-        }
-
-        public void Hide()
-        {
-            m_Graphics.gameObject.SetActive(false);
+            m_Graphics.gameObject.SetActive(value);
+            m_Collider.enabled = value;
+            m_TankAudio.ToggleMuteEngineAudio(!value);
         }
     }
 }

@@ -1,10 +1,10 @@
 using BTG.Tank;
 using BTG.UI;
+using UnityEngine;
 
 
 namespace BTG.Player
 {
-    // public class PlayerService : MonoBehaviour
     public class PlayerService
     {
         private PlayerInputs m_PlayerInputs;
@@ -13,7 +13,9 @@ namespace BTG.Player
             in int tankId,
             in TankFactory tankFactory,
             in PlayerVirualCameraController pvc, 
-            in UltimateUI ultimateUI)
+            in UltimateUI ultimateUI,
+            int playerLayer,
+            int enemyLayer)
         {
             if (!tankFactory.TryGetTank(tankId, out TankMainController controller))
             {
@@ -21,6 +23,7 @@ namespace BTG.Player
             }
 
             controller.Model.IsPlayer = true;
+            controller.SetLayers(playerLayer, enemyLayer);
             ConfigurePlayerCameraWithController(pvc, controller);
             ConfigureUltimateUIWithController(ultimateUI, controller);
 

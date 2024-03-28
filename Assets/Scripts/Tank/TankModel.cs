@@ -25,6 +25,12 @@ namespace BTG.Tank
         public int CurrentHealth => m_CurrentHealth;
         public string Name => m_TankData.name;
 
+        /// <summary>
+        /// Layer mask of the opposition party to do damage 
+        /// (Enemy's opposition is Player and vice-versa)
+        /// </summary>
+        public int OppositionLayer;
+
         public TankModel(TankDataSO m_TankData, TankMainController controller)
         {
             this.m_TankData = m_TankData;
@@ -44,6 +50,7 @@ namespace BTG.Tank
             IsCharging = false;
             ChargeAmount = 0;
             m_CurrentHealth = m_TankData.MaxHealth;
+            OppositionLayer = 0;
         }
     }
 }

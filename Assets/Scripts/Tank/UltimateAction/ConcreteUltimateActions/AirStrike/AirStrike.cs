@@ -9,6 +9,7 @@ namespace BTG.Tank.UltimateAction
     public class AirStrike : UltimateAction, ICameraShakeUltimateAction
     {
         public event System.Action<float> OnExecuteCameraShake;
+        public override event System.Action<IUltimateAction> OnFullyCharged;
 
         private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
 
@@ -66,8 +67,14 @@ namespace BTG.Tank.UltimateAction
 
         public override void OnDestroy()
         {
+            OnFullyCharged = null;
             OnExecuteCameraShake = null;
             base.OnDestroy();
+        }
+
+        protected override void RaiseFullyChargedEvent()
+        {
+            OnFullyCharged?.Invoke(this);
         }
 
         private void SpawnView(Transform parent)
@@ -100,7 +107,7 @@ namespace BTG.Tank.UltimateAction
                 m_UltimateController.TankTransform.position,
                 m_AirStrikeData.ImpactRadius,
                 m_OverlappingColliders,
-                m_AirStrikeData.LayerMask,
+                m_UltimateController.LayerMask,
                 QueryTriggerInteraction.Ignore);
 
             return count > 0;

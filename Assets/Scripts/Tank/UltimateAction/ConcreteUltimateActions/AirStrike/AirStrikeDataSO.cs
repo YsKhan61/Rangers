@@ -17,8 +17,5 @@ namespace BTG.Tank.UltimateAction
 
         [SerializeField] private float m_Radius;
         public float ImpactRadius => m_Radius;
-
-        [SerializeField] private LayerMask m_LayerMask;
-        public LayerMask LayerMask => m_LayerMask;
     }
 }

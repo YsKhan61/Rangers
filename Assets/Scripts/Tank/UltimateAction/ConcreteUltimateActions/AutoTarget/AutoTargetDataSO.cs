@@ -6,10 +6,6 @@ namespace BTG.Tank.UltimateAction
     [CreateAssetMenu(fileName = "AutoTargetData", menuName = "ScriptableObjects/UltimateAction/AutoTargetDataSO")]
     public class AutoTargetDataSO : UltimateActionDataSO
     {
-        [SerializeField]
-        private LayerMask m_TargetLayer;
-        public LayerMask TargetLayer => m_TargetLayer;
-
         [SerializeField, Tooltip("The center of the impact area will be offset in the forward direction of the owner tank")]
         private int m_CenterOffset;
         public int CenterOffset => m_CenterOffset;

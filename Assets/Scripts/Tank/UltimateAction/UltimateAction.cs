@@ -11,8 +11,8 @@ namespace BTG.Tank.UltimateAction
         public const int FULL_CHARGE = 100;
 
         public event System.Action<string> OnUltimateActionAssigned;
+        public abstract event System.Action<IUltimateAction> OnFullyCharged;
         public event System.Action<int> OnChargeUpdated;
-        public event System.Action OnFullyCharged;
         public event System.Action OnUltimateActionExecuted;
 
         protected TankUltimateController m_UltimateController;
@@ -62,7 +62,6 @@ namespace BTG.Tank.UltimateAction
             m_CancellationTokenSource.Cancel();
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
-            OnFullyCharged = null;
         }
 
         protected virtual void Start()
@@ -82,10 +81,7 @@ namespace BTG.Tank.UltimateAction
             OnUltimateActionAssigned?.Invoke(Name);
         }
 
-        protected void RaiseFullyChargedEvent()
-        {
-            OnFullyCharged?.Invoke();
-        }
+        protected abstract void RaiseFullyChargedEvent();
 
         protected void RaiseUltimateActionExecutedEvent()
         {
