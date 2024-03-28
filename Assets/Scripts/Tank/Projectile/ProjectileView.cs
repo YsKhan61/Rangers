@@ -9,14 +9,16 @@ namespace BTG.Tank.Projectile
         [SerializeField] Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
+        [SerializeField] private Collider m_Collider;
+
         [SerializeField] private ParticleSystem m_ExplosionParticle;
         [SerializeField] private AudioSource m_ExplosionAudioSource;
 
         private ProjectileController m_Controller;
 
-        public void SetController(ProjectileController controller)
+        private void OnEnable()
         {
-            m_Controller = controller;
+            m_Collider.enabled = true;
         }
 
         public void OnCollisionEnter(Collision other)
@@ -24,18 +26,31 @@ namespace BTG.Tank.Projectile
             if (other.gameObject.TryGetComponent(out IDamageable damageable))
             {
                 m_Controller.OnHitDamageable(damageable);
-                return;
             }
             else
             {
                 m_Controller.ResetProjectile();
             }
+
+            m_Collider.enabled = false;
+        }
+
+        private void OnDisable()
+        {
+            m_Collider.enabled = false;
         }
 
         private void OnDestroy()
         {
             m_Controller.OnDestroy();
         }
+
+        public void SetController(ProjectileController controller)
+        {
+            m_Controller = controller;
+        }
+
+        
 
         public void PlayExplosionSound(AudioClip clip)
         {

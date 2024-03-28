@@ -1,6 +1,9 @@
 using BTG.EventSystem;
 using BTG.Tank;
+using System;
 using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 
 
 namespace BTG.Enemy
@@ -9,8 +12,11 @@ namespace BTG.Enemy
     {
         private TankFactory m_TankFactory;
 
+        private CancellationTokenSource m_Cts;
+
         public EnemyService(TankFactory tankFactory)
         {
+            m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
         }
@@ -19,6 +25,9 @@ namespace BTG.Enemy
         {
             m_TankFactory = null;
             EventService.Instance.OnTankDead.RemoveListener(OnTankDead);
+
+            m_Cts.Cancel();
+            m_Cts.Dispose();
         }
 
         public void SpawnEnemyTank(
@@ -40,7 +49,17 @@ namespace BTG.Enemy
         private void OnTankDead(bool isPlayer)
         {
             if (isPlayer) return;
-            SpawnEnemyTank(0);
+
+            _ = InvokeAsync(3, () =>
+            {
+                SpawnEnemyTank(0);
+            });
+        }
+
+        private async Task InvokeAsync(float seconds, Action actionAfterWait)
+        {
+            await Task.Delay((int)(seconds * 1000), m_Cts.Token);
+            actionAfterWait();
         }
     }
 }

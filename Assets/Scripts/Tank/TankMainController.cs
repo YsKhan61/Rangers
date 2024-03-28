@@ -95,6 +95,10 @@ namespace BTG.Tank
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
 
+            m_Model.Reset();
+            Rigidbody.velocity = Vector3.zero;
+            Rigidbody.angularVelocity = Vector3.zero;
+
             m_Pool.ReturnTank(this);
         }
 

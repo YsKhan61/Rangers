@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Rigidbody: {fileID: 8701921482695587310}
+  m_Collider: {fileID: 8818179891181637405}
   m_ExplosionParticle: {fileID: 3340924904290693821}
   m_ExplosionAudioSource: {fileID: 2511142134510957386}
 --- !u!54 &8701921482695587310

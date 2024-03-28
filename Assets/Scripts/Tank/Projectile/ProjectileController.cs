@@ -43,7 +43,7 @@ namespace BTG.Tank.Projectile
         public void OnHitDamageable(IDamageable damageable)
         {
             damageable.TakeDamage(m_Data.Damage);
-            _ = Explode();
+            _ = ExplodeAsync();
         }
 
         public void ResetProjectile()
@@ -56,7 +56,7 @@ namespace BTG.Tank.Projectile
             m_Pool.ReturnProjectile(this);
         }
 
-        private async Task Explode()
+        private async Task ExplodeAsync()
         {
             m_View.PlayExplosionParticle();
             m_View.PlayExplosionSound(m_Data.ExplosionSound);

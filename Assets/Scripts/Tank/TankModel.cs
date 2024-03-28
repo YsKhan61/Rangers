@@ -36,5 +36,14 @@ namespace BTG.Tank
             m_CurrentHealth += health;
             Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);
         }
+
+        public void Reset()
+        {
+            IsPlayer = false;
+            State = TankMainController.TankState.Idle;
+            IsCharging = false;
+            ChargeAmount = 0;
+            m_CurrentHealth = m_TankData.MaxHealth;
+        }
     }
 }
