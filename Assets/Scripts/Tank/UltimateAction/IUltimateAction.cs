@@ -25,8 +25,6 @@ namespace BTG.Tank.UltimateAction
 
         public float ChargeRate { get; }
 
-        // public bool IsFullyCharged { get; }
-
         public void ChangeState(State newState);
 
         public void AutoCharge();

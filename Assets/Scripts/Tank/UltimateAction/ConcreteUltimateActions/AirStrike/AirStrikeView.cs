@@ -11,6 +11,18 @@ namespace BTG.Tank.UltimateAction
         [SerializeField]
         private AudioSource m_AudioSource;
 
+        private AirStrike m_Controller;
+
+        public void SetController(AirStrike controller)
+        {
+            m_Controller = controller;
+        }
+
+        private void FixedUpdate()
+        {
+            m_Controller.FixedUpdate();
+        }
+
         public void PlayParticleSystem()
         {
             m_ParticleSystem.Play();

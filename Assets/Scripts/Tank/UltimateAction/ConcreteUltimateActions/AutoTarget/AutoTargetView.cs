@@ -6,15 +6,17 @@ namespace BTG.Tank.UltimateAction
 
     public class AutoTargetView : MonoBehaviour
     {
+        private AutoTarget m_Controller;
+
         private float m_Speed;
         private Transform m_Target;
 
         private bool m_IsLaunched = false;
-        private float m_AngleToTarget;
         private Quaternion m_FinalRotation;
 
-        public void Configure(Transform target, float m_Speed)
+        public void Configure(AutoTarget controller, Transform target, float m_Speed)
         {
+            m_Controller = controller;
             m_Target = target;
             this.m_Speed = m_Speed;
 
@@ -39,16 +41,9 @@ namespace BTG.Tank.UltimateAction
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.gameObject == m_Target.gameObject)
-            {
-                Debug.Log("Auto target projectile hit the target!");
-            }
-            else
-            {
-                Debug.Log("Auto target projectile hit something else!");
-            }
-
+            m_Controller.OnHitObject(collision);
             m_IsLaunched = false;
+            Destroy(gameObject);
         }
 
         private void UpdateProjectilePosition()

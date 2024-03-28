@@ -1,4 +1,5 @@
 using BTG.Tank.UltimateAction;
+using BTG.Utilities;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -18,7 +19,12 @@ namespace BTG.Tank
 
         public Transform FirePoint => m_Controller.FirePoint;
 
-        public TankUltimateController(TankMainController controller, UltimateActionFactorySO ultimateFactoryData)
+        public IDamageable Damageable => m_Controller.Damageable;
+
+        public TankUltimateController(
+            TankMainController controller, 
+            UltimateActionFactorySO ultimateFactoryData
+            )
         {
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
             m_Controller = controller;

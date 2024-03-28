@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2734815738978a4ba7df9165043dcd8, type: 3}
   m_Name: WaveConfig
   m_EditorClassIdentifier: 
+  m_Interval: 3
   m_Waves:
   - ID: 1
-    EnemyTankIDs: 01000000
+    EnemyTankIDs: 01000000020000000300000004000000
   - ID: 2
-    EnemyTankIDs: 02000000
+    EnemyTankIDs: 0100000002000000030000000400000005000000
   - ID: 3
     EnemyTankIDs: 03000000
   - ID: 4

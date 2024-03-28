@@ -22,3 +22,4 @@ MonoBehaviour:
   m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
     type: 3}
   m_ProjectileSpeed: 7
+  m_Damage: 50

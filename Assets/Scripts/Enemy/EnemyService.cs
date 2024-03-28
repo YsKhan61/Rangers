@@ -14,12 +14,17 @@ namespace BTG.Enemy
         private WaveConfigSO m_EnemyWaves;
         private CancellationTokenSource m_Cts;
 
+        private int m_NextWaveIndex = 0;
+        private int m_TankCountInCurrentWave = 0;
+
         public EnemyService(TankFactory tankFactory, WaveConfigSO enemyWaves)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
             m_EnemyWaves = enemyWaves;
+
+            m_NextWaveIndex = 0;
         }
 
         ~EnemyService()
@@ -33,17 +38,13 @@ namespace BTG.Enemy
 
         public void StartNextWave()
         {
-            if (!m_EnemyWaves.GetTanksForNextWave(out int[] tankIDs))
+            if (!m_EnemyWaves.GetTanksForNextWave(m_NextWaveIndex, out int[] tankIDs))
             {
-                Debug.Log("No more waves");
+                Debug.Log("No tanks found!");
                 return;
             }
 
-            if (tankIDs == null)
-            {
-                Debug.Log("No more waves");
-                return;
-            }
+            m_TankCountInCurrentWave = tankIDs.Length;
 
             foreach (int tankId in tankIDs)
             {
@@ -83,11 +84,12 @@ namespace BTG.Enemy
 
         private void OnEnemyTankDead() 
         {
-            m_EnemyWaves.TankCountInCurrentWave--;
-            if (m_EnemyWaves.TankCountInCurrentWave > 0)
+            m_TankCountInCurrentWave--;
+            if (m_TankCountInCurrentWave > 0)
             {
                 return;
             }
+            m_NextWaveIndex++;
 
             _ = InvokeAsync(m_EnemyWaves.Interval, () =>
             {

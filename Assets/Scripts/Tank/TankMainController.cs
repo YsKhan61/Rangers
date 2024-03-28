@@ -1,4 +1,5 @@
 using BTG.EventSystem;
+using BTG.Utilities;
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -36,6 +37,7 @@ namespace BTG.Tank
 
         public Transform FirePoint => m_View.FirePoint;
 
+        public IDamageable Damageable => m_View;
 
         private TankPool m_Pool;
 

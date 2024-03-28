@@ -29,5 +29,9 @@ namespace BTG.Tank.UltimateAction
         [SerializeField]
         private int m_ProjectileSpeed;
         public int ProjectileSpeed => m_ProjectileSpeed;
+
+        [SerializeField]
+        private int m_Damage;
+        public int Damage => m_Damage;
     }
 }

@@ -14,21 +14,20 @@ namespace BTG.Enemy
 
         [SerializeField] private Pose[] m_SpawnPose;
 
-        private int m_NextWaveIndex = 0;        // start from 0
-
-        public int TankCountInCurrentWave;
-
-        public bool GetTanksForNextWave(out int[] tankIDs)
+        public bool GetTanksForNextWave(in int index, out int[] tankIDs)
         {
-            if (m_NextWaveIndex >= m_Waves.Length)
+            tankIDs = null;
+            if (index >= m_Waves.Length)
             {
-                tankIDs = null;
                 return false;
             }
 
-            tankIDs = m_Waves[m_NextWaveIndex].EnemyTankIDs;
-            TankCountInCurrentWave = tankIDs.Length;
-            m_NextWaveIndex++;
+            tankIDs = m_Waves[index].EnemyTankIDs;
+            if (tankIDs == null)
+            {
+                return false;
+            }
+
             return true;
         }
 

@@ -11,5 +11,14 @@ namespace BTG.Tank.UltimateAction
 
         [SerializeField] private AirStrikeView m_AirStrikeViewPrefab;
         public AirStrikeView AirStrikeViewPrefab => m_AirStrikeViewPrefab;
+
+        [SerializeField] private int m_Damage;
+        public int Damage => m_Damage;
+
+        [SerializeField] private float m_Radius;
+        public float ImpactRadius => m_Radius;
+
+        [SerializeField] private LayerMask m_LayerMask;
+        public LayerMask LayerMask => m_LayerMask;
     }
 }
