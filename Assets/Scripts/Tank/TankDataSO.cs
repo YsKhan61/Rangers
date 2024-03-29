@@ -1,7 +1,6 @@
 using BTG.Tank.Projectile;
 using BTG.Tank.UltimateAction;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BTG.Tank
 {
@@ -15,14 +14,14 @@ namespace BTG.Tank
         [SerializeField] private TankView m_TankViewPrefab;
         public TankView TankViewPrefab => m_TankViewPrefab;
 
-        [SerializeField, FormerlySerializedAs("m_MoveSpeed")] private float m_Acceleration;
+        [SerializeField] private float m_Acceleration;
         public float Acceleration => m_Acceleration;
 
-        [SerializeField] private float m_MaxSpeed;
-        public float MaxSpeed => m_MaxSpeed;
+        [SerializeField] private int m_MaxSpeed;
+        public int MaxSpeed => m_MaxSpeed;
 
-        [SerializeField] private float m_RotateSpeed;
-        public float RotateSpeed => m_RotateSpeed;
+        [SerializeField] private int m_RotateSpeed;
+        public int RotateSpeed => m_RotateSpeed;
 
         [SerializeField] private ProjectileDataSO m_projectileData;
         public ProjectileDataSO ProjectileData => m_projectileData;

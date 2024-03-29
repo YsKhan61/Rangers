@@ -13,11 +13,11 @@ namespace BTG.Player
         private InputAction m_MoveInputAction;
         private InputAction m_RotateInputAction;
 
-        private TankMainController m_PlayerTank;
+        private PlayerController m_Controller;
 
-        public PlayerInputs(TankMainController tankController)
+        public PlayerInputs(PlayerController controller)
         {
-            m_PlayerTank = tankController;
+            m_Controller = controller;
         }
 
         public void Start()
@@ -37,8 +37,8 @@ namespace BTG.Player
 
         public void Update()
         {
-            m_PlayerTank.SetMoveValue(m_MoveInputAction.ReadValue<float>());
-            m_PlayerTank.SetRotateValue(m_RotateInputAction.ReadValue<float>());
+            m_Controller.SetMoveValue(m_MoveInputAction.ReadValue<float>());
+            m_Controller.SetRotateValue(m_RotateInputAction.ReadValue<float>());
         }
 
         public void OnDestroy()
@@ -53,17 +53,17 @@ namespace BTG.Player
 
         private void OnFireInputStarted(InputAction.CallbackContext context)
         {
-            m_PlayerTank.FiringController.OnFireStarted();
+            m_Controller.StartFire();
         }
 
         private void OnFireInputActionCanceled(InputAction.CallbackContext context)
         {
-            m_PlayerTank.FiringController.OnFireEnded();
+            m_Controller.StopFire();
         }
 
         private void OnUltimateInputPerformed(InputAction.CallbackContext context)
         {
-            m_PlayerTank.UltimateController.UltimateAction.TryExecute();
+            m_Controller.TryExecuteUltimate();
         }
     }
 }

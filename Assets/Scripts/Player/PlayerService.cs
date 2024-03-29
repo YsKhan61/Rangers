@@ -1,6 +1,5 @@
 using BTG.Tank;
 using BTG.UI;
-using UnityEngine;
 
 
 namespace BTG.Player
@@ -9,7 +8,7 @@ namespace BTG.Player
     {
         private PlayerInputs m_PlayerInputs;
 
-        public void SpawnPlayerTank(
+        public void Initialize(
             in int tankId,
             in TankFactory tankFactory,
             in PlayerVirualCameraController pvc, 
@@ -17,18 +16,12 @@ namespace BTG.Player
             int playerLayer,
             int enemyLayer)
         {
-            if (!tankFactory.TryGetTank(tankId, out TankMainController controller))
-            {
-                return;
-            }
-
-            controller.Model.IsPlayer = true;
-            controller.SetLayers(playerLayer, enemyLayer);
-            ConfigurePlayerCameraWithController(pvc, controller);
-            ConfigureUltimateUIWithController(ultimateUI, controller);
-
-            m_PlayerInputs = new PlayerInputs(controller);
-            m_PlayerInputs.Start();
+            CreatePlayer(out PlayerController playerController);
+            CreatePlayerTank(tankId, tankFactory, playerLayer, enemyLayer, out TankMainController tankController);
+            playerController.SetTank(tankController);
+            ConfigurePlayerCameraWithTankController(pvc, tankController);
+            ConfigureUltimateUIWithTankController(ultimateUI, tankController);
+            InitializePlayerInput(playerController);
         }
 
         public void Update()
@@ -42,8 +35,34 @@ namespace BTG.Player
             m_PlayerInputs = null;
         }
 
+        private void CreatePlayer(out PlayerController controller)
+        {
+            controller = new PlayerController();
+        }
 
-        private void ConfigurePlayerCameraWithController(
+        private void CreatePlayerTank(
+            int tankId, 
+            TankFactory tankFactory, 
+            int playerLayer, 
+            int enemyLayer,
+            out TankMainController controller)
+        {
+            if (!tankFactory.TryGetTank(tankId, out controller))
+            {
+                return;
+            }
+
+            controller.Model.IsPlayer = true;
+            controller.SetLayers(playerLayer, enemyLayer);
+        }
+
+        private void InitializePlayerInput(PlayerController controller)
+        {
+            m_PlayerInputs = new PlayerInputs(controller);
+            m_PlayerInputs.Start();
+        }
+
+        private void ConfigurePlayerCameraWithTankController(
             in PlayerVirualCameraController pvc,
             in TankMainController controller)
         {
@@ -52,7 +71,7 @@ namespace BTG.Player
             controller.SubscribeToCameraShakeEvent(pvc.ShakeCameraOnUltimateExecution);
         }
 
-        private void ConfigureUltimateUIWithController(
+        private void ConfigureUltimateUIWithTankController(
             in UltimateUI ultimateUI,
             in TankMainController controller)
         {

@@ -37,21 +37,6 @@ namespace BTG.Tank
         public Transform Transform => transform;
 
 
-        private void FixedUpdate()
-        {
-            m_Controller.FixedUpdate();
-        }
-
-        private void Update()
-        {
-            m_Controller.Update();
-        }
-
-        private void OnDestroy()
-        {
-            m_Controller.OnDestroy();
-        }
-
         public void SetController(TankMainController controller)
         {
             m_Controller = controller;

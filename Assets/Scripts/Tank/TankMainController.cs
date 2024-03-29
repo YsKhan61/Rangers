@@ -13,7 +13,7 @@ namespace BTG.Tank
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
-    public class TankMainController
+    public class TankMainController : IUpdatable, IDestroyable
     {
         public enum TankState
         {
@@ -26,7 +26,7 @@ namespace BTG.Tank
         private TankModel m_Model;
         public TankModel Model => m_Model;
         private TankView m_View;
-        private TankMovementController m_MovementController;
+
         private TankChargedFiringController m_FiringController;
         public TankChargedFiringController FiringController => m_FiringController;
 
@@ -63,8 +63,6 @@ namespace BTG.Tank
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
             m_View.SetController(this);
 
-
-            m_MovementController = new TankMovementController(this);
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
@@ -76,6 +74,9 @@ namespace BTG.Tank
             OnTankStateChangedToIdle();
 
             m_View.gameObject.SetActive(true);
+
+            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.Register(this as IDestroyable);
         }
 
         public void SetLayers(int selfLayer, int oppositionLayer)
@@ -85,16 +86,10 @@ namespace BTG.Tank
         }
 
 
-        public void FixedUpdate()
-        {
-            m_MovementController?.FixedUpdate();
-        }
-
         public void Update()
         {
             UpdateState();
 
-            m_MovementController?.Update();
             m_FiringController?.Update();
 
             UpdateMoveSound();
@@ -119,17 +114,10 @@ namespace BTG.Tank
             Rigidbody.velocity = Vector3.zero;
             Rigidbody.angularVelocity = Vector3.zero;
 
+            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+
             m_Pool.ReturnTank(this);
-        }
-
-        public void SetMoveValue(float value)
-        {
-            m_Model.MoveInputValue = value;
-        }
-
-        public void SetRotateValue(float value)
-        {
-            m_Model.RotateInputValue = value;
         }
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)

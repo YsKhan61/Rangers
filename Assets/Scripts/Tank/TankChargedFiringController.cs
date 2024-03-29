@@ -31,7 +31,6 @@ namespace BTG.Tank
 
         public void OnDestroy()
         {
-            m_View.TankAudio.StopChargingClip();
             // Remove all the event listeners of OnTankShoot
             OnTankShoot = null;
         }
@@ -42,7 +41,7 @@ namespace BTG.Tank
             m_View.TankAudio.PlayChargingClip(m_Model.TankData.ShotChargingClip);
         }
 
-        public void OnFireEnded()
+        public void OnFireStopped()
         {
             m_Model.IsCharging = false;
 

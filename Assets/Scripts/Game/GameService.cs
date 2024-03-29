@@ -3,6 +3,7 @@ using BTG.Player;
 using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BTG.Game
@@ -25,13 +26,11 @@ namespace BTG.Game
 
         private void Start()
         {
-            m_PlayerService = new PlayerService();
-            TankFactory tankFactory = new TankFactory(m_TankDataList);
-            
-            int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
-            m_PlayerService.SpawnPlayerTank(tankId, tankFactory, m_PVCController, m_UltimatePanel, m_PlayerLayer, m_EnemyLayer);
-            
-            new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer).StartNextWave();
+            CreateTankFactory(out TankFactory tankFactory);
+
+            InitializePlayerService(tankFactory);
+
+            // StartEnemyService(tankFactory); 
         }
 
         private void Update()
@@ -43,6 +42,30 @@ namespace BTG.Game
         {
             m_PlayerService.OnDestroy();
             m_PlayerService = null;
+        }
+
+        private void CreateTankFactory(out TankFactory tankFactory)
+        {
+            tankFactory = new TankFactory(m_TankDataList);
+        }
+
+        private void InitializePlayerService(in TankFactory tankFactory)
+        {
+            m_PlayerService = new PlayerService();
+            int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
+            
+            m_PlayerService.Initialize(
+                tankId, 
+                tankFactory, 
+                m_PVCController, 
+                m_UltimatePanel, 
+                m_PlayerLayer, 
+                m_EnemyLayer);
+        }
+
+        private void StartEnemyService(in TankFactory tankFactory)
+        {
+            new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer).StartNextWave();
         }
     }
 }
