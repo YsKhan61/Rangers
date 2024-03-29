@@ -1,65 +1,80 @@
+using BTG.EventSystem;
 using BTG.Tank;
 using BTG.UI;
+using BTG.Utilities;
+using System.Threading;
 
 
 namespace BTG.Player
 {
     public class PlayerService
     {
-        private PlayerInputs m_PlayerInputs;
+        private PlayerController m_PlayerController;
+        private TankFactory m_TankFactory;
+        private int m_PlayerLayer;
+        private int m_EnemyLayer;
+
+        private int m_TankID;       // temporary for now
+        private UltimateUI m_UltimateUI;    // temporary for now
+        private PlayerVirualCameraController m_PVC;    // temporary for now
+
+        private CancellationTokenSource m_CTS;
 
         public void Initialize(
-            in int tankId,
+            in int tankID,
             in TankFactory tankFactory,
             in PlayerVirualCameraController pvc, 
             in UltimateUI ultimateUI,
             int playerLayer,
             int enemyLayer)
         {
-            CreatePlayer(out PlayerController playerController);
-            CreatePlayerTank(tankId, tankFactory, playerLayer, enemyLayer, out TankMainController tankController);
-            playerController.SetTank(tankController);
-            ConfigurePlayerCameraWithTankController(pvc, tankController);
-            ConfigureUltimateUIWithTankController(ultimateUI, tankController);
-            InitializePlayerInput(playerController);
+            m_TankID = tankID;
+            m_TankFactory = tankFactory;
+            m_PlayerLayer = playerLayer;
+            m_EnemyLayer = enemyLayer;
+            m_PVC = pvc;
+            m_UltimateUI = ultimateUI;
+
+            m_PlayerController = new PlayerController();
+            InitializePlayerInput(m_PlayerController);
+
+            CreateAndConfigureTankWithPlayer();
+
+            EventService.Instance.OnTankDead.AddListener(OnTankDead);
+
+            m_CTS = new CancellationTokenSource();
         }
 
-        public void Update()
+        ~PlayerService()
         {
-            m_PlayerInputs?.Update();
+            EventService.Instance.OnTankDead.RemoveListener(OnTankDead);
+            m_CTS.Cancel();
+            m_CTS.Dispose();
         }
 
-        public void OnDestroy()
+        private void CreateAndConfigureTankWithPlayer()
         {
-            m_PlayerInputs?.OnDestroy();
-            m_PlayerInputs = null;
+            CreatePlayerTank(out TankMainController tank);
+
+            m_PlayerController.SetTank(tank);
+            ConfigurePlayerCameraWithTankController(m_PVC, tank);
+            ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
         }
 
-        private void CreatePlayer(out PlayerController controller)
+        private void CreatePlayerTank(out TankMainController controller)
         {
-            controller = new PlayerController();
-        }
-
-        private void CreatePlayerTank(
-            int tankId, 
-            TankFactory tankFactory, 
-            int playerLayer, 
-            int enemyLayer,
-            out TankMainController controller)
-        {
-            if (!tankFactory.TryGetTank(tankId, out controller))
+            if (!m_TankFactory.TryGetTank(m_TankID, out controller))
             {
                 return;
             }
 
             controller.Model.IsPlayer = true;
-            controller.SetLayers(playerLayer, enemyLayer);
+            controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
         }
 
         private void InitializePlayerInput(PlayerController controller)
         {
-            m_PlayerInputs = new PlayerInputs(controller);
-            m_PlayerInputs.Start();
+            new PlayerInputs(controller).Initialize();
         }
 
         private void ConfigurePlayerCameraWithTankController(
@@ -79,6 +94,16 @@ namespace BTG.Player
             controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
             controller.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
             controller.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
+        }
+
+        private void OnTankDead(bool isPlayer)
+        {
+            if (!isPlayer)
+                return;
+
+            m_PlayerController.OnTankDead();
+
+            HelperMethods.InvokeAfterAsync(3, () => CreateAndConfigureTankWithPlayer(), m_CTS.Token);
         }
     }
 }

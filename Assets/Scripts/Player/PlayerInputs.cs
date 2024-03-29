@@ -1,12 +1,12 @@
 
 using BTG.Inputs;
-using BTG.Tank;
+using BTG.Utilities;
 using UnityEngine.InputSystem;
 
 
 namespace BTG.Player
 {
-    public class PlayerInputs
+    public class PlayerInputs : IUpdatable, IDestroyable
     {
         private InputControls m_InputControls;
 
@@ -20,7 +20,7 @@ namespace BTG.Player
             m_Controller = controller;
         }
 
-        public void Start()
+        public void Initialize()
         {
             m_InputControls = new InputControls();
             m_InputControls.Enable();
@@ -32,6 +32,9 @@ namespace BTG.Player
             m_InputControls.Player.Fire.started += OnFireInputStarted;
             m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
             m_InputControls.Player.UltimateAction.performed += OnUltimateInputPerformed;
+
+            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.Register(this as IDestroyable);
         }
 
 
@@ -49,6 +52,9 @@ namespace BTG.Player
 
             m_InputControls.Player.Disable();
             m_InputControls.Disable();
+
+            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IDestroyable);
         }
 
         private void OnFireInputStarted(InputAction.CallbackContext context)

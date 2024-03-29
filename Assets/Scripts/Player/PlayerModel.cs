@@ -12,5 +12,10 @@ namespace BTG.Player
         public int TankMaxSpeed => TankModel.TankData.MaxSpeed;
         public int TankRotateSpeed => TankModel.TankData.RotateSpeed;
         public float TankAcceleration => TankModel.TankData.Acceleration;
+
+        /// <summary>
+        /// Enable when tank is alive, disable when tank is dead
+        /// </summary>
+        public bool IsEnabled;
     }
 }

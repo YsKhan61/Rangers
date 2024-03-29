@@ -33,17 +33,6 @@ namespace BTG.Game
             //StartEnemyService(tankFactory); 
         }
 
-        private void Update()
-        {
-            m_PlayerService.Update();
-        }
-
-        private void OnDestroy()
-        {
-            m_PlayerService.OnDestroy();
-            m_PlayerService = null;
-        }
-
         private void CreateTankFactory(out TankFactory tankFactory)
         {
             tankFactory = new TankFactory(m_TankDataList);

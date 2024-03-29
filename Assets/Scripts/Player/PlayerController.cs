@@ -37,42 +37,75 @@ namespace BTG.Player
         {
             m_TankController = tankController;
             m_Model.TankModel = tankController.Model;
+
+            m_Model.IsEnabled = true;
         }
 
         public void SetMoveValue(float value)
         {
+            if (!m_Model.IsEnabled)
+                return;
+
             m_Model.MoveInputValue = value;
         }
 
         public void SetRotateValue(float value)
         {
+            if (!m_Model.IsEnabled)
+                return;
+
             m_Model.RotateInputValue = value;
         }
 
         public void StartFire()
         {
-            m_TankController.FiringController.OnFireStarted();
+            if (!m_Model.IsEnabled)
+                return;
+
+            m_TankController?.FiringController.OnFireStarted();
         }
 
         public void StopFire()
         {
-            m_TankController.FiringController.OnFireStopped();
+            if (!m_Model.IsEnabled)
+                return;
+
+            m_TankController?.FiringController.OnFireStopped();
         }
 
         public void TryExecuteUltimate()
         {
-            m_TankController.UltimateController.UltimateAction.TryExecute();
+            if (!m_Model.IsEnabled)
+                return;
+
+            m_TankController?.UltimateController.UltimateAction.TryExecute();
         }
 
         public void FixedUpdate()
         {
+            if (!m_Model.IsEnabled)
+                return;
+
             MoveWithForce();
         }
 
         public void Update()
         {
+            if (!m_Model.IsEnabled)
+                return;
+
             Rotate();
             CalculateInputSpeed();
+        }
+
+        public void OnTankDead()
+        {
+            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+
+            m_Model.IsEnabled = false;
+            m_Model.TankModel = null;
+            m_TankController = null;
         }
 
         private void MoveWithForce()

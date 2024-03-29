@@ -17,7 +17,7 @@ namespace BTG.Enemy
         private int m_NextWaveIndex = 0;
         private int m_TankCountInCurrentWave = 0;
 
-        private EnemyAI m_EnemyAI;
+        private EnemyController m_EnemyAI;
 
         private int m_PlayerLayer;
         private int m_EnemyLayer;
@@ -35,9 +35,6 @@ namespace BTG.Enemy
 
             m_PlayerLayer = playerLayer;
             m_EnemyLayer = enemyLayer;
-
-            m_EnemyAI = new EnemyAI();
-
             m_NextWaveIndex = 0;
         }
 
@@ -62,11 +59,11 @@ namespace BTG.Enemy
 
             foreach (int tankId in tankIDs)
             {
-                SpawnEnemyTank(tankId);
+                CreateEnemyTank(tankId);
             }
         }
 
-        public void SpawnEnemyTank(int tankId)
+        public void CreateEnemyTank(int tankId)
         {
             if (!m_TankFactory.TryGetTank(tankId, out TankMainController controller))
             {
@@ -83,6 +80,9 @@ namespace BTG.Enemy
 
             controller.Model.IsPlayer = false;
             controller.SetLayers(m_EnemyLayer, m_PlayerLayer);
+
+            m_EnemyAI = new EnemyController(controller);
+
             controller.SubscribeToFullyChargedEvent(m_EnemyAI.OnUltimateFullyCharged);
         }
 
@@ -94,7 +94,7 @@ namespace BTG.Enemy
             OnEnemyTankDead();
         }
 
-        private void OnEnemyTankDead() 
+        private void OnEnemyTankDead()
         {
             m_TankCountInCurrentWave--;
             if (m_TankCountInCurrentWave > 0)
