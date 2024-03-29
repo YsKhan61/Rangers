@@ -30,7 +30,7 @@ namespace BTG.Game
 
             InitializePlayerService(tankFactory);
 
-            // StartEnemyService(tankFactory); 
+            //StartEnemyService(tankFactory); 
         }
 
         private void Update()
