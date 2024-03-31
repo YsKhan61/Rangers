@@ -74,10 +74,9 @@ namespace BTG.Tank
             OnTankStateChangedToIdle();
 
             ToggleTankVisibility(true);
-            Rigidbody.WakeUp();
+            Rigidbody.isKinematic = false;
 
             m_UltimateController.EnableUltimate();
-            
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
             UnityCallbacks.Instance.Register(this as IDestroyable);
@@ -105,24 +104,12 @@ namespace BTG.Tank
             m_UltimateController?.OnDestroy();
         }
 
-        public void OnDead()
+        public void Die()
         {
-            ToggleTankVisibility(false);
-
-            m_Model.Reset();
-            m_UltimateController.DisableUltimate();
-
-            Rigidbody.velocity = Vector3.zero;
-            Rigidbody.angularVelocity = Vector3.zero;
-            Rigidbody.Sleep();
+            EventService.Instance.OnTankDead?.InvokeEvent(m_Model.IsPlayer);
 
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
-
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IDestroyable);
-
-            m_Pool.ReturnTank(this);
         }
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
@@ -211,8 +198,21 @@ namespace BTG.Tank
 
         private void OnTankStateChangedToDead()
         {
+            ToggleTankVisibility(false);
+
+            m_Model.Reset();
+            m_UltimateController.DisableUltimate();
+
+            Rigidbody.velocity = Vector3.zero;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.isKinematic = true;
+
             m_View.TankAudio.StopEngineAudio();
-            EventService.Instance.OnTankDead?.InvokeEvent(m_Model.IsPlayer);
+
+            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+
+            m_Pool.ReturnTank(this);
         }
     }
 }

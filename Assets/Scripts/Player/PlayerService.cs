@@ -70,7 +70,6 @@ namespace BTG.Player
 
             controller.Transform.position = new UnityEngine.Vector3(0, 0, 0);
             controller.Transform.rotation = UnityEngine.Quaternion.identity;
-            controller.ToggleTankVisibility(true);
             controller.Model.IsPlayer = true;
             controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
         }
@@ -93,7 +92,7 @@ namespace BTG.Player
             in UltimateUI ultimateUI,
             in TankMainController controller)
         {
-            controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.AssignUltimateActionName);
+            controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.Init);
             controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
             controller.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
             controller.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);

@@ -27,7 +27,7 @@ namespace BTG.Tank
             if (m_Model.CurrentHealth <= 0)
             {
                 Debug.Log("Tank is dead: " + m_Model.Name);
-                m_MainController.OnDead();
+                m_MainController.Die();
             }
         }
     }

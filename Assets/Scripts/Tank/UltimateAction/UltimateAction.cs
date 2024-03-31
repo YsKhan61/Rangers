@@ -27,17 +27,21 @@ namespace BTG.Tank.UltimateAction
 
         public virtual void Enable()
         {
+            m_CancellationTokenSource = new CancellationTokenSource();
+
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
 
-            RaiseUltimateActionAssignedEvent();
-
-            AutoCharge();
+            _ = RaiseActionAssignedEventAndStartAutoChargeAsync();
         }
 
         public virtual void Disable()
         {
             m_CancellationTokenSource.Cancel();
+            m_CancellationTokenSource.Dispose();
+            OnUltimateActionAssigned = null;
+            OnChargeUpdated = null;
+
             ChangeState(State.Disabled);
         }
 
@@ -80,10 +84,8 @@ namespace BTG.Tank.UltimateAction
             OnChargeUpdated = null;
         }
 
-        protected async void RaiseUltimateActionAssignedEvent()
+        protected void RaiseUltimateActionAssignedEvent()
         {
-            // wait for 1 frame to ensure that the event is subscribed to
-            await Task.Yield();
             OnUltimateActionAssigned?.Invoke(Name);
         }
 
@@ -100,6 +102,16 @@ namespace BTG.Tank.UltimateAction
         }
 
         protected abstract void Restart();
+
+        private async Task RaiseActionAssignedEventAndStartAutoChargeAsync()
+        {
+            // wait for 1 frame to ensure that the event is subscribed to
+            await Task.Yield();
+            RaiseUltimateActionAssignedEvent();
+
+            await Task.Yield();
+            AutoCharge();
+        }
 
         private async Task AutoChargeAsync()
         {

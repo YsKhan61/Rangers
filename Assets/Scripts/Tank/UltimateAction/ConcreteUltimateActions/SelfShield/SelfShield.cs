@@ -16,7 +16,6 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = selfShieldData;
-            m_CancellationTokenSource = new CancellationTokenSource();
         }
 
         public override bool TryExecute()

@@ -24,7 +24,6 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = airStrikeData;
-            m_CancellationTokenSource = new CancellationTokenSource();
         }
 
         public override void Enable()

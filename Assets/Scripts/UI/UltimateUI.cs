@@ -12,16 +12,13 @@ namespace BTG.UI
         [SerializeField] private Image m_UnreadyImage;
         [SerializeField] private Image m_ReadyImage;
 
-        private void Start()
+        public void Init(string name)
         {
+            m_UltimateNameText.text = name;
+
             m_ChargedAmountText.text = "0";
             m_UnreadyImage.gameObject.SetActive(true);
             m_ReadyImage.gameObject.SetActive(false);
-        }
-
-        public void AssignUltimateActionName(string name)
-        {
-            m_UltimateNameText.text = name;
         }
 
         public void UpdateChargeAmount(int amount)
