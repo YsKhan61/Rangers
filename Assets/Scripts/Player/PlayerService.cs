@@ -68,6 +68,9 @@ namespace BTG.Player
                 return;
             }
 
+            controller.Transform.position = new UnityEngine.Vector3(0, 0, 0);
+            controller.Transform.rotation = UnityEngine.Quaternion.identity;
+            controller.ToggleTankVisibility(true);
             controller.Model.IsPlayer = true;
             controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
         }

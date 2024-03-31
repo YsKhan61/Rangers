@@ -17,7 +17,6 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = invisibilityData;
-            Start();
         }
 
         public override bool TryExecute()
@@ -33,7 +32,7 @@ namespace BTG.Tank.UltimateAction
             m_View.PlayDisappearPS();
             m_View.PlayDisappearAudio();
             m_UltimateController.TankController.ToggleTankVisibility(false);
-            _ = ResetAfterDuration(m_InvisibilityData.Duration, m_CancellationTokenSource.Token);
+            RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
         }
@@ -44,7 +43,7 @@ namespace BTG.Tank.UltimateAction
             base.OnDestroy();
         }
 
-        protected override void Reset()
+        protected override void Restart()
         {
             m_View.PlayAppearPS();
             m_View.PlayAppearAudio();

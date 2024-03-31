@@ -135,7 +135,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Unregister(IFixedUpdatable fixedUpdatable)
+        public void Deregister(IFixedUpdatable fixedUpdatable)
         {
             if (fixedUpdatables.Contains(fixedUpdatable))
             {

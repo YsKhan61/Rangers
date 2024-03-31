@@ -11,6 +11,7 @@ namespace BTG.Tank.UltimateAction
     {
         public enum State
         {
+            Disabled,
             Charging,
             FullyCharged,
             Executing
@@ -24,6 +25,10 @@ namespace BTG.Tank.UltimateAction
         public string Name { get; }
 
         public float ChargeRate { get; }
+
+        public void Enable();
+
+        public void Disable();
 
         public void ChangeState(State newState);
 

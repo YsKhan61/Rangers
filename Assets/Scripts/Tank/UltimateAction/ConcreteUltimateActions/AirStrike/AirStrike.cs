@@ -1,12 +1,13 @@
 using BTG.Utilities;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using State = BTG.Tank.UltimateAction.IUltimateAction.State;
 
 
 namespace BTG.Tank.UltimateAction
 {
-    public class AirStrike : UltimateAction, ICameraShakeUltimateAction
+    public class AirStrike : UltimateAction, ICameraShakeUltimateAction, IFixedUpdatable
     {
         public event System.Action<float> OnExecuteCameraShake;
         public override event System.Action<IUltimateAction> OnFullyCharged;
@@ -23,7 +24,23 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = airStrikeData;
-            Start();
+            m_CancellationTokenSource = new CancellationTokenSource();
+        }
+
+        public override void Enable()
+        {
+            base.Enable();
+            UnityCallbacks.Instance.Register(this);
+        }
+
+        public override void Disable()
+        {
+            UnityCallbacks.Instance.Deregister(this);
+            m_View.StopParticleSystem();
+            m_View.StopAudio();
+            m_View = null;
+
+            base.Disable();
         }
 
         public void FixedUpdate()
@@ -35,6 +52,7 @@ namespace BTG.Tank.UltimateAction
         {
             if (CurrentState != State.FullyCharged)
             {
+                // still charging
                 return false;
             }
 
@@ -44,14 +62,14 @@ namespace BTG.Tank.UltimateAction
             m_View.SetController(this);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
-            _ = ResetAfterDuration(m_AirStrikeData.Duration, m_CancellationTokenSource.Token);
+            RestartAfterDuration(m_AirStrikeData.Duration);
 
             OnExecuteCameraShake?.Invoke(m_AirStrikeData.Duration);
 
             return true;
         }
 
-        protected override void Reset()
+        protected override void Restart()
         {
             m_View.StopParticleSystem();
             m_View.StopAudio();

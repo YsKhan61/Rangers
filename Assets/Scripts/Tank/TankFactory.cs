@@ -29,6 +29,12 @@ namespace BTG.Tank
                 return false;
 
             controller = m_Pools.Find(pool => pool.Id == tankId).Pool.GetTank();
+            if (controller == null)
+            {
+                Debug.LogError("TankMainController is null in TankFactory");
+                return false;
+            }
+
             return true;
         }
 

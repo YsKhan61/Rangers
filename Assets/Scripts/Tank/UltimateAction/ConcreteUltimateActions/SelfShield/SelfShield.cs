@@ -15,7 +15,6 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = selfShieldData;
-            Start();
         }
 
         public override bool TryExecute()
@@ -29,7 +28,7 @@ namespace BTG.Tank.UltimateAction
             m_View.SetParticleSystem(m_SelfShieldData.Duration);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
-            _ = ResetAfterDuration(m_SelfShieldData.Duration, m_CancellationTokenSource.Token);
+            RestartAfterDuration(m_SelfShieldData.Duration);
 
             return true;
         }
@@ -40,7 +39,7 @@ namespace BTG.Tank.UltimateAction
             base.OnDestroy();
         }
 
-        protected override void Reset()
+        protected override void Restart()
         {
             m_View.StopParticleSystem();
             Object.Destroy(m_View.gameObject);

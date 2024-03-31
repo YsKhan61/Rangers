@@ -18,11 +18,6 @@ namespace BTG.Tank.UltimateAction
             m_Controller = controller;
         }
 
-        private void FixedUpdate()
-        {
-            m_Controller.FixedUpdate();
-        }
-
         public void PlayParticleSystem()
         {
             m_ParticleSystem.Play();

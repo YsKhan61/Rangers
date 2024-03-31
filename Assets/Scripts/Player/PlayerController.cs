@@ -22,14 +22,11 @@ namespace BTG.Player
         public PlayerController()
         {
             m_Model = new PlayerModel();
-
-            UnityCallbacks.Instance.Register(this as IFixedUpdatable);
-            UnityCallbacks.Instance.Register(this as IUpdatable);
         }
 
         ~PlayerController()
         {
-            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Deregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
@@ -39,6 +36,9 @@ namespace BTG.Player
             m_Model.TankModel = tankController.Model;
 
             m_Model.IsEnabled = true;
+
+            UnityCallbacks.Instance.Register(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Register(this as IUpdatable);
         }
 
         public void SetMoveValue(float value)
@@ -100,7 +100,7 @@ namespace BTG.Player
 
         public void OnTankDead()
         {
-            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Deregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
 
             m_Model.IsEnabled = false;

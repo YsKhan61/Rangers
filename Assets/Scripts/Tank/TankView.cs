@@ -57,6 +57,7 @@ namespace BTG.Tank
             m_Graphics.gameObject.SetActive(value);
             m_Collider.enabled = value;
             m_TankAudio.ToggleMuteEngineAudio(!value);
+            m_TankAudio.ToggleMuteShootingAudio(!value);
         }
     }
 }

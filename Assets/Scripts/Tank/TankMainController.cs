@@ -73,7 +73,11 @@ namespace BTG.Tank
             m_Model.State = TankState.Idle;
             OnTankStateChangedToIdle();
 
-            m_View.gameObject.SetActive(true);
+            ToggleTankVisibility(true);
+            Rigidbody.WakeUp();
+
+            m_UltimateController.EnableUltimate();
+            
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
             UnityCallbacks.Instance.Register(this as IDestroyable);
@@ -103,16 +107,17 @@ namespace BTG.Tank
 
         public void OnDead()
         {
-            m_FiringController?.OnDestroy();
-            m_UltimateController?.OnDestroy();
-            m_View.gameObject.SetActive(false);
+            ToggleTankVisibility(false);
+
+            m_Model.Reset();
+            m_UltimateController.DisableUltimate();
+
+            Rigidbody.velocity = Vector3.zero;
+            Rigidbody.angularVelocity = Vector3.zero;
+            Rigidbody.Sleep();
 
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
-
-            m_Model.Reset();
-            Rigidbody.velocity = Vector3.zero;
-            Rigidbody.angularVelocity = Vector3.zero;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);

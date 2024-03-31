@@ -17,7 +17,6 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = autoTargetData;
-            Start();
         }
 
         public override bool TryExecute()
@@ -45,7 +44,7 @@ namespace BTG.Tank.UltimateAction
             base.OnDestroy();
         }
 
-        protected override void Reset()
+        protected override void Restart()
         {
             RaiseUltimateActionExecutedEvent();
 
@@ -119,7 +118,7 @@ namespace BTG.Tank.UltimateAction
                 }
 
                 // after all tanks are targeted, reset the ultimate
-                Reset();
+                Restart();
             }
             catch (TaskCanceledException)
             {

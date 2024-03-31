@@ -1,8 +1,8 @@
-
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
 using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using BTG.Utilities;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -27,7 +27,23 @@ namespace BTG.Tank.UltimateAction
         public float ChargeRate => m_UltimateActionData.ChargeRate;
 
         public State CurrentState { get; protected set; }
-        // public bool IsFullyCharged => m_ChargedAmount >= FULL_CHARGE;
+
+
+        public virtual void Enable()
+        {
+            ChangeState(State.Charging);
+            Charge(-FULL_CHARGE);
+
+            RaiseUltimateActionAssignedEvent();
+
+            AutoCharge();
+        }
+
+        public virtual void Disable()
+        {
+            m_CancellationTokenSource.Cancel();
+            ChangeState(State.Disabled);
+        }
 
         public void ChangeState(State newState)
         {
@@ -36,13 +52,16 @@ namespace BTG.Tank.UltimateAction
 
         public void AutoCharge()
         {
-            _ = AutoChargeAsync(m_CancellationTokenSource.Token);
+            _ = AutoChargeAsync();
         }
 
         public virtual void Charge(float amount)
         {
             if (CurrentState != State.Charging)
+            {
+                Debug.LogError("This should not happen!");
                 return;
+            }
 
             m_ChargedAmount += amount;
             m_ChargedAmount = Mathf.Clamp(m_ChargedAmount, 0, FULL_CHARGE);
@@ -60,18 +79,9 @@ namespace BTG.Tank.UltimateAction
         public virtual void OnDestroy()
         {
             m_CancellationTokenSource.Cancel();
+            m_CancellationTokenSource.Dispose();
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
-        }
-
-        protected virtual void Start()
-        {
-            m_CancellationTokenSource = new CancellationTokenSource();
-
-            ChangeState(State.Charging);
-            Charge(-FULL_CHARGE);
-
-            RaiseUltimateActionAssignedEvent();
         }
 
         protected async void RaiseUltimateActionAssignedEvent()
@@ -88,31 +98,21 @@ namespace BTG.Tank.UltimateAction
             OnUltimateActionExecuted?.Invoke();
         }
 
-        protected async Task ResetAfterDuration(float duration, CancellationToken cancellationToken)
+        protected void RestartAfterDuration(int duration)
         {
-            try
-            {
-                await Task.Delay((int)(duration * 1000), cancellationToken);
-                Reset();
-            }
-            catch (TaskCanceledException)
-            {
-                // Do nothing
-            }
+            HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
         }
 
-        protected abstract void Reset();
+        protected abstract void Restart();
 
-        private async Task AutoChargeAsync(CancellationToken token)
+        private async Task AutoChargeAsync()
         {
             try
             {
-                ChangeState(State.Charging);
-
                 while (CurrentState == State.Charging)
                 {
                     Charge(ChargeRate);
-                    await Task.Delay(1000, token);
+                    await Task.Delay(1000, m_CancellationTokenSource.Token);
                 }
             }
             catch (TaskCanceledException)

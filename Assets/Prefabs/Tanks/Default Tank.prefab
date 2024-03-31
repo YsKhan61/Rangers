@@ -123,7 +123,7 @@ MonoBehaviour:
   m_CameraTarget: {fileID: 7945974898630701512}
   m_Graphics: {fileID: 2165065266451995825}
   m_Rigidbody: {fileID: 4761740404829176107}
-  m_Collider: {fileID: 0}
+  m_Collider: {fileID: 4410209405603289284}
   m_FirePoint: {fileID: 7782211647504060980}
   m_TankUI: {fileID: 1870917013688007187}
   m_TankAudio: {fileID: 5165964390985742851}

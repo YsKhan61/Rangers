@@ -1,7 +1,6 @@
 using BTG.Tank.UltimateAction;
 using BTG.Utilities;
 using System;
-using System.Threading;
 using UnityEngine;
 
 namespace BTG.Tank
@@ -29,15 +28,23 @@ namespace BTG.Tank
             UltimateActionFactorySO ultimateFactoryData
             )
         {
-            m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
             m_Controller = controller;
-
-            m_UltimateAction.AutoCharge();
+            m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
         }
 
         public void OnDestroy()
         {
             m_UltimateAction.OnDestroy();
+        }
+
+        public void EnableUltimate()
+        {
+            m_UltimateAction.Enable();
+        }
+
+        public void DisableUltimate()
+        {
+            m_UltimateAction.Disable();
         }
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)

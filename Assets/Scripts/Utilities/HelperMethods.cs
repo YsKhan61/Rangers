@@ -10,8 +10,15 @@ namespace BTG.Utilities
     {
         public static async void InvokeAfterAsync(int seconds, System.Action action, CancellationToken token)
         {
-            await Task.Delay(seconds * 1000, token);
-            action?.Invoke();
+            try
+            {
+                await Task.Delay(seconds * 1000, token);
+                action?.Invoke();
+            }
+            catch (TaskCanceledException)
+            {
+                // Do nothing
+            }
         }
     }
 }
