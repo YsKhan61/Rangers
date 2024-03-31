@@ -21,11 +21,7 @@ namespace BTG.Tank.UltimateAction
 
         private float m_ChargedAmount;
 
-
         public string Name => m_UltimateActionData.name;
-
-        public float ChargeRate => m_UltimateActionData.ChargeRate;
-
         public State CurrentState { get; protected set; }
 
 
@@ -111,7 +107,7 @@ namespace BTG.Tank.UltimateAction
             {
                 while (CurrentState == State.Charging)
                 {
-                    Charge(ChargeRate);
+                    Charge(m_UltimateActionData.ChargeRate);
                     await Task.Delay(1000, m_CancellationTokenSource.Token);
                 }
             }

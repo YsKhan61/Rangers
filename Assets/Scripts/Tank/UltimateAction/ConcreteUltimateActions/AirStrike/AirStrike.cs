@@ -35,7 +35,7 @@ namespace BTG.Tank.UltimateAction
 
         public override void Disable()
         {
-            UnityCallbacks.Instance.Deregister(this);
+            UnityCallbacks.Instance.Unregister(this);
             m_View.StopParticleSystem();
             m_View.StopAudio();
             m_View = null;

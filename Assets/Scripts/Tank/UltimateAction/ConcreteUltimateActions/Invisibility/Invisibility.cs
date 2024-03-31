@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using State = BTG.Tank.UltimateAction.IUltimateAction.State;
@@ -17,6 +18,7 @@ namespace BTG.Tank.UltimateAction
         {
             m_UltimateController = controller;
             m_UltimateActionData = invisibilityData;
+            m_CancellationTokenSource = new CancellationTokenSource();
         }
 
         public override bool TryExecute()

@@ -26,7 +26,7 @@ namespace BTG.Player
 
         ~PlayerController()
         {
-            UnityCallbacks.Instance.Deregister(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
@@ -100,7 +100,7 @@ namespace BTG.Player
 
         public void OnTankDead()
         {
-            UnityCallbacks.Instance.Deregister(this as IFixedUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
 
             m_Model.IsEnabled = false;
