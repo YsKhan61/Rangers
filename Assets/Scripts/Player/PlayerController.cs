@@ -8,11 +8,11 @@ namespace BTG.Player
     {
         private PlayerModel m_Model;
 
-        private TankBrain m_TankController;
+        private TankBrain m_Tank;
 
         // cache
-        private Rigidbody TankRigidbody => m_TankController.Rigidbody;
-        private Transform TankTransform => m_TankController.Transform;
+        private Rigidbody TankRigidbody => m_Tank.Rigidbody;
+        private Transform TankTransform => m_Tank.Transform;
 
         // cached values
         private float m_AccelerationMagnitude;
@@ -32,7 +32,7 @@ namespace BTG.Player
 
         public void SetTank(TankBrain tankController)
         {
-            m_TankController = tankController;
+            m_Tank = tankController;
             m_Model.TankModel = tankController.Model;
 
             m_Model.IsEnabled = true;
@@ -41,7 +41,7 @@ namespace BTG.Player
             UnityCallbacks.Instance.Register(this as IUpdatable);
         }
 
-        public void SetMoveValue(float value)
+        public void SetMoveValue(in float value)
         {
             if (!m_Model.IsEnabled)
                 return;
@@ -49,7 +49,7 @@ namespace BTG.Player
             m_Model.MoveInputValue = value;
         }
 
-        public void SetRotateValue(float value)
+        public void SetRotateValue(in float value)
         {
             if (!m_Model.IsEnabled)
                 return;
@@ -62,7 +62,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_TankController?.FiringController.OnFireStarted();
+            m_Tank?.StartFire();
         }
 
         public void StopFire()
@@ -70,7 +70,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_TankController?.FiringController.OnFireStopped();
+            m_Tank?.StopFire();
         }
 
         public void TryExecuteUltimate()
@@ -78,7 +78,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_TankController?.UltimateController.UltimateAction.TryExecute();
+            m_Tank?.TryExecuteUltimate();
         }
 
         public void FixedUpdate()
@@ -105,7 +105,7 @@ namespace BTG.Player
 
             m_Model.IsEnabled = false;
             m_Model.TankModel = null;
-            m_TankController = null;
+            m_Tank = null;
         }
 
         private void MoveWithForce()

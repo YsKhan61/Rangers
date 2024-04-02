@@ -16,7 +16,7 @@ namespace BTG.Game
         [SerializeField] private WaveConfigSO m_EnemyWaves;
 
         [SerializeField] TankDataContainerSO m_TankDataList;
-        [SerializeField] PlayerVirualCameraController m_PVCController;
+        [SerializeField] PlayerVirtualCamera m_PVCController;
 
         [SerializeField] private UltimateUI m_UltimatePanel;
 

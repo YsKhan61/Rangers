@@ -3,7 +3,6 @@ using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
 using System.Threading;
-using UnityEngine.InputSystem.XR;
 
 
 namespace BTG.Player
@@ -17,14 +16,14 @@ namespace BTG.Player
 
         private int m_TankID;       // temporary for now
         private UltimateUI m_UltimateUI;    // temporary for now
-        private PlayerVirualCameraController m_PVC;    // temporary for now
+        private PlayerVirtualCamera m_PVC;    // temporary for now
 
         private CancellationTokenSource m_CTS;
 
         public PlayerService(
             in int tankID,
             in TankFactory tankFactory,
-            in PlayerVirualCameraController pvc,
+            in PlayerVirtualCamera pvc,
             in UltimateUI ultimateUI,
             int playerLayer,
             int enemyLayer)
@@ -40,11 +39,8 @@ namespace BTG.Player
         public void Initialize()
         {
             CreatePlayerControllerAndInput();
-            CreatePlayerTank(out TankBrain tank);
-            ConfigureTankWithPlayer(tank);
-
+            Respawn();
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
-
             m_CTS = new CancellationTokenSource();
         }
 
@@ -55,12 +51,6 @@ namespace BTG.Player
             m_CTS.Dispose();
         }
 
-        private void Respawn()
-        {
-            CreatePlayerTank(out TankBrain tank);
-            ConfigureTankWithPlayer(tank);
-        }
-
         private void CreatePlayerControllerAndInput()
         {
             m_PlayerController = new PlayerController();
@@ -68,14 +58,13 @@ namespace BTG.Player
             playerInput.Initialize();
         }
 
-        private void ConfigureTankWithPlayer(in TankBrain tank)
+        private void Respawn()
         {
-            m_PlayerController.SetTank(tank);
-            ConfigurePlayerCameraWithTankController(m_PVC, tank);
-            ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
+            CreateAndSpawnPlayerTank(out TankBrain tank);
+            ConfigureTankWithPlayer(tank);
         }
 
-        private void CreatePlayerTank(out TankBrain controller)
+        private void CreateAndSpawnPlayerTank(out TankBrain controller)
         {
             if (!m_TankFactory.TryGetTank(m_TankID, out controller))
             {
@@ -88,23 +77,30 @@ namespace BTG.Player
             controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
         }
 
-        private void ConfigurePlayerCameraWithTankController(
-            in PlayerVirualCameraController pvc,
-            in TankBrain controller)
+        private void ConfigureTankWithPlayer(TankBrain tank)
         {
-            pvc.Initialize(controller.CameraTarget);
-            controller.SubscribeToOnTankShootEvent(pvc.ShakeCameraOnPlayerTankShoot);
-            controller.SubscribeToCameraShakeEvent(pvc.ShakeCameraOnUltimateExecution);
+            m_PlayerController.SetTank(tank);
+            ConfigurePlayerCameraWithTankController(m_PVC, tank);
+            ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
+        }
+
+        private void ConfigurePlayerCameraWithTankController(
+            PlayerVirtualCamera pvc,
+            TankBrain tank)
+        {
+            pvc.Initialize(tank.CameraTarget);
+            tank.SubscribeToOnTankShootEvent(pvc.ShakeCameraOnPlayerTankShoot);
+            tank.SubscribeToCameraShakeEvent(pvc.ShakeCameraOnUltimateExecution);
         }
 
         private void ConfigureUltimateUIWithTankController(
-            in UltimateUI ultimateUI,
-            in TankBrain controller)
+            UltimateUI ultimateUI,
+            TankBrain tank)
         {
-            controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.Init);
-            controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
-            controller.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
-            controller.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
+            tank.SubscribeToUltimateActionAssignedEvent(ultimateUI.Init);
+            tank.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
+            tank.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
+            tank.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
         }
 
         private void OnTankDead(bool isPlayer)

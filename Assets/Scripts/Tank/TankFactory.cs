@@ -21,15 +21,15 @@ namespace BTG.Tank
             return TryGetTank(m_TankDataContainer.TankDataList[randomIndex].ID , out controller);
         }
 
-        public bool TryGetTank(int tankId, out TankBrain controller)
+        public bool TryGetTank(int tankId, out TankBrain tank)
         {
-            controller = null;
+            tank = null;
 
             if (!TryGetTankDataById(tankId, out TankDataSO tankDataToSpawn))            // m_TankID is for test purpose
                 return false;
 
-            controller = m_Pools.Find(pool => pool.Id == tankId).Pool.GetTank();
-            if (controller == null)
+            tank = m_Pools.Find(pool => pool.Id == tankId).Pool.GetTank();
+            if (tank == null)
             {
                 Debug.LogError("TankMainController is null in TankFactory");
                 return false;

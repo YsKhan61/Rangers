@@ -28,11 +28,9 @@ namespace BTG.Tank
         private TankView m_View;
 
         private TankChargedFiringController m_FiringController;
-        public TankChargedFiringController FiringController => m_FiringController;
-
+        
         private TankUltimateController m_UltimateController;
-        public TankUltimateController UltimateController => m_UltimateController;
-
+        
         private TankHealthController m_HealthController;
         public TankHealthController HealthController => m_HealthController;
 
@@ -110,6 +108,21 @@ namespace BTG.Tank
 
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
+        }
+
+        public void StartFire()
+        {
+            m_FiringController.OnFireStarted();
+        }
+
+        public void StopFire()
+        {
+            m_FiringController.OnFireStopped();
+        }
+
+        public void TryExecuteUltimate()
+        {
+            m_UltimateController.UltimateAction.TryExecute();
         }
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
