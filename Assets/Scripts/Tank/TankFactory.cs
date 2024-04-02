@@ -15,13 +15,13 @@ namespace BTG.Tank
             CreatePoolItems();
         }
 
-        public bool TryGetRandomTank(out TankMainController controller)
+        public bool TryGetRandomTank(out TankBrain controller)
         {
             int randomIndex = Random.Range(0, m_TankDataContainer.TankDataList.Length);
             return TryGetTank(m_TankDataContainer.TankDataList[randomIndex].ID , out controller);
         }
 
-        public bool TryGetTank(int tankId, out TankMainController controller)
+        public bool TryGetTank(int tankId, out TankBrain controller)
         {
             controller = null;
 

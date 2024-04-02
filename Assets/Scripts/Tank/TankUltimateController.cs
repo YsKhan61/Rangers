@@ -13,8 +13,8 @@ namespace BTG.Tank
         private IUltimateAction m_UltimateAction;
         public IUltimateAction UltimateAction => m_UltimateAction;
 
-        private TankMainController m_Controller;
-        public TankMainController TankController => m_Controller;
+        private TankBrain m_Controller;
+        public TankBrain TankController => m_Controller;
 
         public Transform TankTransform => m_Controller.Transform;
 
@@ -24,7 +24,7 @@ namespace BTG.Tank
         public LayerMask LayerMask => m_Controller.OppositionLayerMask;
 
         public TankUltimateController(
-            TankMainController controller, 
+            TankBrain controller, 
             UltimateActionFactorySO ultimateFactoryData
             )
         {

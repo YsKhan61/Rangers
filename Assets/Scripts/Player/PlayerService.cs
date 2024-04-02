@@ -3,6 +3,7 @@ using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
 using System.Threading;
+using UnityEngine.InputSystem.XR;
 
 
 namespace BTG.Player
@@ -20,10 +21,10 @@ namespace BTG.Player
 
         private CancellationTokenSource m_CTS;
 
-        public void Initialize(
+        public PlayerService(
             in int tankID,
             in TankFactory tankFactory,
-            in PlayerVirualCameraController pvc, 
+            in PlayerVirualCameraController pvc,
             in UltimateUI ultimateUI,
             int playerLayer,
             int enemyLayer)
@@ -34,11 +35,13 @@ namespace BTG.Player
             m_EnemyLayer = enemyLayer;
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
+        }
 
-            m_PlayerController = new PlayerController();
-            InitializePlayerInput(m_PlayerController);
-
-            CreateAndConfigureTankWithPlayer();
+        public void Initialize()
+        {
+            CreatePlayerControllerAndInput();
+            CreatePlayerTank(out TankBrain tank);
+            ConfigureTankWithPlayer(tank);
 
             EventService.Instance.OnTankDead.AddListener(OnTankDead);
 
@@ -52,16 +55,27 @@ namespace BTG.Player
             m_CTS.Dispose();
         }
 
-        private void CreateAndConfigureTankWithPlayer()
+        private void Respawn()
         {
-            CreatePlayerTank(out TankMainController tank);
+            CreatePlayerTank(out TankBrain tank);
+            ConfigureTankWithPlayer(tank);
+        }
 
+        private void CreatePlayerControllerAndInput()
+        {
+            m_PlayerController = new PlayerController();
+            PlayerInputs playerInput = new PlayerInputs(m_PlayerController);
+            playerInput.Initialize();
+        }
+
+        private void ConfigureTankWithPlayer(in TankBrain tank)
+        {
             m_PlayerController.SetTank(tank);
             ConfigurePlayerCameraWithTankController(m_PVC, tank);
             ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
         }
 
-        private void CreatePlayerTank(out TankMainController controller)
+        private void CreatePlayerTank(out TankBrain controller)
         {
             if (!m_TankFactory.TryGetTank(m_TankID, out controller))
             {
@@ -74,14 +88,9 @@ namespace BTG.Player
             controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
         }
 
-        private void InitializePlayerInput(PlayerController controller)
-        {
-            new PlayerInputs(controller).Initialize();
-        }
-
         private void ConfigurePlayerCameraWithTankController(
             in PlayerVirualCameraController pvc,
-            in TankMainController controller)
+            in TankBrain controller)
         {
             pvc.Initialize(controller.CameraTarget);
             controller.SubscribeToOnTankShootEvent(pvc.ShakeCameraOnPlayerTankShoot);
@@ -90,7 +99,7 @@ namespace BTG.Player
 
         private void ConfigureUltimateUIWithTankController(
             in UltimateUI ultimateUI,
-            in TankMainController controller)
+            in TankBrain controller)
         {
             controller.SubscribeToUltimateActionAssignedEvent(ultimateUI.Init);
             controller.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
@@ -105,7 +114,7 @@ namespace BTG.Player
 
             m_PlayerController.OnTankDead();
 
-            HelperMethods.InvokeAfterAsync(3, () => CreateAndConfigureTankWithPlayer(), m_CTS.Token);
+            HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
         }
     }
 }

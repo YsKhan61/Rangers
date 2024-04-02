@@ -3,7 +3,6 @@ using BTG.Player;
 using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BTG.Game
@@ -40,16 +39,17 @@ namespace BTG.Game
 
         private void InitializePlayerService(in TankFactory tankFactory)
         {
-            m_PlayerService = new PlayerService();
             int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
-            
-            m_PlayerService.Initialize(
-                tankId, 
-                tankFactory, 
-                m_PVCController, 
-                m_UltimatePanel, 
-                m_PlayerLayer, 
+
+            m_PlayerService = new PlayerService(
+                tankId,
+                tankFactory,
+                m_PVCController,
+                m_UltimatePanel,
+                m_PlayerLayer,
                 m_EnemyLayer);
+
+            m_PlayerService.Initialize();
         }
 
         private void StartEnemyService(in TankFactory tankFactory)

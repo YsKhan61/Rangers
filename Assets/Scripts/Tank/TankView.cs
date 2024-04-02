@@ -31,13 +31,13 @@ namespace BTG.Tank
         public TankAudio TankAudio => m_TankAudio;
 
         // dependencies
-        private TankMainController m_Controller;
-        public TankMainController Controller => m_Controller;
+        private TankBrain m_Controller;
+        public TankBrain Controller => m_Controller;
 
         public Transform Transform => transform;
 
 
-        public void SetController(TankMainController controller)
+        public void SetController(TankBrain controller)
         {
             m_Controller = controller;
         }

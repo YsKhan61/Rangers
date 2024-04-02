@@ -119,8 +119,8 @@ namespace BTG.Tank.UltimateAction
             {
                 while (CurrentState == State.Charging)
                 {
-                    Charge(m_UltimateActionData.ChargeRate);
                     await Task.Delay(1000, m_CancellationTokenSource.Token);
+                    Charge(m_UltimateActionData.ChargeRate);
                 }
             }
             catch (TaskCanceledException)

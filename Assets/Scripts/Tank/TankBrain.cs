@@ -13,7 +13,7 @@ namespace BTG.Tank
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
-    public class TankMainController : IUpdatable, IDestroyable
+    public class TankBrain : IUpdatable, IDestroyable
     {
         public enum TankState
         {
@@ -55,7 +55,7 @@ namespace BTG.Tank
         /// </summary>
         /// <param name="tankData"></param>
         /// <param name="pool"></param>
-        public TankMainController(TankDataSO tankData, TankPool pool)
+        public TankBrain(TankDataSO tankData, TankPool pool)
         {
             m_Pool = pool;
 

@@ -53,5 +53,3 @@ namespace BTG.Tank
         public int MaxHealth => m_MaxHealth;
     }
 }
-
-

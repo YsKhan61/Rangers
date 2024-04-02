@@ -8,7 +8,7 @@ namespace BTG.Player
     {
         private PlayerModel m_Model;
 
-        private TankMainController m_TankController;
+        private TankBrain m_TankController;
 
         // cache
         private Rigidbody TankRigidbody => m_TankController.Rigidbody;
@@ -30,7 +30,7 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        public void SetTank(TankMainController tankController)
+        public void SetTank(TankBrain tankController)
         {
             m_TankController = tankController;
             m_Model.TankModel = tankController.Model;

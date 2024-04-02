@@ -5,9 +5,9 @@ namespace BTG.Tank
     public class TankHealthController
     {
         private TankModel m_Model;
-        private TankMainController m_MainController;
+        private TankBrain m_MainController;
 
-        public TankHealthController(TankModel model, TankMainController controller)
+        public TankHealthController(TankModel model, TankBrain controller)
         {
             m_Model = model;
             m_MainController = controller;

@@ -9,9 +9,9 @@ namespace BTG.Tank
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
-        private TankMainController m_TankController;
+        private TankBrain m_TankController;
 
-        public TankMainController.TankState State;
+        public TankBrain.TankState State;
 
         public float CurrentMoveSpeed => m_TankController.Rigidbody.velocity.magnitude;
         public bool IsCharging;
@@ -28,7 +28,7 @@ namespace BTG.Tank
         /// </summary>
         public int OppositionLayer;
 
-        public TankModel(TankDataSO m_TankData, TankMainController controller)
+        public TankModel(TankDataSO m_TankData, TankBrain controller)
         {
             this.m_TankData = m_TankData;
             m_TankController = controller;
@@ -43,7 +43,7 @@ namespace BTG.Tank
         public void Reset()
         {
             IsPlayer = false;
-            State = TankMainController.TankState.Idle;
+            State = TankBrain.TankState.Idle;
             IsCharging = false;
             ChargeAmount = 0;
             m_CurrentHealth = m_TankData.MaxHealth;

@@ -65,7 +65,7 @@ namespace BTG.Enemy
 
         public void CreateEnemyTank(int tankId)
         {
-            if (!m_TankFactory.TryGetTank(tankId, out TankMainController controller))
+            if (!m_TankFactory.TryGetTank(tankId, out TankBrain controller))
             {
                 if (!m_TankFactory.TryGetRandomTank(out controller))
                 {

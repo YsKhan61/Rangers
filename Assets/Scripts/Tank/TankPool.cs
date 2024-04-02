@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Tank
 {
-    public class TankPool : GenericObjectPool<TankMainController>
+    public class TankPool : GenericObjectPool<TankBrain>
     {
         private TankDataSO m_TankData;
         private Transform m_TankContainer;
@@ -16,18 +16,18 @@ namespace BTG.Tank
             m_TankContainer = new GameObject("TankContainer of " + data.name).transform;
         }
 
-        public TankMainController GetTank()
+        public TankBrain GetTank()
         {
-            TankMainController tank = GetItem();
+            TankBrain tank = GetItem();
             tank.Init();
             return tank;
         }
 
-        public void ReturnTank(TankMainController tank)
+        public void ReturnTank(TankBrain tank)
         {
             ReturnItem(tank);
         }
 
-        protected override TankMainController CreateItem() => new TankMainController(m_TankData, this);
+        protected override TankBrain CreateItem() => new TankBrain(m_TankData, this);
     }
 }

@@ -5,9 +5,9 @@ namespace BTG.Enemy
 {
     public class EnemyController
     {
-        private TankMainController m_TankController;
+        private TankBrain m_TankController;
 
-        public EnemyController(TankMainController tankController)
+        public EnemyController(TankBrain tankController)
         {
             m_TankController = tankController;
         }
