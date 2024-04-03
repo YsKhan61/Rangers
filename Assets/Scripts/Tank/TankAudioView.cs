@@ -30,11 +30,14 @@ namespace BTG.Tank
         /// Toggle the mute state of the engine audio.
         /// </summary>
         /// <param name="value">True - Mute, False - Unmute</param>
-        public void ToggleMuteEngineAudio(bool value) => m_EngineAudioSource.mute = value;
+        public void ToggleMuteEngineAudio(bool value) => 
+            m_EngineAudioSource.mute = value;
 
-        public void ToggleMuteShootingAudio(bool value) => m_ShootingAudioSource.mute = value;
+        public void ToggleMuteShootingAudio(bool value) => 
+            m_ShootingAudioSource.mute = value;
 
-        public void UpdateEngineDrivingClipPitch(float amount) => m_EngineAudioSource.pitch = Mathf.Lerp(0.2f, 1.2f, amount);
+        public void UpdateEngineDrivingClipPitch(float amount) => 
+            m_EngineAudioSource.pitch = Mathf.Lerp(0.2f, 1.2f, amount);
 
 
         public void PlayChargingClip(AudioClip clip)

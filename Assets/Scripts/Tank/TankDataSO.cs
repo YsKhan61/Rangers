@@ -11,22 +11,36 @@ namespace BTG.Tank
         private int m_ID;
         public int ID => m_ID;
 
-        [SerializeField] private TankView m_TankViewPrefab;
+        [SerializeField]
+        private Sprite m_Icon;
+        public Sprite Icon => m_Icon;
+
+        [SerializeField] 
+        private TankView m_TankViewPrefab;
         public TankView TankViewPrefab => m_TankViewPrefab;
 
-        [SerializeField] private float m_Acceleration;
+        [SerializeField]
+        private int m_MaxHealth;
+        public int MaxHealth => m_MaxHealth;
+
+        [SerializeField] 
+        private float m_Acceleration;
         public float Acceleration => m_Acceleration;
 
-        [SerializeField] private int m_MaxSpeed;
+        [SerializeField] 
+        private int m_MaxSpeed;
         public int MaxSpeed => m_MaxSpeed;
 
-        [SerializeField] private int m_RotateSpeed;
+        [SerializeField] 
+        private int m_RotateSpeed;
         public int RotateSpeed => m_RotateSpeed;
 
-        [SerializeField] private ProjectileDataSO m_projectileData;
+        [SerializeField] 
+        private ProjectileDataSO m_projectileData;
         public ProjectileDataSO ProjectileData => m_projectileData;
 
-        [SerializeField] private int m_ChargeTime;
+        [SerializeField] 
+        private int m_ChargeTime;
         public int ChargeTime => m_ChargeTime;
 
         [SerializeField]
@@ -49,7 +63,6 @@ namespace BTG.Tank
         private UltimateActionFactorySO m_UltimateActionFactory;
         public UltimateActionFactorySO UltimateActionFactory => m_UltimateActionFactory;
 
-        [SerializeField] private int m_MaxHealth;
-        public int MaxHealth => m_MaxHealth;
+        
     }
 }

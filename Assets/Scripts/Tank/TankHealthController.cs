@@ -1,9 +1,12 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace BTG.Tank
 {
     public class TankHealthController
     {
+        public event System.Action<int, int> OnTankHealthUpdated;        // int - CurrentHealth, int - MaxHealth
+
         private TankModel m_Model;
         private TankBrain m_MainController;
 
@@ -11,7 +14,6 @@ namespace BTG.Tank
         {
             m_Model = model;
             m_MainController = controller;
-            model.AddHealthData(model.TankData.MaxHealth);
         }
 
         ~TankHealthController()
@@ -19,10 +21,21 @@ namespace BTG.Tank
             
         }
 
+        public async void Init()
+        {
+            await Task.Yield();             // wait a frame to make sure UI is ready
+            AddHealth(m_Model.MaxHealth);
+        }
+
+        public void AddHealth(int health)
+        {
+            m_Model.AddHealthData(health);
+            OnTankHealthUpdated?.Invoke(m_Model.CurrentHealth, m_Model.MaxHealth);
+        }
+
         public void TakeDamage(int damage)
         {
-            m_Model.AddHealthData(-damage);
-            Debug.Log("Tank: " + m_Model.Name + " took damage: " + damage + " Current Health: " + m_Model.CurrentHealth);
+            AddHealth(-damage);
 
             if (m_Model.CurrentHealth <= 0)
             {
@@ -30,5 +43,8 @@ namespace BTG.Tank
                 m_MainController.Die();
             }
         }
+
+        public void SubscribeToHealthUpdatedEvent(System.Action<int, int> callback) =>
+            OnTankHealthUpdated += callback;
     }
 }

@@ -4,6 +4,7 @@ using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BTG.Game
 {
@@ -18,7 +19,8 @@ namespace BTG.Game
         [SerializeField] TankDataContainerSO m_TankDataList;
         [SerializeField] PlayerVirtualCamera m_PVCController;
 
-        [SerializeField] private UltimateUI m_UltimatePanel;
+        [SerializeField, FormerlySerializedAs("m_UltimatePanel")] private UltimateUI m_UltimateUI;
+        [SerializeField] private HealthUI m_HealthUI;
 
         //cache
         private PlayerService m_PlayerService;
@@ -45,7 +47,8 @@ namespace BTG.Game
                 tankId,
                 tankFactory,
                 m_PVCController,
-                m_UltimatePanel,
+                m_UltimateUI,
+                m_HealthUI,
                 m_PlayerLayer,
                 m_EnemyLayer);
 

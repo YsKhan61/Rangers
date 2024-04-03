@@ -16,15 +16,17 @@ namespace BTG.Player
 
         private int m_TankID;       // temporary for now
         private UltimateUI m_UltimateUI;    // temporary for now
+        private HealthUI m_HealthUI;    // temporary for now
         private PlayerVirtualCamera m_PVC;    // temporary for now
 
         private CancellationTokenSource m_CTS;
 
         public PlayerService(
             in int tankID,
-            in TankFactory tankFactory,
-            in PlayerVirtualCamera pvc,
-            in UltimateUI ultimateUI,
+            TankFactory tankFactory,
+            PlayerVirtualCamera pvc,
+            UltimateUI ultimateUI,
+            HealthUI healthUI,
             int playerLayer,
             int enemyLayer)
         {
@@ -34,6 +36,7 @@ namespace BTG.Player
             m_EnemyLayer = enemyLayer;
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
+            m_HealthUI = healthUI;
         }
 
         public void Initialize()
@@ -82,6 +85,7 @@ namespace BTG.Player
             m_PlayerController.SetTank(tank);
             ConfigurePlayerCameraWithTankController(m_PVC, tank);
             ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
+            ConfigureHealthUIWithTankController(m_HealthUI, tank);
         }
 
         private void ConfigurePlayerCameraWithTankController(
@@ -101,6 +105,14 @@ namespace BTG.Player
             tank.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
             tank.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
             tank.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
+        }
+
+        private void ConfigureHealthUIWithTankController(
+            HealthUI healthUI,
+            TankBrain tank)
+        {
+            tank.SubscribeToTankInitializedEvent(healthUI.SetTankIcon);
+            tank.SubscribeToHealthUpdatedEvent(healthUI.UpdateHealth);
         }
 
         private void OnTankDead(bool isPlayer)

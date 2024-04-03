@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: RedTankData
   m_EditorClassIdentifier: 
   m_ID: 1
+  m_Icon: {fileID: 21300000, guid: e09360e7a0e51a54d964c2001f7cc509, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 391f4fd004d1b9a49be031b9f94cd476,
     type: 3}
+  m_MaxHealth: 175
   m_Acceleration: 14
   m_MaxSpeed: 20
   m_RotateSpeed: 27
@@ -26,4 +28,3 @@ MonoBehaviour:
   m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
   m_UltimateActionFactory: {fileID: 11400000, guid: 4487d5efdec43e044b1b954224d9668a,
     type: 2}
-  m_MaxHealth: 175

@@ -13,8 +13,10 @@ MonoBehaviour:
   m_Name: BlueTankData
   m_EditorClassIdentifier: 
   m_ID: 4
+  m_Icon: {fileID: 21300000, guid: b4ca51f8689fee04fa6caabad96efdbf, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 92084363dfb297c458e4434ac2695e1d,
     type: 3}
+  m_MaxHealth: 100
   m_Acceleration: 15
   m_MaxSpeed: 20
   m_RotateSpeed: 32
@@ -26,4 +28,3 @@ MonoBehaviour:
   m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
   m_UltimateActionFactory: {fileID: 11400000, guid: 01bfb6f0c08676c45b5ca508ece0404a,
     type: 2}
-  m_MaxHealth: 100

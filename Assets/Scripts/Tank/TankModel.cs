@@ -20,7 +20,12 @@ namespace BTG.Tank
 
         private int m_CurrentHealth;
         public int CurrentHealth => m_CurrentHealth;
+
+        public int MaxHealth => m_TankData.MaxHealth;
+
         public string Name => m_TankData.name;
+
+        public Sprite Icon => m_TankData.Icon;
 
         /// <summary>
         /// Layer mask of the opposition party to do damage 
@@ -40,13 +45,12 @@ namespace BTG.Tank
             Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);
         }
 
-        public void Reset()
+        public void Dead()
         {
             IsPlayer = false;
-            State = TankBrain.TankState.Idle;
             IsCharging = false;
             ChargeAmount = 0;
-            m_CurrentHealth = m_TankData.MaxHealth;
+            m_CurrentHealth = 0;
             OppositionLayer = 0;
         }
     }
