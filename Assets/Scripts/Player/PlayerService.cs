@@ -40,13 +40,13 @@ namespace BTG.Player
         {
             CreatePlayerControllerAndInput();
             Respawn();
-            EventService.Instance.OnTankDead.AddListener(OnTankDead);
+            EventService.Instance.OnBeforeTankDead.AddListener(OnTankDead);
             m_CTS = new CancellationTokenSource();
         }
 
         ~PlayerService()
         {
-            EventService.Instance.OnTankDead.RemoveListener(OnTankDead);
+            EventService.Instance.OnBeforeTankDead.RemoveListener(OnTankDead);
             m_CTS.Cancel();
             m_CTS.Dispose();
         }

@@ -9,11 +9,11 @@ namespace BTG.Tank
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
-        private TankBrain m_TankController;
+        private TankBrain m_Brain;
 
         public TankBrain.TankState State;
 
-        public float CurrentMoveSpeed => m_TankController.Rigidbody.velocity.magnitude;
+        public float CurrentMoveSpeed => m_Brain.Rigidbody.velocity.magnitude;
         public bool IsCharging;
 
         public float ChargeAmount;
@@ -28,10 +28,10 @@ namespace BTG.Tank
         /// </summary>
         public int OppositionLayer;
 
-        public TankModel(TankDataSO m_TankData, TankBrain controller)
+        public TankModel(TankDataSO m_TankData, TankBrain brain)
         {
             this.m_TankData = m_TankData;
-            m_TankController = controller;
+            m_Brain = brain;
         }
 
         public void AddHealthData(int health)

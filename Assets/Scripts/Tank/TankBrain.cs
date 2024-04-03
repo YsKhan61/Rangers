@@ -32,7 +32,6 @@ namespace BTG.Tank
         private TankUltimateController m_UltimateController;
         
         private TankHealthController m_HealthController;
-        public TankHealthController HealthController => m_HealthController;
 
         public Transform Transform => m_View.transform;
         public Rigidbody Rigidbody => m_View.RigidBody;
@@ -59,7 +58,7 @@ namespace BTG.Tank
 
             m_Model = new TankModel(tankData, this);
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
-            m_View.SetController(this);
+            m_View.SetController(this); 
 
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
@@ -98,13 +97,13 @@ namespace BTG.Tank
 
         public void OnDestroy()
         {
-            m_FiringController?.OnDestroy();
+            m_FiringController?.OnDestroy();  
             m_UltimateController?.OnDestroy();
         }
 
         public void Die()
         {
-            EventService.Instance.OnTankDead?.InvokeEvent(m_Model.IsPlayer);
+            EventService.Instance.OnBeforeTankDead?.InvokeEvent(m_Model.IsPlayer);
 
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
@@ -122,7 +121,12 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate()
         {
-            m_UltimateController.UltimateAction.TryExecute();
+            m_UltimateController.TryExecuteUltimate();
+        }
+
+        public void TakeDamage(int damage)
+        {
+            m_HealthController.TakeDamage(damage);
         }
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
@@ -194,19 +198,19 @@ namespace BTG.Tank
         {
             if (m_Model.State == TankState.Driving)
             {
-                m_View.TankAudio.UpdateEngineDrivingClipPitch(
+                m_View.AudioView.UpdateEngineDrivingClipPitch(
                     Mathf.Lerp(0, 1, Mathf.InverseLerp(0, m_Model.TankData.MaxSpeed, m_Model.CurrentMoveSpeed)));
             }
         }
 
         private void OnTankStateChangedToIdle()
         {
-            m_View.TankAudio.PlayEngineIdleClip(m_Model.TankData.EngineIdleClip);
+            m_View.AudioView.PlayEngineIdleClip(m_Model.TankData.EngineIdleClip);
         }
 
         private void OnTankStateChangedToDriving()
         {
-            m_View.TankAudio.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
+            m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
         }
 
         private void OnTankStateChangedToDead()
@@ -220,7 +224,7 @@ namespace BTG.Tank
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.isKinematic = true;
 
-            m_View.TankAudio.StopEngineAudio();
+            m_View.AudioView.StopEngineAudio();
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);

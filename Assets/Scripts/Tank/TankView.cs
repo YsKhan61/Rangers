@@ -27,24 +27,24 @@ namespace BTG.Tank
         TankUI m_TankUI;
 
         [SerializeField]
-        TankAudio m_TankAudio;
-        public TankAudio TankAudio => m_TankAudio;
+        TankAudioView m_TankAudio;
+        public TankAudioView AudioView => m_TankAudio;
 
         // dependencies
-        private TankBrain m_Controller;
-        public TankBrain Controller => m_Controller;
+        private TankBrain m_Brain;
+        public TankBrain Controller => m_Brain;
 
         public Transform Transform => transform;
 
 
-        public void SetController(TankBrain controller)
+        public void SetController(TankBrain brain)
         {
-            m_Controller = controller;
+            m_Brain = brain;
         }
 
         public void TakeDamage(int damage)
         {
-            m_Controller.HealthController.TakeDamage(damage);
+            m_Brain.TakeDamage(damage);
         }
 
         public void UpdateChargedAmountUI(float chargeAmount)

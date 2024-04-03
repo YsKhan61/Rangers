@@ -38,7 +38,7 @@ namespace BTG.Tank
         public void OnFireStarted()
         {
             m_Model.IsCharging = true;
-            m_View.TankAudio.PlayChargingClip(m_Model.TankData.ShotChargingClip);
+            m_View.AudioView.PlayChargingClip(m_Model.TankData.ShotChargingClip);
         }
 
         public void OnFireStopped()
@@ -52,7 +52,7 @@ namespace BTG.Tank
             projectile.AddImpulseForce(CalculateProjectileInitialSpeed());
 
             OnTankShoot?.Invoke(m_Model.ChargeAmount);
-            m_View.TankAudio.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
+            m_View.AudioView.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
             ResetChargedAmount();
         }
 
@@ -64,14 +64,14 @@ namespace BTG.Tank
             m_Model.ChargeAmount += Time.deltaTime / m_Model.TankData.ChargeTime;
             m_Model.ChargeAmount = Mathf.Clamp01(m_Model.ChargeAmount);
             m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
-            m_View.TankAudio.UpdateChargingClipPitch(m_Model.ChargeAmount);
+            m_View.AudioView.UpdateChargingClipPitch(m_Model.ChargeAmount);
         }
 
         private void ResetChargedAmount()
         {
             m_Model.ChargeAmount = 0f;
             m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
-            m_View.TankAudio.StopChargingClip();
+            m_View.AudioView.StopChargingClip();
         }
 
         private void SpawnProjectile(out ProjectileController projectile)

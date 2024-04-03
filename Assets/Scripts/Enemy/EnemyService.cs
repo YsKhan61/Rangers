@@ -30,7 +30,7 @@ namespace BTG.Enemy
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
-            EventService.Instance.OnTankDead.AddListener(OnTankDead);
+            EventService.Instance.OnBeforeTankDead.AddListener(OnTankDead);
             m_EnemyWaves = enemyWaves;
 
             m_PlayerLayer = playerLayer;
@@ -41,7 +41,7 @@ namespace BTG.Enemy
         ~EnemyService()
         {
             m_TankFactory = null;
-            EventService.Instance.OnTankDead.RemoveListener(OnTankDead);
+            EventService.Instance.OnBeforeTankDead.RemoveListener(OnTankDead);
 
             m_Cts.Cancel();
             m_Cts.Dispose();

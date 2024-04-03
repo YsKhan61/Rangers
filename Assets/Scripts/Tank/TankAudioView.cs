@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BTG.Tank
 {
-    public class TankAudio : MonoBehaviour
+    public class TankAudioView : MonoBehaviour
     {
         [SerializeField]
         private AudioSource m_EngineAudioSource;
