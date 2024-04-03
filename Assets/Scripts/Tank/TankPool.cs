@@ -23,10 +23,7 @@ namespace BTG.Tank
             return tank;
         }
 
-        public void ReturnTank(TankBrain tank)
-        {
-            ReturnItem(tank);
-        }
+        public void ReturnTank(TankBrain tank) => ReturnItem(tank);
 
         protected override TankBrain CreateItem() => new TankBrain(m_TankData, this);
     }

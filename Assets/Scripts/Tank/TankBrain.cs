@@ -89,9 +89,7 @@ namespace BTG.Tank
         public void Update()
         {
             UpdateState();
-
             m_FiringController?.Update();
-
             UpdateMoveSound();
         }
 
@@ -109,64 +107,37 @@ namespace BTG.Tank
             OnTankStateChangedToDead();
         }
 
-        public void StartFire()
-        {
-            m_FiringController.OnFireStarted();
-        }
+        public void StartFire() => m_FiringController.OnFireStarted();
 
-        public void StopFire()
-        {
-            m_FiringController.OnFireStopped();
-        }
+        public void StopFire() => m_FiringController.OnFireStopped();
 
-        public void TryExecuteUltimate()
-        {
-            m_UltimateController.TryExecuteUltimate();
-        }
+        public void TryExecuteUltimate() => m_UltimateController.TryExecuteUltimate();
 
-        public void TakeDamage(int damage)
-        {
-            m_HealthController.TakeDamage(damage);
-        }
+        public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
 
-        public void SubscribeToOnTankShootEvent(Action<float> onTankShoot)
-        {
+        public void SubscribeToOnTankShootEvent(Action<float> onTankShoot) => 
             m_FiringController.OnTankShoot += onTankShoot;
-        }
 
-        public void SubscribeToUltimateActionAssignedEvent(Action<string> onUltimateActionAssigned)
-        {
+        public void SubscribeToUltimateActionAssignedEvent(Action<string> onUltimateActionAssigned) =>
             m_UltimateController.SubscribeToUltimateActionAssignedEvent(onUltimateActionAssigned);
-        }
 
-        public void SubscribeToUltimateExecutedEvent(Action onUltimateExecuted)
-        {
+        public void SubscribeToUltimateExecutedEvent(Action onUltimateExecuted) =>
             m_UltimateController.SubscribeToUltimateExecutedEvent(onUltimateExecuted);
-        }
 
-        public void SubscribeToCameraShakeEvent(Action<float> onCameraShake)
-        {
+        public void SubscribeToCameraShakeEvent(Action<float> onCameraShake) =>
             m_UltimateController.SubscribeToCameraShakeEvent(onCameraShake);
-        }
 
-        public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated)
-        {
+        public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated) =>
             m_UltimateController.SubscribeToChargeUpdatedEvent(onChargeUpdated);
-        }
 
-        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> onFullyCharged)
-        {
+        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> onFullyCharged) =>
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
-        }
 
         /// <summary>
         /// True - Make tank visible, False - Make tank invisible
         /// </summary>
         /// <param name="value"></param>
-        public void ToggleTankVisibility(bool value)
-        {
-            m_View.ToggleVisible(value);
-        }
+        public void ToggleTankVisibility(bool value) => m_View.ToggleVisible(value);
 
         private void UpdateState()
         {
@@ -189,10 +160,7 @@ namespace BTG.Tank
             }
         }
 
-        private void SetState(TankState state)
-        {
-            m_Model.State = state;
-        }
+        private void SetState(TankState state) => m_Model.State = state;
 
         private void UpdateMoveSound()
         {
@@ -203,15 +171,11 @@ namespace BTG.Tank
             }
         }
 
-        private void OnTankStateChangedToIdle()
-        {
+        private void OnTankStateChangedToIdle() =>
             m_View.AudioView.PlayEngineIdleClip(m_Model.TankData.EngineIdleClip);
-        }
 
-        private void OnTankStateChangedToDriving()
-        {
+        private void OnTankStateChangedToDriving() =>
             m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
-        }
 
         private void OnTankStateChangedToDead()
         {

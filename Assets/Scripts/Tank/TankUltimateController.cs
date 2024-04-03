@@ -36,30 +36,20 @@ namespace BTG.Tank
             m_UltimateAction.OnDestroy();
         }
 
-        public void EnableUltimate()
-        {
-            m_UltimateAction.Enable();
-        }
+        public void EnableUltimate() => m_UltimateAction.Enable();
 
-        public void DisableUltimate()
-        {
-            m_UltimateAction.Disable();
-        }
+        public void DisableUltimate() => m_UltimateAction.Disable();
 
-        public void TryExecuteUltimate()
-        {
-            m_UltimateAction?.TryExecute();
-        }
+        public void TryExecuteUltimate() => m_UltimateAction?.TryExecute();
+
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
         {
             m_UltimateAction.OnUltimateActionAssigned += action;
         }
 
-        public void SubscribeToUltimateExecutedEvent(Action action)
-        {
+        public void SubscribeToUltimateExecutedEvent(Action action) => 
             m_UltimateAction.OnUltimateActionExecuted += action;
-        }
 
         public void SubscribeToCameraShakeEvent(Action<float> action)
         {
@@ -69,15 +59,11 @@ namespace BTG.Tank
             }
         }
 
-        public void SubscribeToChargeUpdatedEvent(Action<int> action)
-        {
+        public void SubscribeToChargeUpdatedEvent(Action<int> action) => 
             m_UltimateAction.OnChargeUpdated += action;
-        }
 
-        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> action)
-        {
+        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> action) =>
             m_UltimateAction.OnFullyCharged += action;
-        }
     }
 }
 
