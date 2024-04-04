@@ -85,21 +85,16 @@ namespace BTG.Tank.UltimateAction
         }
 
         protected void RaiseUltimateActionAssignedEvent()
-        {
-            OnUltimateActionAssigned?.Invoke(Name);
-        }
+            => OnUltimateActionAssigned?.Invoke(Name);
 
         protected abstract void RaiseFullyChargedEvent();
 
         protected void RaiseUltimateActionExecutedEvent()
-        {
-            OnUltimateActionExecuted?.Invoke();
-        }
+            => OnUltimateActionExecuted?.Invoke();
 
         protected void RestartAfterDuration(int duration)
-        {
-            HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
-        }
+            => HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
+
 
         protected abstract void Restart();
 

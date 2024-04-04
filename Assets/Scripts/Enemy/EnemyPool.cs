@@ -5,24 +5,21 @@ namespace BTG.Enemy
 { 
     public class EnemyPool : GenericObjectPool<EnemyController>
     {
-        private EnemyView m_EnemyPrefab;
         private Transform m_EnemyContainer;
         public Transform EnemyContainer => m_EnemyContainer;
 
-        public EnemyPool(EnemyView enemyPrefab)
+        private EnemyDataSO m_Data;
+
+        public EnemyPool(EnemyDataSO data)
         {
             m_EnemyContainer = new GameObject("EnemyContainer").transform;
-            m_EnemyPrefab = enemyPrefab;
+            m_Data = data;
         }
 
-        public EnemyController GetEnemy()
-        {
-            EnemyController enemy = GetItem();
-            return enemy;
-        }
+        public EnemyController GetEnemy() => GetItem();
 
         public void ReturnEnemy(EnemyController enemy) => ReturnItem(enemy);
 
-        protected override EnemyController CreateItem() => new EnemyController(m_EnemyPrefab, this);
+        protected override EnemyController CreateItem() => new EnemyController(m_Data, this);
     }
 }

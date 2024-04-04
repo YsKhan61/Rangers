@@ -9,28 +9,38 @@ namespace BTG.Enemy
 {
     public class EnemyController : IUpdatable
     {
+        private EnemyDataSO m_Data;
         private EnemyPool m_Pool;
         private TankBrain m_TankBrain;
         private EnemyView m_View;
         private NavMeshAgent m_Agent;
 
-        public EnemyController(EnemyView prefab, EnemyPool pool)
+        private int m_LastIndex = 0;
+
+        public EnemyController(EnemyDataSO data, EnemyPool pool)
         {
-            m_View = Object.Instantiate(prefab, pool.EnemyContainer);
+            m_Data = data;
+            m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
             m_Agent = m_View.GetComponent<NavMeshAgent>();
         }
 
         ~EnemyController()
         {
             m_TankBrain.OnDeath -= OnDeath;
-            // UnityCallbacks.Instance.Unregister(this);
+            UnityCallbacks.Instance.Unregister(this);
 
             m_TankBrain = null;
         }
 
         public void Update()
         {
-            m_Agent.Move(m_Agent.transform.forward * Time.deltaTime * m_TankBrain.Model.Acceleration);
+            UpdateLookDirection();
+            
+            // check if enemy is near destination, if yes, set new destination
+            if (m_Agent.remainingDistance < m_Data.DestinationReachedThreshold)
+            {
+                SetNewDestination();
+            }
         }
 
         public void Init()
@@ -39,7 +49,9 @@ namespace BTG.Enemy
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
             m_TankBrain.OnDeath += OnDeath;
 
-            // UnityCallbacks.Instance.Register(this);
+            m_Agent.SetDestination(Vector3.zero);
+            m_Agent.acceleration = m_TankBrain.Model.Acceleration;
+            UnityCallbacks.Instance.Register(this);
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
@@ -56,10 +68,30 @@ namespace BTG.Enemy
             ultimate.TryExecute();
         }
 
+        private void SetNewDestination()
+        {
+            int newIndex = m_LastIndex;
+            while (newIndex == m_LastIndex)
+            {
+                newIndex = Random.Range(0, m_Data.PatrolPoints.Length);
+            }
+            m_LastIndex = newIndex;
+
+            m_Agent.SetDestination(m_Data.PatrolPoints[newIndex]);
+        }
+
+        private void UpdateLookDirection()
+        {
+            // Make sure to look towards destination with a slerp
+            Vector3 lookDir = m_Agent.steeringTarget - m_View.transform.position;
+            m_View.transform.rotation = Quaternion.Slerp(m_View.transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * m_Data.LookAtSpeed);
+
+        }
+
         private void OnDeath()
         {
             m_TankBrain.OnDeath -= OnDeath;
-            // UnityCallbacks.Instance.Unregister(this);
+            UnityCallbacks.Instance.Unregister(this);
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);

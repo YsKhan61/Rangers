@@ -22,7 +22,7 @@ namespace BTG.Game
         [SerializeField] private UltimateUI m_UltimateUI;
         [SerializeField] private HealthUI m_HealthUI;
 
-        [SerializeField] private EnemyView m_EnemyPrefab;
+        [SerializeField] private EnemyDataSO m_EnemyData;
 
         //cache
         private PlayerService m_PlayerService;
@@ -33,7 +33,7 @@ namespace BTG.Game
 
             InitializePlayerService(tankFactory);
 
-            InitializeEnemyService(tankFactory); 
+            InitializeEnemyService(tankFactory, m_EnemyData); 
         }
 
         private void CreateTankFactory(out TankFactory tankFactory)
@@ -57,10 +57,10 @@ namespace BTG.Game
             m_PlayerService.Initialize();
         }
 
-        private void InitializeEnemyService(in TankFactory tankFactory)
+        private void InitializeEnemyService(TankFactory tankFactory, EnemyDataSO enemyData)
         {
-            EnemyService enemyService = new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer);
-            enemyService.CreateEnemyPool(m_EnemyPrefab);
+            EnemyService enemyService = new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer, enemyData);
+            enemyService.CreateEnemyPool(m_EnemyData);
             enemyService.StartNextWave();
         }
     }

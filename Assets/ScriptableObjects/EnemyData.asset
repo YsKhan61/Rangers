@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dece458af2868e045ad8f0dda00edaaa, type: 3}
+  m_Name: EnemyData
+  m_EditorClassIdentifier: 
+  m_PatrolPoints:
+  - {x: -36.7, y: 0, z: -1.4}
+  - {x: -35.1, y: 0, z: -38.5}
+  - {x: 9.3, y: 0, z: -42.4}
+  - {x: 27.2, y: 0, z: -2.7}
+  m_EnemyPrefab: {fileID: 4183360666428944421, guid: ed1de6e1e1f87cd47b09dadb7b4c5a8e,
+    type: 3}
+  m_DestinationReachedThreshold: 0.5
+  m_LookAtSpeed: 5

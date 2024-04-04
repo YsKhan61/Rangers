@@ -23,12 +23,14 @@ namespace BTG.Enemy
         private int m_EnemyLayer;
 
         private EnemyPool m_EnemyPool;
+        private EnemyDataSO m_EnemyData;
 
         public EnemyService(
             TankFactory tankFactory, 
             WaveConfigSO enemyWaves,
             int playerLayer,
-            int enemyLayer)
+            int enemyLayer,
+            EnemyDataSO data)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
@@ -38,6 +40,8 @@ namespace BTG.Enemy
             m_PlayerLayer = playerLayer;
             m_EnemyLayer = enemyLayer;
             m_NextWaveIndex = 0;
+
+            m_EnemyData = data;
         }
 
         ~EnemyService()
@@ -49,9 +53,9 @@ namespace BTG.Enemy
             m_Cts.Dispose();
         }
 
-        public void CreateEnemyPool(EnemyView prefab)
+        public void CreateEnemyPool(EnemyDataSO data)
         {
-            m_EnemyPool = new EnemyPool(prefab);
+            m_EnemyPool = new EnemyPool(data);
         }
 
         public void StartNextWave()

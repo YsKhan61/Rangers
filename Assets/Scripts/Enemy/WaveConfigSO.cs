@@ -14,6 +14,9 @@ namespace BTG.Enemy
 
         [SerializeField] private Pose[] m_SpawnPose;
 
+        [SerializeField] private Vector3[] m_PatrolPoints;
+        public Vector3[] PatrolPoints => m_PatrolPoints;
+
         public bool GetTanksForNextWave(in int index, out int[] tankIDs)
         {
             tankIDs = null;
