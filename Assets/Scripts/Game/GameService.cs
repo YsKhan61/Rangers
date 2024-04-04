@@ -19,8 +19,10 @@ namespace BTG.Game
         [SerializeField] TankDataContainerSO m_TankDataList;
         [SerializeField] PlayerVirtualCamera m_PVCController;
 
-        [SerializeField, FormerlySerializedAs("m_UltimatePanel")] private UltimateUI m_UltimateUI;
+        [SerializeField] private UltimateUI m_UltimateUI;
         [SerializeField] private HealthUI m_HealthUI;
+
+        [SerializeField] private EnemyView m_EnemyPrefab;
 
         //cache
         private PlayerService m_PlayerService;
@@ -31,7 +33,7 @@ namespace BTG.Game
 
             InitializePlayerService(tankFactory);
 
-            //StartEnemyService(tankFactory); 
+            InitializeEnemyService(tankFactory); 
         }
 
         private void CreateTankFactory(out TankFactory tankFactory)
@@ -55,9 +57,10 @@ namespace BTG.Game
             m_PlayerService.Initialize();
         }
 
-        private void StartEnemyService(in TankFactory tankFactory)
+        private void InitializeEnemyService(in TankFactory tankFactory)
         {
             EnemyService enemyService = new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer);
+            enemyService.CreateEnemyPool(m_EnemyPrefab);
             enemyService.StartNextWave();
         }
     }

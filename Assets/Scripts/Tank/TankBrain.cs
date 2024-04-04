@@ -17,6 +17,7 @@ namespace BTG.Tank
     public class TankBrain : IUpdatable, IDestroyable
     {
         public event Action<Sprite> OnTankInitialized;
+        public event Action OnDeath;
 
         public enum TankState
         {
@@ -176,6 +177,10 @@ namespace BTG.Tank
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.isKinematic = true;
 
+            SetParent(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
+
+            OnDeath?.Invoke();
+
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);
 
@@ -189,6 +194,8 @@ namespace BTG.Tank
         }
 
         #region Helper Methods for accessing other class methods
+
+        public void SetParent(Transform parent, Vector3 localPos, Quaternion localRot) => m_View.transform.SetParent(parent, localPos, localRot);
 
         public void StartFire() => m_FiringController.OnFireStarted();
 
@@ -220,7 +227,7 @@ namespace BTG.Tank
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
 
         public void SubscribeToHealthUpdatedEvent(Action<int, int> onHealthUpdated) =>
-            m_HealthController.SubscribeToHealthUpdatedEvent(onHealthUpdated);
+            m_HealthController.OnTankHealthUpdated += onHealthUpdated;
 
         #endregion
     }

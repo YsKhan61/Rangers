@@ -43,8 +43,5 @@ namespace BTG.Tank
                 m_MainController.Die();
             }
         }
-
-        public void SubscribeToHealthUpdatedEvent(System.Action<int, int> callback) =>
-            OnTankHealthUpdated += callback;
     }
 }

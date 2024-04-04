@@ -9,6 +9,8 @@ namespace BTG.Tank
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
+        public float Acceleration => m_TankData.Acceleration;
+
         private TankBrain m_Brain;
 
         public TankBrain.TankState State;
