@@ -8,12 +8,12 @@ namespace BTG.Tank
         public event System.Action<int, int> OnTankHealthUpdated;        // int - CurrentHealth, int - MaxHealth
 
         private TankModel m_Model;
-        private TankBrain m_MainController;
+        private TankBrain m_Brain;
 
-        public TankHealthController(TankModel model, TankBrain controller)
+        public TankHealthController(TankModel model, TankBrain brain)
         {
             m_Model = model;
-            m_MainController = controller;
+            m_Brain = brain;
         }
 
         ~TankHealthController()
@@ -35,13 +35,13 @@ namespace BTG.Tank
 
         public void TakeDamage(int damage)
         {
+            if (!m_Model.IsDamageable) return;
+
             AddHealth(-damage);
 
-            if (m_Model.CurrentHealth <= 0)
-            {
-                Debug.Log("Tank is dead: " + m_Model.Name);
-                m_MainController.Die();
-            }
+            if (m_Model.CurrentHealth > 0) return;
+
+            m_Brain.Die();
         }
     }
 }

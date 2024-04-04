@@ -62,7 +62,7 @@ namespace BTG.Tank
 
             m_Model = new TankModel(tankData, this);
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
-            m_View.SetController(this); 
+            m_View.SetBrain(this); 
 
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
@@ -184,6 +184,8 @@ namespace BTG.Tank
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);
 
+            Debug.Log("Tank is dead: " + m_Model.Name);
+
             m_Pool.ReturnTank(this);
         }
 
@@ -195,7 +197,8 @@ namespace BTG.Tank
 
         #region Helper Methods for accessing other class methods
 
-        public void SetParent(Transform parent, Vector3 localPos, Quaternion localRot) => m_View.transform.SetParent(parent, localPos, localRot);
+        public void SetParent(Transform parent, Vector3 localPos, Quaternion localRot) 
+            => m_View.transform.SetParent(parent, localPos, localRot);
 
         public void StartFire() => m_FiringController.OnFireStarted();
 

@@ -37,27 +37,21 @@ namespace BTG.Tank
         public Transform Transform => transform;
 
 
-        public void SetController(TankBrain brain)
-        {
-            m_Brain = brain;
-        }
+        public void SetBrain(TankBrain brain)
+            => m_Brain = brain;
 
-        public void TakeDamage(int damage)
-        {
-            m_Brain.TakeDamage(damage);
-        }
+        public void TakeDamage(int damage) 
+            => m_Brain.TakeDamage(damage);
 
         public void UpdateChargedAmountUI(float chargeAmount)
-        {
-            m_TankUI.UpdateChargedAmountUI(chargeAmount);
-        }
+            => m_TankUI.UpdateChargedAmountUI(chargeAmount);
 
-        public void ToggleVisible(bool value)
+        public void ToggleVisible(bool isVisible)
         {
-            m_Graphics.gameObject.SetActive(value);
-            m_Collider.enabled = value;
-            m_TankAudio.ToggleMuteEngineAudio(!value);
-            m_TankAudio.ToggleMuteShootingAudio(!value);
+            m_Graphics.gameObject.SetActive(isVisible);
+            m_TankAudio.ToggleMuteEngineAudio(!isVisible);
+            m_TankAudio.ToggleMuteShootingAudio(!isVisible);
+            m_Brain.Model.IsDamageable = isVisible;
         }
     }
 }

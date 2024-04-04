@@ -10,22 +10,17 @@ namespace BTG.Tank
     /// </summary>
     public class TankUltimateController
     {
-        private IUltimateAction m_UltimateAction;
-
-        private TankBrain m_Brain;
-        public TankBrain TankController => m_Brain;
-
         public Transform TankTransform => m_Brain.Transform;
-
         public Transform FirePoint => m_Brain.FirePoint;
-
         public IDamageable Damageable => m_Brain.Damageable;
         public LayerMask LayerMask => m_Brain.OppositionLayerMask;
 
+        private IUltimateAction m_UltimateAction;
+        private TankBrain m_Brain;
+
         public TankUltimateController(
             TankBrain brain, 
-            UltimateActionFactorySO ultimateFactoryData
-            )
+            UltimateActionFactorySO ultimateFactoryData)
         {
             m_Brain = brain;
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
@@ -42,11 +37,10 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate() => m_UltimateAction?.TryExecute();
 
+        public void ToggleTankVisibility(bool isVisible) => m_Brain.ToggleTankVisibility(isVisible);
 
         public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
-        {
-            m_UltimateAction.OnUltimateActionAssigned += action;
-        }
+            => m_UltimateAction.OnUltimateActionAssigned += action;
 
         public void SubscribeToUltimateExecutedEvent(Action action) => 
             m_UltimateAction.OnUltimateActionExecuted += action;

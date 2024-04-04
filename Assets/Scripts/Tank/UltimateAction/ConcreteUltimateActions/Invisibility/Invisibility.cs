@@ -32,7 +32,7 @@ namespace BTG.Tank.UltimateAction
             SpawnView(m_UltimateController.TankTransform);
             m_View.PlayDisappearPS();
             m_View.PlayDisappearAudio();
-            m_UltimateController.TankController.ToggleTankVisibility(false);
+            m_UltimateController.ToggleTankVisibility(false);
             RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
@@ -71,7 +71,7 @@ namespace BTG.Tank.UltimateAction
                 await Task.Delay((int)(m_View.AppearPSDuration * 1000), token);
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
-                m_UltimateController.TankController.ToggleTankVisibility(true);
+                m_UltimateController.ToggleTankVisibility(true);
                 OnExecuteCameraShake?.Invoke(1f);
 
                 RaiseUltimateActionExecutedEvent();

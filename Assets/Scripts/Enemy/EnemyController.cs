@@ -23,7 +23,7 @@ namespace BTG.Enemy
         ~EnemyController()
         {
             m_TankBrain.OnDeath -= OnDeath;
-            UnityCallbacks.Instance.Unregister(this);
+            // UnityCallbacks.Instance.Unregister(this);
 
             m_TankBrain = null;
         }
@@ -39,7 +39,7 @@ namespace BTG.Enemy
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
             m_TankBrain.OnDeath += OnDeath;
 
-            UnityCallbacks.Instance.Register(this);
+            // UnityCallbacks.Instance.Register(this);
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
@@ -59,7 +59,7 @@ namespace BTG.Enemy
         private void OnDeath()
         {
             m_TankBrain.OnDeath -= OnDeath;
-            UnityCallbacks.Instance.Unregister(this);
+            // UnityCallbacks.Instance.Unregister(this);
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);
