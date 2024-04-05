@@ -1,9 +1,14 @@
 ﻿using BTG.Utilities;
+using UnityEngine;
 
 namespace BTG.Enemy
 {
     public class EnemyIdleState : BaseState<EnemyStateManager.EnemyState>
     {
+        private const int MAX_IDLE_TIME = 3;
+        private float m_IdleTime = 0;
+        private float m_TimeElapsed = 0;
+
         public EnemyIdleState(EnemyStateManager.EnemyState state) : base(state)
         {
 
@@ -11,17 +16,20 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
-            throw new System.NotImplementedException();
+            NextState = EnemyStateManager.EnemyState.Idle;
+            m_IdleTime = Random.Range(0, MAX_IDLE_TIME);
         }
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
+            m_TimeElapsed += Time.deltaTime;
+            if (m_TimeElapsed >= m_IdleTime)
+                NextState = EnemyStateManager.EnemyState.Move;
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            // do nothing for now
         }
     }
 }

@@ -26,12 +26,12 @@ namespace BTG.Enemy
         {
             // check if enemy is near destination, if yes, set new destination
             if (HasReachedDestination())
-                SetNewDestination();
+                NextState = EnemyStateManager.EnemyState.Idle;
         }
 
         public override void Exit()
         {
-            throw new System.NotImplementedException();
+            // do nothing for now
         }
 
         private void SetNewDestination()
