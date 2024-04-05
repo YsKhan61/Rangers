@@ -35,8 +35,6 @@ namespace BTG.Tank
 
         public void TakeDamage(int damage)
         {
-            if (!m_Model.IsDamageable) return;
-
             AddHealth(-damage);
 
             if (m_Model.CurrentHealth > 0) return;

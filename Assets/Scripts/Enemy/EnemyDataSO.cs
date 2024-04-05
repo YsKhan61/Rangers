@@ -15,8 +15,8 @@ namespace BTG.Enemy
         public EnemyView EnemyPrefab => m_EnemyPrefab;
 
         [SerializeField, Tooltip("The accepted distance between tank and destination to consider reached")]
-        private float m_DestinationReachedThreshold = 0.5f;
-        public float DestinationReachedThreshold => m_DestinationReachedThreshold;
+        private float m_StoppingDistance = 0.5f;
+        public float StoppingDistance => m_StoppingDistance;
 
         [SerializeField]
         private int m_LookAtSpeed = 5;

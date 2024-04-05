@@ -34,13 +34,11 @@ namespace BTG.Enemy
 
         public void Update()
         {
-            UpdateLookDirection();
+            // UpdateLookDirection();
             
             // check if enemy is near destination, if yes, set new destination
-            if (m_Agent.remainingDistance < m_Data.DestinationReachedThreshold)
-            {
+            if (HasReachedDestination())
                 SetNewDestination();
-            }
         }
 
         public void Init()
@@ -51,6 +49,8 @@ namespace BTG.Enemy
 
             m_Agent.SetDestination(Vector3.zero);
             m_Agent.acceleration = m_TankBrain.Model.Acceleration;
+            m_Agent.stoppingDistance = m_Data.StoppingDistance;
+
             UnityCallbacks.Instance.Register(this);
         }
 
@@ -96,6 +96,13 @@ namespace BTG.Enemy
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);
             Debug.Log("Enemy died!");
+        }
+
+        private bool HasReachedDestination()
+        {
+            return !m_Agent.pathPending 
+                && m_Agent.remainingDistance < m_Agent.stoppingDistance
+                && (!m_Agent.hasPath || m_Agent.velocity.sqrMagnitude == 0f);
         }
     }
 }

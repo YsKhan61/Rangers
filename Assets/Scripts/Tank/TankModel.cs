@@ -35,8 +35,6 @@ namespace BTG.Tank
         /// </summary>
         public int OppositionLayer;
 
-        public bool IsDamageable;       // If false, the tank cannot take damage (while having invisibility, or special armor)
-
         public TankModel(TankDataSO m_TankData, TankBrain brain)
         {
             this.m_TankData = m_TankData;

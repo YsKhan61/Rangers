@@ -44,7 +44,7 @@ namespace BTG.Tank
 
         public Transform FirePoint => m_View.FirePoint;
 
-        public IDamageable Damageable => m_View;
+        public IDamageable Damageable => m_View.Damageable;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
 
         private TankPool m_Pool;
@@ -88,7 +88,7 @@ namespace BTG.Tank
 
         public void SetLayers(int selfLayer, int oppositionLayer)
         {
-            m_View.gameObject.layer = selfLayer;
+            m_View.SetDamageableLayer(selfLayer);
             m_Model.OppositionLayer = 1 << oppositionLayer;
         }
 

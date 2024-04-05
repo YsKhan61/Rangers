@@ -67,6 +67,73 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1532483733680906918
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7556362761219353126}
+  - component: {fileID: 5353289944543359656}
+  - component: {fileID: 8647166367981316567}
+  m_Layer: 0
+  m_Name: Damageable
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7556362761219353126
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532483733680906918}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8606235021615285385}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &5353289944543359656
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532483733680906918}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.5762839, y: 1.7587739, z: 1.9220543}
+  m_Center: {x: 0.009604692, y: 0.9844851, z: -0.028814077}
+--- !u!114 &8647166367981316567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1532483733680906918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 576933cacdedd9c4794e7b23dbbcf0a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DamageableCollider: {fileID: 5353289944543359656}
 --- !u!1 &2571957331697108734
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,6 +173,7 @@ Transform:
   - {fileID: 1081696600432693848}
   - {fileID: 4063831496951654433}
   - {fileID: 2165065266451995825}
+  - {fileID: 7556362761219353126}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &17056773906127175
@@ -127,6 +195,7 @@ MonoBehaviour:
   m_FirePoint: {fileID: 7782211647504060980}
   m_TankUI: {fileID: 1870917013688007187}
   m_TankAudio: {fileID: 5165964390985742851}
+  m_DamageableView: {fileID: 8647166367981316567}
 --- !u!54 &4761740404829176107
 Rigidbody:
   m_ObjectHideFlags: 0
