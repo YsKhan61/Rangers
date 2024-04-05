@@ -13,15 +13,22 @@ namespace BTG.Enemy
         private EnemyPool m_Pool;
         private TankBrain m_TankBrain;
         private EnemyView m_View;
+        private Rigidbody m_Rigidbody;
         private NavMeshAgent m_Agent;
 
         private int m_LastIndex = 0;
+        private Transform m_Transform;
+
 
         public EnemyController(EnemyDataSO data, EnemyPool pool)
         {
             m_Data = data;
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
+            m_View.SetController(this);
+            m_Rigidbody = m_View.GetComponent<Rigidbody>();
+            m_Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
             m_Agent = m_View.GetComponent<NavMeshAgent>();
+            m_Transform = m_View.transform;
         }
 
         ~EnemyController()
@@ -34,8 +41,6 @@ namespace BTG.Enemy
 
         public void Update()
         {
-            // UpdateLookDirection();
-            
             // check if enemy is near destination, if yes, set new destination
             if (HasReachedDestination())
                 SetNewDestination();
@@ -43,13 +48,10 @@ namespace BTG.Enemy
 
         public void Init()
         {
-            Debug.Log("Enemy initialized");
-            m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
-            m_TankBrain.OnDeath += OnDeath;
-
-            m_Agent.SetDestination(Vector3.zero);
-            m_Agent.acceleration = m_TankBrain.Model.Acceleration;
+            
+            m_Agent.speed = m_TankBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
+            SetNewDestination();
 
             UnityCallbacks.Instance.Register(this);
         }
@@ -60,6 +62,9 @@ namespace BTG.Enemy
         {
             m_TankBrain = tankBrain;
             m_TankBrain.SetParent(m_View.transform, Vector3.zero, Quaternion.identity);
+            m_TankBrain.SetRigidbody(m_Rigidbody);
+            m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
+            m_TankBrain.OnDeath += OnDeath;
         }
 
 
@@ -80,13 +85,6 @@ namespace BTG.Enemy
             m_Agent.SetDestination(m_Data.PatrolPoints[newIndex]);
         }
 
-        private void UpdateLookDirection()
-        {
-            // Make sure to look towards destination with a slerp
-            Vector3 lookDir = m_Agent.steeringTarget - m_View.transform.position;
-            m_View.transform.rotation = Quaternion.Slerp(m_View.transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * m_Data.LookAtSpeed);
-
-        }
 
         private void OnDeath()
         {
@@ -101,8 +99,14 @@ namespace BTG.Enemy
         private bool HasReachedDestination()
         {
             return !m_Agent.pathPending 
-                && m_Agent.remainingDistance < m_Agent.stoppingDistance
+                && m_Agent.remainingDistance <= m_Agent.stoppingDistance
                 && (!m_Agent.hasPath || m_Agent.velocity.sqrMagnitude == 0f);
+        }
+
+        public void OnDrawGizmos()
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(m_Transform.position, m_Agent.destination);
         }
     }
 }

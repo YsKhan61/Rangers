@@ -67,17 +67,18 @@ namespace BTG.Player
             ConfigureTankWithPlayer(tank);
         }
 
-        private void CreateAndSpawnPlayerTank(out TankBrain controller)
+        private void CreateAndSpawnPlayerTank(out TankBrain tank)
         {
-            if (!m_TankFactory.TryGetTank(m_TankID, out controller))
+            if (!m_TankFactory.TryGetTank(m_TankID, out tank))
             {
                 return;
             }
 
-            controller.Transform.position = new UnityEngine.Vector3(0, 0, 0);
-            controller.Transform.rotation = UnityEngine.Quaternion.identity;
-            controller.Model.IsPlayer = true;
-            controller.SetLayers(m_PlayerLayer, m_EnemyLayer);
+            tank.Transform.position = new UnityEngine.Vector3(0, 0, 0);
+            tank.Transform.rotation = UnityEngine.Quaternion.identity;
+            tank.Model.IsPlayer = true;
+            tank.SetLayers(m_PlayerLayer, m_EnemyLayer);
+            tank.Init();
         }
 
         private void ConfigureTankWithPlayer(TankBrain tank)

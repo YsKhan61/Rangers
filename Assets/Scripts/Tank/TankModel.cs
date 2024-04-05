@@ -10,6 +10,7 @@ namespace BTG.Tank
         public TankDataSO TankData => m_TankData;
 
         public float Acceleration => m_TankData.Acceleration;
+        public int MaxSpeed => m_TankData.MaxSpeed;
 
         private TankBrain m_Brain;
 

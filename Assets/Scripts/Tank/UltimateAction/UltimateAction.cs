@@ -78,8 +78,12 @@ namespace BTG.Tank.UltimateAction
 
         public virtual void OnDestroy()
         {
-            m_CancellationTokenSource.Cancel();
-            m_CancellationTokenSource.Dispose();
+            if (m_CancellationTokenSource != null)
+            {
+                m_CancellationTokenSource.Cancel();
+                m_CancellationTokenSource.Dispose();
+            }
+            
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
         }

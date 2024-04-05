@@ -18,9 +18,7 @@ namespace BTG.Tank
 
         public TankBrain GetTank()
         {
-            TankBrain tank = GetItem();
-            tank.Init();
-            return tank;
+            return GetItem();
         }
 
         public void ReturnTank(TankBrain tank) => ReturnItem(tank);

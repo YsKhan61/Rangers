@@ -17,20 +17,16 @@ namespace BTG.Enemy
         private int m_NextWaveIndex = 0;
         private int m_TankCountInCurrentWave = 0;
 
-        private EnemyController m_EnemyController;
-
         private int m_PlayerLayer;
         private int m_EnemyLayer;
 
         private EnemyPool m_EnemyPool;
-        private EnemyDataSO m_EnemyData;
 
         public EnemyService(
             TankFactory tankFactory, 
             WaveConfigSO enemyWaves,
             int playerLayer,
-            int enemyLayer,
-            EnemyDataSO data)
+            int enemyLayer)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
@@ -40,8 +36,6 @@ namespace BTG.Enemy
             m_PlayerLayer = playerLayer;
             m_EnemyLayer = enemyLayer;
             m_NextWaveIndex = 0;
-
-            m_EnemyData = data;
         }
 
         ~EnemyService()
@@ -70,11 +64,56 @@ namespace BTG.Enemy
 
             foreach (int tankId in tankIDs)
             {
-                SpawnEnemyTank(tankId);
+                ConfigureTankAndController(tankId);
             }
         }
 
-        public void SpawnEnemyTank(int tankId)
+        private void ConfigureTankAndController(int tankId)
+        {
+            bool tankFound = GetEnemyTank(tankId, out TankBrain tank);
+            if (!tankFound)
+                return;
+
+            tank.Model.IsPlayer = false;
+            tank.SetLayers(m_EnemyLayer, m_PlayerLayer);
+            tank.Init();
+
+            bool found = GetEnemyController(out EnemyController controller);
+            if (!found)
+                return;
+
+            controller.SetTankBrain(tank);
+            Pose pose = m_EnemyWaves.GetRandomSpawnPose();
+            controller.SetPose(pose);
+            controller.Init();
+        }
+
+        private bool GetEnemyTank(int tankId, out TankBrain tank)
+        {
+            if (!m_TankFactory.TryGetTank(tankId, out tank))
+            {
+                if (!m_TankFactory.TryGetRandomTank(out tank))
+                {
+                    Debug.Log("Failed to spawn enemy tank");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool GetEnemyController(out EnemyController controller)
+        {
+            controller = m_EnemyPool.GetEnemy();
+            if (controller == null)
+            {
+                Debug.Log("Failed to spawn enemy controller");
+                return false;
+            }
+            
+            return true;
+        }
+
+        /*public void SpawnEnemyTank(int tankId)
         {
             if (!m_TankFactory.TryGetTank(tankId, out TankBrain tankBrain))
             {
@@ -94,7 +133,7 @@ namespace BTG.Enemy
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             m_EnemyController.SetPose(pose);
             m_EnemyController.Init();
-        }
+        }*/
 
         private void OnTankAboutToDie(bool isPlayer)
         {

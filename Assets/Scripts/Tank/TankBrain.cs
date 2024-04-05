@@ -38,7 +38,8 @@ namespace BTG.Tank
         private TankHealthController m_HealthController;
 
         public Transform Transform => m_View.transform;
-        public Rigidbody Rigidbody => m_View.RigidBody;
+
+        public Rigidbody Rigidbody { get; private set; }
 
         public Transform CameraTarget => m_View.CameraTarget;
 
@@ -75,7 +76,6 @@ namespace BTG.Tank
             OnTankStateChangedToIdle();
 
             ToggleTankVisibility(true);
-            Rigidbody.isKinematic = false;
 
             m_UltimateController.EnableUltimate();
             m_HealthController.Init();
@@ -85,6 +85,8 @@ namespace BTG.Tank
 
             _ = RaiseInitializedEventAsync();
         }
+
+        public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
 
         public void SetLayers(int selfLayer, int oppositionLayer)
         {

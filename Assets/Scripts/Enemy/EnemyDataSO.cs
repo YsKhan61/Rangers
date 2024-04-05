@@ -19,7 +19,7 @@ namespace BTG.Enemy
         public float StoppingDistance => m_StoppingDistance;
 
         [SerializeField]
-        private int m_LookAtSpeed = 5;
-        public int LookAtSpeed => m_LookAtSpeed;
+        private float m_MaxSpeedMultiplier = 0.5f;
+        public float MaxSpeedMultiplier => m_MaxSpeedMultiplier;
     }
 }

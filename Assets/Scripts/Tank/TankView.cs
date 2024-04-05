@@ -13,10 +13,6 @@ namespace BTG.Tank
         Transform m_Graphics;
 
         [SerializeField]
-        Rigidbody m_Rigidbody;
-        public Rigidbody RigidBody => m_Rigidbody;
-
-        [SerializeField]
         Collider m_Collider;
 
         [SerializeField]
