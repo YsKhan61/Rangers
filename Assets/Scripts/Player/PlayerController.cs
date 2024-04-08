@@ -123,7 +123,7 @@ namespace BTG.Player
             m_Model.TankModel = null;
             m_Tank = null;
 
-            m_PlayerService.OnPlayerTankDead();
+            // m_PlayerService.OnPlayerTankDead();
         }
 
         private void MoveWithForce()

@@ -71,7 +71,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to register an already registered startable");
+                Debug.Log("Trying to register an already registered startable");
             }
         }
 
@@ -83,7 +83,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to register an already registered updatable");
+                Debug.Log("Trying to register an already registered updatable");
             }
         }
 
@@ -95,7 +95,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to register an already registered fixed updatable");
+                Debug.Log("Trying to register an already registered fixed updatable");
             }
         }
 
@@ -107,7 +107,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to register an already registered destroyable");
+                Debug.Log("Trying to register an already registered destroyable");
             }
         }
 
@@ -119,7 +119,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to unregister an unregistered startable");
+                Debug.Log("Trying to unregister an unregistered startable");
             }
         }
 
@@ -131,7 +131,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to unregister an unregistered updatable");
+                Debug.Log("Trying to unregister an unregistered updatable");
             }
         }
 
@@ -143,7 +143,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to unregister an unregistered fixed updatable");
+                Debug.Log("Trying to unregister an unregistered fixed updatable");
             }
         }
 
@@ -155,7 +155,7 @@ namespace BTG.Utilities
             }
             else
             {
-                Debug.LogError("Trying to unregister an unregistered destroyable");
+                Debug.Log("Trying to unregister an unregistered destroyable");
             }
         }
     }

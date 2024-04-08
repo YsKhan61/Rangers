@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46f03ec6b60c01444ad1ba4942255c58, type: 3}
-  m_Name: BlueTankData
+  m_Name: RedTankData_1
   m_EditorClassIdentifier: 
-  m_ID: 4
-  m_Icon: {fileID: 21300000, guid: b4ca51f8689fee04fa6caabad96efdbf, type: 3}
-  m_TankViewPrefab: {fileID: 9016891696666167597, guid: 92084363dfb297c458e4434ac2695e1d,
+  m_ID: 1
+  m_Icon: {fileID: 21300000, guid: e09360e7a0e51a54d964c2001f7cc509, type: 3}
+  m_TankViewPrefab: {fileID: 9016891696666167597, guid: 391f4fd004d1b9a49be031b9f94cd476,
     type: 3}
-  m_MaxHealth: 100
-  m_Acceleration: 15
+  m_MaxHealth: 175
+  m_Acceleration: 14
   m_MaxSpeed: 20
-  m_RotateSpeed: 32
-  m_projectileData: {fileID: 11400000, guid: d3fe2704d3ce30f46b07580694904c49, type: 2}
-  m_ChargeTime: 1
+  m_RotateSpeed: 27
+  m_projectileData: {fileID: 11400000, guid: b2e67de5fbedc484788a469a0f20223a, type: 2}
+  m_ChargeTime: 3
   m_EngineIdleClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
   m_EngineDrivingClip: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
   m_ShotFiringClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
   m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
-  m_UltimateActionFactory: {fileID: 11400000, guid: 01bfb6f0c08676c45b5ca508ece0404a,
+  m_UltimateActionFactory: {fileID: 11400000, guid: 4487d5efdec43e044b1b954224d9668a,
     type: 2}

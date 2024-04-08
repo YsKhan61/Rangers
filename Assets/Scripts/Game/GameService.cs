@@ -4,7 +4,6 @@ using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BTG.Game
 {
@@ -13,7 +12,6 @@ namespace BTG.Game
         [SerializeField] private int m_PlayerLayer;
         [SerializeField] private int m_EnemyLayer;
         
-        [SerializeField] private IntDataSO m_TestPlayerTankID; // This is for test purpose, so that we dont have to go to MainMenu and then select the tank
         [SerializeField] private WaveConfigSO m_EnemyWaves;
 
         [SerializeField] TankDataContainerSO m_TankDataList;
@@ -24,6 +22,8 @@ namespace BTG.Game
 
         [SerializeField] private EnemyDataSO m_EnemyData;
         [SerializeField] private PlayerDataSO m_PlayerData;
+
+        [SerializeField] private IntDataSO m_TankIDSelectedData;
 
         //cache
         private PlayerService m_PlayerService;
@@ -44,10 +44,8 @@ namespace BTG.Game
 
         private void InitializePlayerService(in TankFactory tankFactory)
         {
-            int tankId = m_TestPlayerTankID > 0 ? m_TestPlayerTankID : PlayerPrefs.GetInt("TankID", 1);     // test purpose
-
             m_PlayerService = new PlayerService(
-                tankId,
+                m_TankIDSelectedData,
                 tankFactory,
                 m_PVCController,
                 m_UltimateUI,

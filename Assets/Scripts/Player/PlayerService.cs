@@ -15,7 +15,6 @@ namespace BTG.Player
         private int m_PlayerLayer;
         private int m_EnemyLayer;
 
-        private int m_TankID;       // temporary for now
         private UltimateUI m_UltimateUI;    // temporary for now
         private HealthUI m_HealthUI;    // temporary for now
         private PlayerVirtualCamera m_PVC;    // temporary for now
@@ -23,9 +22,10 @@ namespace BTG.Player
         private CancellationTokenSource m_CTS;
 
         private PlayerDataSO m_PlayerData;
+        private IntDataSO m_PlayerTankIDSelectedData;
 
         public PlayerService(
-            in int tankID,
+            IntDataSO tankIDSelectedData,
             TankFactory tankFactory,
             PlayerVirtualCamera pvc,
             UltimateUI ultimateUI,
@@ -34,7 +34,7 @@ namespace BTG.Player
             int enemyLayer,
             PlayerDataSO playerData)
         {
-            m_TankID = tankID;
+            m_PlayerTankIDSelectedData = tankIDSelectedData;
             m_TankFactory = tankFactory;
             m_PlayerLayer = playerLayer;
             m_EnemyLayer = enemyLayer;
@@ -47,20 +47,24 @@ namespace BTG.Player
         public void Initialize()
         {
             CreatePlayerControllerAndInput();
-            Respawn();
+            // Respawn();
             m_CTS = new CancellationTokenSource();
+
+            EventService.Instance.OnPlayerTankSelected.AddListener(Respawn);
         }
 
         ~PlayerService()
         {
+            EventService.Instance.OnPlayerTankSelected.RemoveListener(Respawn);
+
             m_CTS.Cancel();
             m_CTS.Dispose();
         }
 
-        public void OnPlayerTankDead()
+        /*public void OnPlayerTankDead()
         {
             _ = HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
-        }
+        }*/
 
         private void CreatePlayerControllerAndInput()
         {
@@ -80,7 +84,7 @@ namespace BTG.Player
 
         private bool CreateAndSpawnPlayerTank(out TankBrain tank)
         {
-            if (!m_TankFactory.TryGetTank(m_TankID, out tank))
+            if (!m_TankFactory.TryGetTank(m_PlayerTankIDSelectedData, out tank))
             {
                 return false;
             }
