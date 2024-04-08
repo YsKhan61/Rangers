@@ -1,4 +1,4 @@
-﻿using BTG.Utilities;
+﻿using UnityEngine;
 
 
 namespace BTG.Enemy
@@ -12,7 +12,7 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
-            
+            Debug.Log("Enemy died!");
         }
 
         public override void Update()

@@ -1,5 +1,4 @@
 using BTG.Tank;
-using BTG.Tank.UltimateAction;
 using BTG.Utilities;
 using UnityEngine;
 using UnityEngine.AI;
@@ -37,7 +36,7 @@ namespace BTG.Enemy
 
         ~EnemyController()
         {
-            m_TankBrain.OnAfterDeath -= OnDeath;
+            m_TankBrain.OnAfterDeath -= OnTankDeath;
 
             m_TankBrain = null;
         }
@@ -64,27 +63,26 @@ namespace BTG.Enemy
             m_TankBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_TankBrain.SetRigidbody(Rigidbody);
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
-            m_TankBrain.OnAfterDeath += OnDeath;
+            m_TankBrain.OnAfterDeath += OnTankDeath;
             m_TankBrain.Init();
         }
 
 
-        public void OnUltimateFullyCharged(IUltimateAction ultimate)
+        public void OnUltimateFullyCharged()
         {
-            ultimate.TryExecute();
+            m_TankBrain.TryExecuteUltimate();
         }
 
 
-        private void OnDeath()
+        private void OnTankDeath()
         {
-            m_TankBrain.OnAfterDeath -= OnDeath;
+            m_TankBrain.OnAfterDeath -= OnTankDeath;
 
             m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
             m_StateManager.DeInit();
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);
-            Debug.Log("Enemy died!");
         }
 
         public void OnDrawGizmos()

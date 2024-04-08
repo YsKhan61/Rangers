@@ -1,7 +1,7 @@
-using BTG.Tank.UltimateAction;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 namespace BTG.UI
 {
@@ -26,7 +26,7 @@ namespace BTG.UI
             m_ChargedAmountText.text = amount.ToString();
         }
 
-        public void OnFullyCharged(IUltimateAction _)
+        public void OnFullyCharged()
         {
             m_UnreadyImage.gameObject.SetActive(false);
             m_ReadyImage.gameObject.SetActive(true);

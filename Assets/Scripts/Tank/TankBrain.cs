@@ -226,7 +226,7 @@ namespace BTG.Tank
         public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated) =>
             m_UltimateController.SubscribeToChargeUpdatedEvent(onChargeUpdated);
 
-        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> onFullyCharged) =>
+        public void SubscribeToFullyChargedEvent(Action onFullyCharged) =>
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
 
         public void SubscribeToHealthUpdatedEvent(Action<int, int> onHealthUpdated) =>

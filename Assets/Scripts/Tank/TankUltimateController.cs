@@ -56,7 +56,7 @@ namespace BTG.Tank
         public void SubscribeToChargeUpdatedEvent(Action<int> action) => 
             m_UltimateAction.OnChargeUpdated += action;
 
-        public void SubscribeToFullyChargedEvent(Action<IUltimateAction> action) =>
+        public void SubscribeToFullyChargedEvent(Action action) =>
             m_UltimateAction.OnFullyCharged += action;
     }
 }

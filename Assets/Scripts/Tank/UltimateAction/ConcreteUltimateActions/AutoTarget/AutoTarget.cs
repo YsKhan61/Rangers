@@ -10,7 +10,7 @@ namespace BTG.Tank.UltimateAction
     public class AutoTarget : UltimateAction, ICameraShakeUltimateAction
     {
         public event System.Action<float> OnExecuteCameraShake;
-        public override event System.Action<IUltimateAction> OnFullyCharged;
+        public override event System.Action OnFullyCharged;
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
@@ -64,7 +64,7 @@ namespace BTG.Tank.UltimateAction
 
         protected override void RaiseFullyChargedEvent()
         {
-            OnFullyCharged?.Invoke(this);
+            OnFullyCharged?.Invoke();
         }
 
         private bool ScanForNearbyColliders(out Collider[] results)

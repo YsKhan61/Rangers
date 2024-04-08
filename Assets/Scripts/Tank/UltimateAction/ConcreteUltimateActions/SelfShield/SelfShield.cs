@@ -6,7 +6,7 @@ namespace BTG.Tank.UltimateAction
 {
     public class SelfShield : UltimateAction
     {
-        public override event System.Action<IUltimateAction> OnFullyCharged;
+        public override event System.Action OnFullyCharged;
 
         private SelfShieldDataSO m_SelfShieldData => m_UltimateActionData as SelfShieldDataSO;
 
@@ -55,7 +55,7 @@ namespace BTG.Tank.UltimateAction
 
         protected override void RaiseFullyChargedEvent()
         {
-            OnFullyCharged?.Invoke(this);
+            OnFullyCharged?.Invoke();
         }
 
         private void SpawnView(Transform parent)

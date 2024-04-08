@@ -48,20 +48,23 @@ namespace BTG.Player
         {
             CreatePlayerControllerAndInput();
             Respawn();
-            EventService.Instance.OnBeforeAnyTankDead.AddListener(OnTankDead);
             m_CTS = new CancellationTokenSource();
         }
 
         ~PlayerService()
         {
-            EventService.Instance.OnBeforeAnyTankDead.RemoveListener(OnTankDead);
             m_CTS.Cancel();
             m_CTS.Dispose();
         }
 
+        public void OnPlayerTankDead()
+        {
+            _ = HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
+        }
+
         private void CreatePlayerControllerAndInput()
         {
-            m_PlayerController = new PlayerController(m_PlayerData);
+            m_PlayerController = new PlayerController(this, m_PlayerData);
             PlayerInputs playerInput = new PlayerInputs(m_PlayerController);
             playerInput.Initialize();
         }
@@ -91,46 +94,30 @@ namespace BTG.Player
             m_PlayerController.Transform.rotation = Quaternion.identity;
             m_PlayerController.SetTank(tank, m_PlayerLayer, m_EnemyLayer);
 
-            ConfigurePlayerCameraWithTankController(m_PVC, tank);
-            ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
-            ConfigureHealthUIWithTankController(m_HealthUI, tank);
+            ConfigurePlayerCameraWithTankController(tank);
+            ConfigureUltimateUIWithTankController(tank);
+            ConfigureHealthUIWithTankController(tank);  
         }
 
-        private void ConfigurePlayerCameraWithTankController(
-            PlayerVirtualCamera pvc,
-            TankBrain tank)
+        private void ConfigurePlayerCameraWithTankController(TankBrain tank)
         {
-            pvc.Initialize(tank.CameraTarget);
-            tank.SubscribeToOnTankShootEvent(pvc.ShakeCameraOnPlayerTankShoot);
-            tank.SubscribeToCameraShakeEvent(pvc.ShakeCameraOnUltimateExecution);
+            m_PVC.Initialize(tank.CameraTarget);
+            tank.SubscribeToOnTankShootEvent(m_PVC.ShakeCameraOnPlayerTankShoot);
+            tank.SubscribeToCameraShakeEvent(m_PVC.ShakeCameraOnUltimateExecution);
         }
 
-        private void ConfigureUltimateUIWithTankController(
-            UltimateUI ultimateUI,
-            TankBrain tank)
+        private void ConfigureUltimateUIWithTankController(TankBrain tank)
         {
-            tank.SubscribeToUltimateActionAssignedEvent(ultimateUI.Init);
-            tank.SubscribeToChargeUpdatedEvent(ultimateUI.UpdateChargeAmount);
-            tank.SubscribeToFullyChargedEvent(ultimateUI.OnFullyCharged);
-            tank.SubscribeToUltimateExecutedEvent(ultimateUI.OnUltimateExecuted);
+            tank.SubscribeToUltimateActionAssignedEvent(m_UltimateUI.Init);
+            tank.SubscribeToChargeUpdatedEvent(m_UltimateUI.UpdateChargeAmount);
+            tank.SubscribeToFullyChargedEvent(m_UltimateUI.OnFullyCharged);
+            tank.SubscribeToUltimateExecutedEvent(m_UltimateUI.OnUltimateExecuted);
         }
 
-        private void ConfigureHealthUIWithTankController(
-            HealthUI healthUI,
-            TankBrain tank)
+        private void ConfigureHealthUIWithTankController(TankBrain tank)
         {
-            tank.SubscribeToTankInitializedEvent(healthUI.SetTankIcon);
-            tank.SubscribeToHealthUpdatedEvent(healthUI.UpdateHealth);
-        }
-
-        private void OnTankDead(bool isPlayer)
-        {
-            if (!isPlayer)
-                return;
-
-            m_PlayerController.OnTankDead();
-
-            _ = HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
+            tank.SubscribeToTankInitializedEvent(m_HealthUI.SetTankIcon);
+            tank.SubscribeToHealthUpdatedEvent(m_HealthUI.UpdateHealth);
         }
     }
 }

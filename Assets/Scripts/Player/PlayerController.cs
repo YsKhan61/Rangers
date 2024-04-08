@@ -6,6 +6,7 @@ namespace BTG.Player
 {
     public class PlayerController : IFixedUpdatable, IUpdatable
     {
+        private PlayerService m_PlayerService;
         private PlayerModel m_Model;
         private PlayerView m_View;
 
@@ -20,8 +21,9 @@ namespace BTG.Player
         private float m_RotateAngle;
         private Quaternion m_DeltaRotation;
 
-        public PlayerController(PlayerDataSO data)
+        public PlayerController(PlayerService service, PlayerDataSO data)
         {
+            m_PlayerService = service;
             m_Model = new PlayerModel(data);
             m_View = Object.Instantiate(data.Prefab);
         }
@@ -42,6 +44,7 @@ namespace BTG.Player
             m_Tank.SetLayers(playerLayer, enemyLayer);
             m_Tank.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_Tank.SetRigidbody(Rigidbody);
+            m_Tank.OnAfterDeath += OnTankDead;
             m_Tank.Init();
 
             Rigidbody.centerOfMass = m_Tank.Transform.position;
@@ -99,7 +102,6 @@ namespace BTG.Player
             Rotate();
 
             MoveWithForce();
-            // Move();
         }
 
         public void Update()
@@ -115,9 +117,13 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
 
+            m_Tank.OnAfterDeath -= OnTankDead;
+
             m_Model.IsEnabled = false;
             m_Model.TankModel = null;
             m_Tank = null;
+
+            m_PlayerService.OnPlayerTankDead();
         }
 
         private void MoveWithForce()
@@ -135,11 +141,6 @@ namespace BTG.Player
 
             m_DeltaRotation = Quaternion.Euler(0, m_RotateAngle, 0);
             Rigidbody.MoveRotation(Rigidbody.rotation * m_DeltaRotation);
-        }
-
-        private void Move()
-        {
-            Rigidbody.MovePosition(Rigidbody.position + Transform.forward * m_AccelerationMagnitude * Time.fixedDeltaTime);
         }
 
         private void CalculateInputSpeed()

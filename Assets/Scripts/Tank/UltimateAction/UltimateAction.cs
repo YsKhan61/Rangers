@@ -11,7 +11,7 @@ namespace BTG.Tank.UltimateAction
         public const int FULL_CHARGE = 100;
 
         public event System.Action<string> OnUltimateActionAssigned;
-        public abstract event System.Action<IUltimateAction> OnFullyCharged;
+        public abstract event System.Action OnFullyCharged;
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnUltimateActionExecuted;
 

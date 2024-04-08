@@ -19,7 +19,7 @@ namespace BTG.Tank.UltimateAction
 
         public event System.Action<string> OnUltimateActionAssigned;
         public event System.Action<int> OnChargeUpdated;
-        public event System.Action<IUltimateAction> OnFullyCharged;
+        public event System.Action OnFullyCharged;
         public event System.Action OnUltimateActionExecuted;
 
         public string Name { get; }

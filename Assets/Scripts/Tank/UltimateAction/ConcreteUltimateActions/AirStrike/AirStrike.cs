@@ -9,7 +9,7 @@ namespace BTG.Tank.UltimateAction
     public class AirStrike : UltimateAction, ICameraShakeUltimateAction, IFixedUpdatable
     {
         public event System.Action<float> OnExecuteCameraShake;
-        public override event System.Action<IUltimateAction> OnFullyCharged;
+        public override event System.Action OnFullyCharged;
 
         private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
 
@@ -94,7 +94,7 @@ namespace BTG.Tank.UltimateAction
 
         protected override void RaiseFullyChargedEvent()
         {
-            OnFullyCharged?.Invoke(this);
+            OnFullyCharged?.Invoke();
         }
 
         private void SpawnView(Transform parent)
