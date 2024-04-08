@@ -24,6 +24,7 @@ namespace BTG.Game
         [SerializeField] private PlayerDataSO m_PlayerData;
 
         [SerializeField] private IntDataSO m_TankIDSelectedData;
+        [SerializeField] private PlayerStatsSO m_PlayerStats;
 
         //cache
         private PlayerService m_PlayerService;
@@ -52,7 +53,8 @@ namespace BTG.Game
                 m_HealthUI,
                 m_PlayerLayer,
                 m_EnemyLayer,
-                m_PlayerData);
+                m_PlayerData,
+                m_PlayerStats);
 
             m_PlayerService.Initialize();
         }
@@ -64,7 +66,8 @@ namespace BTG.Game
                 m_EnemyWaves, 
                 m_PlayerLayer, 
                 m_EnemyLayer, 
-                m_EnemyData);
+                m_EnemyData,
+                m_PlayerStats.EliminatedEnemiesCount);
 
             enemyService.StartNextWave();
         }

@@ -20,17 +20,18 @@ namespace BTG.Enemy
         private int m_EnemyLayer;
 
         private EnemyPool m_EnemyPool;
+        private IntDataSO m_EnemyDeathCountData;
 
         public EnemyService(
             TankFactory tankFactory, 
             WaveConfigSO enemyWaves,
             int playerLayer,
             int enemyLayer,
-            EnemyDataSO enemyData)
+            EnemyDataSO enemyData,
+            IntDataSO enemyDeathCountData)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
-            EventService.Instance.OnBeforeAnyTankDead.AddListener(OnTankAboutToDie);
             m_EnemyWaves = enemyWaves;
 
             m_PlayerLayer = playerLayer;
@@ -38,15 +39,21 @@ namespace BTG.Enemy
             m_NextWaveIndex = 0;
 
             m_EnemyPool = new EnemyPool(enemyData);
+            m_EnemyDeathCountData = enemyDeathCountData;
         }
 
         ~EnemyService()
         {
             m_TankFactory = null;
-            EventService.Instance.OnBeforeAnyTankDead.RemoveListener(OnTankAboutToDie);
 
             m_Cts.Cancel();
             m_Cts.Dispose();
+        }
+
+        public void OnEnemyDeath()
+        {
+            m_EnemyDeathCountData.Value++;
+            TryStartNextWave();
         }
 
         public void StartNextWave()
@@ -76,6 +83,7 @@ namespace BTG.Enemy
                 return;
 
             controller.SetTank(tank, m_EnemyLayer, m_PlayerLayer);
+            controller.SetService(this);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
             controller.Init();
@@ -104,14 +112,6 @@ namespace BTG.Enemy
             }
             
             return true;
-        }
-
-        private void OnTankAboutToDie(bool isPlayer)
-        {
-            if (isPlayer)
-                return;
-
-            TryStartNextWave();
         }
 
         private void TryStartNextWave()

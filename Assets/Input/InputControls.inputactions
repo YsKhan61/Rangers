@@ -132,6 +132,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "UI",
+            "id": "e38fd070-ea04-4c37-aada-5176c528c3b2",
+            "actions": [
+                {
+                    "name": "TogglePlayerStatsPanel",
+                    "type": "Button",
+                    "id": "eb906477-1680-496b-a3ae-ff3419ced9f6",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "08f93879-4ade-4e7d-a065-1d44ccd01080",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TogglePlayerStatsPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

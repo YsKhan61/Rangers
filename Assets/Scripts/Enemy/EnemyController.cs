@@ -12,6 +12,7 @@ namespace BTG.Enemy
         public EnemyDataSO Data => m_Data;
 
         private EnemyPool m_Pool;
+        private EnemyService m_Service;
         private TankBrain m_TankBrain;
         private EnemyView m_View;
         private NavMeshAgent m_Agent;
@@ -67,6 +68,11 @@ namespace BTG.Enemy
             m_TankBrain.Init();
         }
 
+        public void SetService(EnemyService service)
+        {
+            m_Service = service;
+        }
+
 
         public void OnUltimateFullyCharged()
         {
@@ -83,6 +89,8 @@ namespace BTG.Enemy
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);
+
+            m_Service.OnEnemyDeath();
         }
 
         public void OnDrawGizmos()

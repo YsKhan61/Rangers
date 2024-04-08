@@ -1,4 +1,3 @@
-using BTG.EventSystem;
 using BTG.Utilities;
 using UnityEngine;
 
@@ -12,43 +11,25 @@ namespace BTG.UI
         [SerializeField]
         private IntDataSO m_TankIDSelectedData;
 
-        private void OnEnable()
-        {
-            EventService.Instance.OnBeforeAnyTankDead.AddListener(OnBeforeAnyTankDead);
-        }
+        [SerializeField]
+        private IntDataSO m_PlayerDeathData;
 
-        private void Start()
-        {
-            ShowPanel();
-        }
+        private void OnEnable() => m_PlayerDeathData.OnValueChanged += OnPlayerDeath;
 
-        private void OnDisable()
-        {
-            EventService.Instance.OnBeforeAnyTankDead.RemoveListener(OnBeforeAnyTankDead);
-        }
+        private void Start() => ShowPanel();
+
+        private void OnDisable() => m_PlayerDeathData.OnValueChanged -= OnPlayerDeath;
 
         public void TankIDSelect(int id)
         {
             m_TankIDSelectedData.Value = id;
-            EventService.Instance.OnPlayerTankSelected.InvokeEvent();
             HidePanel();
         }
 
-        private void ShowPanel()
-        {
-            m_Panel.SetActive(true);
-        }
+        private void ShowPanel() => m_Panel.SetActive(true);
 
-        private void HidePanel()
-        {
-            m_Panel.SetActive(false);
-        }
+        private void HidePanel() => m_Panel.SetActive(false);
 
-        private void OnBeforeAnyTankDead(bool isPlayer)
-        {
-            if (!isPlayer) return;
-
-            ShowPanel();
-        }
+        private void OnPlayerDeath(int _) => ShowPanel();
     }
 }

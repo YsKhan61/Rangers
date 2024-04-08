@@ -112,7 +112,7 @@ namespace BTG.Player
             CalculateInputSpeed();
         }
 
-        public void OnTankDead()
+        private void OnTankDead()
         {
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
@@ -123,7 +123,7 @@ namespace BTG.Player
             m_Model.TankModel = null;
             m_Tank = null;
 
-            // m_PlayerService.OnPlayerTankDead();
+            m_PlayerService.OnPlayerDeath();
         }
 
         private void MoveWithForce()

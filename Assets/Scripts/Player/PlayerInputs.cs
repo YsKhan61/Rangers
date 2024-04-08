@@ -1,5 +1,3 @@
-
-using BTG.Inputs;
 using BTG.Utilities;
 using UnityEngine.InputSystem;
 
@@ -25,6 +23,7 @@ namespace BTG.Player
             m_InputControls = new InputControls();
             m_InputControls.Enable();
             m_InputControls.Player.Enable();
+            m_InputControls.UI.Enable();
 
             m_MoveInputAction = m_InputControls.Player.MoveAction;
             m_RotateInputAction = m_InputControls.Player.RotateAction;
@@ -51,6 +50,7 @@ namespace BTG.Player
             m_InputControls.Player.UltimateAction.performed -= OnUltimateInputPerformed;
 
             m_InputControls.Player.Disable();
+            m_InputControls.UI.Disable();
             m_InputControls.Disable();
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);

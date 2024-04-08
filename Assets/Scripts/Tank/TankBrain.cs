@@ -112,12 +112,9 @@ namespace BTG.Tank
 
         public void Die()
         {
-            EventService.Instance.OnBeforeAnyTankDead?.InvokeEvent(m_Model.IsPlayer);
-
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
         }
-
         
 
         /// <summary>

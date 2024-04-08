@@ -15,14 +15,15 @@ namespace BTG.Player
         private int m_PlayerLayer;
         private int m_EnemyLayer;
 
-        private UltimateUI m_UltimateUI;    // temporary for now
-        private HealthUI m_HealthUI;    // temporary for now
-        private PlayerVirtualCamera m_PVC;    // temporary for now
+        private readonly UltimateUI m_UltimateUI;    // temporary for now
+        private readonly HealthUI m_HealthUI;    // temporary for now
+        private readonly PlayerVirtualCamera m_PVC;    // temporary for now
 
         private CancellationTokenSource m_CTS;
 
         private PlayerDataSO m_PlayerData;
         private IntDataSO m_PlayerTankIDSelectedData;
+        private PlayerStatsSO m_PlayerStats;
 
         public PlayerService(
             IntDataSO tankIDSelectedData,
@@ -32,7 +33,8 @@ namespace BTG.Player
             HealthUI healthUI,
             int playerLayer,
             int enemyLayer,
-            PlayerDataSO playerData)
+            PlayerDataSO playerData,
+            PlayerStatsSO playerStats)
         {
             m_PlayerTankIDSelectedData = tankIDSelectedData;
             m_TankFactory = tankFactory;
@@ -42,29 +44,31 @@ namespace BTG.Player
             m_UltimateUI = ultimateUI;
             m_HealthUI = healthUI;
             m_PlayerData = playerData;
+            m_PlayerStats = playerStats;
         }
 
         public void Initialize()
         {
             CreatePlayerControllerAndInput();
-            // Respawn();
             m_CTS = new CancellationTokenSource();
+            
+            m_PlayerStats.ResetStats();
 
-            EventService.Instance.OnPlayerTankSelected.AddListener(Respawn);
+            m_PlayerTankIDSelectedData.OnValueChanged += Respawn;
         }
 
         ~PlayerService()
         {
-            EventService.Instance.OnPlayerTankSelected.RemoveListener(Respawn);
+            m_PlayerTankIDSelectedData.OnValueChanged -= Respawn;
 
             m_CTS.Cancel();
             m_CTS.Dispose();
         }
 
-        /*public void OnPlayerTankDead()
+        public void OnPlayerDeath()
         {
-            _ = HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
-        }*/
+            m_PlayerStats.DeathCount.Value++;
+        }
 
         private void CreatePlayerControllerAndInput()
         {
@@ -73,7 +77,7 @@ namespace BTG.Player
             playerInput.Initialize();
         }
 
-        private void Respawn()
+        private void Respawn(int _)
         {
             bool tankFound = CreateAndSpawnPlayerTank(out TankBrain tank);
             if (!tankFound)
@@ -84,7 +88,7 @@ namespace BTG.Player
 
         private bool CreateAndSpawnPlayerTank(out TankBrain tank)
         {
-            if (!m_TankFactory.TryGetTank(m_PlayerTankIDSelectedData, out tank))
+            if (!m_TankFactory.TryGetTank(m_PlayerTankIDSelectedData.Value, out tank))
             {
                 return false;
             }
