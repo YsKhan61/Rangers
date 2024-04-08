@@ -130,7 +130,7 @@ namespace BTG.Player
 
             m_PlayerController.OnTankDead();
 
-            HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
+            _ = HelperMethods.InvokeAfterAsync(3, () => Respawn(), m_CTS.Token);
         }
     }
 }

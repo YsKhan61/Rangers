@@ -80,6 +80,7 @@ namespace BTG.Enemy
             m_TankBrain.OnAfterDeath -= OnDeath;
 
             m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
+            m_StateManager.DeInit();
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);

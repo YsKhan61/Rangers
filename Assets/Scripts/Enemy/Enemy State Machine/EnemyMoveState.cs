@@ -3,18 +3,14 @@ using UnityEngine;
 
 namespace BTG.Enemy
 {
-    public class EnemyMoveState : BaseState<EnemyStateManager.EnemyState>
+    public class EnemyMoveState : EnemyAliveState
     {
         private int m_LastIndex;
-        private EnemyController m_Controller;
 
         public EnemyMoveState(EnemyStateManager.EnemyState state) : base(state)
         {
 
         }
-
-        public void SetController(EnemyController controller)
-            => m_Controller = controller;
 
         public override void Enter()
         {

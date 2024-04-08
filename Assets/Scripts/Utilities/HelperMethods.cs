@@ -8,7 +8,7 @@ namespace BTG.Utilities
     /// </summary>
     public static class HelperMethods
     {
-        public static async void InvokeAfterAsync(int seconds, System.Action action, CancellationToken token)
+        public static async Task InvokeAfterAsync(int seconds, System.Action action, CancellationToken token)
         {
             try
             {

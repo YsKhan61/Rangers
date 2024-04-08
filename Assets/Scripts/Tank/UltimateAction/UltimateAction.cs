@@ -97,7 +97,7 @@ namespace BTG.Tank.UltimateAction
             => OnUltimateActionExecuted?.Invoke();
 
         protected void RestartAfterDuration(int duration)
-            => HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
+            => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
 
 
         protected abstract void Restart();

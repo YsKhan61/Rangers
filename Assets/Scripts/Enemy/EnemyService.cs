@@ -124,7 +124,7 @@ namespace BTG.Enemy
 
             m_NextWaveIndex++;
 
-            HelperMethods.InvokeAfterAsync(m_EnemyWaves.Interval, () =>
+            _ = HelperMethods.InvokeAfterAsync(m_EnemyWaves.Interval, () =>
             {
                 StartNextWave();
             }, m_Cts.Token);

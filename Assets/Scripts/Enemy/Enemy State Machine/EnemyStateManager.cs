@@ -18,13 +18,10 @@ namespace BTG.Enemy
         {
             m_Controller = enemyController;
 
-            States.Add(EnemyState.Idle, new EnemyIdleState(EnemyState.Idle));
-
+            InitializeIdleState();
             InitializeMoveState();
-
-            States.Add(EnemyState.Attack, new EnemyAttackState(EnemyState.Attack));
-            States.Add(EnemyState.Dead, new EnemyDeadState(EnemyState.Dead));
-            
+            InitializeAttackState();
+            InitializeDeadState();  
         }
 
         public void Init()
@@ -35,10 +32,23 @@ namespace BTG.Enemy
             ChangeState(EnemyState.Move);
         }
 
+        public void DeInit()
+        {
+            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+        }
+
         public void OnDestroy()
         {
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);
+        }
+
+        private void InitializeIdleState()
+        {
+            EnemyIdleState idleState = new EnemyIdleState(EnemyState.Idle);
+            idleState.SetController(m_Controller);
+            States.Add(EnemyState.Idle, idleState);
         }
 
         private void InitializeMoveState()
@@ -46,6 +56,20 @@ namespace BTG.Enemy
             EnemyMoveState moveState = new EnemyMoveState(EnemyState.Move);
             moveState.SetController(m_Controller);
             States.Add(EnemyState.Move, moveState);
+        }
+
+        private void InitializeAttackState()
+        {
+            EnemyAttackState attackState = new EnemyAttackState(EnemyState.Attack);
+            attackState.SetController(m_Controller);
+            States.Add(EnemyState.Attack, attackState);
+        }
+
+        private void InitializeDeadState()
+        {
+            EnemyDeadState deadState = new EnemyDeadState(EnemyState.Dead);
+            deadState.SetController(m_Controller);
+            States.Add(EnemyState.Dead, deadState);
         }
     }
 }

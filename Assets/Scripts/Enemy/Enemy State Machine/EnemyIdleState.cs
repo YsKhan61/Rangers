@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Enemy
 {
-    public class EnemyIdleState : BaseState<EnemyStateManager.EnemyState>
+    public class EnemyIdleState : EnemyAliveState
     {
         private const int MAX_IDLE_TIME = 3;
         private float m_IdleTime = 0;
