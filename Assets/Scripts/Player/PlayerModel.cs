@@ -4,6 +4,14 @@ namespace BTG.Player
 {
     public class PlayerModel
     {
+        private PlayerDataSO m_PlayerData;
+        public PlayerDataSO PlayerData => m_PlayerData;
+
+        public PlayerModel(PlayerDataSO data)
+        {
+            m_PlayerData = data;
+        }
+
         public float MoveInputValue;
         public float RotateInputValue;
 

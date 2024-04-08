@@ -13,9 +13,6 @@ namespace BTG.Tank
         Transform m_Graphics;
 
         [SerializeField]
-        Collider m_Collider;
-
-        [SerializeField]
         Transform m_FirePoint;
         public Transform FirePoint => m_FirePoint;
 

@@ -71,15 +71,11 @@ namespace BTG.Enemy
             if (!tankFound)
                 return;
 
-            tank.Model.IsPlayer = false;
-            tank.SetLayers(m_EnemyLayer, m_PlayerLayer);
-            tank.Init();
-
             bool found = GetEnemyController(out EnemyController controller);
             if (!found)
                 return;
 
-            controller.SetTankBrain(tank);
+            controller.SetTank(tank, m_EnemyLayer, m_PlayerLayer);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
             controller.Init();

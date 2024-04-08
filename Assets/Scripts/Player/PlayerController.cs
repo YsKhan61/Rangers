@@ -7,21 +7,23 @@ namespace BTG.Player
     public class PlayerController : IFixedUpdatable, IUpdatable
     {
         private PlayerModel m_Model;
+        private PlayerView m_View;
 
         private TankBrain m_Tank;
 
         // cache
-        private Rigidbody TankRigidbody => m_Tank.Rigidbody;
-        private Transform TankTransform => m_Tank.Transform;
+        public Rigidbody Rigidbody => m_View.Rigidbody;
+        public Transform Transform => m_View.transform;
 
         // cached values
         private float m_AccelerationMagnitude;
         private float m_RotateAngle;
         private Quaternion m_DeltaRotation;
 
-        public PlayerController()
+        public PlayerController(PlayerDataSO data)
         {
-            m_Model = new PlayerModel();
+            m_Model = new PlayerModel(data);
+            m_View = Object.Instantiate(data.Prefab);
         }
 
         ~PlayerController()
@@ -30,17 +32,20 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        public void SetTank(TankBrain tankController, int playerLayer, int enemyLayer)
+        public void SetTank(TankBrain tank, int playerLayer, int enemyLayer)
         {
-            m_Tank = tankController;
-            m_Model.TankModel = tankController.Model;
-
+            m_Tank = tank;
+            m_Model.TankModel = tank.Model;
             m_Model.IsEnabled = true;
-            m_Tank.Transform.position = new Vector3(0, 0, 0);
-            m_Tank.Transform.rotation = Quaternion.identity;
+
             m_Tank.Model.IsPlayer = true;
             m_Tank.SetLayers(playerLayer, enemyLayer);
+            m_Tank.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
+            m_Tank.SetRigidbody(Rigidbody);
             m_Tank.Init();
+
+            Rigidbody.centerOfMass = m_Tank.Transform.position;
+            Rigidbody.maxLinearVelocity = m_Model.TankMaxSpeed;
 
             UnityCallbacks.Instance.Register(this as IFixedUpdatable);
             UnityCallbacks.Instance.Register(this as IUpdatable);
@@ -91,7 +96,10 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
+            Rotate();
+
             MoveWithForce();
+            // Move();
         }
 
         public void Update()
@@ -99,7 +107,6 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            Rotate();
             CalculateInputSpeed();
         }
 
@@ -115,19 +122,24 @@ namespace BTG.Player
 
         private void MoveWithForce()
         {
-            TankRigidbody.AddForce(TankTransform.forward * m_AccelerationMagnitude, ForceMode.Acceleration);
-            TankRigidbody.velocity = Vector3.ClampMagnitude(TankRigidbody.velocity, m_Model.TankMaxSpeed);
+            Rigidbody.AddForce(Transform.forward * m_AccelerationMagnitude, ForceMode.Acceleration);
+            Rigidbody.velocity = Vector3.ClampMagnitude(Rigidbody.velocity, m_Model.TankMaxSpeed);
         }
 
         private void Rotate()
         {
-            m_RotateAngle = m_Model.TankRotateSpeed * m_Model.RotateInputValue * Time.deltaTime *
+            m_RotateAngle = m_Model.TankRotateSpeed * m_Model.RotateInputValue * Time.fixedDeltaTime *
                 (m_Model.MoveInputValue > 0 ? 1 :
                     (m_Model.MoveInputValue < 0 ? -1 : 0)
                     );
 
             m_DeltaRotation = Quaternion.Euler(0, m_RotateAngle, 0);
-            TankRigidbody.MoveRotation(TankRigidbody.rotation * m_DeltaRotation);
+            Rigidbody.MoveRotation(Rigidbody.rotation * m_DeltaRotation);
+        }
+
+        private void Move()
+        {
+            Rigidbody.MovePosition(Rigidbody.position + Transform.forward * m_AccelerationMagnitude * Time.fixedDeltaTime);
         }
 
         private void CalculateInputSpeed()

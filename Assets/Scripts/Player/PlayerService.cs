@@ -3,6 +3,7 @@ using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
 using System.Threading;
+using UnityEngine;
 
 
 namespace BTG.Player
@@ -21,6 +22,8 @@ namespace BTG.Player
 
         private CancellationTokenSource m_CTS;
 
+        private PlayerDataSO m_PlayerData;
+
         public PlayerService(
             in int tankID,
             TankFactory tankFactory,
@@ -28,7 +31,8 @@ namespace BTG.Player
             UltimateUI ultimateUI,
             HealthUI healthUI,
             int playerLayer,
-            int enemyLayer)
+            int enemyLayer,
+            PlayerDataSO playerData)
         {
             m_TankID = tankID;
             m_TankFactory = tankFactory;
@@ -37,6 +41,7 @@ namespace BTG.Player
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
             m_HealthUI = healthUI;
+            m_PlayerData = playerData;
         }
 
         public void Initialize()
@@ -56,28 +61,36 @@ namespace BTG.Player
 
         private void CreatePlayerControllerAndInput()
         {
-            m_PlayerController = new PlayerController();
+            m_PlayerController = new PlayerController(m_PlayerData);
             PlayerInputs playerInput = new PlayerInputs(m_PlayerController);
             playerInput.Initialize();
         }
 
         private void Respawn()
         {
-            CreateAndSpawnPlayerTank(out TankBrain tank);
-            ConfigureTankWithPlayer(tank);
+            bool tankFound = CreateAndSpawnPlayerTank(out TankBrain tank);
+            if (!tankFound)
+                return;
+
+            ConfigureTankAndController(tank);
         }
 
-        private void CreateAndSpawnPlayerTank(out TankBrain tank)
+        private bool CreateAndSpawnPlayerTank(out TankBrain tank)
         {
             if (!m_TankFactory.TryGetTank(m_TankID, out tank))
             {
-                return;
+                return false;
             }
+
+            return true;
         }
 
-        private void ConfigureTankWithPlayer(TankBrain tank)
+        private void ConfigureTankAndController(TankBrain tank)
         {
-            m_PlayerController.SetTank(tank, m_PlayerLayer,m_EnemyLayer);
+            m_PlayerController.Transform.position = Vector3.zero;
+            m_PlayerController.Transform.rotation = Quaternion.identity;
+            m_PlayerController.SetTank(tank, m_PlayerLayer, m_EnemyLayer);
+
             ConfigurePlayerCameraWithTankController(m_PVC, tank);
             ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
             ConfigureHealthUIWithTankController(m_HealthUI, tank);

@@ -15,30 +15,23 @@ namespace BTG.Enemy
         private EnemyPool m_Pool;
         private TankBrain m_TankBrain;
         private EnemyView m_View;
-        private Rigidbody m_Rigidbody;
         private NavMeshAgent m_Agent;
         public NavMeshAgent Agent => m_Agent;
 
-        private Transform m_Transform;
-
         private EnemyStateManager m_StateManager;
+        public Rigidbody Rigidbody => m_View.Rigidbody;
+        public Transform Transform => m_View.transform;
 
 
         public EnemyController(EnemyDataSO data, EnemyPool pool)
         {
             m_Data = data;
-
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
             m_View.SetController(this);
-
-            m_Rigidbody = m_View.GetComponent<Rigidbody>();
-            m_Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
-
             m_Agent = m_View.GetComponent<NavMeshAgent>();
-
-            m_Transform = m_View.transform;
-
             m_StateManager = new EnemyStateManager(this);
+
+            Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
 
         ~EnemyController()
@@ -58,13 +51,18 @@ namespace BTG.Enemy
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
-        public void SetTankBrain(TankBrain tankBrain)
+        public void SetTank(TankBrain tank,
+            int selfLayer, int oppositionLayer)
         {
-            m_TankBrain = tankBrain;
+            m_TankBrain = tank;
+
+            m_TankBrain.Model.IsPlayer = false;
+            m_TankBrain.SetLayers(selfLayer, oppositionLayer);
             m_TankBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
-            m_TankBrain.SetRigidbody(m_Rigidbody);
+            m_TankBrain.SetRigidbody(Rigidbody);
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
             m_TankBrain.OnAfterDeath += OnDeath;
+            m_TankBrain.Init();
         }
 
 
@@ -88,7 +86,7 @@ namespace BTG.Enemy
         public void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(m_Transform.position, m_Agent.destination);
+            Gizmos.DrawLine(Transform.position, m_Agent.destination);
         }
     }
 }
