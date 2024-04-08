@@ -23,7 +23,7 @@ namespace BTG.Tank.Projectile
 
         public void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.TryGetComponent(out IDamageable damageable))
+            if (other.collider.TryGetComponent(out IDamageable damageable))
             {
                 m_Controller.OnHitDamageable(damageable);
             }

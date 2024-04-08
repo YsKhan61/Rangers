@@ -25,6 +25,7 @@ namespace BTG.Enemy
 
         public EnemyController(EnemyDataSO data, EnemyPool pool)
         {
+            m_Pool = pool;
             m_Data = data;
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
             m_View.SetController(this);
@@ -51,8 +52,10 @@ namespace BTG.Enemy
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
-        public void SetTank(TankBrain tank,
-            int selfLayer, int oppositionLayer)
+        public void SetTank(
+            TankBrain tank,
+            int selfLayer, 
+            int oppositionLayer)
         {
             m_TankBrain = tank;
 
