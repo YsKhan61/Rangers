@@ -48,7 +48,7 @@ namespace BTG.Tank
             Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);
         }
 
-        public void Dead()
+        public void Reset()
         {
             IsPlayer = false;
             IsCharging = false;

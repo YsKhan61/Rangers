@@ -30,12 +30,17 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        public void SetTank(TankBrain tankController)
+        public void SetTank(TankBrain tankController, int playerLayer, int enemyLayer)
         {
             m_Tank = tankController;
             m_Model.TankModel = tankController.Model;
 
             m_Model.IsEnabled = true;
+            m_Tank.Transform.position = new Vector3(0, 0, 0);
+            m_Tank.Transform.rotation = Quaternion.identity;
+            m_Tank.Model.IsPlayer = true;
+            m_Tank.SetLayers(playerLayer, enemyLayer);
+            m_Tank.Init();
 
             UnityCallbacks.Instance.Register(this as IFixedUpdatable);
             UnityCallbacks.Instance.Register(this as IUpdatable);

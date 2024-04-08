@@ -43,7 +43,7 @@ namespace BTG.Enemy
 
         ~EnemyController()
         {
-            m_TankBrain.OnDeath -= OnDeath;
+            m_TankBrain.OnAfterDeath -= OnDeath;
 
             m_TankBrain = null;
         }
@@ -61,10 +61,10 @@ namespace BTG.Enemy
         public void SetTankBrain(TankBrain tankBrain)
         {
             m_TankBrain = tankBrain;
-            m_TankBrain.SetParent(m_View.transform, Vector3.zero, Quaternion.identity);
+            m_TankBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_TankBrain.SetRigidbody(m_Rigidbody);
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
-            m_TankBrain.OnDeath += OnDeath;
+            m_TankBrain.OnAfterDeath += OnDeath;
         }
 
 
@@ -76,7 +76,9 @@ namespace BTG.Enemy
 
         private void OnDeath()
         {
-            m_TankBrain.OnDeath -= OnDeath;
+            m_TankBrain.OnAfterDeath -= OnDeath;
+
+            m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
 
             m_TankBrain = null;
             m_Pool.ReturnEnemy(this);

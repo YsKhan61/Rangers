@@ -43,13 +43,13 @@ namespace BTG.Player
         {
             CreatePlayerControllerAndInput();
             Respawn();
-            EventService.Instance.OnBeforeTankDead.AddListener(OnTankDead);
+            EventService.Instance.OnBeforeAnyTankDead.AddListener(OnTankDead);
             m_CTS = new CancellationTokenSource();
         }
 
         ~PlayerService()
         {
-            EventService.Instance.OnBeforeTankDead.RemoveListener(OnTankDead);
+            EventService.Instance.OnBeforeAnyTankDead.RemoveListener(OnTankDead);
             m_CTS.Cancel();
             m_CTS.Dispose();
         }
@@ -73,17 +73,11 @@ namespace BTG.Player
             {
                 return;
             }
-
-            tank.Transform.position = new UnityEngine.Vector3(0, 0, 0);
-            tank.Transform.rotation = UnityEngine.Quaternion.identity;
-            tank.Model.IsPlayer = true;
-            tank.SetLayers(m_PlayerLayer, m_EnemyLayer);
-            tank.Init();
         }
 
         private void ConfigureTankWithPlayer(TankBrain tank)
         {
-            m_PlayerController.SetTank(tank);
+            m_PlayerController.SetTank(tank, m_PlayerLayer,m_EnemyLayer);
             ConfigurePlayerCameraWithTankController(m_PVC, tank);
             ConfigureUltimateUIWithTankController(m_UltimateUI, tank);
             ConfigureHealthUIWithTankController(m_HealthUI, tank);

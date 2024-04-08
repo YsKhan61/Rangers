@@ -16,8 +16,8 @@ namespace BTG.Tank
     /// </summary>
     public class TankBrain : IUpdatable, IDestroyable
     {
-        public event Action<Sprite> OnTankInitialized;
-        public event Action OnDeath;
+        public event Action<Sprite> OnTankInitializedEvent;
+        public event Action OnAfterDeath;
 
         public enum TankState
         {
@@ -104,7 +104,7 @@ namespace BTG.Tank
 
         public void OnDestroy()
         {
-            OnTankInitialized = null;
+            OnTankInitializedEvent = null;
 
             m_FiringController?.OnDestroy();  
             m_UltimateController?.OnDestroy();
@@ -112,7 +112,7 @@ namespace BTG.Tank
 
         public void Die()
         {
-            EventService.Instance.OnBeforeTankDead?.InvokeEvent(m_Model.IsPlayer);
+            EventService.Instance.OnBeforeAnyTankDead?.InvokeEvent(m_Model.IsPlayer);
 
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
@@ -168,25 +168,24 @@ namespace BTG.Tank
         {
             ToggleTankVisibility(false);
 
-            m_Model.Dead();
+            m_Model.Reset();
             m_UltimateController.DisableUltimate();
 
             m_View.AudioView.StopEngineAudio();
 
-            OnTankInitialized = null;
+            OnTankInitializedEvent = null;
 
             Rigidbody.velocity = Vector3.zero;
             Rigidbody.angularVelocity = Vector3.zero;
             Rigidbody.isKinematic = true;
 
-            SetParent(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
+            SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
 
-            OnDeath?.Invoke();
+            OnAfterDeath?.Invoke();
+            OnAfterDeath = null;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);
-
-            Debug.Log("Tank is dead: " + m_Model.Name);
 
             m_Pool.ReturnTank(this);
         }
@@ -194,12 +193,12 @@ namespace BTG.Tank
         private async Task RaiseInitializedEventAsync()
         {
             await Task.Yield();
-            OnTankInitialized?.Invoke(m_Model.Icon);
+            OnTankInitializedEvent?.Invoke(m_Model.Icon);
         }
 
         #region Helper Methods for accessing other class methods
 
-        public void SetParent(Transform parent, Vector3 localPos, Quaternion localRot) 
+        public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot) 
             => m_View.transform.SetParent(parent, localPos, localRot);
 
         public void StartFire() => m_FiringController.OnFireStarted();
@@ -211,7 +210,7 @@ namespace BTG.Tank
         public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
 
         public void SubscribeToTankInitializedEvent(Action<Sprite> onTankInitialized) =>
-            OnTankInitialized += onTankInitialized;
+            OnTankInitializedEvent += onTankInitialized;
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot) =>
             m_FiringController.OnTankShoot += onTankShoot;

@@ -1,8 +1,7 @@
 using BTG.EventSystem;
 using BTG.Tank;
-using System;
+using BTG.Utilities;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -26,30 +25,28 @@ namespace BTG.Enemy
             TankFactory tankFactory, 
             WaveConfigSO enemyWaves,
             int playerLayer,
-            int enemyLayer)
+            int enemyLayer,
+            EnemyDataSO enemyData)
         {
             m_Cts = new CancellationTokenSource();
             m_TankFactory = tankFactory;
-            EventService.Instance.OnBeforeTankDead.AddListener(OnTankAboutToDie);
+            EventService.Instance.OnBeforeAnyTankDead.AddListener(OnTankAboutToDie);
             m_EnemyWaves = enemyWaves;
 
             m_PlayerLayer = playerLayer;
             m_EnemyLayer = enemyLayer;
             m_NextWaveIndex = 0;
+
+            m_EnemyPool = new EnemyPool(enemyData);
         }
 
         ~EnemyService()
         {
             m_TankFactory = null;
-            EventService.Instance.OnBeforeTankDead.RemoveListener(OnTankAboutToDie);
+            EventService.Instance.OnBeforeAnyTankDead.RemoveListener(OnTankAboutToDie);
 
             m_Cts.Cancel();
             m_Cts.Dispose();
-        }
-
-        public void CreateEnemyPool(EnemyDataSO data)
-        {
-            m_EnemyPool = new EnemyPool(data);
         }
 
         public void StartNextWave()
@@ -113,28 +110,6 @@ namespace BTG.Enemy
             return true;
         }
 
-        /*public void SpawnEnemyTank(int tankId)
-        {
-            if (!m_TankFactory.TryGetTank(tankId, out TankBrain tankBrain))
-            {
-                if (!m_TankFactory.TryGetRandomTank(out tankBrain))
-                {
-                    Debug.Log("Failed to spawn enemy tank");
-                    return;
-                }
-            }
-
-            tankBrain.Model.IsPlayer = false;
-            tankBrain.SetLayers(m_EnemyLayer, m_PlayerLayer);
-
-            m_EnemyController = m_EnemyPool.GetEnemy();
-            m_EnemyController.SetTankBrain(tankBrain);
-
-            Pose pose = m_EnemyWaves.GetRandomSpawnPose();
-            m_EnemyController.SetPose(pose);
-            m_EnemyController.Init();
-        }*/
-
         private void OnTankAboutToDie(bool isPlayer)
         {
             if (isPlayer)
@@ -153,16 +128,10 @@ namespace BTG.Enemy
 
             m_NextWaveIndex++;
 
-            _ = InvokeAsync(m_EnemyWaves.Interval, () =>
+            HelperMethods.InvokeAfterAsync(m_EnemyWaves.Interval, () =>
             {
                 StartNextWave();
-            });
-        }
-
-        private async Task InvokeAsync(float seconds, Action actionAfterWait)
-        {
-            await Task.Delay((int)(seconds * 1000), m_Cts.Token);
-            actionAfterWait();
+            }, m_Cts.Token);
         }
     }
 }

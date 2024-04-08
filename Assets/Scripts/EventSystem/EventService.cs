@@ -15,11 +15,11 @@ namespace BTG.EventSystem
             }
         }
 
-        public EventController<bool> OnBeforeTankDead { get; private set; }
+        public EventController<bool> OnBeforeAnyTankDead { get; private set; }
 
         public EventService()
         {
-            OnBeforeTankDead = new EventController<bool>();
+            OnBeforeAnyTankDead = new EventController<bool>();
         }
     }
 }

@@ -59,8 +59,7 @@ namespace BTG.Game
 
         private void InitializeEnemyService(TankFactory tankFactory, EnemyDataSO enemyData)
         {
-            EnemyService enemyService = new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer);
-            enemyService.CreateEnemyPool(m_EnemyData);
+            EnemyService enemyService = new EnemyService(tankFactory, m_EnemyWaves, m_PlayerLayer, m_EnemyLayer, m_EnemyData);
             enemyService.StartNextWave();
         }
     }
