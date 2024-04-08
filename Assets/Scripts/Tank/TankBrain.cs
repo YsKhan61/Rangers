@@ -177,7 +177,6 @@ namespace BTG.Tank
 
             Rigidbody.velocity = Vector3.zero;
             Rigidbody.angularVelocity = Vector3.zero;
-            Rigidbody.isKinematic = true;
 
             SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
 

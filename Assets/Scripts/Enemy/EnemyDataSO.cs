@@ -21,5 +21,10 @@ namespace BTG.Enemy
         [SerializeField]
         private float m_MaxSpeedMultiplier = 0.5f;
         public float MaxSpeedMultiplier => m_MaxSpeedMultiplier;
+
+        public void SetPatrolPoints(in Vector3[] points)
+        {
+            m_PatrolPoints = points;
+        }
     }
 }
