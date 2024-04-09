@@ -1,3 +1,5 @@
+using BTG.Enemy;
+using BTG.Player;
 using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
@@ -8,18 +10,39 @@ namespace BTG.Services
     public class DependencyProviderService : MonoBehaviour, IDependencyProvider
     {
         [SerializeField]
-        PlayerStatsSO playerStats;
+        PlayerDataSO m_PlayerData;
+
+        [Provide]
+        public PlayerDataSO ProvidePlayerData() => m_PlayerData;
+
 
         [SerializeField]
-        TankDataContainerSO tankDataList;
+        EnemyDataSO m_EnemyData;
 
         [Provide]
-        public PlayerStatsSO ProvidePlayerStats() => playerStats;
+        public EnemyDataSO ProvideEnemyData() => m_EnemyData;
+
+
+        [SerializeField]
+        PlayerStatsSO m_PlayerStats;
 
         [Provide]
-        public IntDataSO ProvideEliminatedEnemiesCount() => playerStats.EliminatedEnemiesCount;
+        public PlayerStatsSO ProvidePlayerStats() => m_PlayerStats;
 
         [Provide]
-        public TankDataContainerSO ProvideTankDataList() => tankDataList;
+        public IntDataSO ProvideEliminatedEnemiesCount() => m_PlayerStats.EliminatedEnemiesCount;
+
+
+        [SerializeField]
+        TankDataContainerSO m_TankDataList;
+
+        [Provide]
+        public TankDataContainerSO ProvideTankDataList() => m_TankDataList;
+
+        [SerializeField]
+        WaveConfigSO m_EnemyWaves;
+
+        [Provide]
+        public WaveConfigSO ProvideEnemyWaves() => m_EnemyWaves;
     }
 }

@@ -31,7 +31,7 @@ namespace BTG.Utilities.DI
             environmentSystem.Initialize();
 
             ClassC classC = new();
-            Injector.Instance.Inject(classC);       // Inject dependencies into the instance
+            DIManager.Instance.Inject(classC);       // Inject dependencies into the instance
             classC.Initialize();
         }
     }

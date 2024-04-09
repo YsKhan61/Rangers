@@ -2067,7 +2067,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 818963020}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1f398026f50c054481b9b7721683bf7, type: 3}
+  m_Script: {fileID: 11500000, guid: e1820e7ced59eb04ba3f757e5616c92f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &818963023
@@ -2082,8 +2082,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94b9620eddbca42418cc9b95611039fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
-  tankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
+  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
+  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
+  m_PlayerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
+  m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
+  m_EnemyWaves: {fileID: 11400000, guid: 5baaf5b2be0209a4083c606dce2e254d, type: 2}
 --- !u!1 &833293457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2211,16 +2214,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be6083ff43087c4bb13c92f9271afb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerLayer: 6
-  m_EnemyLayer: 7
-  m_EnemyWaves: {fileID: 11400000, guid: 5baaf5b2be0209a4083c606dce2e254d, type: 2}
   m_PVCController: {fileID: 1894154699}
   m_UltimateUI: {fileID: 223905666}
   m_HealthUI: {fileID: 1509247441}
-  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
-  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
-  m_TankIDSelectedData: {fileID: 11400000, guid: 8b0c58c2ef2afa94b857b31f535be511,
-    type: 2}
 --- !u!1 &932114868
 GameObject:
   m_ObjectHideFlags: 0

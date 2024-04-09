@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BTG.Utilities.DI
 {
     /// <summary>
-    /// Injector class is responsible for resolving dependencies and injecting them into objects.
+    /// DIManager class is responsible for resolving dependencies and injecting them into objects.
     /// We can use this injector directly in the project to resolve dependencies.
     /// 
     /// 
@@ -18,7 +18,7 @@ namespace BTG.Utilities.DI
     /// for debugging purposes.
     /// </summary>
     [DefaultExecutionOrder(-1000)]
-    public class Injector : Singleton<Injector>
+    public class DIManager : Singleton<DIManager>
     {
         const BindingFlags BINDING_FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
     
@@ -104,6 +104,42 @@ namespace BTG.Utilities.DI
                 }
             }
         }
+
+        /// <summary>
+        /// This method is used to provide an instance of the object of the specified type by creating it.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public object ProvideType(Type type)
+        {
+            if (registry.ContainsKey(type))
+            {
+                Debug.LogWarning($"Object of type {type.Name} is already registered");
+                return registry[type];
+            }
+
+            var instance = Activator.CreateInstance(type);
+            registry.Add(type, instance);
+            return instance;
+        }
+
+        /// <summary>
+        /// This method is used to provide an instance of the object of the specified type given by the parameter.
+        /// </summary>
+        /// <typeparam name="T">The type of the object to be registered</typeparam>
+        /// <param name="instance">The instance to be registered</param>
+        public void Provide<T>(T instance)
+        {
+            var type = typeof(T);
+            if (registry.ContainsKey(type))
+            {
+                Debug.LogWarning($"Object of type {type.Name} is already registered");
+                return;
+            }
+
+            registry.Add(type, instance);
+        }
+        
 
         private void Inject(MonoBehaviour injectable)
         {

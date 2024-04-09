@@ -1,4 +1,5 @@
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 
 namespace BTG.Enemy
@@ -8,12 +9,14 @@ namespace BTG.Enemy
         private Transform m_EnemyContainer;
         public Transform EnemyContainer => m_EnemyContainer;
 
+        [Inject]
         private EnemyDataSO m_Data;
 
-        public EnemyPool(EnemyDataSO data)
+        // public EnemyPool(EnemyDataSO data)
+        public EnemyPool()
         {
             m_EnemyContainer = new GameObject("EnemyContainer").transform;
-            m_Data = data;
+            // m_Data = data;
         }
 
         public EnemyController GetEnemy() => GetItem();

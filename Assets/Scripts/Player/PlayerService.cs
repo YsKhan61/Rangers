@@ -1,4 +1,3 @@
-using BTG.EventSystem;
 using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
@@ -11,10 +10,17 @@ namespace BTG.Player
 {
     public class PlayerService
     {
-        private PlayerController m_PlayerController;
+        [Inject]
+        private PlayerDataSO m_PlayerData;
+
+        [Inject]
+        private PlayerStatsSO m_PlayerStats;
+
+        [Inject]
         private TankFactory m_TankFactory;
-        /*private int m_SelfLayer;
-        private int m_OppositionLayer;*/
+
+
+        private PlayerController m_PlayerController;
 
         private readonly UltimateUI m_UltimateUI;    // temporary for now
         private readonly HealthUI m_HealthUI;    // temporary for now
@@ -22,30 +28,18 @@ namespace BTG.Player
 
         private CancellationTokenSource m_CTS;
 
-        private PlayerDataSO m_PlayerData;
-        private IntDataSO m_PlayerTankIDSelectedData;
-
-        [Inject]
-        private PlayerStatsSO m_PlayerStats;
+        
 
         public PlayerService(
-            IntDataSO tankIDSelectedData,
-            TankFactory tankFactory,
+            // IntDataSO tankIDSelectedData,
             PlayerVirtualCamera pvc,
             UltimateUI ultimateUI,
-            HealthUI healthUI,
-            /*int playerLayer,
-            int enemyLayer,*/
-            PlayerDataSO playerData)
+            HealthUI healthUI)
         {
-            m_PlayerTankIDSelectedData = tankIDSelectedData;
-            m_TankFactory = tankFactory;
-            /*m_PlayerLayer = playerLayer;
-            m_EnemyLayer = enemyLayer;*/
+            // m_PlayerTankIDSelectedData = tankIDSelectedData;
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
             m_HealthUI = healthUI;
-            m_PlayerData = playerData;
         }
 
         public void Initialize()
@@ -55,12 +49,12 @@ namespace BTG.Player
             
             m_PlayerStats.ResetStats();
 
-            m_PlayerTankIDSelectedData.OnValueChanged += Respawn;
+            m_PlayerStats.TankIDSelected.OnValueChanged += Respawn;
         }
 
         ~PlayerService()
         {
-            m_PlayerTankIDSelectedData.OnValueChanged -= Respawn;
+            m_PlayerStats.TankIDSelected.OnValueChanged -= Respawn;
 
             m_CTS.Cancel();
             m_CTS.Dispose();
@@ -89,7 +83,7 @@ namespace BTG.Player
 
         private bool CreateAndSpawnPlayerTank(out TankBrain tank)
         {
-            if (!m_TankFactory.TryGetTank(m_PlayerTankIDSelectedData.Value, out tank))
+            if (!m_TankFactory.TryGetTank(m_PlayerStats.TankIDSelected.Value, out tank))
             {
                 return false;
             }
@@ -101,7 +95,6 @@ namespace BTG.Player
         {
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
-            // m_PlayerController.SetTank(tank, m_SelfLayer, m_OppositionLayer);
             m_PlayerController.SetTank(tank);
 
             ConfigurePlayerCameraWithTankController(tank);

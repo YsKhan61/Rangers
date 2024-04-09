@@ -8,6 +8,10 @@ namespace BTG.Utilities
     public class PlayerStatsSO : ScriptableObject
     {
         [SerializeField]
+        IntDataSO m_TankIDSelected;
+        public IntDataSO TankIDSelected => m_TankIDSelected;
+
+        [SerializeField]
         IntDataSO m_DeathCount;
         public IntDataSO DeathCount => m_DeathCount;
 

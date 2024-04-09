@@ -1,4 +1,3 @@
-using BTG.EventSystem;
 using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
@@ -10,37 +9,26 @@ namespace BTG.Enemy
 {
     public class EnemyService
     {
+        [Inject]
         private TankFactory m_TankFactory;
+
+        [Inject]
+        private IntDataSO m_EnemyDeathCountData;
+
+        [Inject]
         private WaveConfigSO m_EnemyWaves;
+
         private CancellationTokenSource m_Cts;
 
         private int m_NextWaveIndex = 0;
         private int m_TankCountInCurrentWave = 0;
 
-        /*private int m_PlayerLayer;
-        private int m_EnemyLayer;*/
-
         private EnemyPool m_EnemyPool;
+        
 
-        [Inject]
-        private IntDataSO m_EnemyDeathCountData;
-
-        public EnemyService(
-            TankFactory tankFactory, 
-            WaveConfigSO enemyWaves,
-            /*int playerLayer,
-            int enemyLayer,*/
-            EnemyDataSO enemyData)
+        public EnemyService()
         {
             m_Cts = new CancellationTokenSource();
-            m_TankFactory = tankFactory;
-            m_EnemyWaves = enemyWaves;
-
-            /*m_PlayerLayer = playerLayer;
-            m_EnemyLayer = enemyLayer;*/
-            m_NextWaveIndex = 0;
-
-            m_EnemyPool = new EnemyPool(enemyData);
         }
 
         ~EnemyService()
@@ -49,6 +37,14 @@ namespace BTG.Enemy
 
             m_Cts.Cancel();
             m_Cts.Dispose();
+        }
+
+        [Inject]
+        public void Initialize()
+        {
+            m_NextWaveIndex = 0;
+            m_EnemyPool = new EnemyPool();
+            DIManager.Instance.Inject(m_EnemyPool);
         }
 
         public void OnEnemyDeath()
@@ -83,7 +79,6 @@ namespace BTG.Enemy
             if (!found)
                 return;
 
-            // controller.SetTank(tank, m_EnemyLayer, m_PlayerLayer);
             controller.SetTank(tank);
             controller.SetService(this);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();

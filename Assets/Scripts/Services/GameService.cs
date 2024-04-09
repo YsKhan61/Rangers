@@ -10,65 +10,54 @@ namespace BTG.Services
 {
     public class GameService : MonoBehaviour
     {
-        /*[SerializeField] private int m_PlayerLayer;
-        [SerializeField] private int m_EnemyLayer;*/
-        
-        [SerializeField] private WaveConfigSO m_EnemyWaves;
-
         [SerializeField] PlayerVirtualCamera m_PVCController;
 
         [SerializeField] private UltimateUI m_UltimateUI;
         [SerializeField] private HealthUI m_HealthUI;
 
-        [SerializeField] private EnemyDataSO m_EnemyData;
-        [SerializeField] private PlayerDataSO m_PlayerData;
+        // [SerializeField] private IntDataSO m_TankIDSelectedData;
 
-        [SerializeField] private IntDataSO m_TankIDSelectedData;
+        TankFactory m_TankFactory;
+
+
+        private void Awake()
+        {
+            InitializeTankFactory();
+        }
 
         private void Start()
         {
-            CreateTankFactory(out TankFactory tankFactory);
-
-            InitializePlayerService(tankFactory);
-
-            InitializeEnemyService(tankFactory, m_EnemyData);
+            InitializePlayerService();
+            InitializeEnemyService();
         }
 
-        private void CreateTankFactory(out TankFactory tankFactory)
-        {
-            tankFactory = new TankFactory();
-            Injector.Instance.Inject(tankFactory);
-            tankFactory.Initialize();
-        }
 
-        private void InitializePlayerService(in TankFactory tankFactory)
+        private void InitializeTankFactory()
         {
-            PlayerService playerService = new PlayerService(
-                m_TankIDSelectedData,
-                tankFactory,
+            object obj = DIManager.Instance.ProvideType(typeof(TankFactory));
+            m_TankFactory = obj as TankFactory;
+            DIManager.Instance.Inject(m_TankFactory);
+            m_TankFactory.Initialize();
+        }
+       
+
+        private void InitializePlayerService()
+        {
+            PlayerService playerService = new(
+                // m_TankIDSelectedData,
                 m_PVCController,
                 m_UltimateUI,
-                m_HealthUI,
-                /*m_PlayerLayer,
-                m_EnemyLayer,*/
-                m_PlayerData);
+                m_HealthUI);
 
-            Injector.Instance.Inject(playerService);
-
+            DIManager.Instance.Inject(playerService);
             playerService.Initialize();
         }
 
-        private void InitializeEnemyService(TankFactory tankFactory, EnemyDataSO enemyData)
+
+        private void InitializeEnemyService()
         {
-            EnemyService enemyService = new EnemyService(
-                tankFactory, 
-                m_EnemyWaves, 
-                /*m_PlayerLayer, 
-                m_EnemyLayer,*/ 
-                m_EnemyData);
-
-            Injector.Instance.Inject(enemyService);
-
+            EnemyService enemyService = new();
+            DIManager.Instance.Inject(enemyService);
             enemyService.StartNextWave();
         }
     }
