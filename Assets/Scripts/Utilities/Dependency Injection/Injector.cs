@@ -7,6 +7,10 @@ using UnityEngine;
 namespace BTG.Utilities.DI
 {
     /// <summary>
+    /// Injector class is responsible for resolving dependencies and injecting them into objects.
+    /// We can use this injector directly in the project to resolve dependencies.
+    /// 
+    /// 
     /// Making Injector as singleton is not necessary, 
     /// but it is a good practice to have a single instance of Injector.
     /// as it will be used to resolve dependencies.
@@ -70,12 +74,8 @@ namespace BTG.Utilities.DI
                 foreach (var injectableField in injectableFields)
                 {
                     var fieldType = injectableField.FieldType;
-                    var resolved = Resolve(fieldType);
-
-                    if (resolved == null)
-                    {
-                        throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
-                    }
+                    var resolved = Resolve(fieldType) 
+                        ?? throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
 
                     injectableField.SetValue(injectable, resolved);
                     Debug.Log($"Field Injected {fieldType.Name} into {type.Name}");

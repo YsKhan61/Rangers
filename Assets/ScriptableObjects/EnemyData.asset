@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dece458af2868e045ad8f0dda00edaaa, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: 
+  m_SelfLayer: 7
+  m_OppositionLayer: 6
   m_PatrolPoints:
   - {x: -36.7, y: 0.27, z: -1.4}
   - {x: -36.87, y: 0.27, z: -38.95}
@@ -25,5 +27,4 @@ MonoBehaviour:
   m_EnemyPrefab: {fileID: 4183360666428944421, guid: ed1de6e1e1f87cd47b09dadb7b4c5a8e,
     type: 3}
   m_StoppingDistance: 1
-  m_AccelerationMultiplier: 1
   m_MaxSpeedMultiplier: 0.2

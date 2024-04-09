@@ -2,6 +2,7 @@ using BTG.EventSystem;
 using BTG.Tank;
 using BTG.UI;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using System.Threading;
 using UnityEngine;
 
@@ -12,8 +13,8 @@ namespace BTG.Player
     {
         private PlayerController m_PlayerController;
         private TankFactory m_TankFactory;
-        private int m_PlayerLayer;
-        private int m_EnemyLayer;
+        /*private int m_SelfLayer;
+        private int m_OppositionLayer;*/
 
         private readonly UltimateUI m_UltimateUI;    // temporary for now
         private readonly HealthUI m_HealthUI;    // temporary for now
@@ -23,6 +24,8 @@ namespace BTG.Player
 
         private PlayerDataSO m_PlayerData;
         private IntDataSO m_PlayerTankIDSelectedData;
+
+        [Inject]
         private PlayerStatsSO m_PlayerStats;
 
         public PlayerService(
@@ -31,20 +34,18 @@ namespace BTG.Player
             PlayerVirtualCamera pvc,
             UltimateUI ultimateUI,
             HealthUI healthUI,
-            int playerLayer,
-            int enemyLayer,
-            PlayerDataSO playerData,
-            PlayerStatsSO playerStats)
+            /*int playerLayer,
+            int enemyLayer,*/
+            PlayerDataSO playerData)
         {
             m_PlayerTankIDSelectedData = tankIDSelectedData;
             m_TankFactory = tankFactory;
-            m_PlayerLayer = playerLayer;
-            m_EnemyLayer = enemyLayer;
+            /*m_PlayerLayer = playerLayer;
+            m_EnemyLayer = enemyLayer;*/
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
             m_HealthUI = healthUI;
             m_PlayerData = playerData;
-            m_PlayerStats = playerStats;
         }
 
         public void Initialize()
@@ -100,7 +101,8 @@ namespace BTG.Player
         {
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
-            m_PlayerController.SetTank(tank, m_PlayerLayer, m_EnemyLayer);
+            // m_PlayerController.SetTank(tank, m_SelfLayer, m_OppositionLayer);
+            m_PlayerController.SetTank(tank);
 
             ConfigurePlayerCameraWithTankController(tank);
             ConfigureUltimateUIWithTankController(tank);

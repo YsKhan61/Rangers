@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7de30e082abf1894d96781ceeed6e23b, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
+  m_SelfLayer: 6
+  m_OppositionLayer: 7
   m_Prefab: {fileID: 4370414885675258852, guid: c4d647abe0b55f2409ddaa7da9e35b3e,
     type: 3}

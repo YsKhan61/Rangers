@@ -2,6 +2,11 @@
 
 namespace BTG.Utilities.DI
 {
+    /// <summary>
+    /// Example provider class that provides dependencies to the DI system
+    /// 
+    /// It is recommended to create a separate provider class for each scene or group of dependencies
+    /// </summary>
     public class Provider : MonoBehaviour, IDependencyProvider 
     {
         [SerializeField]

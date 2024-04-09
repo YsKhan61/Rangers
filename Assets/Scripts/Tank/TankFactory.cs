@@ -1,3 +1,4 @@
+using BTG.Utilities.DI;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -5,15 +6,16 @@ namespace BTG.Tank
 {
     public class TankFactory
     {
+        [Inject]
         private TankDataContainerSO m_TankDataContainer;
 
         private List<TankPoolItem> m_Pools;
 
-        public TankFactory(TankDataContainerSO container)
+        public void Initialize()
         {
-            m_TankDataContainer = container;
             CreatePoolItems();
         }
+
 
         public bool TryGetRandomTank(out TankBrain controller)
         {

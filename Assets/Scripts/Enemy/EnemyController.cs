@@ -53,14 +53,15 @@ namespace BTG.Enemy
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
         public void SetTank(
-            TankBrain tank,
-            int selfLayer, 
-            int oppositionLayer)
+            TankBrain tank
+            /*int selfLayer, 
+            int oppositionLayer*/)
         {
             m_TankBrain = tank;
 
             m_TankBrain.Model.IsPlayer = false;
-            m_TankBrain.SetLayers(selfLayer, oppositionLayer);
+            // m_TankBrain.SetLayers(selfLayer, oppositionLayer);
+            m_TankBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
             m_TankBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_TankBrain.SetRigidbody(Rigidbody);
             m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);

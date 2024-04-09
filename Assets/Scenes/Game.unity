@@ -2025,6 +2025,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 450071678}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &818963020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 818963021}
+  - component: {fileID: 818963022}
+  - component: {fileID: 818963023}
+  m_Layer: 0
+  m_Name: DI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &818963021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818963020}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &818963022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818963020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f398026f50c054481b9b7721683bf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &818963023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818963020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b9620eddbca42418cc9b95611039fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
+  tankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
 --- !u!1 &833293457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2155,7 +2214,6 @@ MonoBehaviour:
   m_PlayerLayer: 6
   m_EnemyLayer: 7
   m_EnemyWaves: {fileID: 11400000, guid: 5baaf5b2be0209a4083c606dce2e254d, type: 2}
-  m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
   m_PVCController: {fileID: 1894154699}
   m_UltimateUI: {fileID: 223905666}
   m_HealthUI: {fileID: 1509247441}
@@ -2163,7 +2221,6 @@ MonoBehaviour:
   m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
   m_TankIDSelectedData: {fileID: 11400000, guid: 8b0c58c2ef2afa94b857b31f535be511,
     type: 2}
-  m_PlayerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
 --- !u!1 &932114868
 GameObject:
   m_ObjectHideFlags: 0
@@ -6485,6 +6542,7 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 818963021}
   - {fileID: 1169354569}
   - {fileID: 450071678}
   - {fileID: 1391056264}

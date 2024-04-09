@@ -6,6 +6,14 @@ namespace BTG.Enemy
     [CreateAssetMenu(fileName = "EnemyData", menuName = "ScriptableObjects/EnemyDataSO")]
     public class EnemyDataSO : ScriptableObject
     {
+        [SerializeField, Tooltip("The layer that will be used to mark the damage collider of player")]
+        int m_SelfLayer;
+        public int SelfLayer => m_SelfLayer;
+
+        [SerializeField, Tooltip("The layer that will be used to mark the damage collider of enemy")]
+        int m_OppositionLayer;
+        public int OppositionLayer => m_OppositionLayer;
+
         [SerializeField]
         private Vector3[] m_PatrolPoints;
         public Vector3[] PatrolPoints => m_PatrolPoints;

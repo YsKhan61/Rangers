@@ -34,14 +34,16 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        public void SetTank(TankBrain tank, int playerLayer, int enemyLayer)
+        // public void SetTank(TankBrain tank, int playerLayer, int enemyLayer)
+        public void SetTank(TankBrain tank)
         {
             m_Tank = tank;
             m_Model.TankModel = tank.Model;
             m_Model.IsEnabled = true;
 
             m_Tank.Model.IsPlayer = true;
-            m_Tank.SetLayers(playerLayer, enemyLayer);
+            // m_Tank.SetLayers(playerLayer, enemyLayer);
+            m_Tank.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
             m_Tank.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_Tank.SetRigidbody(Rigidbody);
             m_Tank.OnAfterDeath += OnTankDead;
