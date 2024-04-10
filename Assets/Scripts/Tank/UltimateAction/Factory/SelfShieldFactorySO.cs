@@ -1,3 +1,4 @@
+using BTG.Entity;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private SelfShieldDataSO m_SelfShieldData;
 
-        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
+        public override IEntityUltimateAbility CreateUltimateAction(TankUltimateController controller)
         {
             return new SelfShield(controller, m_SelfShieldData);
         }

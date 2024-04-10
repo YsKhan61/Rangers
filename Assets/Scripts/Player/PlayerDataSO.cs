@@ -19,11 +19,28 @@ namespace BTG.Player
         public PlayerView Prefab => m_Prefab;
 
         [SerializeField]
-        IntIntEventChannelSO m_PlayerHealthEventChannel;
-        public IntIntEventChannelSO PlayerHealthEventChannel => m_PlayerHealthEventChannel;
+        IntIntEventChannelSO m_OnPlayerHealthUpdated;
+        public IntIntEventChannelSO OnPlayerHealthUpdated => m_OnPlayerHealthUpdated;
 
         [SerializeField]
-        SpriteDataSO m_PlayerIcon;
-        public SpriteDataSO PlayerIcon => m_PlayerIcon;
+        StringEventChannelSO m_OnUltimateAssigned;
+        public StringEventChannelSO OnUltimateAssigned => m_OnUltimateAssigned;
+
+        [SerializeField]
+        IntEventChannelSO m_OnUltimateChargeUpdated;
+        public IntEventChannelSO OnUltimateChargeUpdated => m_OnUltimateChargeUpdated;
+
+        [SerializeField]
+        VoidEventChannelSO m_OnUltimateFullyCharged;
+        public VoidEventChannelSO OnUltimateFullyCharged => m_OnUltimateFullyCharged;
+
+        [SerializeField]
+        VoidEventChannelSO m_OnUltimateExecuted;
+        public VoidEventChannelSO OnUltimateExecuted => m_OnUltimateExecuted;
+
+        [SerializeField]
+        FloatFloatEventChannelSO m_OnCameraShake;
+        public FloatFloatEventChannelSO OnCameraShake => m_OnCameraShake;
+    
     }
 }

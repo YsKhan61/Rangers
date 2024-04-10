@@ -1,13 +1,9 @@
 
 
-namespace BTG.Tank.UltimateAction
+namespace BTG.Entity
 {
-    public interface ICameraShakeUltimateAction
-    {
-        public event System.Action<float> OnExecuteCameraShake;
-    }
 
-    public interface IUltimateAction
+    public interface IEntityUltimateAbility
     {
         public enum State
         {
@@ -23,6 +19,8 @@ namespace BTG.Tank.UltimateAction
         public event System.Action OnUltimateActionExecuted;
 
         public string Name { get; }
+
+        public IEntityUltimateController Controller { get; } 
 
         public void Enable();
 

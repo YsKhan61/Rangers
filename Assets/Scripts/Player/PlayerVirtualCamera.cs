@@ -1,4 +1,6 @@
+using BTG.Utilities;
 using Cinemachine;
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -11,16 +13,28 @@ namespace BTG.Player
     /// </summary>
     public class PlayerVirtualCamera : MonoBehaviour
     {
+        [SerializeField]
+        FloatFloatEventChannelSO m_OnPlayerCamShake;
+
         [SerializeField] CinemachineVirtualCamera m_PVC1;
 
         [SerializeField] float m_MinShakeIntensity;
         [SerializeField] float m_MaxShakeIntensity;
-        [SerializeField] float m_ShakeDurationOnPlayerTankShoot = 0.1f;
-        [SerializeField] float m_ShakeIntensityOnUltimateExecution = 2f;
 
         private CinemachineBasicMultiChannelPerlin m_Perlin;
         private WaitForSeconds m_WaitForSeconds;
         private Coroutine m_StopShakeCoroutine;
+
+        private void OnEnable()
+        {
+            m_OnPlayerCamShake.OnEventRaised += OnPlayerCamShake;
+        }
+
+        private void OnDisable()
+        {
+            m_OnPlayerCamShake.OnEventRaised -= OnPlayerCamShake;
+        }
+        
 
         public void Initialize(Transform target)
         {
@@ -29,15 +43,10 @@ namespace BTG.Player
             Reset();
         }
 
-        public void ShakeCameraOnPlayerTankShoot(float intensityMultiplier)
+        private void OnPlayerCamShake(float amount, float duration)
         {
-            StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * intensityMultiplier), 
-                m_ShakeDurationOnPlayerTankShoot);
-        }
-
-        public void ShakeCameraOnUltimateExecution(float duration)
-        {
-            StartShake(m_ShakeIntensityOnUltimateExecution, duration);
+            StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * amount),
+                duration);
         }
 
         void StartShake(float intensity, float duration)

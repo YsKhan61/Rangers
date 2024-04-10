@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Tank.Projectile;
 using System;
 using UnityEngine;
@@ -8,18 +9,20 @@ namespace BTG.Tank
     /// <summary>
     /// Firing happens by charging the projectile and releasing it.
     /// </summary>
-    public class TankChargedFiringController
+    public class TankChargedFiringController : IEntityFiringController
     {
+        public event Action<float, float> OnPlayerCamShake;
+
         // dependencies
         TankModel m_Model;
+        IEntityBrain m_Brain;
         TankView m_View;
         ProjectilePool m_ProjectilePool;
 
-        public event Action<float> OnTankShoot;
-
-        public TankChargedFiringController(TankModel model, TankView view)
+        public TankChargedFiringController(TankModel model, IEntityBrain brain, TankView view)
         {
             m_Model = model;
+            m_Brain = brain;
             m_View = view;
             m_ProjectilePool = new ProjectilePool(m_Model.TankData.ProjectileData);
         }
@@ -32,7 +35,7 @@ namespace BTG.Tank
         public void OnDestroy()
         {
             // Remove all the event listeners of OnTankShoot
-            OnTankShoot = null;
+            
         }
 
         public void OnFireStarted()
@@ -51,7 +54,9 @@ namespace BTG.Tank
             SpawnProjectile(out ProjectileController projectile);
             projectile.AddImpulseForce(CalculateProjectileInitialSpeed());
 
-            OnTankShoot?.Invoke(m_Model.ChargeAmount);
+            if (m_Model.IsPlayer)
+                OnPlayerCamShake?.Invoke(m_Model.ChargeAmount, 0.5f);
+
             m_View.AudioView.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
             ResetChargedAmount();
         }

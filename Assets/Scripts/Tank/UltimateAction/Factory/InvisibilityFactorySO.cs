@@ -1,3 +1,4 @@
+using BTG.Entity;
 using UnityEngine;
 
 
@@ -8,7 +9,7 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private InvisibilityDataSO m_InvisibilityData;
 
-        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
+        public override IEntityUltimateAbility CreateUltimateAction(TankUltimateController controller)
         {
             return new Invisibility(controller, m_InvisibilityData);
         }

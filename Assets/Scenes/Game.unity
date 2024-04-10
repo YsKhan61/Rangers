@@ -796,6 +796,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63284c331942153409c26ee33afbfeb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_UltimateAssignedEventChannel: {fileID: 11400000, guid: 77ac333a9a1485c498883046f90d1664,
+    type: 2}
+  m_UltimateChargeUpdateEventChannel: {fileID: 11400000, guid: ac13916834dfd274c91df097160439d0,
+    type: 2}
+  m_UltimateFullyChargedEventChannel: {fileID: 11400000, guid: 0ffbb38bc1fc29643889307360a5e629,
+    type: 2}
+  m_UltimateExecutedEventChannel: {fileID: 11400000, guid: d7e8f69fe6d59414aa71deda1386a6a9,
+    type: 2}
   m_UltimateNameText: {fileID: 1745312397}
   m_ChargedAmountText: {fileID: 1417694165}
   m_UnreadyImage: {fileID: 1317613462}
@@ -1849,11 +1857,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e217efee7114ac742abf80757ed3ef78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerIconData: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
+  m_PlayerIcon: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
   m_PlayerHealthEventChannel: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
     type: 2}
   m_Panel: {fileID: 1509247439}
-  m_TankIcon: {fileID: 960463774}
+  m_Image: {fileID: 960463774}
   m_HealthBar: {fileID: 329047340}
   m_HealthBarFill: {fileID: 2004210967}
   m_Color1: {r: 1, g: 0, b: 0, a: 1}
@@ -2237,7 +2245,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PVCController: {fileID: 1894154699}
-  m_UltimateUI: {fileID: 223905666}
 --- !u!1 &932114868
 GameObject:
   m_ObjectHideFlags: 0
@@ -4526,11 +4533,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d6ee73856e67d439b8ab682921151f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_OnPlayerCamShake: {fileID: 11400000, guid: 04be7a5b9910f124c879a2610126305a, type: 2}
   m_PVC1: {fileID: 1894154697}
   m_MinShakeIntensity: 1
   m_MaxShakeIntensity: 5
-  m_ShakeDurationOnPlayerTankShoot: 0.1
-  m_ShakeIntensityOnUltimateExecution: 4
 --- !u!1 &1914077042
 GameObject:
   m_ObjectHideFlags: 0

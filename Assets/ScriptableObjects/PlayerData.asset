@@ -16,6 +16,14 @@ MonoBehaviour:
   m_OppositionLayer: 7
   m_Prefab: {fileID: 4370414885675258852, guid: c4d647abe0b55f2409ddaa7da9e35b3e,
     type: 3}
-  m_PlayerHealthEventChannel: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
+  m_OnPlayerHealthUpdated: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
     type: 2}
-  m_PlayerIcon: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
+  m_OnUltimateAssigned: {fileID: 11400000, guid: 77ac333a9a1485c498883046f90d1664,
+    type: 2}
+  m_OnUltimateChargeUpdated: {fileID: 11400000, guid: ac13916834dfd274c91df097160439d0,
+    type: 2}
+  m_OnUltimateFullyCharged: {fileID: 11400000, guid: 0ffbb38bc1fc29643889307360a5e629,
+    type: 2}
+  m_OnUltimateExecuted: {fileID: 11400000, guid: d7e8f69fe6d59414aa71deda1386a6a9,
+    type: 2}
+  m_OnCameraShake: {fileID: 11400000, guid: 04be7a5b9910f124c879a2610126305a, type: 2}

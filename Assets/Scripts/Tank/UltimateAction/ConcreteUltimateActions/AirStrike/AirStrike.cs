@@ -1,14 +1,14 @@
+using BTG.Entity;
 using BTG.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
-using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using State = BTG.Entity.IEntityUltimateAbility.State;
 
 
 namespace BTG.Tank.UltimateAction
 {
-    public class AirStrike : UltimateAction, ICameraShakeUltimateAction, IFixedUpdatable
+    public class AirStrike : UltimateAction, IFixedUpdatable
     {
-        public event System.Action<float> OnExecuteCameraShake;
         public override event System.Action OnFullyCharged;
 
         private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
@@ -21,7 +21,7 @@ namespace BTG.Tank.UltimateAction
         // Create constructor
         public AirStrike(TankUltimateController controller, AirStrikeDataSO airStrikeData)
         {
-            m_UltimateController = controller;
+            Controller = controller;
             m_UltimateActionData = airStrikeData;
         }
 
@@ -60,13 +60,12 @@ namespace BTG.Tank.UltimateAction
 
             ChangeState(State.Executing);
 
-            SpawnView(m_UltimateController.TankTransform);
+            SpawnView(Controller.EntityTransform);
             m_View.SetController(this);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
             RestartAfterDuration(m_AirStrikeData.Duration);
-
-            OnExecuteCameraShake?.Invoke(m_AirStrikeData.Duration);
+            Controller.ShakePlayerCamera(1f, m_AirStrikeData.Duration);
 
             return true;
         }
@@ -88,7 +87,6 @@ namespace BTG.Tank.UltimateAction
         public override void OnDestroy()
         {
             OnFullyCharged = null;
-            OnExecuteCameraShake = null;
             base.OnDestroy();
         }
 
@@ -124,10 +122,10 @@ namespace BTG.Tank.UltimateAction
         private bool CheckNearbyDamageables()
         {
             int count = Physics.OverlapSphereNonAlloc(
-                m_UltimateController.TankTransform.position,
+                Controller.EntityTransform.position,
                 m_AirStrikeData.ImpactRadius,
                 m_OverlappingColliders,
-                m_UltimateController.LayerMask,
+                Controller.LayerMask,
                 QueryTriggerInteraction.Ignore);
 
             return count > 0;
@@ -159,7 +157,7 @@ namespace BTG.Tank.UltimateAction
 
             foreach (IDamageable damageable in m_Damageables)
             {
-                if (damageable == m_UltimateController.Damageable)
+                if (damageable == Controller.Damageable)
                 {
                     continue;
                 }

@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
   m_TankIDSelected: {fileID: 11400000, guid: 8b0c58c2ef2afa94b857b31f535be511, type: 2}
+  m_PlayerIcon: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
   m_DeathCount: {fileID: 11400000, guid: c590489f9a1f6f6419cdb0d0263323ae, type: 2}
   m_EliminatedEnemiesCount: {fileID: 11400000, guid: 5f30b61b42d928541b0ca790e6b83a5a,
     type: 2}

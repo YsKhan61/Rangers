@@ -12,6 +12,10 @@ namespace BTG.Utilities
         public IntDataSO TankIDSelected => m_TankIDSelected;
 
         [SerializeField]
+        SpriteDataSO m_PlayerIcon;
+        public SpriteDataSO PlayerIcon => m_PlayerIcon;
+
+        [SerializeField]
         IntDataSO m_DeathCount;
         public IntDataSO DeathCount => m_DeathCount;
 

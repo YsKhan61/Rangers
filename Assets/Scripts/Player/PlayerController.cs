@@ -1,6 +1,5 @@
 using BTG.Entity;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 
 namespace BTG.Player
@@ -45,8 +44,14 @@ namespace BTG.Player
             m_Entity.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
             m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_Entity.SetRigidbody(Rigidbody);
-            m_Entity.OnEntityInitialized += OnEntityInitialized;
+            m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+            m_Entity.FiringController.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.UltimateController.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
+            m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_Entity.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_Entity.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_Entity.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
             m_Entity.OnAfterDeath += OnTankDead;
             m_Entity.Init();
 
@@ -120,8 +125,14 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
 
-            m_Entity.OnEntityInitialized -= OnEntityInitialized;
+            m_Entity.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;
+            m_Entity.FiringController.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.UltimateController.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_Entity.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_Entity.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_Entity.UltimateAction.OnUltimateActionExecuted -= m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
             m_Entity.OnAfterDeath -= OnTankDead;
 
             m_Model.IsEnabled = false;
@@ -131,14 +142,9 @@ namespace BTG.Player
             m_PlayerService.OnPlayerDeath();
         }
 
-        private void OnEntityInitialized(Sprite sprite)
-        {
-            m_Model.PlayerData.PlayerIcon.Value = sprite;
-        }
-
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
         {
-            m_Model.PlayerData.PlayerHealthEventChannel.RaiseEvent(currentHealth, maxHealth);
+            m_Model.PlayerData.OnPlayerHealthUpdated.RaiseEvent(currentHealth, maxHealth);
         }
 
         private void MoveWithForce()

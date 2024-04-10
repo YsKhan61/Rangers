@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 namespace BTG.Tank
 {
     /// <summary>
-    /// The main controller for the tank. It handles the communications between Model, View and other controllers such as 
+    /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
@@ -33,8 +33,11 @@ namespace BTG.Tank
         private TankView m_View;
 
         private TankChargedFiringController m_FiringController;
+        public IEntityFiringController FiringController => m_FiringController;
         
         private TankUltimateController m_UltimateController;
+        public IEntityUltimateController UltimateController => m_UltimateController;
+        public IEntityUltimateAbility UltimateAction => m_UltimateController.UltimateAction;
         
         private TankHealthController m_HealthController;
         public IEntityHealthController HealthController => m_HealthController;
@@ -69,7 +72,7 @@ namespace BTG.Tank
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
             m_View.SetBrain(this); 
 
-            m_FiringController = new TankChargedFiringController(m_Model, m_View);
+            m_FiringController = new TankChargedFiringController(m_Model, this, m_View);
             m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
         }
@@ -208,29 +211,8 @@ namespace BTG.Tank
 
         public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
 
-        public void SubscribeToTankInitializedEvent(Action<Sprite> onTankInitialized) =>
-            OnEntityInitialized += onTankInitialized;
-
-        public void SubscribeToOnTankShootEvent(Action<float> onTankShoot) =>
-            m_FiringController.OnTankShoot += onTankShoot;
-
-        public void SubscribeToUltimateActionAssignedEvent(Action<string> onUltimateActionAssigned) =>
-            m_UltimateController.SubscribeToUltimateActionAssignedEvent(onUltimateActionAssigned);
-
-        public void SubscribeToUltimateExecutedEvent(Action onUltimateExecuted) =>
-            m_UltimateController.SubscribeToUltimateExecutedEvent(onUltimateExecuted);
-
-        public void SubscribeToCameraShakeEvent(Action<float> onCameraShake) =>
-            m_UltimateController.SubscribeToCameraShakeEvent(onCameraShake);
-
-        public void SubscribeToChargeUpdatedEvent(Action<int> onChargeUpdated) =>
-            m_UltimateController.SubscribeToChargeUpdatedEvent(onChargeUpdated);
-
         public void SubscribeToFullyChargedEvent(Action onFullyCharged) =>
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
-
-        /*public void SubscribeToHealthUpdatedEvent(Action<int, int> onHealthUpdated) =>
-            m_HealthController.OnTankHealthUpdated += onHealthUpdated;*/
 
         #endregion
     }

@@ -7,7 +7,7 @@ namespace BTG.UI
     public class HealthUI : MonoBehaviour
     {
         [SerializeField]
-        SpriteDataSO m_PlayerIconData;
+        SpriteDataSO m_PlayerIcon;
 
         [SerializeField]
         IntIntEventChannelSO m_PlayerHealthEventChannel;
@@ -16,7 +16,7 @@ namespace BTG.UI
         GameObject m_Panel;
 
         [SerializeField]
-        private Image m_TankIcon;
+        private Image m_Image;
 
         [SerializeField]
         private Slider m_HealthBar;
@@ -32,8 +32,8 @@ namespace BTG.UI
 
         private void OnEnable()
         {
-            m_PlayerIconData.OnValueChanged += OnPlayerIconDataChanged;
-            m_PlayerHealthEventChannel.OnPlayerHealthUpdated += UpdateHealth;
+            m_PlayerIcon.OnValueChanged += OnPlayerIconDataChanged;
+            m_PlayerHealthEventChannel.OnEventRaised += UpdateHealth;
         }
 
         private void Start()
@@ -43,8 +43,8 @@ namespace BTG.UI
 
         private void OnDisable()
         {
-            m_PlayerIconData.OnValueChanged -= OnPlayerIconDataChanged;
-            m_PlayerHealthEventChannel.OnPlayerHealthUpdated -= UpdateHealth;
+            m_PlayerIcon.OnValueChanged -= OnPlayerIconDataChanged;
+            m_PlayerHealthEventChannel.OnEventRaised -= UpdateHealth;
         }
 
         private void OnPlayerIconDataChanged(Sprite icon)
@@ -55,7 +55,7 @@ namespace BTG.UI
 
         private void SetTankIcon(Sprite icon)
         {
-            m_TankIcon.sprite = icon;
+            m_Image.sprite = icon;
         }
 
         private void UpdateHealth(int currentHealth, int maxHealth)

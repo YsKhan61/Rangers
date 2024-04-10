@@ -1,22 +1,20 @@
 using BTG.Utilities;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using State = BTG.Entity.IEntityUltimateAbility.State;
 
 namespace BTG.Tank.UltimateAction
 {
-    public class AutoTarget : UltimateAction, ICameraShakeUltimateAction
+    public class AutoTarget : UltimateAction
     {
-        public event System.Action<float> OnExecuteCameraShake;
         public override event System.Action OnFullyCharged;
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
         public AutoTarget(TankUltimateController controller, AutoTargetDataSO autoTargetData)
         {
-            m_UltimateController = controller;
+            Controller = controller;
             m_UltimateActionData = autoTargetData;
         }
 
@@ -41,7 +39,6 @@ namespace BTG.Tank.UltimateAction
         public override void OnDestroy()
         {
             OnFullyCharged = null;
-            OnExecuteCameraShake = null;
             base.OnDestroy();
         }
 
@@ -71,10 +68,10 @@ namespace BTG.Tank.UltimateAction
         {
             results = new Collider[10];
             int count = Physics.OverlapSphereNonAlloc(
-                (m_UltimateController.TankTransform.position + m_UltimateController.TankTransform.forward * m_AutoTargetData.CenterOffset),
+                (Controller.EntityTransform.position + Controller.EntityTransform.forward * m_AutoTargetData.CenterOffset),
                 m_AutoTargetData.ImpactRadius,
                 results,
-                m_UltimateController.LayerMask,
+                Controller.LayerMask,
                 QueryTriggerInteraction.Ignore);
 
             if (count <= 0)
@@ -94,7 +91,7 @@ namespace BTG.Tank.UltimateAction
 
                 if (results[i].TryGetComponent(out IDamageable damageable))
                 {
-                    if (damageable == m_UltimateController.Damageable)
+                    if (damageable == Controller.Damageable)
                     {
                         continue;
                     }
@@ -112,7 +109,7 @@ namespace BTG.Tank.UltimateAction
                     SpawnAutoTargetProjectile(out AutoTargetView projectile);
                     projectile.Configure(this, damageable.Transform, m_AutoTargetData.ProjectileSpeed);
                     projectile.Launch();
-                    OnExecuteCameraShake?.Invoke(1f);
+                    Controller.ShakePlayerCamera(1f, 1f);
                     // Do audio and visual effects here
                     // Do camera shake here
                     await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, m_CancellationTokenSource.Token);
@@ -129,7 +126,7 @@ namespace BTG.Tank.UltimateAction
 
         private void SpawnAutoTargetProjectile(out AutoTargetView projectile)
         {
-            projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, m_UltimateController.FirePoint.position, m_UltimateController.FirePoint.rotation);
+            projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, Controller.FirePoint.position, Controller.FirePoint.rotation);
         }
     }
 }

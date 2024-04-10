@@ -12,6 +12,9 @@ namespace BTG.Entity
 
         public Transform Transform { get; }
 
+        public IEntityUltimateController UltimateController { get; }
+        public IEntityUltimateAbility UltimateAction { get; }
+        public IEntityFiringController FiringController { get; }
         public IEntityHealthController HealthController { get; }
 
         public void SetLayers(int selfLayer, int oppositionLayer);

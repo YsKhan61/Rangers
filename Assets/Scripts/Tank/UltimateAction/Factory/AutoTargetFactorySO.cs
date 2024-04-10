@@ -1,3 +1,4 @@
+using BTG.Entity;
 using UnityEngine;
 
 namespace BTG.Tank.UltimateAction
@@ -7,7 +8,7 @@ namespace BTG.Tank.UltimateAction
     {
         [SerializeField] private AutoTargetDataSO m_AutoTargetData;
 
-        public override IUltimateAction CreateUltimateAction(TankUltimateController controller)
+        public override IEntityUltimateAbility CreateUltimateAction(TankUltimateController controller)
         {
             return new AutoTarget(controller, m_AutoTargetData);
         }

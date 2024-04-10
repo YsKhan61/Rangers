@@ -1,13 +1,11 @@
-using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using State = BTG.Entity.IEntityUltimateAbility.State;
 
 namespace BTG.Tank.UltimateAction
 {
     public class Invisibility : UltimateAction
     {
-        public event System.Action<float> OnExecuteCameraShake;
         public override event System.Action OnFullyCharged;
 
         private InvisibilityDataSO m_InvisibilityData => m_UltimateActionData as InvisibilityDataSO;
@@ -16,7 +14,7 @@ namespace BTG.Tank.UltimateAction
 
         public Invisibility(TankUltimateController controller, InvisibilityDataSO invisibilityData)
         {
-            m_UltimateController = controller;
+            Controller = controller;
             m_UltimateActionData = invisibilityData;
         }
 
@@ -29,10 +27,10 @@ namespace BTG.Tank.UltimateAction
 
             ChangeState(State.Executing);
 
-            SpawnView(m_UltimateController.TankTransform);
+            SpawnView(Controller.EntityTransform);
             m_View.PlayDisappearPS();
             m_View.PlayDisappearAudio();
-            m_UltimateController.ToggleTankVisibility(false);
+            Controller.ToggleTankVisibility(false);
             RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
@@ -71,8 +69,8 @@ namespace BTG.Tank.UltimateAction
                 await Task.Delay((int)(m_View.AppearPSDuration * 1000), token);
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
-                m_UltimateController.ToggleTankVisibility(true);
-                OnExecuteCameraShake?.Invoke(1f);
+                Controller.ToggleTankVisibility(true);
+                Controller.ShakePlayerCamera(1f, 1f);
 
                 RaiseUltimateActionExecutedEvent();
 

@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Tank.UltimateAction;
 using BTG.Utilities;
 using System;
@@ -8,14 +9,18 @@ namespace BTG.Tank
     /// <summary>
     /// Controls the ultimate action of the tank.
     /// </summary>
-    public class TankUltimateController
+    public class TankUltimateController : IEntityUltimateController
     {
-        public Transform TankTransform => m_Brain.Transform;
+        public event Action<float, float> OnPlayerCamShake;
+
+        public Transform EntityTransform => m_Brain.Transform;
         public Transform FirePoint => m_Brain.FirePoint;
         public IDamageable Damageable => m_Brain.Damageable;
         public LayerMask LayerMask => m_Brain.OppositionLayerMask;
 
-        private IUltimateAction m_UltimateAction;
+        private IEntityUltimateAbility m_UltimateAction;
+        public IEntityUltimateAbility UltimateAction => m_UltimateAction;
+
         private TankBrain m_Brain;
 
         public TankUltimateController(
@@ -39,22 +44,13 @@ namespace BTG.Tank
 
         public void ToggleTankVisibility(bool isVisible) => m_Brain.ToggleTankVisibility(isVisible);
 
-        public void SubscribeToUltimateActionAssignedEvent(Action<string> action)
-            => m_UltimateAction.OnUltimateActionAssigned += action;
-
-        public void SubscribeToUltimateExecutedEvent(Action action) => 
-            m_UltimateAction.OnUltimateActionExecuted += action;
-
-        public void SubscribeToCameraShakeEvent(Action<float> action)
+        public void ShakePlayerCamera(float amount, float duration)
         {
-            if (m_UltimateAction is ICameraShakeUltimateAction camShakeUltAction)
-            {
-                camShakeUltAction.OnExecuteCameraShake += action;
-            }
-        }
+            // Implement camera shake
+            if (!m_Brain.IsPlayer) return;
 
-        public void SubscribeToChargeUpdatedEvent(Action<int> action) => 
-            m_UltimateAction.OnChargeUpdated += action;
+            OnPlayerCamShake?.Invoke(amount, duration);
+        }
 
         public void SubscribeToFullyChargedEvent(Action action) =>
             m_UltimateAction.OnFullyCharged += action;

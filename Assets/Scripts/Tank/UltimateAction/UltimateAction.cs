@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
 using System.Threading;
 using UnityEngine;
-using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using State = BTG.Entity.IEntityUltimateAbility.State;
 using BTG.Utilities;
+using BTG.Entity;
 
 namespace BTG.Tank.UltimateAction
 {
-    public abstract class UltimateAction : IUltimateAction
+    public abstract class UltimateAction : IEntityUltimateAbility
     {
         public const int FULL_CHARGE = 100;
 
@@ -15,7 +16,6 @@ namespace BTG.Tank.UltimateAction
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnUltimateActionExecuted;
 
-        protected TankUltimateController m_UltimateController;
         protected UltimateActionDataSO m_UltimateActionData;
         protected CancellationTokenSource m_CancellationTokenSource;
 
@@ -24,6 +24,8 @@ namespace BTG.Tank.UltimateAction
         public string Name => m_UltimateActionData.name;
         public State CurrentState { get; protected set; }
 
+
+        public IEntityUltimateController Controller { get; protected set; }
 
         public virtual void Enable()
         {

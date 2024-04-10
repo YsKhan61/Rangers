@@ -1,6 +1,5 @@
-using System.Threading;
 using UnityEngine;
-using State = BTG.Tank.UltimateAction.IUltimateAction.State;
+using State = BTG.Entity.IEntityUltimateAbility.State;
 
 namespace BTG.Tank.UltimateAction
 {
@@ -14,7 +13,7 @@ namespace BTG.Tank.UltimateAction
 
         public SelfShield(TankUltimateController controller, SelfShieldDataSO selfShieldData)
         {
-            m_UltimateController = controller;
+            Controller = controller;
             m_UltimateActionData = selfShieldData;
         }
 
@@ -25,7 +24,7 @@ namespace BTG.Tank.UltimateAction
                 return false;
             }
 
-            SpawnView(m_UltimateController.TankTransform);
+            SpawnView(Controller.EntityTransform);
             m_View.SetParticleSystem(m_SelfShieldData.Duration);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
