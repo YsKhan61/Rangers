@@ -1,5 +1,6 @@
-using BTG.Tank;
+using BTG.Entity;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 
 namespace BTG.Player
@@ -10,7 +11,7 @@ namespace BTG.Player
         private PlayerModel m_Model;
         private PlayerView m_View;
 
-        private TankBrain m_Tank;
+        private IEntityBrain m_Entity;
 
         // cache
         public Rigidbody Rigidbody => m_View.Rigidbody;
@@ -34,23 +35,23 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        // public void SetTank(TankBrain tank, int playerLayer, int enemyLayer)
-        public void SetTank(TankBrain tank)
+        public void SetEntity(IEntityBrain entity)
         {
-            m_Tank = tank;
-            m_Model.TankModel = tank.Model;
+            m_Entity = entity;
+            m_Model.EntityModel = entity.Model;
             m_Model.IsEnabled = true;
 
-            m_Tank.Model.IsPlayer = true;
-            // m_Tank.SetLayers(playerLayer, enemyLayer);
-            m_Tank.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
-            m_Tank.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
-            m_Tank.SetRigidbody(Rigidbody);
-            m_Tank.OnAfterDeath += OnTankDead;
-            m_Tank.Init();
+            m_Entity.Model.IsPlayer = true;
+            m_Entity.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
+            m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
+            m_Entity.SetRigidbody(Rigidbody);
+            m_Entity.OnEntityInitialized += OnEntityInitialized;
+            m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
+            m_Entity.OnAfterDeath += OnTankDead;
+            m_Entity.Init();
 
-            Rigidbody.centerOfMass = m_Tank.Transform.position;
-            Rigidbody.maxLinearVelocity = m_Model.TankMaxSpeed;
+            Rigidbody.centerOfMass = m_Entity.Transform.position;
+            Rigidbody.maxLinearVelocity = m_Model.EntityMaxSpeed;
 
             UnityCallbacks.Instance.Register(this as IFixedUpdatable);
             UnityCallbacks.Instance.Register(this as IUpdatable);
@@ -77,7 +78,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_Tank?.StartFire();
+            m_Entity?.StartFire();
         }
 
         public void StopFire()
@@ -85,7 +86,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_Tank?.StopFire();
+            m_Entity?.StopFire();
         }
 
         public void TryExecuteUltimate()
@@ -93,7 +94,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_Tank?.TryExecuteUltimate();
+            m_Entity?.TryExecuteUltimate();
         }
 
         public void FixedUpdate()
@@ -119,24 +120,36 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
 
-            m_Tank.OnAfterDeath -= OnTankDead;
+            m_Entity.OnEntityInitialized -= OnEntityInitialized;
+            m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;
+            m_Entity.OnAfterDeath -= OnTankDead;
 
             m_Model.IsEnabled = false;
-            m_Model.TankModel = null;
-            m_Tank = null;
+            m_Model.EntityModel = null;
+            m_Entity = null;
 
             m_PlayerService.OnPlayerDeath();
+        }
+
+        private void OnEntityInitialized(Sprite sprite)
+        {
+            m_Model.PlayerData.PlayerIcon.Value = sprite;
+        }
+
+        private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
+        {
+            m_Model.PlayerData.PlayerHealthEventChannel.RaiseEvent(currentHealth, maxHealth);
         }
 
         private void MoveWithForce()
         {
             Rigidbody.AddForce(Transform.forward * m_AccelerationMagnitude, ForceMode.Acceleration);
-            Rigidbody.velocity = Vector3.ClampMagnitude(Rigidbody.velocity, m_Model.TankMaxSpeed);
+            Rigidbody.velocity = Vector3.ClampMagnitude(Rigidbody.velocity, m_Model.EntityMaxSpeed);
         }
 
         private void Rotate()
         {
-            m_RotateAngle = m_Model.TankRotateSpeed * m_Model.RotateInputValue * Time.fixedDeltaTime *
+            m_RotateAngle = m_Model.EntityRotateSpeed * m_Model.RotateInputValue * Time.fixedDeltaTime *
                 (m_Model.MoveInputValue > 0 ? 1 :
                     (m_Model.MoveInputValue < 0 ? -1 : 0)
                     );
@@ -147,7 +160,7 @@ namespace BTG.Player
 
         private void CalculateInputSpeed()
         {
-            m_AccelerationMagnitude = m_Model.TankAcceleration * m_Model.MoveInputValue;
+            m_AccelerationMagnitude = m_Model.EntityAcceleration * m_Model.MoveInputValue;
         }
     }
 }

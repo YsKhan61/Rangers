@@ -1,11 +1,12 @@
+using BTG.Entity;
 using System.Threading.Tasks;
-using UnityEngine;
+
 
 namespace BTG.Tank
 {
-    public class TankHealthController
+    public class TankHealthController : IEntityHealthController
     {
-        public event System.Action<int, int> OnTankHealthUpdated;        // int - CurrentHealth, int - MaxHealth
+        public event System.Action<int, int> OnHealthUpdated;        // int - CurrentHealth, int - MaxHealth
 
         private TankModel m_Model;
         private TankBrain m_Brain;
@@ -21,7 +22,7 @@ namespace BTG.Tank
             
         }
 
-        public async void Init()
+        public async void Reset()
         {
             await Task.Yield();             // wait a frame to make sure UI is ready
             AddHealth(m_Model.MaxHealth);
@@ -30,7 +31,7 @@ namespace BTG.Tank
         public void AddHealth(int health)
         {
             m_Model.AddHealthData(health);
-            OnTankHealthUpdated?.Invoke(m_Model.CurrentHealth, m_Model.MaxHealth);
+            OnHealthUpdated?.Invoke(m_Model.CurrentHealth, m_Model.MaxHealth);
         }
 
         public void TakeDamage(int damage)

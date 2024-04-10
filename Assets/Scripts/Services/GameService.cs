@@ -2,7 +2,6 @@ using BTG.Enemy;
 using BTG.Player;
 using BTG.Tank;
 using BTG.UI;
-using BTG.Utilities;
 using BTG.Utilities.DI;
 using UnityEngine;
 
@@ -13,9 +12,6 @@ namespace BTG.Services
         [SerializeField] PlayerVirtualCamera m_PVCController;
 
         [SerializeField] private UltimateUI m_UltimateUI;
-        [SerializeField] private HealthUI m_HealthUI;
-
-        // [SerializeField] private IntDataSO m_TankIDSelectedData;
 
         TankFactory m_TankFactory;
 
@@ -44,10 +40,8 @@ namespace BTG.Services
         private void InitializePlayerService()
         {
             PlayerService playerService = new(
-                // m_TankIDSelectedData,
                 m_PVCController,
-                m_UltimateUI,
-                m_HealthUI);
+                m_UltimateUI);
 
             DIManager.Instance.Inject(playerService);
             playerService.Initialize();

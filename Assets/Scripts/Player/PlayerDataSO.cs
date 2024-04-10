@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 
 namespace BTG.Player
@@ -16,5 +17,13 @@ namespace BTG.Player
         [SerializeField]
         PlayerView m_Prefab;
         public PlayerView Prefab => m_Prefab;
+
+        [SerializeField]
+        IntIntEventChannelSO m_PlayerHealthEventChannel;
+        public IntIntEventChannelSO PlayerHealthEventChannel => m_PlayerHealthEventChannel;
+
+        [SerializeField]
+        SpriteDataSO m_PlayerIcon;
+        public SpriteDataSO PlayerIcon => m_PlayerIcon;
     }
 }

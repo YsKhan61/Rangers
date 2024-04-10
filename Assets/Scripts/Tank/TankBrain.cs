@@ -1,5 +1,4 @@
-using BTG.EventSystem;
-using BTG.Tank.UltimateAction;
+using BTG.Entity;
 using BTG.Utilities;
 using System;
 using System.Threading.Tasks;
@@ -14,9 +13,9 @@ namespace BTG.Tank
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
-    public class TankBrain : IUpdatable, IDestroyable
+    public class TankBrain : IEntityBrain, IUpdatable, IDestroyable
     {
-        public event Action<Sprite> OnTankInitializedEvent;
+        public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
 
         public enum TankState
@@ -28,6 +27,8 @@ namespace BTG.Tank
 
         // dependencies
         private TankModel m_Model;
+        IEntityModel IEntityBrain.Model => m_Model;
+
         public TankModel Model => m_Model;
         private TankView m_View;
 
@@ -36,6 +37,7 @@ namespace BTG.Tank
         private TankUltimateController m_UltimateController;
         
         private TankHealthController m_HealthController;
+        public IEntityHealthController HealthController => m_HealthController;
 
         public Transform Transform => m_View.transform;
 
@@ -47,6 +49,8 @@ namespace BTG.Tank
 
         public IDamageable Damageable => m_View.Damageable;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
+
+        public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
 
         private TankPool m_Pool;
 
@@ -78,7 +82,7 @@ namespace BTG.Tank
             ToggleTankVisibility(true);
 
             m_UltimateController.EnableUltimate();
-            m_HealthController.Init();
+            m_HealthController.Reset();
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
             UnityCallbacks.Instance.Register(this as IDestroyable);
@@ -94,7 +98,6 @@ namespace BTG.Tank
             m_Model.OppositionLayer = 1 << oppositionLayer;
         }
 
-
         public void Update()
         {
             UpdateState();
@@ -104,7 +107,7 @@ namespace BTG.Tank
 
         public void OnDestroy()
         {
-            OnTankInitializedEvent = null;
+            OnEntityInitialized = null;
 
             m_FiringController?.OnDestroy();  
             m_UltimateController?.OnDestroy();
@@ -170,7 +173,7 @@ namespace BTG.Tank
 
             m_View.AudioView.StopEngineAudio();
 
-            OnTankInitializedEvent = null;
+            OnEntityInitialized = null;
 
             Rigidbody.velocity = Vector3.zero;
             Rigidbody.angularVelocity = Vector3.zero;
@@ -189,7 +192,7 @@ namespace BTG.Tank
         private async Task RaiseInitializedEventAsync()
         {
             await Task.Yield();
-            OnTankInitializedEvent?.Invoke(m_Model.Icon);
+            OnEntityInitialized?.Invoke(m_Model.Icon);
         }
 
         #region Helper Methods for accessing other class methods
@@ -206,7 +209,7 @@ namespace BTG.Tank
         public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
 
         public void SubscribeToTankInitializedEvent(Action<Sprite> onTankInitialized) =>
-            OnTankInitializedEvent += onTankInitialized;
+            OnEntityInitialized += onTankInitialized;
 
         public void SubscribeToOnTankShootEvent(Action<float> onTankShoot) =>
             m_FiringController.OnTankShoot += onTankShoot;
@@ -226,8 +229,8 @@ namespace BTG.Tank
         public void SubscribeToFullyChargedEvent(Action onFullyCharged) =>
             m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
 
-        public void SubscribeToHealthUpdatedEvent(Action<int, int> onHealthUpdated) =>
-            m_HealthController.OnTankHealthUpdated += onHealthUpdated;
+        /*public void SubscribeToHealthUpdatedEvent(Action<int, int> onHealthUpdated) =>
+            m_HealthController.OnTankHealthUpdated += onHealthUpdated;*/
 
         #endregion
     }

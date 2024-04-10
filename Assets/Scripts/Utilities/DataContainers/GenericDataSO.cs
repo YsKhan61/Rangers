@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Utilities
 {
-    public abstract class GenericDataSO<T> : ScriptableObject where T : struct
+    public abstract class GenericDataSO<T> : ScriptableObject
     {
         private T m_Value;
 

@@ -23,7 +23,6 @@ namespace BTG.Player
         private PlayerController m_PlayerController;
 
         private readonly UltimateUI m_UltimateUI;    // temporary for now
-        private readonly HealthUI m_HealthUI;    // temporary for now
         private readonly PlayerVirtualCamera m_PVC;    // temporary for now
 
         private CancellationTokenSource m_CTS;
@@ -31,15 +30,11 @@ namespace BTG.Player
         
 
         public PlayerService(
-            // IntDataSO tankIDSelectedData,
             PlayerVirtualCamera pvc,
-            UltimateUI ultimateUI,
-            HealthUI healthUI)
+            UltimateUI ultimateUI)
         {
-            // m_PlayerTankIDSelectedData = tankIDSelectedData;
             m_PVC = pvc;
             m_UltimateUI = ultimateUI;
-            m_HealthUI = healthUI;
         }
 
         public void Initialize()
@@ -68,6 +63,7 @@ namespace BTG.Player
         private void CreatePlayerControllerAndInput()
         {
             m_PlayerController = new PlayerController(this, m_PlayerData);
+            DIManager.Instance.Inject(m_PlayerController);
             PlayerInputs playerInput = new PlayerInputs(m_PlayerController);
             playerInput.Initialize();
         }
@@ -95,32 +91,25 @@ namespace BTG.Player
         {
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
-            m_PlayerController.SetTank(tank);
+            m_PlayerController.SetEntity(tank);
 
-            ConfigurePlayerCameraWithTankController(tank);
-            ConfigureUltimateUIWithTankController(tank);
-            ConfigureHealthUIWithTankController(tank);  
+            ConfigurePlayerCameraWithTank(tank);
+            ConfigureUltimateUIWithTank(tank);  
         }
 
-        private void ConfigurePlayerCameraWithTankController(TankBrain tank)
+        private void ConfigurePlayerCameraWithTank(TankBrain tank)
         {
             m_PVC.Initialize(tank.CameraTarget);
             tank.SubscribeToOnTankShootEvent(m_PVC.ShakeCameraOnPlayerTankShoot);
             tank.SubscribeToCameraShakeEvent(m_PVC.ShakeCameraOnUltimateExecution);
         }
 
-        private void ConfigureUltimateUIWithTankController(TankBrain tank)
+        private void ConfigureUltimateUIWithTank(TankBrain tank)
         {
             tank.SubscribeToUltimateActionAssignedEvent(m_UltimateUI.Init);
             tank.SubscribeToChargeUpdatedEvent(m_UltimateUI.UpdateChargeAmount);
             tank.SubscribeToFullyChargedEvent(m_UltimateUI.OnFullyCharged);
             tank.SubscribeToUltimateExecutedEvent(m_UltimateUI.OnUltimateExecuted);
-        }
-
-        private void ConfigureHealthUIWithTankController(TankBrain tank)
-        {
-            tank.SubscribeToTankInitializedEvent(m_HealthUI.SetTankIcon);
-            tank.SubscribeToHealthUpdatedEvent(m_HealthUI.UpdateHealth);
         }
     }
 }

@@ -1,16 +1,15 @@
+using BTG.Entity;
 using UnityEngine;
 
 namespace BTG.Tank
 {
-    public class TankModel
+    public class TankModel : IEntityModel
     {
-        public bool IsPlayer = false;
+        public bool IsPlayer { get; set; }
 
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
-
-        public float Acceleration => m_TankData.Acceleration;
-        public int MaxSpeed => m_TankData.MaxSpeed;
+        
 
         private TankBrain m_Brain;
 
@@ -25,6 +24,9 @@ namespace BTG.Tank
         public int CurrentHealth => m_CurrentHealth;
 
         public int MaxHealth => m_TankData.MaxHealth;
+        public float Acceleration => m_TankData.Acceleration;
+        public int MaxSpeed => m_TankData.MaxSpeed;
+        public int RotateSpeed => m_TankData.RotateSpeed;
 
         public string Name => m_TankData.name;
 

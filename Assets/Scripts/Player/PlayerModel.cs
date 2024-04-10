@@ -1,4 +1,4 @@
-using BTG.Tank;
+using BTG.Entity;
 
 namespace BTG.Player
 {
@@ -15,11 +15,13 @@ namespace BTG.Player
         public float MoveInputValue;
         public float RotateInputValue;
 
-        public TankModel TankModel;
+        public IEntityModel EntityModel;
 
-        public int TankMaxSpeed => TankModel.TankData.MaxSpeed;
-        public int TankRotateSpeed => TankModel.TankData.RotateSpeed;
-        public float TankAcceleration => TankModel.TankData.Acceleration;
+        public int MaxHealth => EntityModel.MaxHealth;
+
+        public int EntityMaxSpeed => EntityModel.MaxSpeed;
+        public int EntityRotateSpeed => EntityModel.RotateSpeed;
+        public float EntityAcceleration => EntityModel.Acceleration;
 
         /// <summary>
         /// Enable when tank is alive, disable when tank is dead

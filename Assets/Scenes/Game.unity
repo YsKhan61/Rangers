@@ -1696,6 +1696,7 @@ GameObject:
   - component: {fileID: 727612018}
   - component: {fileID: 727612019}
   - component: {fileID: 727612020}
+  - component: {fileID: 727612021}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1836,6 +1837,27 @@ MonoBehaviour:
   m_EliminatedEnemiesCountText: {fileID: 932114870}
   m_InputActionReference: {fileID: -2950496558765192213, guid: dce30368c114aca4080cd3a58b2379c9,
     type: 3}
+--- !u!114 &727612021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727612013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e217efee7114ac742abf80757ed3ef78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PlayerIconData: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
+  m_PlayerHealthEventChannel: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
+    type: 2}
+  m_Panel: {fileID: 1509247439}
+  m_TankIcon: {fileID: 960463774}
+  m_HealthBar: {fileID: 329047340}
+  m_HealthBarFill: {fileID: 2004210967}
+  m_Color1: {r: 1, g: 0, b: 0, a: 1}
+  m_Color2: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &728911153
 GameObject:
   m_ObjectHideFlags: 0
@@ -2216,7 +2238,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PVCController: {fileID: 1894154699}
   m_UltimateUI: {fileID: 223905666}
-  m_HealthUI: {fileID: 1509247441}
 --- !u!1 &932114868
 GameObject:
   m_ObjectHideFlags: 0
@@ -3950,7 +3971,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1509247440}
-  - component: {fileID: 1509247441}
   m_Layer: 5
   m_Name: HealthPanel
   m_TagString: Untagged
@@ -3979,23 +3999,6 @@ RectTransform:
   m_AnchoredPosition: {x: 10, y: 10}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1509247441
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1509247439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e217efee7114ac742abf80757ed3ef78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TankIcon: {fileID: 960463774}
-  m_HealthBar: {fileID: 329047340}
-  m_HealthBarFill: {fileID: 2004210967}
-  m_Color1: {r: 1, g: 0, b: 0, a: 1}
-  m_Color2: {r: 0, g: 1, b: 0, a: 1}
 --- !u!1 &1518868782
 GameObject:
   m_ObjectHideFlags: 0
