@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
@@ -10,7 +11,7 @@ namespace BTG.Enemy
     public class EnemyService
     {
         [Inject]
-        private TankFactory m_TankFactory;
+        EntityFactoryContainerSO m_FactoryContainer;
 
         [Inject]
         private IntDataSO m_EnemyDeathCountData;
@@ -33,7 +34,7 @@ namespace BTG.Enemy
 
         ~EnemyService()
         {
-            m_TankFactory = null;
+            // m_TankFactory = null;
 
             m_Cts.Cancel();
             m_Cts.Dispose();
@@ -53,49 +54,45 @@ namespace BTG.Enemy
             TryStartNextWave();
         }
 
-        public void StartNextWave()
+        public void StartNextWaveWithEntityTags()
         {
-            if (!m_EnemyWaves.GetTanksForNextWave(m_NextWaveIndex, out int[] tankIDs))
+            if (!m_EnemyWaves.TryGetEntityTagsForNextWave(m_NextWaveIndex, out TagSO[] tags))
             {
                 Debug.Log("No tanks found!");
                 return;
             }
 
-            m_TankCountInCurrentWave = tankIDs.Length;
-
-            foreach (int tankId in tankIDs)
+            foreach (TagSO tag in tags)
             {
-                ConfigureTankAndController(tankId);
+                GetEntityAndConfigureWithController(tag);
             }
         }
 
-        private void ConfigureTankAndController(int tankId)
+        private void GetEntityAndConfigureWithController(TagSO tag)
         {
-            bool tankFound = GetEnemyTank(tankId, out TankBrain tank);
-            if (!tankFound)
-                return;
+            bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
+            if (!entityFound) return;
 
-            bool found = GetEnemyController(out EnemyController controller);
-            if (!found)
-                return;
+            bool controllerFound = GetEnemyController(out EnemyController controller);
+            if (!controllerFound) return;
 
-            controller.SetTank(tank);
+            controller.SetTank(entity as TankBrain);
             controller.SetService(this);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
             controller.Init();
         }
 
-        private bool GetEnemyTank(int tankId, out TankBrain tank)
+        private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
         {
-            if (!m_TankFactory.TryGetTank(tankId, out tank))
+            entity = null;
+            if (!m_FactoryContainer.TryGetFactory(tag, out EntityFactorySO factory))
             {
-                if (!m_TankFactory.TryGetRandomTank(out tank))
-                {
-                    Debug.Log("Failed to spawn enemy tank");
-                    return false;
-                }
+                Debug.Log("Failed to get entity factory of tag: " + tag.name);
+                return false;
             }
+
+            entity = factory.GetEntity();
             return true;
         }
 
@@ -123,7 +120,7 @@ namespace BTG.Enemy
 
             _ = HelperMethods.InvokeAfterAsync(m_EnemyWaves.Interval, () =>
             {
-                StartNextWave();
+                StartNextWaveWithEntityTags();
             }, m_Cts.Token);
         }
     }

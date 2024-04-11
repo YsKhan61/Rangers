@@ -1,3 +1,4 @@
+using BTG.Entity;
 using System.Threading.Tasks;
 using UnityEngine;
 using State = BTG.Entity.IEntityUltimateAbility.State;
@@ -12,7 +13,7 @@ namespace BTG.Tank.UltimateAction
 
         private InvisibilityView m_View;
 
-        public Invisibility(TankUltimateController controller, InvisibilityDataSO invisibilityData)
+        public Invisibility(IEntityUltimateController controller, InvisibilityDataSO invisibilityData)
         {
             Controller = controller;
             m_UltimateActionData = invisibilityData;

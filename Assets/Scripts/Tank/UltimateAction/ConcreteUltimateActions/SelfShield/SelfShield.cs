@@ -1,3 +1,4 @@
+using BTG.Entity;
 using UnityEngine;
 using State = BTG.Entity.IEntityUltimateAbility.State;
 
@@ -11,7 +12,7 @@ namespace BTG.Tank.UltimateAction
 
         private SelfShieldView m_View;
 
-        public SelfShield(TankUltimateController controller, SelfShieldDataSO selfShieldData)
+        public SelfShield(IEntityUltimateController controller, SelfShieldDataSO selfShieldData)
         {
             Controller = controller;
             m_UltimateActionData = selfShieldData;

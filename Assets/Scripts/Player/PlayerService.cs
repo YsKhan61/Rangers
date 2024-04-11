@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
@@ -10,22 +11,24 @@ namespace BTG.Player
     public class PlayerService
     {
         [Inject]
+        private EntityFactoryContainerSO m_EntityFactory;
+
+        [Inject]
         private PlayerDataSO m_PlayerData;
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
+        /*[Inject]
+        private TankFactory m_TankFactory;*/
+
         [Inject]
-        private TankFactory m_TankFactory;
+        private PlayerVirtualCamera m_PVCamera;
 
 
         private PlayerController m_PlayerController;
 
-        private readonly PlayerVirtualCamera m_PVC;    // temporary for now
-
         private CancellationTokenSource m_CTS;
-
-        public PlayerService() { }
 
         public void Initialize()
         {
@@ -70,14 +73,27 @@ namespace BTG.Player
                 return;
 
             ConfigureTankAndController(tank);
+
+            ConfigureTankWithCamera(tank);
         }
 
         private bool CreateAndSpawnPlayerTank(out TankBrain tank)
         {
-            if (!m_TankFactory.TryGetTank(m_PlayerStats.TankIDSelected.Value, out tank))
+            /*if (!m_TankFactory.TryGetTank(m_PlayerStats.TankIDSelected.Value, out tank))
             {
                 return false;
+            }*/
+
+            tank = null;
+
+            bool factoryFound = m_EntityFactory.TryGetFactory(m_PlayerStats.TankIDSelected.Value, out EntityFactorySO factory);
+            if (!factoryFound)
+            {
+                Debug.Log("Factory not found!");
+                return false;
             }
+
+            tank = factory.GetEntity() as TankBrain;
 
             return true;
         }
@@ -87,6 +103,11 @@ namespace BTG.Player
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
             m_PlayerController.SetEntity(tank);
+        }
+
+        private void ConfigureTankWithCamera(TankBrain tank)
+        {
+            m_PVCamera.Initialize(tank.CameraTarget);
         }
     }
 }

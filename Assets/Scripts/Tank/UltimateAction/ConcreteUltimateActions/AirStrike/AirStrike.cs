@@ -19,7 +19,7 @@ namespace BTG.Tank.UltimateAction
         private readonly List<IDamageable> m_Damageables = new();
 
         // Create constructor
-        public AirStrike(TankUltimateController controller, AirStrikeDataSO airStrikeData)
+        public AirStrike(IEntityUltimateController controller, AirStrikeDataSO airStrikeData)
         {
             Controller = controller;
             m_UltimateActionData = airStrikeData;

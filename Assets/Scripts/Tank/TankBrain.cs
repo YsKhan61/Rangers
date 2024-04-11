@@ -43,6 +43,7 @@ namespace BTG.Tank
         public IEntityHealthController HealthController => m_HealthController;
 
         public Transform Transform => m_View.transform;
+        public Transform CameraTarget => m_View.CameraTarget;
 
         public Rigidbody Rigidbody { get; private set; }
 
@@ -73,7 +74,7 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
-            m_UltimateController = new TankUltimateController(m_Model.TankData.UltimateActionFactory);
+            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
         }
 

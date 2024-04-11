@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace BTG.Tank.UltimateAction
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
-        public AutoTarget(TankUltimateController controller, AutoTargetDataSO autoTargetData)
+        public AutoTarget(IEntityUltimateController controller, AutoTargetDataSO autoTargetData)
         {
             Controller = controller;
             m_UltimateActionData = autoTargetData;

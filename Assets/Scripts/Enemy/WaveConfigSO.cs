@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -15,7 +16,7 @@ namespace BTG.Enemy
         [SerializeField] private Pose[] m_SpawnPose;
 
 
-        public bool GetTanksForNextWave(in int index, out int[] tankIDs)
+        public bool GetTanksForNextWave(int index, out int[] tankIDs)
         {
             tankIDs = null;
             if (index >= m_Waves.Length)
@@ -32,6 +33,17 @@ namespace BTG.Enemy
             return true;
         }
 
+        public bool TryGetEntityTagsForNextWave(int index, out TagSO[] tags) 
+        {
+            tags = null;
+            if (index < 0 || index >= m_Waves.Length) return false;
+
+            tags = m_Waves[index].EntityTags;
+            if (tags == null) return false;
+
+            return true;
+        }
+
         public Pose GetRandomSpawnPose()
         {
             return m_SpawnPose[Random.Range(0, m_SpawnPose.Length)];
@@ -43,6 +55,7 @@ namespace BTG.Enemy
     public class Wave
     {
         public int ID;
+        public TagSO[] EntityTags;
         public int[] EnemyTankIDs;
     }
 

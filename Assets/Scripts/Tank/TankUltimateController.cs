@@ -25,9 +25,10 @@ namespace BTG.Tank
 
         private TankBrain m_Brain;
 
-        public TankUltimateController(
+        public TankUltimateController(TankBrain brain,
             UltimateActionFactorySO ultimateFactoryData)
         {
+            m_Brain = brain;
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
         }
 
