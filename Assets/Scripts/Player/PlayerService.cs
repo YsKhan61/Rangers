@@ -22,7 +22,7 @@ namespace BTG.Player
         private PlayerVirtualCamera m_PVCamera;
 
 
-        private PlayerController m_PlayerController;
+        private PlayerTankController m_PlayerController;
 
         private CancellationTokenSource m_CTS;
 
@@ -56,7 +56,7 @@ namespace BTG.Player
 
         private void CreatePlayerControllerAndInput()
         {
-            m_PlayerController = new PlayerController(this, m_PlayerData);
+            m_PlayerController = new PlayerTankController(this, m_PlayerData);
             DIManager.Instance.Inject(m_PlayerController);
             PlayerInputs playerInput = new(m_PlayerController);
             playerInput.Initialize();
@@ -69,8 +69,6 @@ namespace BTG.Player
                 return;
 
             ConfigureTankAndController(entity);
-
-            ConfigureTankWithCamera(entity);
         }
 
         private bool CreateAndSpawnPlayerEntity(out IEntityBrain entity)
@@ -94,11 +92,8 @@ namespace BTG.Player
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
             m_PlayerController.SetEntity(entity);
-        }
 
-        private void ConfigureTankWithCamera(IEntityBrain entity)
-        {
-            m_PVCamera.Initialize(entity.CameraTarget);
+            m_PVCamera.Initialize(m_PlayerController.CameraTarget);
         }
     }
 }

@@ -1,5 +1,6 @@
 using BTG.Entity;
 
+
 namespace BTG.Player
 {
     public class PlayerModel
@@ -15,7 +16,7 @@ namespace BTG.Player
         public float MoveInputValue;
         public float RotateInputValue;
 
-        public IEntityModel EntityModel;
+        public IEntityTankModel EntityModel;
 
         public int MaxHealth => EntityModel.MaxHealth;
 

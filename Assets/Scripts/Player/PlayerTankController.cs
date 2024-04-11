@@ -2,33 +2,36 @@ using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
 
+
 namespace BTG.Player
 {
-    public class PlayerController : IFixedUpdatable, IUpdatable
+    public class PlayerTankController : IFixedUpdatable, IUpdatable
     {
         private PlayerService m_PlayerService;
         private PlayerModel m_Model;
         private PlayerView m_View;
 
-        private IEntityBrain m_Entity;
+        private IEntityTankBrain m_Entity;
 
         // cache
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_View.transform;
+
+        public Transform CameraTarget => m_Entity.CameraTarget;
 
         // cached values
         private float m_AccelerationMagnitude;
         private float m_RotateAngle;
         private Quaternion m_DeltaRotation;
 
-        public PlayerController(PlayerService service, PlayerDataSO data)
+        public PlayerTankController(PlayerService service, PlayerDataSO data)
         {
             m_PlayerService = service;
             m_Model = new PlayerModel(data);
             m_View = Object.Instantiate(data.Prefab);
         }
 
-        ~PlayerController()
+        ~PlayerTankController()
         {
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
@@ -36,8 +39,8 @@ namespace BTG.Player
 
         public void SetEntity(IEntityBrain entity)
         {
-            m_Entity = entity;
-            m_Model.EntityModel = entity.Model;
+            m_Entity = entity as IEntityTankBrain;
+            m_Model.EntityModel = m_Entity.Model;
             m_Model.IsEnabled = true;
 
             m_Entity.Model.IsPlayer = true;

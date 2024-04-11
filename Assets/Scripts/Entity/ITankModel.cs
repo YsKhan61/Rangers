@@ -1,6 +1,6 @@
 namespace BTG.Entity
 {
-    public interface IEntityModel
+    public interface IEntityTankModel
     {
         public bool IsPlayer { get; set; }
         public int MaxHealth { get; }

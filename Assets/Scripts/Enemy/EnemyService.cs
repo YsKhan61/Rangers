@@ -70,10 +70,10 @@ namespace BTG.Enemy
             bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
             if (!entityFound) return;
 
-            bool controllerFound = GetEnemyController(out EnemyController controller);
+            bool controllerFound = GetEnemyController(out EnemyTankController controller);
             if (!controllerFound) return;
 
-            controller.SetTank(entity);
+            controller.SetEntityBrain(entity);
             controller.SetService(this);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
@@ -93,7 +93,7 @@ namespace BTG.Enemy
             return true;
         }
 
-        private bool GetEnemyController(out EnemyController controller)
+        private bool GetEnemyController(out EnemyTankController controller)
         {
             controller = m_EnemyPool.GetEnemy();
             if (controller == null)

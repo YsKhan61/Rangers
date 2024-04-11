@@ -13,16 +13,8 @@ namespace BTG.Tank
         [SerializeField]
         TankDataSO m_Data;
 
-        private TankPool m_Pool;
-        public TankPool Pool 
-        { 
-            get
-            {
-                if (m_Pool == null)
-                    m_Pool = new(m_Data);
-                return m_Pool;
-            }
-        }
+        TankPool m_Pool;
+        public TankPool Pool => m_Pool ??= new(m_Data);
 
         public override IEntityBrain GetEntity() => Pool.GetTank();
 

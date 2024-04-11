@@ -6,14 +6,14 @@ using UnityEngine.AI;
 
 namespace BTG.Enemy
 {
-    public class EnemyController
+    public class EnemyTankController
     {
         private EnemyDataSO m_Data;
         public EnemyDataSO Data => m_Data;
 
         private EnemyPool m_Pool;
         private EnemyService m_Service;
-        private IEntityBrain m_EntityBrain;
+        private IEntityTankBrain m_EntityBrain;
         private EnemyView m_View;
         private NavMeshAgent m_Agent;
         public NavMeshAgent Agent => m_Agent;
@@ -23,7 +23,7 @@ namespace BTG.Enemy
         public Transform Transform => m_View.transform;
 
 
-        public EnemyController(EnemyDataSO data, EnemyPool pool)
+        public EnemyTankController(EnemyDataSO data, EnemyPool pool)
         {
             m_Pool = pool;
             m_Data = data;
@@ -35,7 +35,7 @@ namespace BTG.Enemy
             Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
 
-        ~EnemyController()
+        ~EnemyTankController()
         {
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
@@ -52,10 +52,15 @@ namespace BTG.Enemy
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
-        public void SetTank(
+        public void SetEntityBrain(
             IEntityBrain entity)
         {
-            m_EntityBrain = entity;
+            m_EntityBrain = entity as IEntityTankBrain;
+            if (m_EntityBrain == null)
+            {
+                Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type ITankBrain");
+                return;
+            }
 
             m_EntityBrain.Model.IsPlayer = false;
             m_EntityBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);

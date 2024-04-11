@@ -4,7 +4,7 @@ namespace BTG.Enemy
 {
     public class EnemyStateManager : StateManager<EnemyStateManager.EnemyState>, IUpdatable, IDestroyable
     {
-        private EnemyController m_Controller;
+        private EnemyTankController m_Controller;
 
         public enum EnemyState
         {
@@ -14,7 +14,7 @@ namespace BTG.Enemy
             Dead
         }
 
-        public EnemyStateManager(EnemyController enemyController)
+        public EnemyStateManager(EnemyTankController enemyController)
         {
             m_Controller = enemyController;
 

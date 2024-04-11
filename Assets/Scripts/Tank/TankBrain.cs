@@ -13,7 +13,7 @@ namespace BTG.Tank
     /// TankMovementController, TankFiringController and TankUltimateController.
     /// It is like a Facade for the tank.
     /// </summary>
-    public class TankBrain : IEntityBrain, IUpdatable, IDestroyable
+    public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
@@ -27,7 +27,7 @@ namespace BTG.Tank
 
         // dependencies
         private TankModel m_Model;
-        IEntityModel IEntityBrain.Model => m_Model;
+        IEntityTankModel IEntityTankBrain.Model => m_Model;
 
         public TankModel Model => m_Model;
         private TankView m_View;

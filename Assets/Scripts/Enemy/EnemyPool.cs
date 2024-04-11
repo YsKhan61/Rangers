@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Enemy
 { 
-    public class EnemyPool : GenericObjectPool<EnemyController>
+    public class EnemyPool : GenericObjectPool<EnemyTankController>
     {
         private Transform m_EnemyContainer;
         public Transform EnemyContainer => m_EnemyContainer;
@@ -19,10 +19,10 @@ namespace BTG.Enemy
             // m_Data = data;
         }
 
-        public EnemyController GetEnemy() => GetItem();
+        public EnemyTankController GetEnemy() => GetItem();
 
-        public void ReturnEnemy(EnemyController enemy) => ReturnItem(enemy);
+        public void ReturnEnemy(EnemyTankController enemy) => ReturnItem(enemy);
 
-        protected override EnemyController CreateItem() => new EnemyController(m_Data, this);
+        protected override EnemyTankController CreateItem() => new(m_Data, this);
     }
 }

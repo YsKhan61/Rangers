@@ -8,14 +8,14 @@ namespace BTG.Enemy
     /// </summary>
     public abstract class EnemyBaseState : BaseState<EnemyStateManager.EnemyState>
     {
-        protected EnemyController m_Controller;
+        protected EnemyTankController m_Controller;
 
         public EnemyBaseState(EnemyStateManager.EnemyState state) : base(state)
         {
 
         }
 
-        public void SetController(EnemyController controller)
+        public void SetController(EnemyTankController controller)
             => m_Controller = controller;
 
     }

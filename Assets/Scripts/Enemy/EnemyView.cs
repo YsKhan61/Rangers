@@ -10,14 +10,14 @@ namespace BTG.Enemy
         private Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
-        private EnemyController m_Controller;
+        private EnemyTankController m_Controller;
 
         private void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
         }
 
-        public void SetController(EnemyController controller)
+        public void SetController(EnemyTankController controller)
             => m_Controller = controller;
 
         private void OnDrawGizmos()
