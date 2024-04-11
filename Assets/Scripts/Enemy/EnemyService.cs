@@ -1,5 +1,4 @@
 using BTG.Entity;
-using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using System.Threading;
@@ -34,8 +33,6 @@ namespace BTG.Enemy
 
         ~EnemyService()
         {
-            // m_TankFactory = null;
-
             m_Cts.Cancel();
             m_Cts.Dispose();
         }
@@ -58,7 +55,7 @@ namespace BTG.Enemy
         {
             if (!m_EnemyWaves.TryGetEntityTagsForNextWave(m_NextWaveIndex, out TagSO[] tags))
             {
-                Debug.Log("No tanks found!");
+                Debug.Log("No entity found!");
                 return;
             }
 
@@ -76,7 +73,7 @@ namespace BTG.Enemy
             bool controllerFound = GetEnemyController(out EnemyController controller);
             if (!controllerFound) return;
 
-            controller.SetTank(entity as TankBrain);
+            controller.SetTank(entity);
             controller.SetService(this);
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);

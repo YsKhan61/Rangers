@@ -1,5 +1,4 @@
 using BTG.Entity;
-using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using System.Threading;
@@ -18,9 +17,6 @@ namespace BTG.Player
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
-
-        /*[Inject]
-        private TankFactory m_TankFactory;*/
 
         [Inject]
         private PlayerVirtualCamera m_PVCamera;
@@ -68,23 +64,18 @@ namespace BTG.Player
 
         private void Respawn(int _)
         {
-            bool tankFound = CreateAndSpawnPlayerTank(out TankBrain tank);
-            if (!tankFound)
+            bool entityFound = CreateAndSpawnPlayerEntity(out IEntityBrain entity);
+            if (!entityFound)
                 return;
 
-            ConfigureTankAndController(tank);
+            ConfigureTankAndController(entity);
 
-            ConfigureTankWithCamera(tank);
+            ConfigureTankWithCamera(entity);
         }
 
-        private bool CreateAndSpawnPlayerTank(out TankBrain tank)
+        private bool CreateAndSpawnPlayerEntity(out IEntityBrain entity)
         {
-            /*if (!m_TankFactory.TryGetTank(m_PlayerStats.TankIDSelected.Value, out tank))
-            {
-                return false;
-            }*/
-
-            tank = null;
+            entity = null;
 
             bool factoryFound = m_EntityFactory.TryGetFactory(m_PlayerStats.TankIDSelected.Value, out EntityFactorySO factory);
             if (!factoryFound)
@@ -93,21 +84,21 @@ namespace BTG.Player
                 return false;
             }
 
-            tank = factory.GetEntity() as TankBrain;
+            entity = factory.GetEntity();
 
             return true;
         }
 
-        private void ConfigureTankAndController(TankBrain tank)
+        private void ConfigureTankAndController(IEntityBrain entity)
         {
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
-            m_PlayerController.SetEntity(tank);
+            m_PlayerController.SetEntity(entity);
         }
 
-        private void ConfigureTankWithCamera(TankBrain tank)
+        private void ConfigureTankWithCamera(IEntityBrain entity)
         {
-            m_PVCamera.Initialize(tank.CameraTarget);
+            m_PVCamera.Initialize(entity.CameraTarget);
         }
     }
 }

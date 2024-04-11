@@ -11,6 +11,7 @@ namespace BTG.Entity
         public IEntityModel Model { get; }
 
         public Transform Transform { get; }
+        public Transform CameraTarget { get; }
 
         public IEntityUltimateController UltimateController { get; }
         public IEntityUltimateAbility UltimateAction { get; }

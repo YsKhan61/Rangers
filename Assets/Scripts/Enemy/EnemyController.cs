@@ -1,4 +1,4 @@
-using BTG.Tank;
+using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,7 +13,7 @@ namespace BTG.Enemy
 
         private EnemyPool m_Pool;
         private EnemyService m_Service;
-        private TankBrain m_TankBrain;
+        private IEntityBrain m_EntityBrain;
         private EnemyView m_View;
         private NavMeshAgent m_Agent;
         public NavMeshAgent Agent => m_Agent;
@@ -37,14 +37,14 @@ namespace BTG.Enemy
 
         ~EnemyController()
         {
-            m_TankBrain.OnAfterDeath -= OnTankDeath;
-
-            m_TankBrain = null;
+            m_EntityBrain.OnAfterDeath -= OnTankDeath;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
+            m_EntityBrain = null;
         }
 
         public void Init()
         {
-            m_Agent.speed = m_TankBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
+            m_Agent.speed = m_EntityBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
 
             m_StateManager.Init();
@@ -53,18 +53,19 @@ namespace BTG.Enemy
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
         public void SetTank(
-            TankBrain tank)
+            IEntityBrain entity)
         {
-            m_TankBrain = tank;
+            m_EntityBrain = entity;
 
-            m_TankBrain.Model.IsPlayer = false;
-            m_TankBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
-            m_TankBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
-            m_TankBrain.SetRigidbody(Rigidbody);
-            m_TankBrain.SubscribeToFullyChargedEvent(OnUltimateFullyCharged);
-            m_TankBrain.OnAfterDeath += OnTankDeath;
-            m_TankBrain.Init();
+            m_EntityBrain.Model.IsPlayer = false;
+            m_EntityBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
+            m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
+            m_EntityBrain.SetRigidbody(Rigidbody);
+            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
+            m_EntityBrain.OnAfterDeath += OnTankDeath;
+            m_EntityBrain.Init();
         }
+
 
         public void SetService(EnemyService service)
         {
@@ -74,18 +75,19 @@ namespace BTG.Enemy
 
         public void OnUltimateFullyCharged()
         {
-            m_TankBrain.TryExecuteUltimate();
+            m_EntityBrain.TryExecuteUltimate();
         }
 
 
         private void OnTankDeath()
         {
-            m_TankBrain.OnAfterDeath -= OnTankDeath;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
+            m_EntityBrain.OnAfterDeath -= OnTankDeath;
 
             m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
             m_StateManager.DeInit();
 
-            m_TankBrain = null;
+            m_EntityBrain = null;
             m_Pool.ReturnEnemy(this);
 
             m_Service.OnEnemyDeath();
