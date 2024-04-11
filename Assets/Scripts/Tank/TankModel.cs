@@ -44,7 +44,7 @@ namespace BTG.Tank
             m_Brain = brain;
         }
 
-        public void AddHealthData(int health)
+        public void AddHealth(int health)
         {
             m_CurrentHealth += health;
             Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);

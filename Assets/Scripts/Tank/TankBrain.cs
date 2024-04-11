@@ -46,8 +46,6 @@ namespace BTG.Tank
 
         public Rigidbody Rigidbody { get; private set; }
 
-        public Transform CameraTarget => m_View.CameraTarget;
-
         public Transform FirePoint => m_View.FirePoint;
 
         public IDamageable Damageable => m_View.Damageable;
@@ -56,6 +54,8 @@ namespace BTG.Tank
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
 
         private TankPool m_Pool;
+
+
 
         /// <summary>
         /// This constructor creates all the respective properties of the tank that are mandatory
@@ -72,10 +72,11 @@ namespace BTG.Tank
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
             m_View.SetBrain(this); 
 
-            m_FiringController = new TankChargedFiringController(m_Model, this, m_View);
-            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
+            m_FiringController = new TankChargedFiringController(m_Model, m_View);
+            m_UltimateController = new TankUltimateController(m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
         }
+
 
         public void Init()
         {
@@ -85,6 +86,8 @@ namespace BTG.Tank
             ToggleTankVisibility(true);
 
             m_UltimateController.EnableUltimate();
+            m_UltimateController.IsPlayer = m_Model.IsPlayer;
+
             m_HealthController.Reset();
 
             UnityCallbacks.Instance.Register(this as IUpdatable);

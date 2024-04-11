@@ -15,14 +15,12 @@ namespace BTG.Tank
 
         // dependencies
         TankModel m_Model;
-        IEntityBrain m_Brain;
         TankView m_View;
         ProjectilePool m_ProjectilePool;
 
-        public TankChargedFiringController(TankModel model, IEntityBrain brain, TankView view)
+        public TankChargedFiringController(TankModel model, TankView view)
         {
             m_Model = model;
-            m_Brain = brain;
             m_View = view;
             m_ProjectilePool = new ProjectilePool(m_Model.TankData.ProjectileData);
         }

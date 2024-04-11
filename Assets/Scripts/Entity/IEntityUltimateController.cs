@@ -6,6 +6,8 @@ namespace BTG.Entity
 {
     public interface IEntityUltimateController
     {
+        public bool IsPlayer { get; }
+
         public event Action<float, float> OnPlayerCamShake;
 
         public Transform EntityTransform { get; }

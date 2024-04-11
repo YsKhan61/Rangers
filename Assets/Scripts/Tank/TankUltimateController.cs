@@ -11,6 +11,8 @@ namespace BTG.Tank
     /// </summary>
     public class TankUltimateController : IEntityUltimateController
     {
+        public bool IsPlayer { get; set; }
+
         public event Action<float, float> OnPlayerCamShake;
 
         public Transform EntityTransform => m_Brain.Transform;
@@ -24,10 +26,8 @@ namespace BTG.Tank
         private TankBrain m_Brain;
 
         public TankUltimateController(
-            TankBrain brain, 
             UltimateActionFactorySO ultimateFactoryData)
         {
-            m_Brain = brain;
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
         }
 
@@ -47,7 +47,7 @@ namespace BTG.Tank
         public void ShakePlayerCamera(float amount, float duration)
         {
             // Implement camera shake
-            if (!m_Brain.IsPlayer) return;
+            if (!IsPlayer) return;
 
             OnPlayerCamShake?.Invoke(amount, duration);
         }

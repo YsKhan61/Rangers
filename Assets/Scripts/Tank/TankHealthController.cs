@@ -30,7 +30,7 @@ namespace BTG.Tank
 
         public void AddHealth(int health)
         {
-            m_Model.AddHealthData(health);
+            m_Model.AddHealth(health);
             OnHealthUpdated?.Invoke(m_Model.CurrentHealth, m_Model.MaxHealth);
         }
 
