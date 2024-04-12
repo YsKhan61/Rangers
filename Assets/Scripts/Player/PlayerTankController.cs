@@ -12,24 +12,21 @@ namespace BTG.Player
         private PlayerView m_View;
 
         private IEntityTankBrain m_Entity;
-        private Transform EntityTransform => (m_Entity as IEntityBrain).Transform;
 
-        // cache
         public Rigidbody Rigidbody => m_View.Rigidbody;
-        public Transform Transform => m_View.transform;
+        public Transform Transform => m_Transform;
 
         public Transform CameraTarget => m_Entity.CameraTarget;
 
         // cached values
-        private float m_AccelerationMagnitude;
-        private float m_RotateAngle;
-        private Quaternion m_DeltaRotation;
+        private Transform m_Transform;
 
         public PlayerTankController(PlayerService service, PlayerDataSO data)
         {
             m_PlayerService = service;
             m_Model = new PlayerModel(data);
             m_View = Object.Instantiate(data.Prefab);
+            m_Transform = m_View.transform;
         }
 
         ~PlayerTankController()
@@ -38,29 +35,40 @@ namespace BTG.Player
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
         }
 
-        public void SetEntity(IEntityBrain entity)
+        public void ConfigureWithEntity(IEntityBrain entity)
         {
-            m_Entity = entity as IEntityTankBrain;
-            m_Model.EntityModel = m_Entity.Model;
-            m_Model.IsEnabled = true;
+            void ConfigurePlayer()
+            {
+                m_Model.IsEnabled = true;
+                m_Entity = entity as IEntityTankBrain;
+                m_Model.EntityMaxSpeed = m_Entity.Model.MaxSpeed;
+                m_Model.EntityRotateSpeed = m_Entity.Model.RotateSpeed;
+                m_Model.EntityAcceleration = m_Entity.Model.Acceleration;
 
-            m_Entity.Model.IsPlayer = true;
-            m_Entity.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
-            m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
-            m_Entity.SetRigidbody(Rigidbody);
-            m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-            m_Entity.PrimaryAction.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
-            m_Entity.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
-            m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
-            m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_Entity.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_Entity.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_Entity.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
-            m_Entity.OnAfterDeath += OnTankDead;
-            m_Entity.Init();
-
-            Rigidbody.centerOfMass = m_Entity.Transform.position;
-            Rigidbody.maxLinearVelocity = m_Model.EntityMaxSpeed;
+                Rigidbody.centerOfMass = m_Entity.Transform.position;
+                Rigidbody.maxLinearVelocity = m_Entity.Model.MaxSpeed;
+            }
+            ConfigurePlayer();
+            
+            void ConfigureEntity()
+            {
+                m_Entity.Model.IsPlayer = true;
+                m_Entity.SetLayers(m_Model.PlayerData.SelfLayer, m_Model.PlayerData.OppositionLayer);
+                m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
+                m_Entity.SetRigidbody(Rigidbody);
+                m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+                m_Entity.PrimaryAction.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
+                m_Entity.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
+                m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
+                m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+                m_Entity.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+                m_Entity.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+                m_Entity.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+                m_Entity.OnAfterDeath += OnTankDead;
+                m_Entity.Init();
+            }
+            ConfigureEntity();
+            
 
             UnityCallbacks.Instance.Register(this as IFixedUpdatable);
             UnityCallbacks.Instance.Register(this as IUpdatable);
@@ -140,7 +148,6 @@ namespace BTG.Player
             m_Entity.OnAfterDeath -= OnTankDead;
 
             m_Model.IsEnabled = false;
-            m_Model.EntityModel = null;
             m_Entity = null;
 
             m_PlayerService.OnPlayerDeath();
@@ -153,24 +160,24 @@ namespace BTG.Player
 
         private void MoveWithForce()
         {
-            Rigidbody.AddForce(Transform.forward * m_AccelerationMagnitude, ForceMode.Acceleration);
+            Rigidbody.AddForce(Transform.forward * m_Model.Acceleration, ForceMode.Acceleration);
             Rigidbody.velocity = Vector3.ClampMagnitude(Rigidbody.velocity, m_Model.EntityMaxSpeed);
         }
 
         private void Rotate()
         {
-            m_RotateAngle = m_Model.EntityRotateSpeed * m_Model.RotateInputValue * Time.fixedDeltaTime *
+            m_Model.RotateAngle = m_Model.EntityRotateSpeed * m_Model.RotateInputValue * Time.fixedDeltaTime *
                 (m_Model.MoveInputValue > 0 ? 1 :
                     (m_Model.MoveInputValue < 0 ? -1 : 0)
                     );
 
-            m_DeltaRotation = Quaternion.Euler(0, m_RotateAngle, 0);
-            Rigidbody.MoveRotation(Rigidbody.rotation * m_DeltaRotation);
+            m_Model.DeltaRotation = Quaternion.Euler(0, m_Model.RotateAngle, 0);
+            Rigidbody.MoveRotation(Rigidbody.rotation * m_Model.DeltaRotation);
         }
 
         private void CalculateInputSpeed()
         {
-            m_AccelerationMagnitude = m_Model.EntityAcceleration * m_Model.MoveInputValue;
+            m_Model.Acceleration = m_Model.EntityAcceleration * m_Model.MoveInputValue;
         }
     }
 }

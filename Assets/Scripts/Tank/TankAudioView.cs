@@ -38,29 +38,6 @@ namespace BTG.Tank
 
         public void UpdateEngineDrivingClipPitch(float amount) => 
             m_EngineAudioSource.pitch = Mathf.Lerp(0.2f, 1.2f, amount);
-
-
-        public void PlayChargingClip(AudioClip clip)
-        {
-            m_ShootingAudioSource.clip = clip;
-            m_ShootingAudioSource.Play();
-        }
-
-        public void UpdateChargingClipPitch(float amount)
-        {
-            m_ShootingAudioSource.pitch = 0.5f + amount;
-        }
-
-        public void StopChargingClip()
-        {
-            m_ShootingAudioSource.Stop();
-        }
-
-        public void PlayShotFiringClip(AudioClip clip)
-        {
-            m_ShootingAudioSource.pitch = 1f;
-            m_ShootingAudioSource.PlayOneShot(clip);
-        }
     }
 }
 

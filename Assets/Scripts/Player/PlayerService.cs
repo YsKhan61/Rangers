@@ -91,7 +91,7 @@ namespace BTG.Player
         {
             m_PlayerController.Transform.position = Vector3.zero;
             m_PlayerController.Transform.rotation = Quaternion.identity;
-            m_PlayerController.SetEntity(entity);
+            m_PlayerController.ConfigureWithEntity(entity);
 
             m_PVCamera.Initialize(m_PlayerController.CameraTarget);
         }

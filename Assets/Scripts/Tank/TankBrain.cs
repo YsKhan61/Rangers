@@ -13,7 +13,7 @@ namespace BTG.Tank
     /// <summary>
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
     /// TankMovementController, TankFiringController and TankUltimateController.
-    /// It is like a Facade for the tank.
+    /// It is like a Facade/Mediator for the tank.
     /// </summary>
     public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
