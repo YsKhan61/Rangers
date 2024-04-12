@@ -27,12 +27,12 @@ namespace BTG.Actions.UltimateAction
         public override void Enable()
         {
             base.Enable();
-            UnityCallbacks.Instance.Register(this);
+            UnityCallbacks.Instance.Register(this as IFixedUpdatable);
         }
 
         public override void Disable()
         {
-            UnityCallbacks.Instance.Unregister(this);
+            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
 
             if (m_View != null) 
             {

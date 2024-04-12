@@ -48,7 +48,7 @@ namespace BTG.Player
             m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_Entity.SetRigidbody(Rigidbody);
             m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-            m_Entity.FiringController.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.PrimaryAction.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
             m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
@@ -86,7 +86,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_Entity?.StartFire();
+            m_Entity?.StartPrimaryFire();
         }
 
         public void StopFire()
@@ -94,7 +94,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_Entity?.StopFire();
+            m_Entity?.StopPrimaryFire();
         }
 
         public void TryExecuteUltimate()
@@ -130,7 +130,7 @@ namespace BTG.Player
 
             m_Entity.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;
-            m_Entity.FiringController.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.PrimaryAction.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_Entity.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;

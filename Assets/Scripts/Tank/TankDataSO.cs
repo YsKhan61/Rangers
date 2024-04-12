@@ -1,5 +1,5 @@
+using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
-using BTG.Tank.Projectile;
 using UnityEngine;
 
 
@@ -36,14 +36,6 @@ namespace BTG.Tank
         private int m_RotateSpeed;
         public int RotateSpeed => m_RotateSpeed;
 
-        [SerializeField] 
-        private ProjectileDataSO m_projectileData;
-        public ProjectileDataSO ProjectileData => m_projectileData;
-
-        [SerializeField] 
-        private int m_ChargeTime;
-        public int ChargeTime => m_ChargeTime;
-
         [SerializeField]
         private AudioClip m_EngineIdleClip;
         public AudioClip EngineIdleClip => m_EngineIdleClip;
@@ -59,6 +51,10 @@ namespace BTG.Tank
         [SerializeField]
         private AudioClip m_ShotChargingClip;
         public AudioClip ShotChargingClip => m_ShotChargingClip;
+
+        [SerializeField]
+        private PrimaryActionFactorySO m_PrimaryActionFactory;
+        public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;
 
         [SerializeField]
         private UltimateActionFactorySO m_UltimateActionFactory;

@@ -1,3 +1,4 @@
+using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Utilities;
@@ -32,8 +33,8 @@ namespace BTG.Tank
         IEntityTankModel IEntityTankBrain.Model => m_Model;
 
         private TankView m_View;
-        private TankChargedFiringController m_FiringController;
-        public IEntityFiringController FiringController => m_FiringController;
+        private IPrimaryAction m_PrimaryAction;
+        public IPrimaryAction PrimaryAction => m_PrimaryAction;
         
         private IUltimateAction m_UltimateAction;
         public IUltimateAction UltimateAction => m_UltimateAction;
@@ -48,7 +49,8 @@ namespace BTG.Tank
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
-
+        public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
+        
         private TankPool m_Pool;
 
 
@@ -68,7 +70,7 @@ namespace BTG.Tank
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
             m_View.SetBrain(this); 
 
-            m_FiringController = new TankChargedFiringController(m_Model, m_View);
+            m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
             m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
             m_HealthController = new TankHealthController(m_Model, this);
         }
@@ -81,6 +83,7 @@ namespace BTG.Tank
             OnTankStateChangedToIdle();
             ToggleActorVisibility(true);
 
+            m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
             m_HealthController.Reset();
 
@@ -101,16 +104,12 @@ namespace BTG.Tank
         public void Update()
         {
             UpdateState();
-            m_FiringController?.Update();
             UpdateMoveSound();
         }
 
         public void OnDestroy()
         {
             OnEntityInitialized = null;
-
-            m_FiringController?.OnDestroy();  
-            m_UltimateAction?.OnDestroy();
         }
 
         public void Die()
@@ -129,9 +128,9 @@ namespace BTG.Tank
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
 
-        public void StartFire() => m_FiringController.OnFireStarted();
+        public void StartPrimaryFire() => m_PrimaryAction.StartAction();
 
-        public void StopFire() => m_FiringController.OnFireStopped();
+        public void StopPrimaryFire() => m_PrimaryAction.StopAction();
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
@@ -187,6 +186,7 @@ namespace BTG.Tank
             ToggleActorVisibility(false);
 
             m_Model.Reset();
+            m_PrimaryAction.Disable();
             m_UltimateAction.Disable();
 
             m_View.AudioView.StopEngineAudio();

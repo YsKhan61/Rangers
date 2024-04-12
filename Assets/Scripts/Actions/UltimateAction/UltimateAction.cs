@@ -35,6 +35,8 @@ namespace BTG.Actions.UltimateAction
             Charge(-FULL_CHARGE);
 
             _ = RaiseActionAssignedEventAndStartAutoChargeAsync();
+
+            UnityCallbacks.Instance.Register(this);
         }
 
         public virtual void Disable()
@@ -45,6 +47,8 @@ namespace BTG.Actions.UltimateAction
             OnChargeUpdated = null;
 
             ChangeState(State.Disabled);
+
+            UnityCallbacks.Instance.Unregister(this);
         }
 
         public void ChangeState(State newState)

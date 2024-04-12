@@ -32,11 +32,6 @@ namespace BTG.Tank
             m_UltimateAction = ultimateFactoryData.CreateUltimateAction(this);
         }
 
-        public void OnDestroy()
-        {
-            m_UltimateAction.OnDestroy();
-        }
-
         public void EnableUltimate() => m_UltimateAction.Enable();
 
         public void DisableUltimate() => m_UltimateAction.Disable();

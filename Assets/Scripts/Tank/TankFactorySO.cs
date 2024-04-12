@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Tank
 {
-    [CreateAssetMenu(fileName = "TankFactory", menuName = "ScriptableObjects/EntityFactory/TankFactorySO")]
+    [CreateAssetMenu(fileName = "TankFactory", menuName = "ScriptableObjects/Factory/EntityFactory/TankFactorySO")]
     public class TankFactorySO : EntityFactorySO
     {
         [SerializeField]

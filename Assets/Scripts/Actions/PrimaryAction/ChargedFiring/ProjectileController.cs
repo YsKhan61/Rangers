@@ -1,32 +1,32 @@
 using BTG.Utilities;
 using System.Threading;
-using System.Threading.Tasks;
 using UnityEngine;
 
 
-namespace BTG.Tank.Projectile
+namespace BTG.Actions.PrimaryAction
 {
-    public class ProjectileController
+    public class ProjectileController : IDestroyable
     {
-        private ProjectileDataSO m_Data;
+        private ChargedFiringDataSO m_Data;
         private ProjectileView m_View;
         private ProjectilePool m_Pool;
         private CancellationTokenSource m_Cts;
 
         public Transform Transform => m_View.transform;
 
-        public ProjectileController(ProjectileDataSO projectileData, ProjectilePool pool)
+        public ProjectileController(ChargedFiringDataSO projectileData, ProjectilePool pool)
         {
             m_Cts = new CancellationTokenSource();
             m_Data = projectileData;
             m_Pool = pool;
-            m_View = Object.Instantiate(projectileData.ProjectileViewPrefab, m_Pool.ProjectileContainer);
+            m_View = Object.Instantiate(projectileData.ViewPrefab, m_Pool.ProjectileContainer);
             m_View.SetController(this);
         }
 
         public void Init()
         {
             m_View.gameObject.SetActive(true);
+            UnityCallbacks.Instance.Register(this);
         }
 
         public void OnDestroy()
@@ -43,33 +43,27 @@ namespace BTG.Tank.Projectile
         public void OnHitDamageable(IDamageable damageable)
         {
             damageable.TakeDamage(m_Data.Damage);
-            _ = ExplodeAsync();
+            Explode();
         }
 
         public void ResetProjectile()
         {
-             m_View.Rigidbody.velocity = Vector3.zero;
+            m_View.Rigidbody.velocity = Vector3.zero;
             m_View.Rigidbody.angularVelocity = Vector3.zero;
             m_View.transform.position = Vector3.zero;
             m_View.transform.rotation = Quaternion.identity;
             m_View.gameObject.SetActive(false);
             m_Pool.ReturnProjectile(this);
+
+            UnityCallbacks.Instance.Unregister(this);
         }
 
-        private async Task ExplodeAsync()
+        private void Explode()
         {
             m_View.PlayExplosionParticle();
             m_View.PlayExplosionSound(m_Data.ExplosionSound);
 
-            try
-            {
-                await Task.Delay((int)(m_View.ExplosionDuration * 1000), m_Cts.Token);
-                ResetProjectile();
-            }
-            catch (TaskCanceledException)
-            {
-
-            }
+            _ = HelperMethods.InvokeAfterAsync(((int)m_View.ExplosionDuration), () => ResetProjectile(), m_Cts.Token);
         }
     }
 }

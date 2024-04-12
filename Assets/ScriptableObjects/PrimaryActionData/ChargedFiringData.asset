@@ -10,12 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
-  m_Name: GreenTankProjectileData
+  m_Name: ChargedFiringData
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 11400000, guid: b9b6749c45132b8448b6b892992dd585, type: 2}
-  m_ProjectileViewPrefab: {fileID: 3501371146870513945, guid: bc01b63fb333be84ea7a2b43d3e28a0f,
+  m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
+  m_ViewPrefab: {fileID: 2128233426004463209, guid: 736c872dc6fd53c4cb7ca160774fb574,
     type: 3}
+  m_ChargeTime: 4
   m_MinInitialSpeed: 10
-  m_MaxInitialSpeed: 40
-  m_Damage: 110
+  m_MaxInitialSpeed: 60
+  m_Damage: 100
   m_ExplosionSound: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}

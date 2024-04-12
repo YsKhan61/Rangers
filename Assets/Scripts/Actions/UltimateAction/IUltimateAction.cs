@@ -1,8 +1,10 @@
 
+using BTG.Utilities;
+
 namespace BTG.Actions.UltimateAction
 {
 
-    public interface IUltimateAction
+    public interface IUltimateAction : IDestroyable
     {
         public enum State
         {
@@ -32,7 +34,5 @@ namespace BTG.Actions.UltimateAction
         public void Charge(float amount);
 
         public bool TryExecute();
-
-        public void OnDestroy();
     }
 }

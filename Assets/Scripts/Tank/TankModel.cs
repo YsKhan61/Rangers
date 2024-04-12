@@ -16,9 +16,6 @@ namespace BTG.Tank
         public TankBrain.TankState State;
 
         public float CurrentMoveSpeed => m_Brain.Rigidbody.velocity.magnitude;
-        public bool IsCharging;
-
-        public float ChargeAmount;
 
         private int m_CurrentHealth;
         public int CurrentHealth => m_CurrentHealth;
@@ -53,8 +50,6 @@ namespace BTG.Tank
         public void Reset()
         {
             IsPlayer = false;
-            IsCharging = false;
-            ChargeAmount = 0;
             m_CurrentHealth = 0;
             OppositionLayer = 0;
         }

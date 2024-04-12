@@ -2,7 +2,7 @@ using BTG.Utilities;
 using UnityEngine;
 
 
-namespace BTG.Tank.Projectile
+namespace BTG.Actions.PrimaryAction
 {
     public class ProjectileView : MonoBehaviour
     {
@@ -40,17 +40,10 @@ namespace BTG.Tank.Projectile
             m_Collider.enabled = false;
         }
 
-        private void OnDestroy()
-        {
-            m_Controller.OnDestroy();
-        }
-
         public void SetController(ProjectileController controller)
         {
             m_Controller = controller;
         }
-
-        
 
         public void PlayExplosionSound(AudioClip clip)
         {

@@ -5,7 +5,7 @@ namespace BTG.Actions.UltimateAction
 {
     public abstract class UltimateActionFactorySO : ScriptableObject
     {
-        public abstract IUltimateAction CreateUltimateAction(IUltimateActor controller);
+        public abstract IUltimateAction CreateUltimateAction(IUltimateActor actor);
     }
 
 }
