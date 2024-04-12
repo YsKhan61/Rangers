@@ -49,7 +49,7 @@ namespace BTG.Player
             m_Entity.SetRigidbody(Rigidbody);
             m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
             m_Entity.FiringController.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
-            m_Entity.UltimateController.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.UltimateActor.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
             m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_Entity.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
@@ -131,7 +131,7 @@ namespace BTG.Player
             m_Entity.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;
             m_Entity.FiringController.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
-            m_Entity.UltimateController.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
+            m_Entity.UltimateActor.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_Entity.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_Entity.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;

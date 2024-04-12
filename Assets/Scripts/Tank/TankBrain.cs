@@ -1,3 +1,4 @@
+using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Utilities;
 using System;
@@ -35,9 +36,9 @@ namespace BTG.Tank
         private TankChargedFiringController m_FiringController;
         public IEntityFiringController FiringController => m_FiringController;
         
-        private TankUltimateController m_UltimateController;
-        public IEntityUltimateController UltimateController => m_UltimateController;
-        public IEntityUltimateAbility UltimateAction => m_UltimateController.UltimateAction;
+        private TankUltimateActor m_UltimateActor;
+        public IUltimateActor UltimateActor => m_UltimateActor;
+        public IUltimateAction UltimateAction => m_UltimateActor.UltimateAction;
         
         private TankHealthController m_HealthController;
         public IEntityHealthController HealthController => m_HealthController;
@@ -74,7 +75,7 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
-            m_UltimateController = new TankUltimateController(this, m_Model.TankData.UltimateActionFactory);
+            m_UltimateActor = new TankUltimateActor(this, m_Model.TankData.UltimateActionFactory);
             m_HealthController = new TankHealthController(m_Model, this);
         }
 
@@ -86,8 +87,8 @@ namespace BTG.Tank
 
             ToggleTankVisibility(true);
 
-            m_UltimateController.EnableUltimate();
-            m_UltimateController.IsPlayer = m_Model.IsPlayer;
+            m_UltimateActor.EnableUltimate();
+            m_UltimateActor.IsPlayer = m_Model.IsPlayer;
 
             m_HealthController.Reset();
 
@@ -117,7 +118,7 @@ namespace BTG.Tank
             OnEntityInitialized = null;
 
             m_FiringController?.OnDestroy();  
-            m_UltimateController?.OnDestroy();
+            m_UltimateActor?.OnDestroy();
         }
 
         public void Die()
@@ -176,7 +177,7 @@ namespace BTG.Tank
             ToggleTankVisibility(false);
 
             m_Model.Reset();
-            m_UltimateController.DisableUltimate();
+            m_UltimateActor.DisableUltimate();
 
             m_View.AudioView.StopEngineAudio();
 
@@ -211,12 +212,12 @@ namespace BTG.Tank
 
         public void StopFire() => m_FiringController.OnFireStopped();
 
-        public void TryExecuteUltimate() => m_UltimateController.TryExecuteUltimate();
+        public void TryExecuteUltimate() => m_UltimateActor.TryExecuteUltimate();
 
         public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
 
         public void SubscribeToFullyChargedEvent(Action onFullyCharged) =>
-            m_UltimateController.SubscribeToFullyChargedEvent(onFullyCharged);
+            m_UltimateActor.SubscribeToFullyChargedEvent(onFullyCharged);
 
         #endregion
     }

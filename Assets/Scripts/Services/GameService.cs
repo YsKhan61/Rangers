@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BTG.Services
 {
-    public class GameService : MonoBehaviour, IDependencyProvider
+    public class GameService : MonoBehaviour
     {
         PlayerService m_PlayerService;
         EnemyService m_EnemyService;

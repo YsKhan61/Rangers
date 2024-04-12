@@ -1,5 +1,7 @@
+using BTG.Actions.UltimateAction;
 using System;
 using UnityEngine;
+
 
 namespace BTG.Entity
 {
@@ -13,8 +15,8 @@ namespace BTG.Entity
         public Transform Transform { get; }
         public Transform CameraTarget { get; }
 
-        public IEntityUltimateController UltimateController { get; }
-        public IEntityUltimateAbility UltimateAction { get; }
+        public IUltimateActor UltimateActor { get; }
+        public IUltimateAction UltimateAction { get; }
         public IEntityFiringController FiringController { get; }
         public IEntityHealthController HealthController { get; }
 
