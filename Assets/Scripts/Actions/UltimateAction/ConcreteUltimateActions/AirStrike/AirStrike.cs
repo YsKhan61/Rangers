@@ -59,7 +59,7 @@ namespace BTG.Actions.UltimateAction
 
             ChangeState(State.Executing);
 
-            SpawnView(Actor.EntityTransform);
+            SpawnView(Actor.Transform);
             m_View.SetController(this);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
@@ -121,10 +121,10 @@ namespace BTG.Actions.UltimateAction
         private bool CheckNearbyDamageables()
         {
             int count = Physics.OverlapSphereNonAlloc(
-                Actor.EntityTransform.position,
+                Actor.Transform.position,
                 m_AirStrikeData.ImpactRadius,
                 m_OverlappingColliders,
-                Actor.LayerMask,
+                Actor.OppositionLayerMask,
                 QueryTriggerInteraction.Ignore);
 
             return count > 0;

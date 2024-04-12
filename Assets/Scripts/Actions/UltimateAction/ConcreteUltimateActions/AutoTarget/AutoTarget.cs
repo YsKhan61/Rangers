@@ -69,10 +69,10 @@ namespace BTG.Actions.UltimateAction
         {
             results = new Collider[10];
             int count = Physics.OverlapSphereNonAlloc(
-                (Actor.EntityTransform.position + Actor.EntityTransform.forward * m_AutoTargetData.CenterOffset),
+                (Actor.Transform.position + Actor.Transform.forward * m_AutoTargetData.CenterOffset),
                 m_AutoTargetData.ImpactRadius,
                 results,
-                Actor.LayerMask,
+                Actor.OppositionLayerMask,
                 QueryTriggerInteraction.Ignore);
 
             if (count <= 0)

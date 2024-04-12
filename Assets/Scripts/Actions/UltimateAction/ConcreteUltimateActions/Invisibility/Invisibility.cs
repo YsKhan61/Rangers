@@ -28,10 +28,10 @@ namespace BTG.Actions.UltimateAction
 
             ChangeState(State.Executing);
 
-            SpawnView(Actor.EntityTransform);
+            SpawnView(Actor.Transform);
             m_View.PlayDisappearPS();
             m_View.PlayDisappearAudio();
-            Actor.ToggleTankVisibility(false);
+            Actor.ToggleActorVisibility(false);
             RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
@@ -70,7 +70,7 @@ namespace BTG.Actions.UltimateAction
                 await Task.Delay((int)(m_View.AppearPSDuration * 1000), token);
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
-                Actor.ToggleTankVisibility(true);
+                Actor.ToggleActorVisibility(true);
                 Actor.ShakePlayerCamera(1f, 1f);
 
                 RaiseUltimateActionExecutedEvent();

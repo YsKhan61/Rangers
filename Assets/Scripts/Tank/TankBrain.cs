@@ -16,6 +16,7 @@ namespace BTG.Tank
     /// </summary>
     public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
+        public event Action<float, float> OnPlayerCamShake;
         public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
 
@@ -26,30 +27,23 @@ namespace BTG.Tank
             Dead
         }
 
-        // dependencies
+
         private TankModel m_Model;
         IEntityTankModel IEntityTankBrain.Model => m_Model;
 
-        public TankModel Model => m_Model;
         private TankView m_View;
-
         private TankChargedFiringController m_FiringController;
         public IEntityFiringController FiringController => m_FiringController;
         
-        private TankUltimateActor m_UltimateActor;
-        public IUltimateActor UltimateActor => m_UltimateActor;
-        public IUltimateAction UltimateAction => m_UltimateActor.UltimateAction;
+        private IUltimateAction m_UltimateAction;
+        public IUltimateAction UltimateAction => m_UltimateAction;
         
         private TankHealthController m_HealthController;
         public IEntityHealthController HealthController => m_HealthController;
-
         public Transform Transform => m_View.transform;
         public Transform CameraTarget => m_View.CameraTarget;
-
         public Rigidbody Rigidbody { get; private set; }
-
         public Transform FirePoint => m_View.FirePoint;
-
         public IDamageable Damageable => m_View.Damageable;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
 
@@ -75,7 +69,7 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_FiringController = new TankChargedFiringController(m_Model, m_View);
-            m_UltimateActor = new TankUltimateActor(this, m_Model.TankData.UltimateActionFactory);
+            m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
             m_HealthController = new TankHealthController(m_Model, this);
         }
 
@@ -83,13 +77,11 @@ namespace BTG.Tank
         public void Init()
         {
             m_Model.State = TankState.Idle;
+
             OnTankStateChangedToIdle();
+            ToggleActorVisibility(true);
 
-            ToggleTankVisibility(true);
-
-            m_UltimateActor.EnableUltimate();
-            m_UltimateActor.IsPlayer = m_Model.IsPlayer;
-
+            m_UltimateAction.Enable();
             m_HealthController.Reset();
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
@@ -118,7 +110,7 @@ namespace BTG.Tank
             OnEntityInitialized = null;
 
             m_FiringController?.OnDestroy();  
-            m_UltimateActor?.OnDestroy();
+            m_UltimateAction?.OnDestroy();
         }
 
         public void Die()
@@ -132,7 +124,25 @@ namespace BTG.Tank
         /// True - Make tank visible, False - Make tank invisible
         /// </summary>
         /// <param name="value"></param>
-        public void ToggleTankVisibility(bool value) => m_View.ToggleVisible(value);
+        public void ToggleActorVisibility(bool value) => m_View.ToggleVisible(value);
+
+        public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
+            => m_View.transform.SetParent(parent, localPos, localRot);
+
+        public void StartFire() => m_FiringController.OnFireStarted();
+
+        public void StopFire() => m_FiringController.OnFireStopped();
+
+        public void TryExecuteUltimate() => UltimateAction.TryExecute();
+
+        public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
+
+        public void ShakePlayerCamera(float amount, float duration)
+        {
+            if (!IsPlayer) return;
+
+            OnPlayerCamShake?.Invoke(amount, duration);
+        }
 
         private void UpdateState()
         {
@@ -174,10 +184,10 @@ namespace BTG.Tank
 
         private void OnTankStateChangedToDead()
         {
-            ToggleTankVisibility(false);
+            ToggleActorVisibility(false);
 
             m_Model.Reset();
-            m_UltimateActor.DisableUltimate();
+            m_UltimateAction.Disable();
 
             m_View.AudioView.StopEngineAudio();
 
@@ -202,24 +212,6 @@ namespace BTG.Tank
             await Task.Yield();
             OnEntityInitialized?.Invoke(m_Model.Icon);
         }
-
-        #region Helper Methods for accessing other class methods
-
-        public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot) 
-            => m_View.transform.SetParent(parent, localPos, localRot);
-
-        public void StartFire() => m_FiringController.OnFireStarted();
-
-        public void StopFire() => m_FiringController.OnFireStopped();
-
-        public void TryExecuteUltimate() => m_UltimateActor.TryExecuteUltimate();
-
-        public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
-
-        public void SubscribeToFullyChargedEvent(Action onFullyCharged) =>
-            m_UltimateActor.SubscribeToFullyChargedEvent(onFullyCharged);
-
-        #endregion
     }
 }
 

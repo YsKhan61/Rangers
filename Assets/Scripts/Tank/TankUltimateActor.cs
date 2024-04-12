@@ -15,10 +15,10 @@ namespace BTG.Tank
 
         public event Action<float, float> OnPlayerCamShake;
 
-        public Transform EntityTransform => m_Brain.Transform;
+        public Transform Transform => m_Brain.Transform;
         public Transform FirePoint => m_Brain.FirePoint;
         public IDamageable Damageable => m_Brain.Damageable;
-        public LayerMask LayerMask => m_Brain.OppositionLayerMask;
+        public LayerMask OppositionLayerMask => m_Brain.OppositionLayerMask;
 
         private IUltimateAction m_UltimateAction;
         public IUltimateAction UltimateAction => m_UltimateAction;
@@ -43,7 +43,7 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate() => m_UltimateAction?.TryExecute();
 
-        public void ToggleTankVisibility(bool isVisible) => m_Brain.ToggleTankVisibility(isVisible);
+        public void ToggleActorVisibility(bool isVisible) => m_Brain.ToggleActorVisibility(isVisible);
 
         public void ShakePlayerCamera(float amount, float duration)
         {

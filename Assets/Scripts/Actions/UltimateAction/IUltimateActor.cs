@@ -1,6 +1,6 @@
 using BTG.Utilities;
-using System;
 using UnityEngine;
+
 
 namespace BTG.Actions.UltimateAction
 {
@@ -8,17 +8,16 @@ namespace BTG.Actions.UltimateAction
     {
         public bool IsPlayer { get; }
 
-        public event Action<float, float> OnPlayerCamShake;
+        public Transform Transform { get; }
 
-        public Transform EntityTransform { get; }
-
-        public LayerMask LayerMask { get; }
+        public LayerMask OppositionLayerMask { get; }
 
         public IDamageable Damageable { get; }
 
         public Transform FirePoint { get; }
+        public void TryExecuteUltimate();
 
-        public void ToggleTankVisibility(bool value);
+        public void ToggleActorVisibility(bool value);
         public void ShakePlayerCamera(float amount, float duration);
     }
 }

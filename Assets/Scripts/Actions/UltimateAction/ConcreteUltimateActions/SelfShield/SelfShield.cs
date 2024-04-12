@@ -25,7 +25,7 @@ namespace BTG.Actions.UltimateAction
                 return false;
             }
 
-            SpawnView(Actor.EntityTransform);
+            SpawnView(Actor.Transform);
             m_View.SetParticleSystem(m_SelfShieldData.Duration);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
