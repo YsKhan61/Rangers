@@ -33,6 +33,14 @@ namespace BTG.Actions.PrimaryAction
         public int Damage => m_Damage;
 
         [SerializeField]
+        AudioClip m_ChargeClip;
+        public AudioClip ChargeClip => m_ChargeClip;
+
+        [SerializeField]
+        AudioClip m_ShotFiredClip;
+        public AudioClip ShotFiredClip => m_ShotFiredClip;
+
+        [SerializeField]
         AudioClip m_ExplosionSound;
         public AudioClip ExplosionSound => m_ExplosionSound;
     }

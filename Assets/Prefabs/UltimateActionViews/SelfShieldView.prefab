@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5937447450004711413}
   - component: {fileID: 7972154870045992005}
   - component: {fileID: 5881146003861858600}
+  - component: {fileID: 7581684313867817413}
   m_Layer: 0
   m_Name: SelfShieldView
   m_TagString: Untagged
@@ -148,6 +149,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!135 &7581684313867817413
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338617837383539503}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.8
+  m_Center: {x: 0, y: 1.22, z: 0}
 --- !u!1001 &7709213031425728258
 PrefabInstance:
   m_ObjectHideFlags: 0

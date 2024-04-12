@@ -12,6 +12,7 @@ namespace BTG.Player
         private PlayerView m_View;
 
         private IEntityTankBrain m_Entity;
+        private Transform EntityTransform => (m_Entity as IEntityBrain).Transform;
 
         // cache
         public Rigidbody Rigidbody => m_View.Rigidbody;

@@ -1,10 +1,11 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
 namespace BTG.Entity
 {
-    public interface IEntityBrain
-    { 
+    public interface IEntityBrain : ITransform
+    {
     }
 
 }

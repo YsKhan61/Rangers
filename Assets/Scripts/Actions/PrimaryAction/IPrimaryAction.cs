@@ -2,7 +2,7 @@ using BTG.Utilities;
 
 namespace BTG.Actions.PrimaryAction
 {
-    public interface IPrimaryAction : IUpdatable, IDestroyable
+    public interface IPrimaryAction
     {
         public event System.Action<float, float> OnPlayerCamShake;
 

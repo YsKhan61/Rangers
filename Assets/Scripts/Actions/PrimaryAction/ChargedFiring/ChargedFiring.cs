@@ -8,8 +8,10 @@ namespace BTG.Actions.PrimaryAction
     /// <summary>
     /// Firing happens by charging the projectile and releasing it.
     /// </summary>
-    public class ChargedFiring : IPrimaryAction
+    public class ChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
     {
+        private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
+
         private ChargedFiringDataSO m_Data;
 
         public event Action<float, float> OnPlayerCamShake;
@@ -20,6 +22,8 @@ namespace BTG.Actions.PrimaryAction
         private bool m_IsEnabled;
         private bool m_IsCharging;
         private float m_ChargeAmount;
+
+        private readonly AudioSource m_FiringAudioSource;
         
 
         public ChargedFiring(ChargedFiringDataSO data, IPrimaryActor actor, ProjectilePool pool)
@@ -27,12 +31,15 @@ namespace BTG.Actions.PrimaryAction
             m_Data = data;
             m_Actor = actor;
             m_Pool = pool;
+            m_FiringAudioSource = new GameObject(FIRING_AUDIO_SOURCE_NAME).AddComponent<AudioSource>();
+            ConfigureAudioSource();
         }
 
         public void Enable()
         {
             UnityCallbacks.Instance.Register(this as IUpdatable);
             UnityCallbacks.Instance.Register(this as IDestroyable);
+            ToggleMuteFiringAudio(false);
 
             // Add all the event listeners of OnTankShoot
             m_IsEnabled = true;
@@ -46,6 +53,7 @@ namespace BTG.Actions.PrimaryAction
         public void Disable()
         {
             ResetChargedAmount();
+            ToggleMuteFiringAudio(true);
             m_IsEnabled = false;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
@@ -55,6 +63,7 @@ namespace BTG.Actions.PrimaryAction
         public void OnDestroy()
         {
             // Remove all the event listeners of OnTankShoot
+            OnPlayerCamShake = null;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
             UnityCallbacks.Instance.Unregister(this as IDestroyable);
@@ -66,7 +75,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            // m_View.AudioView.PlayChargingClip(m_Model.TankData.ShotChargingClip);
+            PlayChargingClip();
         }
 
         public void StopAction()
@@ -85,7 +94,7 @@ namespace BTG.Actions.PrimaryAction
             if (m_Actor.IsPlayer)
                 OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
 
-            // m_View.AudioView.PlayShotFiringClip(m_Model.TankData.ShotFiringClip);
+            PlayShotFiredClip();
             ResetChargedAmount();
         }
 
@@ -97,14 +106,14 @@ namespace BTG.Actions.PrimaryAction
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
             // m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
-            // m_View.AudioView.UpdateChargingClipPitch(m_Model.ChargeAmount);
+            UpdateChargingClipPitch(m_ChargeAmount);
         }
 
         private void ResetChargedAmount()
         {
             m_ChargeAmount = 0f;
             // m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
-            // m_View.AudioView.StopChargingClip();
+            StopChargingClip();
         }
 
         private void SpawnProjectile(out ProjectileController projectile)
@@ -121,6 +130,29 @@ namespace BTG.Actions.PrimaryAction
                 m_Data.MinInitialSpeed,
                 m_Data.MaxInitialSpeed,
                 m_ChargeAmount) + m_Actor.CurrentMoveSpeed;
+        }
+
+        private void ConfigureAudioSource()
+        {
+            m_FiringAudioSource.transform.SetParent(m_Actor.Transform);
+            m_FiringAudioSource.spatialBlend = 1f;
+            m_FiringAudioSource.playOnAwake = false;
+            m_FiringAudioSource.loop = false;
+        }
+
+        private void ToggleMuteFiringAudio(bool mute) => m_FiringAudioSource.mute = mute;
+        private void PlayChargingClip()
+        {
+            m_FiringAudioSource.clip = m_Data.ChargeClip;
+            m_FiringAudioSource.Play();
+        }
+
+        private void UpdateChargingClipPitch(float amount) => m_FiringAudioSource.pitch = 0.5f + amount;
+        private void StopChargingClip() => m_FiringAudioSource.Stop();
+        private void PlayShotFiredClip()
+        {
+            m_FiringAudioSource.pitch = 1f;
+            m_FiringAudioSource.PlayOneShot(m_Data.ShotFiredClip);
         }
     }
 

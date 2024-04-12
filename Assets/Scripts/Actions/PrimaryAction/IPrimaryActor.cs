@@ -1,9 +1,10 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
 namespace BTG.Actions.PrimaryAction
 {
-    public interface IPrimaryActor
+    public interface IPrimaryActor :ITransform
     {
         public bool IsPlayer { get; }
         public Transform FirePoint { get; }
