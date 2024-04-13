@@ -12,7 +12,7 @@ namespace BTG.Entity
     }
 
 
-    [CreateAssetMenu(fileName = "EntityFactoryContainer", menuName = "ScriptableObjects/EntityFactory/EntityFactoryContainerSO")]
+    [CreateAssetMenu(fileName = "EntityFactoryContainer", menuName = "ScriptableObjects/EntityFactoryContainerSO")]
     public class EntityFactoryContainerSO : ScriptableObject
     {
         public EntityFactoryData[] EntityFactories;

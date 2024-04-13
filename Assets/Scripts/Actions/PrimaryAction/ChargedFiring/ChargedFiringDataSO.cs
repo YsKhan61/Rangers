@@ -1,3 +1,4 @@
+using BTG.Effects;
 using BTG.Utilities;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -41,8 +42,8 @@ namespace BTG.Actions.PrimaryAction
         public AudioClip ShotFiredClip => m_ShotFiredClip;
 
         [SerializeField]
-        AudioClip m_ExplosionSound;
-        public AudioClip ExplosionSound => m_ExplosionSound;
+        ExplosionFactorySO m_ExplosionFactory;
+        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;
     }
 }
 

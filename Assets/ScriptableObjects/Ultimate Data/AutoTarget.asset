@@ -13,9 +13,6 @@ MonoBehaviour:
   m_Name: AutoTarget
   m_EditorClassIdentifier: 
   m_ChargeRate: 10
-  m_TargetLayer:
-    serializedVersion: 2
-    m_Bits: 64
   m_CenterOffset: 12
   m_ImpactRadius: 15
   m_FireRate: 2
@@ -23,3 +20,4 @@ MonoBehaviour:
     type: 3}
   m_ProjectileSpeed: 7
   m_Damage: 50
+  m_ExplosionFactory: {fileID: 11400000, guid: 5ce55542ba5b37846af9316784d46224, type: 2}

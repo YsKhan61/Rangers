@@ -40,13 +40,17 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.AddForce(m_View.transform.forward * initialSpeed, ForceMode.Impulse);
         }
 
-        public void OnHitDamageable(IDamageable damageable)
+        public void OnHitObject(Collider other)
         {
-            damageable.TakeDamage(m_Data.Damage);
-            Explode();
+            if (other.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(m_Data.Damage);
+            }
+
+            m_Data.ExplosionFactory.CreateExplosion(Transform.position);
         }
 
-        public void ResetProjectile()
+        private void ResetProjectile()
         {
             m_View.Rigidbody.velocity = Vector3.zero;
             m_View.Rigidbody.angularVelocity = Vector3.zero;
@@ -56,14 +60,6 @@ namespace BTG.Actions.PrimaryAction
             m_Pool.ReturnProjectile(this);
 
             UnityCallbacks.Instance.UnregisterFromDestroy(this);
-        }
-
-        private void Explode()
-        {
-            m_View.PlayExplosionParticle();
-            m_View.PlayExplosionSound(m_Data.ExplosionSound);
-
-            _ = HelperMethods.InvokeAfterAsync(((int)m_View.ExplosionDuration), () => ResetProjectile(), m_Cts.Token);
         }
     }
 }

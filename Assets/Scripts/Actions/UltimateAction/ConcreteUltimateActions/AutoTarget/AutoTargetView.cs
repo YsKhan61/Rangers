@@ -14,11 +14,11 @@ namespace BTG.Actions.UltimateAction
         private bool m_IsLaunched = false;
         private Quaternion m_FinalRotation;
 
-        public void Configure(AutoTarget controller, Transform target, float m_Speed)
+        public void Configure(AutoTarget controller, Transform target, float speed)
         {
             m_Controller = controller;
             m_Target = target;
-            this.m_Speed = m_Speed;
+            m_Speed = speed;
 
             m_IsLaunched = false;
         }
@@ -41,7 +41,13 @@ namespace BTG.Actions.UltimateAction
 
         private void OnCollisionEnter(Collision collision)
         {
-            m_Controller.OnHitObject(collision);
+            if (collision.collider.TryGetComponent(out IDamageable damageable))
+            {
+                m_Controller.OnHitDamageable(damageable);
+            }
+            
+            m_Controller.CreateExplosion(transform.position);
+
             m_IsLaunched = false;
             Destroy(gameObject);
         }

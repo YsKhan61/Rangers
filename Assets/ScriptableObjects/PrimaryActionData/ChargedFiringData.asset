@@ -21,4 +21,4 @@ MonoBehaviour:
   m_Damage: 100
   m_ChargeClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
   m_ShotFiredClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
-  m_ExplosionSound: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
+  m_ExplosionFactory: {fileID: 11400000, guid: 0a5329ac05142b44aa46d4b1c1607ede, type: 2}

@@ -61,7 +61,6 @@ namespace BTG.UI
         private void UpdateHealth(int currentHealth, int maxHealth)
         {
             float fillAmount = (float)currentHealth / maxHealth;
-            Debug.Log("Fill Amount: " + fillAmount);
             m_HealthBar.value = fillAmount;
             m_HealthBarFill.color = Color.Lerp(m_Color1, m_Color2, fillAmount);
         }

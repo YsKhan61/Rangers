@@ -134,9 +134,14 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
-        public void TakeDamage(int damage) => m_HealthController.TakeDamage(damage);
+        public void TakeDamage(int damage)
+        {
+            m_HealthController.TakeDamage(damage);
+            if (m_Model.IsPlayer)
+                OnPlayerCamShake?.Invoke(0.5f, 0.2f);           // shake values are hardcoded for now
+        }
 
-        public void ShakePlayerCamera(float amount, float duration)
+            public void ShakePlayerCamera(float amount, float duration)
         {
             if (!IsPlayer) return;
 

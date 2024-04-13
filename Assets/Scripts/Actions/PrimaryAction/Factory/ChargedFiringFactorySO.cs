@@ -8,8 +8,8 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField]
         ChargedFiringDataSO m_Data;
 
-        ProjectilePool s_Pool;
-        ProjectilePool Pool => s_Pool ??= new ProjectilePool(m_Data);
+        ProjectilePool m_Pool;
+        ProjectilePool Pool => m_Pool ??= new ProjectilePool(m_Data);
 
 
         public override IPrimaryAction CreatePrimaryAction(IPrimaryActor actor)

@@ -1,3 +1,4 @@
+using BTG.Effects;
 using UnityEngine;
 
 
@@ -29,5 +30,9 @@ namespace BTG.Actions.UltimateAction
         [SerializeField]
         private int m_Damage;
         public int Damage => m_Damage;
+
+        [SerializeField]
+        ExplosionFactorySO m_ExplosionFactory;
+        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;
     }
 }

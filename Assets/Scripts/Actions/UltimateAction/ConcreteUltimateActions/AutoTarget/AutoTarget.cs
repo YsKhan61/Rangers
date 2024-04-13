@@ -52,13 +52,9 @@ namespace BTG.Actions.UltimateAction
             AutoCharge();
         }
 
-        public void OnHitObject(Collision collision)
-        {
-            if (collision.collider.TryGetComponent(out IDamageable damageable))
-            {
-                damageable.TakeDamage(m_AutoTargetData.Damage);
-            }
-        }
+        public void OnHitDamageable(IDamageable damageable) => damageable.TakeDamage(m_AutoTargetData.Damage);
+
+        public void CreateExplosion(Vector3 position) => m_AutoTargetData.ExplosionFactory.CreateExplosion(position);
 
         protected override void RaiseFullyChargedEvent()
         {
@@ -107,9 +103,8 @@ namespace BTG.Actions.UltimateAction
             {
                 foreach (IDamageable damageable in damageables)
                 {
-                    SpawnAutoTargetProjectile(out AutoTargetView projectile);
-                    projectile.Configure(this, damageable.Transform, m_AutoTargetData.ProjectileSpeed);
-                    projectile.Launch();
+                    SpawnConfigureLaunchProjectile(damageable.Transform);
+                    
                     Actor.ShakePlayerCamera(1f, 1f);
                     // Do audio and visual effects here
                     // Do camera shake here
@@ -125,9 +120,11 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private void SpawnAutoTargetProjectile(out AutoTargetView projectile)
+        private void SpawnConfigureLaunchProjectile(in Transform targetTransform)
         {
-            projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
+            AutoTargetView projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
+            projectile.Configure(this, targetTransform, m_AutoTargetData.ProjectileSpeed);
+            projectile.Launch();
         }
     }
 }

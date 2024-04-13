@@ -11,9 +11,6 @@ namespace BTG.Actions.PrimaryAction
 
         [SerializeField] private Collider m_Collider;
 
-        [SerializeField] private ParticleSystem m_ExplosionParticle;
-        [SerializeField] private AudioSource m_ExplosionAudioSource;
-
         private ProjectileController m_Controller;
 
         private void OnEnable()
@@ -21,17 +18,9 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = true;
         }
 
-        public void OnCollisionEnter(Collision other)
+        public void OnCollisionEnter(Collision collision)
         {
-            if (other.collider.TryGetComponent(out IDamageable damageable))
-            {
-                m_Controller.OnHitDamageable(damageable);
-            }
-            else
-            {
-                m_Controller.ResetProjectile();
-            }
-
+            m_Controller.OnHitObject(collision.collider);
             m_Collider.enabled = false;
         }
 
@@ -44,18 +33,6 @@ namespace BTG.Actions.PrimaryAction
         {
             m_Controller = controller;
         }
-
-        public void PlayExplosionSound(AudioClip clip)
-        {
-            m_ExplosionAudioSource.PlayOneShot(clip);
-        }
-
-        public void PlayExplosionParticle()
-        {
-            m_ExplosionParticle.Play();
-        }
-
-        public float ExplosionDuration => m_ExplosionParticle.main.duration;
     }
 }
 
