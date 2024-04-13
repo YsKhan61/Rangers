@@ -88,7 +88,7 @@ namespace BTG.Tank
             m_HealthController.Reset();
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
-            UnityCallbacks.Instance.Register(this as IDestroyable);
+            UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
 
             _ = RaiseInitializedEventAsync();
         }
@@ -202,7 +202,7 @@ namespace BTG.Tank
             OnAfterDeath = null;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
 
             m_Pool.ReturnTank(this);
         }

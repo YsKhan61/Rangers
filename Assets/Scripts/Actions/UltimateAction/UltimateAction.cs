@@ -29,26 +29,26 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Enable()
         {
-            m_CancellationTokenSource = new CancellationTokenSource();
+            m_CancellationTokenSource = new();
 
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
 
             _ = RaiseActionAssignedEventAndStartAutoChargeAsync();
 
-            UnityCallbacks.Instance.Register(this);
+            UnityCallbacks.Instance.RegisterToDestroyable(this);
         }
 
         public virtual void Disable()
         {
-            m_CancellationTokenSource.Cancel();
-            m_CancellationTokenSource.Dispose();
+            HelperMethods.DisposeCancellationTokenSource(ref m_CancellationTokenSource);
+
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
 
             ChangeState(State.Disabled);
 
-            UnityCallbacks.Instance.Unregister(this);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void ChangeState(State newState)
@@ -84,11 +84,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void OnDestroy()
         {
-            if (m_CancellationTokenSource != null)
-            {
-                m_CancellationTokenSource.Cancel();
-                m_CancellationTokenSource.Dispose();
-            }
+            HelperMethods.DisposeCancellationTokenSource(ref m_CancellationTokenSource);
             
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;

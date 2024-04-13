@@ -26,7 +26,7 @@ namespace BTG.Actions.PrimaryAction
         public void Init()
         {
             m_View.gameObject.SetActive(true);
-            UnityCallbacks.Instance.Register(this);
+            UnityCallbacks.Instance.RegisterToDestroyable(this);
         }
 
         public void OnDestroy()
@@ -55,7 +55,7 @@ namespace BTG.Actions.PrimaryAction
             m_View.gameObject.SetActive(false);
             m_Pool.ReturnProjectile(this);
 
-            UnityCallbacks.Instance.Unregister(this);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         private void Explode()

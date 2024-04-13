@@ -99,7 +99,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Register(IDestroyable destroyable)
+        public void RegisterToDestroyable(IDestroyable destroyable)
         {
             if (!destroyables.Contains(destroyable))
             {
@@ -147,7 +147,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Unregister(IDestroyable destroyable)
+        public void UnregisterFromDestroy(IDestroyable destroyable)
         {
             if (destroyables.Contains(destroyable))
             {

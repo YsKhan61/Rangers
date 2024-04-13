@@ -38,7 +38,7 @@ namespace BTG.Actions.PrimaryAction
         public void Enable()
         {
             UnityCallbacks.Instance.Register(this as IUpdatable);
-            UnityCallbacks.Instance.Register(this as IDestroyable);
+            UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
             ToggleMuteFiringAudio(false);
 
             // Add all the event listeners of OnTankShoot
@@ -57,7 +57,7 @@ namespace BTG.Actions.PrimaryAction
             m_IsEnabled = false;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
         public void OnDestroy()
@@ -66,7 +66,7 @@ namespace BTG.Actions.PrimaryAction
             OnPlayerCamShake = null;
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
         public void StartAction()

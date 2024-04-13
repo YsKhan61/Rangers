@@ -20,5 +20,15 @@ namespace BTG.Utilities
                 // Do nothing
             }
         }
+
+        public static void DisposeCancellationTokenSource(ref CancellationTokenSource cancellationTokenSource)
+        {
+            if (cancellationTokenSource != null)
+            {
+                cancellationTokenSource.Cancel();
+                cancellationTokenSource.Dispose();
+                cancellationTokenSource = null;
+            }
+        }
     }
 }

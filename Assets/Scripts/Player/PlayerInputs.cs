@@ -33,7 +33,7 @@ namespace BTG.Player
             m_InputControls.Player.UltimateAction.performed += OnUltimateInputPerformed;
 
             UnityCallbacks.Instance.Register(this as IUpdatable);
-            UnityCallbacks.Instance.Register(this as IDestroyable);
+            UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
         }
 
 
@@ -54,7 +54,7 @@ namespace BTG.Player
             m_InputControls.Disable();
 
             UnityCallbacks.Instance.Unregister(this as IUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IDestroyable);
+            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
         private void OnFireInputStarted(InputAction.CallbackContext context)
