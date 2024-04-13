@@ -26,7 +26,7 @@ namespace BTG.Enemy
 
         public void Init()
         {
-            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
 
             ChangeState(EnemyState.Move);
@@ -34,13 +34,13 @@ namespace BTG.Enemy
 
         public void DeInit()
         {
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
         public void OnDestroy()
         {
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 

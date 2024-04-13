@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a217ae8c354c7e747b1dc473e27e57c0, type: 3}
+  m_Name: TeslaFiringData
+  m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: d9e19b7c219517d40a8455a93ab43d9d, type: 2}
+  m_TeslaBallViewPrefab: {fileID: 7449926087737942210, guid: c5d676d9573a76d4ab378f6d825d637d,
+    type: 3}
+  m_ChargeTime: 3
+  m_MinInitialSpeed: 10
+  m_MaxInitialSpeed: 50
+  m_MinScale: 0.2
+  m_MaxScale: 1
+  m_MinDamage: 10
+  m_MaxDamage: 80
+  m_ShotFiredClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_ExplosionFactory: {fileID: 11400000, guid: ba47f56c150137543af4a66e80fd7292, type: 2}

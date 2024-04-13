@@ -37,7 +37,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Enable()
         {
-            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
             ToggleMuteFiringAudio(false);
 
@@ -47,16 +47,19 @@ namespace BTG.Actions.PrimaryAction
 
         public void Update()
         {
+            if (!m_IsEnabled)
+                return;
+
             UpdateChargeAmount();
         }
 
         public void Disable()
         {
-            ResetChargedAmount();
+            ResetCharging();
             ToggleMuteFiringAudio(true);
             m_IsEnabled = false;
 
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
@@ -65,7 +68,7 @@ namespace BTG.Actions.PrimaryAction
             // Remove all the event listeners of OnTankShoot
             OnPlayerCamShake = null;
 
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
@@ -95,12 +98,12 @@ namespace BTG.Actions.PrimaryAction
                 OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
 
             PlayShotFiredClip();
-            ResetChargedAmount();
+            ResetCharging();
         }
 
         private void UpdateChargeAmount()
         {
-            if (!m_IsEnabled || !m_IsCharging)
+            if (!m_IsCharging)
                 return;
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
@@ -109,7 +112,7 @@ namespace BTG.Actions.PrimaryAction
             UpdateChargingClipPitch(m_ChargeAmount);
         }
 
-        private void ResetChargedAmount()
+        private void ResetCharging()
         {
             m_ChargeAmount = 0f;
             // m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);

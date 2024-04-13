@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8818179891181637405}
   - component: {fileID: 2511142134510957386}
   m_Layer: 0
-  m_Name: ChargedFiringProjectile
+  m_Name: ProjectileView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -75,7 +75,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Register(IUpdatable updatable)
+        public void RegisterToUpdatable(IUpdatable updatable)
         {
             if (!updatables.Contains(updatable))
             {
@@ -123,7 +123,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Unregister(IUpdatable updatable)
+        public void UnregisterFromUpdatable(IUpdatable updatable)
         {
             if (updatables.Contains(updatable))
             {

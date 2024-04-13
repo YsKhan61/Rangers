@@ -9,7 +9,7 @@ namespace BTG.Actions.PrimaryAction
         ChargedFiringDataSO m_Data;
 
         ProjectilePool m_Pool;
-        ProjectilePool Pool => m_Pool ??= new ProjectilePool(m_Data);
+        ProjectilePool Pool => m_Pool ??= new (m_Data);
 
 
         public override IPrimaryAction CreatePrimaryAction(IPrimaryActor actor)

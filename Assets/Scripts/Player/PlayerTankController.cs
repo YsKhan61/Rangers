@@ -32,7 +32,7 @@ namespace BTG.Player
         ~PlayerTankController()
         {
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
         }
 
         public void ConfigureWithEntity(IEntityBrain entity)
@@ -71,7 +71,7 @@ namespace BTG.Player
             
 
             UnityCallbacks.Instance.Register(this as IFixedUpdatable);
-            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
         }
 
         public void SetMoveValue(in float value)
@@ -135,7 +135,7 @@ namespace BTG.Player
         private void OnTankDead()
         {
             UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
 
             m_Entity.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;

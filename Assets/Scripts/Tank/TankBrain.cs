@@ -87,7 +87,7 @@ namespace BTG.Tank
             m_UltimateAction.Enable();
             m_HealthController.Reset();
 
-            UnityCallbacks.Instance.Register(this as IUpdatable);
+            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
 
             _ = RaiseInitializedEventAsync();
@@ -173,11 +173,11 @@ namespace BTG.Tank
 
         private void UpdateMoveSound()
         {
-            if (m_Model.State == TankState.Driving)
-            {
-                m_View.AudioView.UpdateEngineDrivingClipPitch(
+            if (m_Model.State != TankState.Driving)
+                return;
+
+            m_View.AudioView.UpdateEngineDrivingClipPitch(
                     Mathf.Lerp(0, 1, Mathf.InverseLerp(0, m_Model.TankData.MaxSpeed, m_Model.CurrentMoveSpeed)));
-            }
         }
 
         private void OnTankStateChangedToIdle() =>
@@ -206,7 +206,7 @@ namespace BTG.Tank
             OnAfterDeath?.Invoke();
             OnAfterDeath = null;
 
-            UnityCallbacks.Instance.Unregister(this as IUpdatable);
+            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
             UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
 
             m_Pool.ReturnTank(this);

@@ -12,7 +12,7 @@ namespace BTG.Actions.PrimaryAction
         public ProjectilePool(ChargedFiringDataSO projectileData)
         {
             m_ProjectileData = projectileData;
-            m_ProjectileContainer = new GameObject("ProjectileContainer of " + projectileData.name).transform;
+            m_ProjectileContainer = new GameObject("ProjectileContainer").transform;
         }
 
         public ProjectileController GetProjectile() => GetItem();
