@@ -2087,71 +2087,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 450071678}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &818963020
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 818963021}
-  - component: {fileID: 818963022}
-  - component: {fileID: 818963023}
-  m_Layer: 0
-  m_Name: DI
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &818963021
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818963020}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &818963022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818963020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1820e7ced59eb04ba3f757e5616c92f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &818963023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818963020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94b9620eddbca42418cc9b95611039fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EntityFactoryContainer: {fileID: 11400000, guid: f332ab77e4d310e418a7b4e0c249277b,
-    type: 2}
-  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
-  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
-  m_PlayerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
-  m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
-  m_EnemyWaves: {fileID: 11400000, guid: 5baaf5b2be0209a4083c606dce2e254d, type: 2}
-  m_pvc: {fileID: 1894154699}
 --- !u!1 &833293457
 GameObject:
   m_ObjectHideFlags: 0
@@ -5826,7 +5761,7 @@ GameObject:
   - component: {fileID: 2094347336}
   - component: {fileID: 2094347333}
   m_Layer: 0
-  m_Name: DI All
+  m_Name: DI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6923,7 +6858,6 @@ MonoBehaviour:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 818963021}
   - {fileID: 2094347335}
   - {fileID: 1169354569}
   - {fileID: 450071678}
