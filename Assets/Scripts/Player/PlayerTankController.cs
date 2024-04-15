@@ -31,8 +31,8 @@ namespace BTG.Player
 
         ~PlayerTankController()
         {
-            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
-            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
         }
 
         public void ConfigureWithEntity(IEntityBrain entity)
@@ -57,8 +57,6 @@ namespace BTG.Player
                 m_Entity.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
                 m_Entity.SetRigidbody(Rigidbody);
                 m_Entity.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-                m_Entity.PrimaryAction.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
-                m_Entity.OnPlayerCamShake += m_Model.PlayerData.OnCameraShake.RaiseEvent;
                 m_Entity.HealthController.OnHealthUpdated += OnEntityHealthUpdated;
                 m_Entity.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
                 m_Entity.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
@@ -70,8 +68,8 @@ namespace BTG.Player
             ConfigureEntity();
             
 
-            UnityCallbacks.Instance.Register(this as IFixedUpdatable);
-            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this as IUpdatable);
         }
 
         public void SetMoveValue(in float value)
@@ -134,13 +132,11 @@ namespace BTG.Player
 
         private void OnTankDead()
         {
-            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
-            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this as IFixedUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
 
             m_Entity.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_Entity.HealthController.OnHealthUpdated -= OnEntityHealthUpdated;
-            m_Entity.PrimaryAction.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
-            m_Entity.OnPlayerCamShake -= m_Model.PlayerData.OnCameraShake.RaiseEvent;
             m_Entity.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_Entity.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_Entity.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;

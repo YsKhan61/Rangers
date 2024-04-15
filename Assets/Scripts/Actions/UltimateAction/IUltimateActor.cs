@@ -14,6 +14,6 @@ namespace BTG.Actions.UltimateAction
 
         public void TryExecuteUltimate();
         public void ToggleActorVisibility(bool value);
-        public void ShakePlayerCamera(float amount, float duration);
+        // public void ShakePlayerCamera(float amount, float duration);
     }
 }

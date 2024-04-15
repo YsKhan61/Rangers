@@ -1,7 +1,9 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Entity;
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -17,7 +19,7 @@ namespace BTG.Tank
     /// </summary>
     public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
-        public event Action<float, float> OnPlayerCamShake;
+        // public event Action<float, float> OnPlayerCamShake;
         public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
 
@@ -87,8 +89,8 @@ namespace BTG.Tank
             m_UltimateAction.Enable();
             m_HealthController.Reset();
 
-            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
-            UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this as IUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this as IDestroyable);
 
             _ = RaiseInitializedEventAsync();
         }
@@ -138,15 +140,15 @@ namespace BTG.Tank
         {
             m_HealthController.TakeDamage(damage);
             if (m_Model.IsPlayer)
-                OnPlayerCamShake?.Invoke(0.5f, 0.2f);           // shake values are hardcoded for now
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0.5f, ShakeDuration = 0.2f }); // OnPlayerCamShake?.Invoke(0.5f, 0.2f);           // shake values are hardcoded for now
         }
 
-            public void ShakePlayerCamera(float amount, float duration)
+        /*public void ShakePlayerCamera(float amount, float duration)
         {
             if (!IsPlayer) return;
 
             OnPlayerCamShake?.Invoke(amount, duration);
-        }
+        }*/
 
         private void UpdateState()
         {
@@ -206,8 +208,8 @@ namespace BTG.Tank
             OnAfterDeath?.Invoke();
             OnAfterDeath = null;
 
-            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
-            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
 
             m_Pool.ReturnTank(this);
         }

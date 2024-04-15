@@ -32,8 +32,8 @@ namespace BTG.Player
             m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
             m_InputControls.Player.UltimateAction.performed += OnUltimateInputPerformed;
 
-            UnityCallbacks.Instance.RegisterToUpdatable(this as IUpdatable);
-            UnityCallbacks.Instance.RegisterToDestroyable(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
 
@@ -53,8 +53,8 @@ namespace BTG.Player
             m_InputControls.UI.Disable();
             m_InputControls.Disable();
 
-            UnityCallbacks.Instance.UnregisterFromUpdatable(this as IUpdatable);
-            UnityCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         private void OnFireInputStarted(InputAction.CallbackContext context)

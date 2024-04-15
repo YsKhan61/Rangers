@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace BTG.UI
 {
-    public class HealthUI : MonoBehaviour
+    public class PlayerInfoUI : MonoBehaviour
     {
         [SerializeField]
         SpriteDataSO m_PlayerIcon;

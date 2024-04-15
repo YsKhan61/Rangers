@@ -1,4 +1,6 @@
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System.Collections.Generic;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
@@ -27,12 +29,12 @@ namespace BTG.Actions.UltimateAction
         public override void Enable()
         {
             base.Enable();
-            UnityCallbacks.Instance.Register(this as IFixedUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this as IFixedUpdatable);
         }
 
         public override void Disable()
         {
-            UnityCallbacks.Instance.Unregister(this as IFixedUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this as IFixedUpdatable);
 
             if (m_View != null) 
             {
@@ -64,7 +66,9 @@ namespace BTG.Actions.UltimateAction
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
             RestartAfterDuration(m_AirStrikeData.Duration);
-            Actor.ShakePlayerCamera(1f, m_AirStrikeData.Duration);
+            // Actor.ShakePlayerCamera(1f, m_AirStrikeData.Duration);
+            if (Actor.IsPlayer)
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
 
             return true;
         }

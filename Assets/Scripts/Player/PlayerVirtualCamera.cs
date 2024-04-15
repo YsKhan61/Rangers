@@ -1,6 +1,7 @@
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using Cinemachine;
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace BTG.Player
 {
     public class PlayerVirtualCamera : MonoBehaviour
     {
+        EventBinding<CameraShakeEvent> m_CameraShakeEventBinding;
+
         [SerializeField]
         FloatFloatEventChannelSO m_OnPlayerCamShake;
 
@@ -23,12 +26,15 @@ namespace BTG.Player
 
         private void OnEnable()
         {
-            m_OnPlayerCamShake.OnEventRaised += OnPlayerCamShake;
+            m_CameraShakeEventBinding = new EventBinding<CameraShakeEvent>(OnPlayerCamShake);
+            EventBus<CameraShakeEvent>.Register(m_CameraShakeEventBinding);
+            // m_OnPlayerCamShake.OnEventRaised += OnPlayerCamShake;
         }
 
         private void OnDisable()
         {
-            m_OnPlayerCamShake.OnEventRaised -= OnPlayerCamShake;
+            EventBus<CameraShakeEvent>.Unregister(m_CameraShakeEventBinding);
+            // m_OnPlayerCamShake.OnEventRaised -= OnPlayerCamShake;
         }
         
 
@@ -43,6 +49,12 @@ namespace BTG.Player
         {
             StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * amount),
                 duration);
+        }
+
+        private void OnPlayerCamShake(CameraShakeEvent data)
+        {
+            StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * data.ShakeAmount),
+                               data.ShakeDuration);
         }
 
         void StartShake(float intensity, float duration)

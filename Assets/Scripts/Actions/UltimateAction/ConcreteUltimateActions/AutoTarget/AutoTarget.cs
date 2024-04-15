@@ -1,4 +1,6 @@
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -104,8 +106,10 @@ namespace BTG.Actions.UltimateAction
                 foreach (IDamageable damageable in damageables)
                 {
                     SpawnConfigureLaunchProjectile(damageable.Transform);
-                    
-                    Actor.ShakePlayerCamera(1f, 1f);
+
+                    // Actor.ShakePlayerCamera(1f, 1f);
+                    if (Actor.IsPlayer)
+                        EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
                     // Do audio and visual effects here
                     // Do camera shake here
                     await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, m_CancellationTokenSource.Token);

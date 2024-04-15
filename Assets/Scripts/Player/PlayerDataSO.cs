@@ -37,10 +37,6 @@ namespace BTG.Player
         [SerializeField]
         VoidEventChannelSO m_OnUltimateExecuted;
         public VoidEventChannelSO OnUltimateExecuted => m_OnUltimateExecuted;
-
-        [SerializeField]
-        FloatFloatEventChannelSO m_OnCameraShake;
-        public FloatFloatEventChannelSO OnCameraShake => m_OnCameraShake;
     
     }
 }

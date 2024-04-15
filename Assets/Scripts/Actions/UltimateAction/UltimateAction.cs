@@ -36,7 +36,7 @@ namespace BTG.Actions.UltimateAction
 
             _ = RaiseActionAssignedEventAndStartAutoChargeAsync();
 
-            UnityCallbacks.Instance.RegisterToDestroyable(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
         public virtual void Disable()
@@ -48,7 +48,7 @@ namespace BTG.Actions.UltimateAction
 
             ChangeState(State.Disabled);
 
-            UnityCallbacks.Instance.UnregisterFromDestroy(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void ChangeState(State newState)

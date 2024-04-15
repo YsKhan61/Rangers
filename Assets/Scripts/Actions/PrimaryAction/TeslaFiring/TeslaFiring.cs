@@ -1,4 +1,6 @@
-﻿using BTG.Utilities;
+﻿using BTG.Events;
+using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
 using UnityEngine;
 
@@ -6,8 +8,6 @@ namespace BTG.Actions.PrimaryAction
 {
     public class TeslaFiring : IPrimaryAction, IUpdatable
     {
-        public event Action<float, float> OnPlayerCamShake;
-
         private TeslaFiringDataSO m_Data;
         private IPrimaryActor m_Actor;
         private TeslaBallPool m_Pool;
@@ -27,7 +27,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Enable()
         {
-            UnityCallbacks.Instance.RegisterToUpdatable(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
 
             m_IsEnabled = true;
         }
@@ -47,7 +47,7 @@ namespace BTG.Actions.PrimaryAction
         {
             m_IsEnabled = false;
 
-            UnityCallbacks.Instance.UnregisterFromUpdatable(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
         public void StartAction()
@@ -72,8 +72,8 @@ namespace BTG.Actions.PrimaryAction
             m_BallInCharge.AddImpulseForce(CalculateProjectileInitialSpeed());
 
             if (m_Actor.IsPlayer)
-                OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
-
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });  // OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
+                
             ResetCharging();
         }
 

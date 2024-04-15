@@ -23,7 +23,7 @@ namespace BTG.Utilities
         public void OnDestroy();
     }
 
-    public class UnityCallbacks : Singleton<UnityCallbacks>
+    public class UnityMonoBehaviourCallbacks : Singleton<UnityMonoBehaviourCallbacks>
     {
         private List<IStartable> startables = new List<IStartable>();
         private List<IFixedUpdatable> fixedUpdatables = new List<IFixedUpdatable>();
@@ -63,7 +63,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Register(IStartable startable)
+        public void RegisterToStart(IStartable startable)
         {
             if (!startables.Contains(startable))
             {
@@ -75,7 +75,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void RegisterToUpdatable(IUpdatable updatable)
+        public void RegisterToUpdate(IUpdatable updatable)
         {
             if (!updatables.Contains(updatable))
             {
@@ -87,7 +87,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Register(IFixedUpdatable fixedUpdatable)
+        public void RegisterToFixedUpdate(IFixedUpdatable fixedUpdatable)
         {
             if (!fixedUpdatables.Contains(fixedUpdatable))
             {
@@ -99,7 +99,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void RegisterToDestroyable(IDestroyable destroyable)
+        public void RegisterToDestroy(IDestroyable destroyable)
         {
             if (!destroyables.Contains(destroyable))
             {
@@ -111,7 +111,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Unregister(IStartable startable)
+        public void UnregisterFromStart(IStartable startable)
         {
             if (startables.Contains(startable))
             {
@@ -123,7 +123,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void UnregisterFromUpdatable(IUpdatable updatable)
+        public void UnregisterFromUpdate(IUpdatable updatable)
         {
             if (updatables.Contains(updatable))
             {
@@ -135,7 +135,7 @@ namespace BTG.Utilities
             }
         }
 
-        public void Unregister(IFixedUpdatable fixedUpdatable)
+        public void UnregisterFromFixedUpdate(IFixedUpdatable fixedUpdatable)
         {
             if (fixedUpdatables.Contains(fixedUpdatable))
             {
