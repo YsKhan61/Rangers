@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BTG.Player
 {
-    public class PlayerService
+    public class PlayerService : ISelfDependencyProvider, IDependencyInjectable
     {
         [Inject]
         private EntityFactoryContainerSO m_EntityFactory;

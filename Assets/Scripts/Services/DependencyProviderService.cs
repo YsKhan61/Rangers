@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BTG.Services
 {
-    public class DependencyProviderService : MonoBehaviour, IDependencyProvider
+    public class DependencyProviderService : MonoBehaviour, IMonoBehaviourDependencyProvider
     {
         [SerializeField]
         EntityFactoryContainerSO m_EntityFactoryContainer;

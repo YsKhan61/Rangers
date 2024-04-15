@@ -16,21 +16,21 @@ namespace BTG.Utilities.DI
         {
             base.Awake();
 
-            RegisterInstancesFromProviders();
+            RegisterProviders();
 
             InjectDependencies();
         }
 
-        void RegisterInstancesFromProviders()
+        void RegisterProviders()
         {
-            List<Type> dependencyProviderTypes = PredefinedAssemblyUtil.GetTypes(typeof(IDependencyProvider));
+            List<Type> dependencyProviderTypes = PredefinedAssemblyUtil.GetTypes(typeof(ISelfDependencyProvider));
 
             foreach (Type providerType in dependencyProviderTypes)
             {
-                RegisterProvider(providerType);
+                RegisterProviderType(providerType);
             }
 
-            var providers = FindMonoBehaviours().OfType<IDependencyProvider>();
+            var providers = FindMonoBehaviours().OfType<IMonoBehaviourDependencyProvider>();
             foreach (var provider in providers)
             {
                 RegisterProvider(provider);
@@ -43,8 +43,8 @@ namespace BTG.Utilities.DI
 
             foreach (Type injectableType in dependencyInjectableTypes)
             {
-                var instance = Activator.CreateInstance(injectableType);
-                Inject(instance);
+                // var instance = Activator.CreateInstance(injectableType);
+                Inject(injectableType);
             }
         }
 
@@ -53,7 +53,7 @@ namespace BTG.Utilities.DI
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public object ProvideType(Type type)
+        public object RegisterProviderType(Type type)
         {
             if (registry.ContainsKey(type))
             {
@@ -61,7 +61,17 @@ namespace BTG.Utilities.DI
                 return registry[type];
             }
 
-            var instance = Activator.CreateInstance(type);
+            object instance;
+
+            // Check if the type is a MonoBehaviour
+            if (typeof(MonoBehaviour).IsAssignableFrom(type))
+            {
+                instance = FindObjectOfType(type) ?? gameObject.AddComponent(type);
+                registry.Add(type, instance);
+                return instance;
+            }
+
+            instance = Activator.CreateInstance(type);
             registry.Add(type, instance);
             return instance;
         }
@@ -86,6 +96,54 @@ namespace BTG.Utilities.DI
         public void Inject(object injectable)
         {
             var type = injectable.GetType();
+            var injectableFields = type.GetFields(BINDING_FLAGS)
+                .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+
+            foreach (var injectableField in injectableFields)
+            {
+                var fieldType = injectableField.FieldType;
+                var resolved = Resolve(fieldType);
+
+                if (resolved == null)
+                {
+                    throw new Exception($"Failed to resolve {fieldType.Name} for {type.Name}");
+                }
+
+                injectableField.SetValue(injectable, resolved);
+                Debug.Log($"Field Injected {fieldType.Name} into {type.Name}");
+            }
+
+            var injectableMethods = type.GetMethods(BINDING_FLAGS)
+                .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
+
+            foreach (var injectableMethod in injectableMethods)
+            {
+                var requiredParameters = injectableMethod.GetParameters()
+                    .Select(parameter => parameter.ParameterType)
+                    .ToArray();
+
+                var resolvedInstances = requiredParameters
+                    .Select(Resolve)
+                    .ToArray();
+
+                if (resolvedInstances.Any(resolvedInstance => resolvedInstance == null))
+                {
+                    throw new Exception($"Failed to resolve parameters for {injectableMethod.Name} in {type.Name}");
+                }
+
+                injectableMethod.Invoke(injectable, resolvedInstances);
+                Debug.Log($"Method Injected {string.Join(", ", requiredParameters.Select(p => p.Name))} into {type.Name}");
+            }
+        }
+
+        public void Inject(Type type)
+        {
+            var injectable = Resolve(type);
+            if (injectable == null)
+            {
+                throw new Exception($"Failed to resolve {type.Name}. Make sure this type is provided before injecting dependencies in it.");
+            }
+
             var injectableFields = type.GetFields(BINDING_FLAGS)
                 .Where(member => Attribute.IsDefined(member, typeof(InjectAttribute)));
 

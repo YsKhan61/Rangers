@@ -1,5 +1,5 @@
 {
-    "name": "BTG.Game",
+    "name": "BTG.Services",
     "rootNamespace": "",
     "references": [
         "GUID:e467f712023d4e945a5089624b530858",

@@ -8,7 +8,9 @@ namespace BTG.Utilities
     {
         enum AssemblyType
         {
-            Assembly_BTG_Utilities
+            Assembly_BTG_Utilities,
+            Assembly_BTG_Player,
+            Assembly_BTG_Services
         }
 
         /// <summary>
@@ -21,6 +23,8 @@ namespace BTG.Utilities
             return assemblyName switch
             {
                 "BTG.Utilities" => AssemblyType.Assembly_BTG_Utilities,
+                "BTG.Player" => AssemblyType.Assembly_BTG_Player,
+                "BTG.Services" => AssemblyType.Assembly_BTG_Services,
                 _ => null
             };
         }
@@ -65,6 +69,8 @@ namespace BTG.Utilities
             }
 
             AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Utilities], types, interfaceType);
+            AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Player], types, interfaceType);
+            AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Services], types, interfaceType);
 
             return types;
         }
