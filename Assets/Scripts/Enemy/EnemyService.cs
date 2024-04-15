@@ -33,8 +33,7 @@ namespace BTG.Enemy
 
         ~EnemyService()
         {
-            m_Cts.Cancel();
-            m_Cts.Dispose();
+            HelperMethods.DisposeCancellationTokenSource(m_Cts);
         }
 
         [Inject]

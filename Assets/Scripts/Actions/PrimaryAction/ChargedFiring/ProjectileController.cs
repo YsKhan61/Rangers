@@ -31,7 +31,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void OnDestroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(ref m_Cts);
+            HelperMethods.DisposeCancellationTokenSource(m_Cts);
         }
 
         public void AddImpulseForce(float initialSpeed)

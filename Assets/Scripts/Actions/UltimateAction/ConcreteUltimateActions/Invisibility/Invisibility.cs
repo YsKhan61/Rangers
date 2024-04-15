@@ -50,7 +50,7 @@ namespace BTG.Actions.UltimateAction
             m_View.PlayAppearPS();
             m_View.PlayAppearAudio();
 
-            _ = ResetAfterDelay(m_CancellationTokenSource.Token);
+            _ = ResetAfterDelay(m_CTS.Token);
         }
 
         protected override void RaiseFullyChargedEvent()

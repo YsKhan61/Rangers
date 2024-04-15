@@ -112,7 +112,7 @@ namespace BTG.Actions.UltimateAction
                         EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
                     // Do audio and visual effects here
                     // Do camera shake here
-                    await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, m_CancellationTokenSource.Token);
+                    await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, m_CTS.Token);
                 }
 
                 // after all tanks are targeted, reset the ultimate

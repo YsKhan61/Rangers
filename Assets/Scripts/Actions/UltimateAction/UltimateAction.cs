@@ -17,7 +17,7 @@ namespace BTG.Actions.UltimateAction
         public event System.Action OnUltimateActionExecuted;
 
         protected UltimateActionDataSO m_UltimateActionData;
-        protected CancellationTokenSource m_CancellationTokenSource;
+        protected CancellationTokenSource m_CTS;
 
         private float m_ChargedAmount;
 
@@ -29,7 +29,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Enable()
         {
-            m_CancellationTokenSource = new();
+            m_CTS = new();
 
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
@@ -41,7 +41,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Disable()
         {
-            HelperMethods.DisposeCancellationTokenSource(ref m_CancellationTokenSource);
+            HelperMethods.DisposeCancellationTokenSource(m_CTS);
 
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
@@ -84,7 +84,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void OnDestroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(ref m_CancellationTokenSource);
+            HelperMethods.DisposeCancellationTokenSource(m_CTS);
             
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
@@ -99,7 +99,7 @@ namespace BTG.Actions.UltimateAction
             => OnUltimateActionExecuted?.Invoke();
 
         protected void RestartAfterDuration(int duration)
-            => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CancellationTokenSource.Token);
+            => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CTS.Token);
 
 
         protected abstract void Restart();
@@ -120,7 +120,7 @@ namespace BTG.Actions.UltimateAction
             {
                 while (CurrentState == State.Charging)
                 {
-                    await Task.Delay(1000, m_CancellationTokenSource.Token);
+                    await Task.Delay(1000, m_CTS.Token);
                     Charge(m_UltimateActionData.ChargeRate);
                 }
             }

@@ -23,7 +23,7 @@ namespace BTG.Effects
 
         private void OnDestroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(ref m_CTS);
+            HelperMethods.DisposeCancellationTokenSource(m_CTS);
         }
 
         public void Play()
