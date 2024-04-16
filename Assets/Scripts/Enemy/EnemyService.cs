@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BTG.Enemy
 {
-    public class EnemyService
+    public class EnemyService : ISelfDependencyRegister, IDependencyInjector
     {
         [Inject]
         EntityFactoryContainerSO m_FactoryContainer;
@@ -40,7 +40,9 @@ namespace BTG.Enemy
         public void Initialize()
         {
             m_NextWaveIndex = 0;
+
             m_EnemyPool = new EnemyPool();
+            // Manual injection
             DIManager.Instance.Inject(m_EnemyPool);
         }
 

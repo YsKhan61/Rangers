@@ -5,17 +5,19 @@ using UnityEngine;
 
 namespace BTG.Services
 {
-    public class GameService : MonoBehaviour, ISelfDependencyProvider, IDependencyInjectable
+    public class GameService : MonoBehaviour, ISelfDependencyRegister, IDependencyInjector
     {
         [Inject]
         PlayerService m_PlayerService;
+
+        [Inject]
         EnemyService m_EnemyService;
 
 
         private void Awake()
         {
             // CreatePlayerService();
-            CreateEnemyService();
+            // CreateEnemyService();
         }
 
         private void Start()
@@ -26,13 +28,13 @@ namespace BTG.Services
 
         private void CreatePlayerService()
         {
-            object obj = DIManager.Instance.RegisterProviderType(typeof(PlayerService)); 
+            object obj = DIManager.Instance.RegisterType(typeof(PlayerService)); 
             m_PlayerService = obj as PlayerService;
         }
 
         private void CreateEnemyService()
         {
-            object obj = DIManager.Instance.RegisterProviderType(typeof(EnemyService));
+            object obj = DIManager.Instance.RegisterType(typeof(EnemyService));
             m_EnemyService = obj as EnemyService;
         }
        
@@ -46,7 +48,7 @@ namespace BTG.Services
 
         private void InitializeEnemyService()
         {
-            DIManager.Instance.Inject(m_EnemyService);
+            // DIManager.Instance.Inject(m_EnemyService);
             m_EnemyService.StartNextWaveWithEntityTags();
         }
     }

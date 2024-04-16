@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BTG.Player
 {
-    public class PlayerService : ISelfDependencyProvider, IDependencyInjectable
+    public class PlayerService : ISelfDependencyRegister, IDependencyInjector
     {
         [Inject]
         private EntityFactoryContainerSO m_EntityFactory;
@@ -40,8 +40,7 @@ namespace BTG.Player
         {
             m_PlayerStats.TankIDSelected.OnValueChanged -= Respawn;
 
-            m_CTS.Cancel();
-            m_CTS.Dispose();
+            HelperMethods.DisposeCancellationTokenSource(m_CTS);
         }
 
         public void OnEntityInitialized(Sprite icon)

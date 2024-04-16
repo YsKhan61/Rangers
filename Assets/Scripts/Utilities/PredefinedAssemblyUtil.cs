@@ -9,8 +9,46 @@ namespace BTG.Utilities
         enum AssemblyType
         {
             Assembly_BTG_Utilities,
+            Assembly_BTG_Enemy,
             Assembly_BTG_Player,
-            Assembly_BTG_Services
+            Assembly_BTG_Services,
+            Assembly_BTG_DIExample
+        }
+
+        /// <summary>
+        /// Gets a list of types from the assemblies that have the specified attribute.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="types"></param>
+        public static List<Type> GetTypesWithAttribute<T>()
+        {
+            Dictionary<AssemblyType, Type[]> assemblyTypes = new();
+            List<Type> types = new();
+            FilterAssemblyTypes(assemblyTypes, types);
+
+            // AddTypesFromAssemblyUsingAttributes(assemblyTypes[AssemblyType.Assembly_BTG_DIExample], types, typeof(T));
+            return types;
+        }
+
+
+        /// <summary>
+        /// Gets a list of types from the assemblies that implement the specified interface type.
+        /// </summary>
+        /// <param name="interfaceType">The interface type to filter the types.</param>
+        /// <returns>A list of types that implement the specified interface type.</returns>
+        public static List<Type> GetTypes(Type interfaceType)
+        {
+            Dictionary<AssemblyType, Type[]> assemblyTypes = new();
+            List<Type> types = new();
+            FilterAssemblyTypes(assemblyTypes, types);
+
+            AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Utilities], types, interfaceType);
+            AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Enemy], types, interfaceType);
+            AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Player], types, interfaceType);
+            AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Services], types, interfaceType);
+            // AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_DIExample], types, interfaceType);
+
+            return types;
         }
 
         /// <summary>
@@ -23,10 +61,32 @@ namespace BTG.Utilities
             return assemblyName switch
             {
                 "BTG.Utilities" => AssemblyType.Assembly_BTG_Utilities,
+                "BTG.Enemy" => AssemblyType.Assembly_BTG_Enemy,
                 "BTG.Player" => AssemblyType.Assembly_BTG_Player,
                 "BTG.Services" => AssemblyType.Assembly_BTG_Services,
+                "BTG.DIExample" => AssemblyType.Assembly_BTG_DIExample,
                 _ => null
             };
+        }
+
+        /// <summary>
+        /// Filters the types from the assemblies based on the assembly type.
+        /// Stores the types in the types collection.
+        /// </summary>
+        /// <param name="assemblyTypes"></param>
+        /// <param name="types"></param>
+        static void FilterAssemblyTypes(Dictionary<AssemblyType, Type[]> assemblyTypes, List<Type> types)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (Assembly assembly in assemblies)
+            {
+                AssemblyType? assemblyType = GetAssemblyType(assembly.GetName().Name);
+                if (assemblyType != null)
+                {
+                    assemblyTypes.Add(assemblyType.Value, assembly.GetTypes());
+                }
+            }
         }
 
         /// <summary>
@@ -35,7 +95,7 @@ namespace BTG.Utilities
         /// <param name="assembly">The assembly to retrieve types from.</param>
         /// <param name="types">The collection to add the types to.</param>
         /// <param name="interfaceType">The interface type to filter the types.</param>
-        static void AddTypesFromAssembly(Type[] assembly, ICollection<Type> types, Type interfaceType)
+        static void AddTypesFromAssemblyUsingInterfaceType(Type[] assembly, ICollection<Type> types, Type interfaceType)
         {
             if (assembly == null) return;
 
@@ -48,31 +108,20 @@ namespace BTG.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets a list of types from the assemblies that implement the specified interface type.
-        /// </summary>
-        /// <param name="interfaceType">The interface type to filter the types.</param>
-        /// <returns>A list of types that implement the specified interface type.</returns>
-        public static List<Type> GetTypes(Type interfaceType)
+        // Create a method that add types from the specified assembly that have the specified attribute to the collection.
+        static void AddTypesFromAssemblyUsingAttributes(Type[] assembly, ICollection<Type> types, Type attributeType)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            if (assembly == null) return;
 
-            Dictionary<AssemblyType, Type[]> assemblyTypes = new();
-            List<Type> types = new();
-            foreach (Assembly assembly in assemblies)
+            foreach (Type type in assembly)
             {
-                AssemblyType? assemblyType = GetAssemblyType(assembly.GetName().Name);
-                if (assemblyType != null)
+                // Get the attribute defined as AtributeTarget.Class, if found, check if it matches attributeType
+                object[] attributes = type.GetCustomAttributes(attributeType, false);
+                if (attributes.Length > 0)
                 {
-                    assemblyTypes.Add(assemblyType.Value, assembly.GetTypes());
+                    types.Add(type);
                 }
             }
-
-            AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Utilities], types, interfaceType);
-            AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Player], types, interfaceType);
-            AddTypesFromAssembly(assemblyTypes[AssemblyType.Assembly_BTG_Services], types, interfaceType);
-
-            return types;
-        }
+        }   
     }
 }

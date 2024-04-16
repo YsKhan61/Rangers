@@ -5,10 +5,12 @@ using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace BTG.Services
 {
-    public class DependencyProviderService : MonoBehaviour, IMonoBehaviourDependencyProvider
+    public class DependencyProviderService : MonoBehaviour, IDependencyProviderForOthers
     {
         [SerializeField]
         EntityFactoryContainerSO m_EntityFactoryContainer;

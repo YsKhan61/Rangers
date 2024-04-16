@@ -12,48 +12,74 @@ namespace BTG.Utilities.DI
         const BindingFlags BINDING_FLAGS = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
         readonly Dictionary<Type, object> registry = new Dictionary<Type, object>();
 
+        /// <summary>
+        /// Awake is called when the script instance is being loaded.
+        /// </summary>
         public override void Awake()
         {
             base.Awake();
 
-            RegisterProviders();
+            RegisterDependencies();
 
             InjectDependencies();
         }
 
-        void RegisterProviders()
+        /// <summary>
+        /// Register all the dependency providers.
+        /// </summary>
+        void RegisterDependencies()
         {
-            List<Type> dependencyProviderTypes = PredefinedAssemblyUtil.GetTypes(typeof(ISelfDependencyProvider));
+            List<Type> typesToRegister = PredefinedAssemblyUtil.GetTypes(typeof(ISelfDependencyRegister));
 
-            foreach (Type providerType in dependencyProviderTypes)
+            foreach (Type type in typesToRegister)
             {
-                RegisterProviderType(providerType);
+                RegisterType(type);
             }
 
-            var providers = FindMonoBehaviours().OfType<IMonoBehaviourDependencyProvider>();
+            var providers = FindMonoBehaviours().OfType<IDependencyProviderForOthers>();
             foreach (var provider in providers)
             {
-                RegisterProvider(provider);
+                RegisterFromProvider(provider);
             }
-        }
 
-        void InjectDependencies()
-        {
-            List<Type> dependencyInjectableTypes = PredefinedAssemblyUtil.GetTypes(typeof(IDependencyInjectable));
-
-            foreach (Type injectableType in dependencyInjectableTypes)
+            typesToRegister = PredefinedAssemblyUtil.GetTypesWithAttribute<RegisterAttribute>();
+            foreach (Type type in typesToRegister)
             {
-                // var instance = Activator.CreateInstance(injectableType);
-                Inject(injectableType);
+                RegisterType(type);
             }
         }
 
         /// <summary>
-        /// This method is used to provide an instance of the object of the specified type by creating it.
+        /// Inject dependencies into all the dependency injectable types.
         /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public object RegisterProviderType(Type type)
+        void InjectDependencies()
+        {
+            List<Type> dependencyInjectableTypes = PredefinedAssemblyUtil.GetTypes(typeof(IDependencyInjector));
+
+            foreach (Type injectableType in dependencyInjectableTypes)
+            {
+                Inject(injectableType);
+            }
+
+            var injectables = FindMonoBehaviours().OfType<IDependencyInjector>();
+            foreach (var injectable in injectables)
+            {
+                Inject(injectable);
+            }
+
+            List<Type> typesToInject = PredefinedAssemblyUtil.GetTypesWithAttribute<InjectorAttribute>();
+            foreach (Type type in typesToInject)
+            {
+                Inject(type);
+            }
+        }
+
+        /// <summary>
+        /// Register a type and provide an instance of the object of the specified type by creating it.
+        /// </summary>
+        /// <param name="type">The type of the object to be registered</param>
+        /// <returns>The instance of the registered object</returns>
+        public object RegisterType(Type type)
         {
             if (registry.ContainsKey(type))
             {
@@ -77,11 +103,11 @@ namespace BTG.Utilities.DI
         }
 
         /// <summary>
-        /// This method is used to provide an instance of the object of the specified type given by the parameter.
+        /// Registers an instance of the object of the specified type.
         /// </summary>
         /// <typeparam name="T">The type of the object to be registered</typeparam>
         /// <param name="instance">The instance to be registered</param>
-        public void Provide<T>(T instance)
+        public void RegisterInstance<T>(T instance)
         {
             var type = typeof(T);
             if (registry.ContainsKey(type))
@@ -93,6 +119,10 @@ namespace BTG.Utilities.DI
             registry.Add(type, instance);
         }
 
+        /// <summary>
+        /// Inject dependencies into the specified injectable object.
+        /// </summary>
+        /// <param name="injectable">The object to inject dependencies into</param>
         public void Inject(object injectable)
         {
             var type = injectable.GetType();
@@ -136,8 +166,18 @@ namespace BTG.Utilities.DI
             }
         }
 
+        /// <summary>
+        /// Inject dependencies into the specified type.
+        /// </summary>
+        /// <param name="type">The type to inject dependencies into</param>
         public void Inject(Type type)
         {
+            // Return if the type is a monobehaviour
+            if (typeof(MonoBehaviour).IsAssignableFrom(type))
+            {
+                return;
+            }
+
             var injectable = Resolve(type);
             if (injectable == null)
             {
@@ -184,13 +224,22 @@ namespace BTG.Utilities.DI
             }
         }
 
+        /// <summary>
+        /// Resolve an instance of the specified type from the registry.
+        /// </summary>
+        /// <param name="type">The type to resolve</param>
+        /// <returns>The resolved instance</returns>
         public object Resolve(Type type)
         {
             registry.TryGetValue(type, out var instance);
             return instance;
         }
 
-        void RegisterProvider(object provider)
+        /// <summary>
+        /// Register a provider object and provide instances of the specified types using the provider's methods.
+        /// </summary>
+        /// <param name="provider">The provider object</param>
+        void RegisterFromProvider(object provider)
         {
             var methods = provider.GetType().GetMethods(BINDING_FLAGS);
 
@@ -213,13 +262,16 @@ namespace BTG.Utilities.DI
                     Debug.Log($"Registered {returnType.Name} from {provider.GetType().Name}");
                 }
                 else
-
                 {
                     throw new Exception($"Provider {provider.GetType().Name} returned null for {returnType.Name}");
                 }
             }
         }
 
+        /// <summary>
+        /// Find all MonoBehaviours in the scene.
+        /// </summary>
+        /// <returns>An array of MonoBehaviours</returns>
         static MonoBehaviour[] FindMonoBehaviours()
         {
             return FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.InstanceID);

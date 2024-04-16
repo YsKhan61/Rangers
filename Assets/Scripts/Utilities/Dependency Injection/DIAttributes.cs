@@ -17,4 +17,20 @@ namespace BTG.Utilities.DI
     public sealed class  ProvideAttribute : Attribute
     {
     }
+
+    /// <summary>
+    /// Attribute to mark classes that should be registered with the DI system
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class RegisterAttribute : Attribute
+    {
+    }
+
+    /// <summary>
+    /// Attribute to mark classes that should be injected with dependencies by the DI system
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class)]
+    public sealed class InjectorAttribute : Attribute
+    {
+    }
 }
