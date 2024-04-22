@@ -18,9 +18,15 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = true;
         }
 
-        public void OnCollisionEnter(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
             m_Controller.OnHitObject(collision.collider);
+            m_Collider.enabled = false;
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            m_Controller.OnHitObject(other);
             m_Collider.enabled = false;
         }
 

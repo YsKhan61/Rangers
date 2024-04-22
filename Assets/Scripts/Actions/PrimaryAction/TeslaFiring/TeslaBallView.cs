@@ -30,6 +30,11 @@ namespace BTG.Actions.PrimaryAction
             Reset();
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            Reset();
+        }
+
         private void OnDisable()
         {
             m_Collider.enabled = false;
