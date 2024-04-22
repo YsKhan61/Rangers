@@ -30,6 +30,10 @@ namespace BTG.Enemy
         private float m_MaxSpeedMultiplier = 0.5f;
         public float MaxSpeedMultiplier => m_MaxSpeedMultiplier;
 
+        [SerializeField]
+        private EnemyStateManager.EnemyState m_InitialState;
+        public EnemyStateManager.EnemyState InitialState => m_InitialState;
+
         public void SetPatrolPoints(in Vector3[] points)
         {
             m_PatrolPoints = points;

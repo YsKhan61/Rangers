@@ -26,22 +26,20 @@ namespace BTG.Enemy
 
         public void Init()
         {
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this as IDestroyable);
-
-            ChangeState(EnemyState.Move);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
         public void DeInit()
         {
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void OnDestroy()
         {
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         private void InitializeIdleState()

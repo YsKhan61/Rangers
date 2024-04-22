@@ -1,13 +1,18 @@
 using BTG.Utilities;
 using UnityEngine;
 
-public class TestDamager : MonoBehaviour
+
+namespace BTG.Test
 {
-    private void OnTriggerStay(Collider collider)
+    public class TestDamager : MonoBehaviour
     {
-        if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+        private void OnTriggerStay(Collider collider)
         {
-            damageable.TakeDamage(1);
+            if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(1);
+            }
         }
     }
+
 }

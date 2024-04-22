@@ -36,7 +36,7 @@ namespace BTG.Enemy
             HelperMethods.DisposeCancellationTokenSource(m_Cts);
         }
 
-        [Inject]
+
         public void Initialize()
         {
             m_NextWaveIndex = 0;
@@ -44,6 +44,8 @@ namespace BTG.Enemy
             m_EnemyPool = new EnemyPool();
             // Manual injection
             DIManager.Instance.Inject(m_EnemyPool);
+
+            StartNextWaveWithEntityTags();
         }
 
         public void OnEnemyDeath()

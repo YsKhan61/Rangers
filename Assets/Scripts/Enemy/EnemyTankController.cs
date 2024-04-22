@@ -38,7 +38,7 @@ namespace BTG.Enemy
         ~EnemyTankController()
         {
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
-            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityBrain = null;
         }
 
@@ -48,6 +48,7 @@ namespace BTG.Enemy
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
 
             m_StateManager.Init();
+            m_StateManager.ChangeState(m_Data.InitialState);
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
@@ -66,7 +67,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
+            m_EntityBrain.UltimateAction.OnFullyCharged += ExecuteUltimate;
             m_EntityBrain.OnAfterDeath += OnTankDeath;
             m_EntityBrain.Init();
         }
@@ -78,7 +79,7 @@ namespace BTG.Enemy
         }
 
 
-        public void OnUltimateFullyCharged()
+        public void ExecuteUltimate()
         {
             m_EntityBrain.TryExecuteUltimate();
         }
@@ -86,7 +87,7 @@ namespace BTG.Enemy
 
         private void OnTankDeath()
         {
-            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
 
             m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
