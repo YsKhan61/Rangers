@@ -6,14 +6,14 @@ namespace BTG.Enemy
     {
         private int m_LastIndex;
 
-        public EnemyMoveState(EnemyStateManager.EnemyState state) : base(state)
+        public EnemyMoveState(EnemyState state) : base(state)
         {
 
         }
 
         public override void Enter()
         {
-            NextState = EnemyStateManager.EnemyState.Move;
+            NextState = EnemyState.Move;
             SetNewDestination();
         }
 
@@ -21,7 +21,7 @@ namespace BTG.Enemy
         {
             // check if enemy is near destination, if yes, set new destination
             if (HasReachedDestination())
-                NextState = EnemyStateManager.EnemyState.Idle;
+                NextState = EnemyState.Idle;
         }
 
         public override void Exit()

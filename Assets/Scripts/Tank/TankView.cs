@@ -29,6 +29,7 @@ namespace BTG.Tank
 
         // dependencies
         private TankBrain m_Brain;
+        public TankBrain TankBrain => m_Brain;
 
         public Transform Transform => transform;
 

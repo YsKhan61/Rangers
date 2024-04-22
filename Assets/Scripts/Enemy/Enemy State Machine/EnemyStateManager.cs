@@ -2,17 +2,17 @@ using BTG.Utilities;
 
 namespace BTG.Enemy
 {
-    public class EnemyStateManager : StateManager<EnemyStateManager.EnemyState>, IUpdatable, IDestroyable
+    public enum EnemyState
+    {
+        Idle,
+        Move,
+        Attack,
+        Dead
+    }
+
+    public class EnemyStateManager : StateManager<EnemyState>, IUpdatable, IDestroyable
     {
         private EnemyTankController m_Controller;
-
-        public enum EnemyState
-        {
-            Idle,
-            Move,
-            Attack,
-            Dead
-        }
 
         public EnemyStateManager(EnemyTankController enemyController)
         {

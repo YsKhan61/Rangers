@@ -5,7 +5,7 @@ namespace BTG.Enemy
 {
     public class EnemyDeadState : EnemyBaseState
     {
-        public EnemyDeadState(EnemyStateManager.EnemyState state) : base(state)
+        public EnemyDeadState(EnemyState state) : base(state)
         {
 
         }

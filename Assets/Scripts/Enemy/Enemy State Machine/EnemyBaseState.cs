@@ -6,11 +6,11 @@ namespace BTG.Enemy
     /// <summary>
     /// All Enemy States should inherit from this class.
     /// </summary>
-    public abstract class EnemyBaseState : BaseState<EnemyStateManager.EnemyState>
+    public abstract class EnemyBaseState : BaseState<EnemyState>
     {
         protected EnemyTankController m_Controller;
 
-        public EnemyBaseState(EnemyStateManager.EnemyState state) : base(state)
+        public EnemyBaseState(EnemyState state) : base(state)
         {
 
         }

@@ -47,14 +47,20 @@ namespace BTG.Enemy
             m_Agent.speed = m_EntityBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
 
+#if UNITY_EDITOR
+            if (!m_Data.InitializeState)
+            {
+                return;
+            }
+#endif
+
             m_StateManager.Init();
             m_StateManager.ChangeState(m_Data.InitialState);
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
-        public void SetEntityBrain(
-            IEntityBrain entity)
+        public void SetEntityBrain(IEntityBrain entity)
         {
             m_EntityBrain = entity as IEntityTankBrain;
             if (m_EntityBrain == null)
@@ -90,7 +96,7 @@ namespace BTG.Enemy
             m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
 
-            m_StateManager.ChangeState(EnemyStateManager.EnemyState.Dead);
+            m_StateManager.ChangeState(EnemyState.Dead);
             m_StateManager.DeInit();
 
             m_EntityBrain = null;

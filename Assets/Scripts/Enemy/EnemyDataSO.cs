@@ -31,12 +31,19 @@ namespace BTG.Enemy
         public float MaxSpeedMultiplier => m_MaxSpeedMultiplier;
 
         [SerializeField]
-        private EnemyStateManager.EnemyState m_InitialState;
-        public EnemyStateManager.EnemyState InitialState => m_InitialState;
+        private EnemyState m_InitialState;
+        public EnemyState InitialState => m_InitialState;
 
         public void SetPatrolPoints(in Vector3[] points)
         {
             m_PatrolPoints = points;
         }
+
+
+#if UNITY_EDITOR
+        [SerializeField]
+        private bool m_InitializeState = false;
+        public bool InitializeState => m_InitializeState;
+#endif
     }
 }
