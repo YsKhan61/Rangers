@@ -3,9 +3,22 @@ This is a fun project where we have tank rangers of various abilities who can fi
 
 # Rangers
 - Red ranger
+  - Ultimate Ability: Invisibility
 - Blue ranger
+  - Ultimate Ability: Air Strike
 - Yellow ranger
+  - Ultimate Ability: Self Shield
 - Green ranger
+  - Ultimate Ability: Auto Target
+
+# Design Pattern used
+- Flyweight
+- Dependency Injection
+- Model-view-controller
+- Observer pattern (Event Channel, EventBus)
+- Factory pattern
+- Dynamic Object Pooling
+- State Machine
 
 # Sceeenshots
 Tank Selection Panel
