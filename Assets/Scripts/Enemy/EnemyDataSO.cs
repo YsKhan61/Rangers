@@ -34,12 +34,6 @@ namespace BTG.Enemy
         private EnemyState m_InitialState;
         public EnemyState InitialState => m_InitialState;
 
-        public void SetPatrolPoints(in Vector3[] points)
-        {
-            m_PatrolPoints = points;
-        }
-
-
 #if UNITY_EDITOR
         [SerializeField]
         private bool m_InitializeState = false;

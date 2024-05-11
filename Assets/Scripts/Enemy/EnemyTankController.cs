@@ -14,6 +14,7 @@ namespace BTG.Enemy
         private EnemyPool m_Pool;
         private EnemyService m_Service;
         private IEntityTankBrain m_EntityBrain;
+        private IEntityHealthController m_EntityHealthController;
         private EnemyView m_View;
         private NavMeshAgent m_Agent;
         public NavMeshAgent Agent => m_Agent;
@@ -39,6 +40,7 @@ namespace BTG.Enemy
         {
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
+            m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
             m_EntityBrain = null;
         }
 
@@ -50,6 +52,7 @@ namespace BTG.Enemy
 #if UNITY_EDITOR
             if (!m_Data.InitializeState)
             {
+                // This is to prevent the state from being initialized in the editor if it is not needed
                 return;
             }
 #endif
@@ -63,6 +66,7 @@ namespace BTG.Enemy
         public void SetEntityBrain(IEntityBrain entity)
         {
             m_EntityBrain = entity as IEntityTankBrain;
+            m_EntityHealthController = m_EntityBrain.HealthController;
             if (m_EntityBrain == null)
             {
                 Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type ITankBrain");
@@ -75,6 +79,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.UltimateAction.OnFullyCharged += ExecuteUltimate;
             m_EntityBrain.OnAfterDeath += OnTankDeath;
+            m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
             m_EntityBrain.Init();
         }
 
@@ -95,6 +100,7 @@ namespace BTG.Enemy
         {
             m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
+            m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
 
             m_StateManager.ChangeState(EnemyState.Dead);
             m_StateManager.DeInit();
