@@ -39,6 +39,7 @@ namespace BTG.Enemy
         ~EnemyTankController()
         {
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
+            m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
             m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
             m_EntityBrain = null;
@@ -79,6 +80,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.UltimateAction.OnFullyCharged += ExecuteUltimate;
             m_EntityBrain.OnAfterDeath += OnTankDeath;
+            m_EntityBrain.OnEntityVisibilityToggled += m_View.ToggleVisibility;
             m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
             m_EntityBrain.Init();
         }
@@ -100,6 +102,7 @@ namespace BTG.Enemy
         {
             m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
+            m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
 
             m_StateManager.ChangeState(EnemyState.Dead);

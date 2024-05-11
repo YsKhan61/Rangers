@@ -31,5 +31,14 @@ namespace BTG.Enemy
         {
             m_BarSlider.value = value;
         }
+
+        /// <summary>
+        /// Toggle the visibility of the health UI.
+        /// </summary>
+        /// <param name="isVisible"></param>
+        public void ToggleVisibility(bool isVisible)
+        {
+            gameObject.SetActive(isVisible);
+        }
     }
 }

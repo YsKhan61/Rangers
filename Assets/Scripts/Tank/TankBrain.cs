@@ -21,6 +21,7 @@ namespace BTG.Tank
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
+        public event Action<bool> OnEntityVisibilityToggled;
 
         public enum TankState
         {
@@ -118,14 +119,17 @@ namespace BTG.Tank
             SetState(TankState.Dead);
             OnTankStateChangedToDead();
         }
-        
+
 
         /// <summary>
         /// True - Make tank visible, False - Make tank invisible
         /// </summary>
         /// <param name="value"></param>
-        public void ToggleActorVisibility(bool value) => m_View.ToggleVisible(value);
-
+        public void ToggleActorVisibility(bool value)
+        {
+            OnEntityVisibilityToggled?.Invoke(value);
+            m_View.ToggleVisible(value);
+        }
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
 

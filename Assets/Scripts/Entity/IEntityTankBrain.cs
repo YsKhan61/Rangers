@@ -8,9 +8,9 @@ namespace BTG.Entity
 {
     public interface IEntityTankBrain : IEntityBrain, IPrimaryActor, IUltimateActor
     {
-        // public event Action<float, float> OnPlayerCamShake;
         public event Action<Sprite> OnEntityInitialized;
         public event Action OnAfterDeath;
+        public event Action<bool> OnEntityVisibilityToggled;
 
         public IEntityTankModel Model { get; }
         public Transform CameraTarget { get; }

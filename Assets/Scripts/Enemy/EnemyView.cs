@@ -28,6 +28,12 @@ namespace BTG.Enemy
         public void UpdateHealthUI(int currentHealth, int maxHealth)
             => m_HealthUIView.UpdateHealthUI((float)currentHealth/maxHealth);
 
+        public void ToggleVisibility(bool isVisible)
+        {
+            gameObject.SetActive(isVisible);
+            m_HealthUIView.ToggleVisibility(isVisible);
+        }
+
         private void OnDrawGizmos()
         {
             m_Controller?.OnDrawGizmos();
