@@ -51,7 +51,7 @@ namespace BTG.Enemy
 
         private void InitializeMoveState()
         {
-            EnemyMoveState moveState = new EnemyMoveState(EnemyState.Move);
+            EnemyPatrolState moveState = new EnemyPatrolState(EnemyState.Move);
             moveState.SetController(m_Controller);
             States.Add(EnemyState.Move, moveState);
         }

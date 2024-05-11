@@ -22,6 +22,7 @@ namespace BTG.Enemy
         private EnemyStateManager m_StateManager;
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_View.transform;
+        public bool IsTargetInRange { get; private set; }
 
 
         public EnemyTankController(EnemyDataSO data, EnemyPool pool)
@@ -63,6 +64,11 @@ namespace BTG.Enemy
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
+
+        /// <summary>
+        /// Set the player in range value depending on whether the player is in range or not.
+        /// </summary>
+        public void SetPlayerInRange(bool value) => IsTargetInRange = value;
 
         public void SetEntityBrain(IEntityBrain entity)
         {

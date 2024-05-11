@@ -2,11 +2,11 @@
 
 namespace BTG.Enemy
 {
-    public class EnemyMoveState : EnemyAliveState
+    public class EnemyPatrolState : EnemyAliveState
     {
         private int m_LastIndex;
 
-        public EnemyMoveState(EnemyState state) : base(state)
+        public EnemyPatrolState(EnemyState state) : base(state)
         {
 
         }
@@ -19,6 +19,11 @@ namespace BTG.Enemy
 
         public override void Update()
         {
+            if (m_Controller.IsTargetInRange)
+            {
+                // if target is in range, switch to chase state
+            }
+
             // check if enemy is near destination, if yes, set new destination
             if (HasReachedDestination())
                 NextState = EnemyState.Idle;

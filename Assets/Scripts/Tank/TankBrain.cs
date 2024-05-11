@@ -124,7 +124,6 @@ namespace BTG.Tank
         /// <summary>
         /// True - Make tank visible, False - Make tank invisible
         /// </summary>
-        /// <param name="value"></param>
         public void ToggleActorVisibility(bool value)
         {
             OnEntityVisibilityToggled?.Invoke(value);
@@ -145,7 +144,7 @@ namespace BTG.Tank
         {
             m_HealthController.TakeDamage(damage);
             if (m_Model.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0.5f, ShakeDuration = 0.2f }); // OnPlayerCamShake?.Invoke(0.5f, 0.2f);           // shake values are hardcoded for now
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0.5f, ShakeDuration = 0.2f });   // shake values are hardcoded for now
         }
 
         private void UpdateState()

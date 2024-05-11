@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,6 +18,22 @@ namespace BTG.Enemy
         private void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out IPlayerView _))
+            {
+                m_Controller.SetPlayerInRange(true);
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.TryGetComponent(out IPlayerView _))
+            {
+                m_Controller.SetPlayerInRange(false);
+            }
         }
 
         public void SetController(EnemyTankController controller)
