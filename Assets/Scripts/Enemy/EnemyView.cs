@@ -30,7 +30,6 @@ namespace BTG.Enemy
 
         public void ToggleVisibility(bool isVisible)
         {
-            gameObject.SetActive(isVisible);
             m_HealthUIView.ToggleVisibility(isVisible);
         }
 
