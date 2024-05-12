@@ -1,4 +1,6 @@
-﻿namespace BTG.Utilities
+﻿using UnityEngine;
+
+namespace BTG.Utilities
 {
     /// <summary>
     /// An interface for the player view
@@ -8,5 +10,6 @@
     /// </summary>
     public interface IPlayerView
     {
+        public Transform Transform { get; }
     }
 }

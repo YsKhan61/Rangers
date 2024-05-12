@@ -22,9 +22,9 @@ namespace BTG.Enemy
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out IPlayerView _))
+            if (other.TryGetComponent(out IPlayerView view))
             {
-                m_Controller.SetPlayerInRange(true);
+                m_Controller.SetPlayerView(view);
             }
         }
 
@@ -32,7 +32,7 @@ namespace BTG.Enemy
         {
             if (other.TryGetComponent(out IPlayerView _))
             {
-                m_Controller.SetPlayerInRange(false);
+                m_Controller.SetPlayerView(null);
             }
         }
 
@@ -54,5 +54,10 @@ namespace BTG.Enemy
         {
             m_Controller?.OnDrawGizmos();
         }
+    }
+
+    public class EnemyTargetDetector : MonoBehaviour
+    {
+
     }
 }

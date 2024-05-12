@@ -9,6 +9,8 @@ namespace BTG.Player
         private Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
+        public Transform Transform => transform;
+
         private void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();

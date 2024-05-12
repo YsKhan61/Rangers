@@ -22,7 +22,9 @@ namespace BTG.Enemy
         private EnemyStateManager m_StateManager;
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_View.transform;
-        public bool IsTargetInRange { get; private set; }
+
+        public IPlayerView TargetView { get; private set; }
+        public bool IsTargetInRange  => TargetView != null;
 
 
         public EnemyTankController(EnemyDataSO data, EnemyPool pool)
@@ -66,9 +68,9 @@ namespace BTG.Enemy
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
         /// <summary>
-        /// Set the player in range value depending on whether the player is in range or not.
+        /// Set the player view that has been detected
         /// </summary>
-        public void SetPlayerInRange(bool value) => IsTargetInRange = value;
+        public void SetPlayerView(IPlayerView view) => TargetView = view;
 
         public void SetEntityBrain(IEntityBrain entity)
         {
@@ -92,16 +94,11 @@ namespace BTG.Enemy
         }
 
 
-        public void SetService(EnemyService service)
-        {
-            m_Service = service;
-        }
+        public void SetService(EnemyService service) => m_Service = service;
 
+        public void ExecutePrimaryAction() => m_EntityBrain.StartPrimaryFire();
 
-        public void ExecuteUltimate()
-        {
-            m_EntityBrain.TryExecuteUltimate();
-        }
+        public void ExecuteUltimate() => m_EntityBrain.TryExecuteUltimate();
 
 
         private void OnTankDeath()
