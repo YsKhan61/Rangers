@@ -45,6 +45,7 @@ namespace BTG.Enemy
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
+            m_EntityHealthController.OnDamageTaken -= OnDamageTaken;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
             m_EntityBrain = null;
         }
@@ -99,6 +100,7 @@ namespace BTG.Enemy
             m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
             m_EntityBrain.OnAfterDeath += OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled += m_View.ToggleVisibility;
+            m_EntityHealthController.OnDamageTaken += OnDamageTaken;
             m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
         }
 
@@ -117,6 +119,15 @@ namespace BTG.Enemy
         /// </summary>
         public void ExecuteUltimateAction() => m_EntityBrain.TryExecuteUltimate();
 
+        /// <summary>
+        /// Reallign the entity brain's transform with the rigidbody's transform
+        /// </summary>
+        public void ReAllign()
+        {
+            m_EntityBrain.Transform.position = Rigidbody.position;
+            m_EntityBrain.Transform.rotation = Rigidbody.rotation;
+        }
+
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
         private void OnUltimateExecuted()
@@ -125,11 +136,14 @@ namespace BTG.Enemy
             m_StateMachine.OnUltimateExecuted();
         }
 
+        private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
+
         private void OnTankDeath()
         {
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
+            m_EntityHealthController.OnDamageTaken -= OnDamageTaken;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
 
             m_StateMachine.OnDeath();

@@ -142,8 +142,6 @@ namespace BTG.Tank
 
         public void StopPrimaryFire() => m_PrimaryAction.StopAction();
 
-        
-
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
         public void TakeDamage(int damage)

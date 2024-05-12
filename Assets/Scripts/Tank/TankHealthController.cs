@@ -7,6 +7,7 @@ namespace BTG.Tank
     public class TankHealthController : IEntityHealthController
     {
         public event System.Action<int, int> OnHealthUpdated;        // int - CurrentHealth, int - MaxHealth
+        public event System.Action OnDamageTaken;
 
         private TankModel m_Model;
         private TankBrain m_Brain;
@@ -37,10 +38,12 @@ namespace BTG.Tank
         public void TakeDamage(int damage)
         {
             AddHealth(-damage);
+            OnDamageTaken?.Invoke();
 
-            if (m_Model.CurrentHealth > 0) return;
-
-            m_Brain.Die();
+            if (m_Model.CurrentHealth < 0)
+            {
+                m_Brain.Die();
+            }
         }
     }
 }

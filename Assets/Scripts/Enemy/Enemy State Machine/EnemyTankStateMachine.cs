@@ -11,6 +11,7 @@ namespace BTG.Enemy
         Patrol,
         PrimaryAttack,
         Ultimate,
+        Damaged,
         Dead
     }
 
@@ -79,13 +80,24 @@ namespace BTG.Enemy
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
+        /// <summary>
+        /// Inform the state machine that the ultimate action has been executed
+        /// </summary>
         public void OnUltimateExecuted()
         {
             ChangeState(EnemyTankState.PrimaryAttack);
         }
 
         /// <summary>
-        /// This method is called by the Idle state when it is complete
+        /// Inform the state machine that the entity has taken damage
+        /// </summary>
+        public void OnDamageTaken()
+        {
+            ChangeState(EnemyTankState.Damaged);
+        }
+
+        /// <summary>
+        /// Inform the state machine that the Idle state is complete
         /// </summary>
         internal void OnIdleStateComplete()
         {
@@ -93,7 +105,7 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// This method is called by the Patrol state when it is complete
+        /// Inform the state machine that the Patrol state is complete
         /// </summary>
         internal void OnPatrolStateComplete()
         {
@@ -101,7 +113,15 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// This method is called by states when the target is in range
+        /// Inform the state machine that the Damaged state is complete
+        /// </summary>
+        internal void OnDamagedStateComplete()
+        {
+            ChangeState(EnemyTankState.Idle);
+        }
+
+        /// <summary>
+        /// Inform the state machine that the target is in range
         /// </summary>
         internal void OnTargetInRange()
         {
@@ -109,7 +129,7 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// This method is called by states when the target is not in range
+        /// Inform the state machine that the target is not in range
         /// </summary>
         internal void OnTargetNotInRange()
         {
@@ -117,19 +137,24 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// This method is called to execute the primary action of the owner
+        /// Inform the state machine to execute the primary action of the owner
         /// </summary>
         internal void ExecutePrimaryAction() => m_Controller.ExecutePrimaryAction();
 
         /// <summary>
-        /// This method is called when the ultimate of the entity is fully charged
+        /// Inform the state machine that the ultimate is ready
         /// </summary>
         internal void OnUltimateReady() => ChangeState(EnemyTankState.Ultimate);
 
         /// <summary>
-        /// This method is called to execute the ultimate action of the owner
+        /// Inform the state machine to execute the ultimate action of the owner
         /// </summary>
         internal void ExecuteUltimateAction() => m_Controller.ExecuteUltimateAction();
+
+        /// <summary>
+        /// This method is called to reallign the entity brain's transform with the rigidbody's transform
+        /// </summary>
+        internal void ReAllign() => m_Controller.ReAllign();
 
         internal void OnDeath()
         {
@@ -143,6 +168,7 @@ namespace BTG.Enemy
             AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
             AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
             AddState(EnemyTankState.Ultimate, new EnemyTankUltimateState(this));
+            AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
             AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
 

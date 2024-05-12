@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HealthUIView: {fileID: 7562855421081359566}
+  m_Description: 
 --- !u!1001 &1044359428758163248
 PrefabInstance:
   m_ObjectHideFlags: 0
