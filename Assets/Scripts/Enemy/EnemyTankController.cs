@@ -19,7 +19,8 @@ namespace BTG.Enemy
         private NavMeshAgent m_Agent;
         public NavMeshAgent Agent => m_Agent;
 
-        private EnemyStateManager m_StateManager;
+        // private EnemyStateMachine m_StateManager;
+        private EnemyTankStateMachine m_StateMachine;
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_View.transform;
 
@@ -34,7 +35,8 @@ namespace BTG.Enemy
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
             m_View.SetController(this);
             m_Agent = m_View.GetComponent<NavMeshAgent>();
-            m_StateManager = new EnemyStateManager(this);
+            // m_StateManager = new EnemyStateMachine(this);
+            m_StateMachine = new (this);
 
             Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
@@ -43,7 +45,7 @@ namespace BTG.Enemy
         {
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
-            m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
             m_EntityBrain = null;
         }
@@ -54,15 +56,13 @@ namespace BTG.Enemy
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
 
 #if UNITY_EDITOR
-            if (!m_Data.InitializeState)
+            if (m_Data.InitializeState)
             {
-                // This is to prevent the state from being initialized in the editor if it is not needed
-                return;
+                /*m_StateManager.Init();
+                m_StateManager.ChangeState(m_Data.InitialState);*/
+                m_StateMachine.Init(m_Data.InitialState);
             }
 #endif
-
-            m_StateManager.Init();
-            m_StateManager.ChangeState(m_Data.InitialState);
         }
 
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
@@ -86,7 +86,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.UltimateAction.OnFullyCharged += ExecuteUltimate;
+            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
             m_EntityBrain.OnAfterDeath += OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled += m_View.ToggleVisibility;
             m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
@@ -98,18 +98,19 @@ namespace BTG.Enemy
 
         public void ExecutePrimaryAction() => m_EntityBrain.StartPrimaryFire();
 
-        public void ExecuteUltimate() => m_EntityBrain.TryExecuteUltimate();
+        public void OnUltimateFullyCharged() { }// m_EntityBrain.TryExecuteUltimate();
 
 
         private void OnTankDeath()
         {
-            m_EntityBrain.UltimateAction.OnFullyCharged -= ExecuteUltimate;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
             m_EntityBrain.OnAfterDeath -= OnTankDeath;
             m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
 
-            m_StateManager.ChangeState(EnemyState.Dead);
-            m_StateManager.DeInit();
+            /*m_StateManager.ChangeState(EnemyState.Dead);
+            m_StateManager.DeInit();*/
+            m_StateMachine.OnDeath();
 
             m_EntityBrain = null;
             m_Pool.ReturnEnemy(this);

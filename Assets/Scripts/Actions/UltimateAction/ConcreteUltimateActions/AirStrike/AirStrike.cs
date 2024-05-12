@@ -87,10 +87,10 @@ namespace BTG.Actions.UltimateAction
             AutoCharge();
         }
 
-        public override void OnDestroy()
+        public override void Destroy()
         {
             OnFullyCharged = null;
-            base.OnDestroy();
+            base.Destroy();
         }
 
         protected override void RaiseFullyChargedEvent()

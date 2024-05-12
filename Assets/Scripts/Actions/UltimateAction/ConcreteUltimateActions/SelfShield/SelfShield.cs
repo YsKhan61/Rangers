@@ -34,10 +34,10 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        public override void OnDestroy()
+        public override void Destroy()
         {
             OnFullyCharged = null;
-            base.OnDestroy();
+            base.Destroy();
         }
 
         protected override void Restart()

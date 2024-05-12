@@ -74,7 +74,7 @@ namespace BTG.Tank
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
             m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
-            m_HealthController = new TankHealthController(m_Model, this);
+            m_HealthController = new (m_Model, this);
         }
 
 
@@ -109,7 +109,7 @@ namespace BTG.Tank
             UpdateMoveSound();
         }
 
-        public void OnDestroy()
+        public void Destroy()
         {
             OnEntityInitialized = null;
         }

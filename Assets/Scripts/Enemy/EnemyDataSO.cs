@@ -31,10 +31,13 @@ namespace BTG.Enemy
         public float MaxSpeedMultiplier => m_MaxSpeedMultiplier;
 
         [SerializeField]
-        private EnemyState m_InitialState;
-        public EnemyState InitialState => m_InitialState;
+        private EnemyTankState m_InitialState;
+        public EnemyTankState InitialState => m_InitialState;
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// Whether to initialize the state machine on start
+        /// </summary>
         [SerializeField]
         private bool m_InitializeState = false;
         public bool InitializeState => m_InitializeState;

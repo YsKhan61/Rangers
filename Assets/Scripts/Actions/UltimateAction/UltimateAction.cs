@@ -82,7 +82,7 @@ namespace BTG.Actions.UltimateAction
 
         public abstract bool TryExecute();
 
-        public virtual void OnDestroy()
+        public virtual void Destroy()
         {
             HelperMethods.DisposeCancellationTokenSource(m_CTS);
             

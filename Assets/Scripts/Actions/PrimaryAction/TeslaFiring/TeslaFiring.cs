@@ -1,7 +1,6 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
-using System;
 using UnityEngine;
 
 namespace BTG.Actions.PrimaryAction
@@ -41,6 +40,7 @@ namespace BTG.Actions.PrimaryAction
 
             UpdateChargeAmount();
             UpdateBallSize();
+            ShootOnFullyCharged();
         }
 
         public void Disable()
@@ -99,6 +99,14 @@ namespace BTG.Actions.PrimaryAction
 
             m_BallInCharge.transform.localScale = Vector3.one * Mathf.Lerp(m_Data.MinTeslaBallScale, m_Data.MaxTeslaBallScale, m_ChargeAmount);
             m_BallInCharge.Collider.radius = Mathf.Lerp(m_Data.MinTeslaBallScale, m_Data.MaxTeslaBallScale, m_ChargeAmount);
+        }
+
+        private void ShootOnFullyCharged()
+        {
+            if (m_ChargeAmount >= 1)
+            {
+                StopAction();
+            }
         }
 
         private void SpawnBall()
