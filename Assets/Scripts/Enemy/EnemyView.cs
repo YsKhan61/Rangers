@@ -50,14 +50,27 @@ namespace BTG.Enemy
             m_HealthUIView.ToggleVisibility(isVisible);
         }
 
+
+#if UNITY_EDITOR
+        [Header("Debug purpose")]
+        [SerializeField]
+        [TextArea(2, 2)]
+        private string m_Description;
+
+        /// <summary>
+        /// This method is used to log the description of the view in it's inspector
+        /// </summary>
+        /// <param name="message">message to log</param>
+        /// <param name="append">if true, the message will be added as new line, or will replace the old message</param>
+        public void LogDescription(string message)
+        {
+            m_Description = message;
+        }
+
         private void OnDrawGizmos()
         {
             m_Controller?.OnDrawGizmos();
         }
-    }
-
-    public class EnemyTargetDetector : MonoBehaviour
-    {
-
+#endif
     }
 }

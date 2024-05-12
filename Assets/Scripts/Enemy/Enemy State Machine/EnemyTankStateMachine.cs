@@ -9,7 +9,8 @@ namespace BTG.Enemy
     {
         Idle,
         Patrol,
-        Attack,
+        PrimaryAttack,
+        Ultimate,
         Dead
     }
 
@@ -22,6 +23,7 @@ namespace BTG.Enemy
         internal bool IsTargetInRange => m_Controller.IsTargetInRange;
         internal Transform Transform => m_Controller.Transform;
         internal Transform TargetTransform => m_Controller.TargetView.Transform;
+        internal bool IsUltimateReady => m_Controller.IsUltimateReady;
 
 
         public EnemyTankStateMachine(EnemyTankController controller)
@@ -37,6 +39,8 @@ namespace BTG.Enemy
         /// </summary>
         public void Init(EnemyTankState stateToStart)
         {
+            EditorInit();
+
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
 
@@ -49,6 +53,8 @@ namespace BTG.Enemy
         /// </summary>
         public void DeInit()
         {
+            EditorDeInit();
+
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
@@ -73,6 +79,11 @@ namespace BTG.Enemy
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
+        public void OnUltimateExecuted()
+        {
+            ChangeState(EnemyTankState.PrimaryAttack);
+        }
+
         /// <summary>
         /// This method is called by the Idle state when it is complete
         /// </summary>
@@ -94,9 +105,12 @@ namespace BTG.Enemy
         /// </summary>
         internal void OnTargetInRange()
         {
-            ChangeState(EnemyTankState.Attack);
+            ChangeState(EnemyTankState.PrimaryAttack);
         }
 
+        /// <summary>
+        /// This method is called by states when the target is not in range
+        /// </summary>
         internal void OnTargetNotInRange()
         {
             ChangeState(EnemyTankState.Idle);
@@ -106,6 +120,16 @@ namespace BTG.Enemy
         /// This method is called to execute the primary action of the owner
         /// </summary>
         internal void ExecutePrimaryAction() => m_Controller.ExecutePrimaryAction();
+
+        /// <summary>
+        /// This method is called when the ultimate of the entity is fully charged
+        /// </summary>
+        internal void OnUltimateReady() => ChangeState(EnemyTankState.Ultimate);
+
+        /// <summary>
+        /// This method is called to execute the ultimate action of the owner
+        /// </summary>
+        internal void ExecuteUltimateAction() => m_Controller.ExecuteUltimateAction();
 
         internal void OnDeath()
         {
@@ -117,7 +141,8 @@ namespace BTG.Enemy
         {
             AddState(EnemyTankState.Idle, new EnemyTankIdleState(this));
             AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
-            AddState(EnemyTankState.Attack, new EnemyTankAttackState(this));
+            AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
+            AddState(EnemyTankState.Ultimate, new EnemyTankUltimateState(this));
             AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
 
@@ -126,10 +151,29 @@ namespace BTG.Enemy
         /// Only for debugging purposes
         /// </summary>
         /// <param name="state"></param>
-        public void ForceChangeState(EnemyTankState state)
+        public void ChangeStateForTesting(EnemyTankState state)
         {
             ChangeState(state);
         }
+
+        /// <summary>
+        /// This method is called when the state machine is initialized
+        /// </summary>
+        private void EditorInit()
+        {
+            OnStateChanged += LogStateChanged;
+        }
+
+        /// <summary>
+        /// This method is called when the state machine is deinitialized
+        /// </summary>
+        private void EditorDeInit()
+        {
+            OnStateChanged -= LogStateChanged;
+        }
+
+        private void LogStateChanged(EnemyTankState state) =>
+            m_Controller.LogDescription($"State Changed: {state}");
 
 #endif
     }

@@ -81,6 +81,7 @@ namespace BTG.Enemy
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
             controller.Init();
+            entity.Init();
         }
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)

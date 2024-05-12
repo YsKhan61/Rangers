@@ -9,6 +9,8 @@ namespace BTG.StateMachine
     /// </summary>
     public abstract class BaseStateMachine<T> where T : Enum
     {
+        internal protected event Action<T> OnStateChanged;
+
         protected Dictionary<T, IState> m_States = new Dictionary<T, IState>();
 
         /// <summary>
@@ -29,6 +31,8 @@ namespace BTG.StateMachine
             currentState?.Exit();
             currentState = nextState;
             currentState.Enter();
+
+            OnStateChanged?.Invoke(state);
         }
 
         /// <summary>

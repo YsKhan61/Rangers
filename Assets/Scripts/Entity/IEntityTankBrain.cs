@@ -19,6 +19,5 @@ namespace BTG.Entity
         public void SetLayers(int selfLayer, int oppositionLayer);
         public void SetParentOfView(Transform parent, Vector3 position, Quaternion rotation);
         public void SetRigidbody(Rigidbody rb);
-        public void Init();
     }
 }

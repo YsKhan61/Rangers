@@ -2,7 +2,7 @@
 
 namespace BTG.Enemy
 {
-    public class EnemyTankAttackState : EnemyTankBaseState
+    public class EnemyTankAttackState : EnemyTankAliveState
     {
         private const float ROTATE_THRESHOLD = 0.1f;
         private const float ROTATE_SPEED = 5f;
@@ -33,6 +33,12 @@ namespace BTG.Enemy
             if (!owner.IsTargetInRange)
             {
                 owner.OnTargetNotInRange();
+                return;
+            }
+
+            if (owner.IsUltimateReady)
+            {
+                owner.OnUltimateReady();
                 return;
             }
 
