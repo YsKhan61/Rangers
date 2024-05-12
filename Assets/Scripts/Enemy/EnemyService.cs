@@ -7,6 +7,10 @@ using UnityEngine;
 
 namespace BTG.Enemy
 {
+    /// <summary>
+    /// The service that manages everything related to the enemies of the game.
+    /// It is responsible for spawning the enemies, starting the waves, and keeping track of the enemy death count.
+    /// </summary>
     public class EnemyService : ISelfDependencyRegister, IDependencyInjector
     {
         [Inject]
@@ -36,24 +40,33 @@ namespace BTG.Enemy
             HelperMethods.DisposeCancellationTokenSource(m_Cts);
         }
 
-
+        /// <summary>
+        /// This method initializes the enemy service.
+        /// It creates the enemy pool and starts the first wave.
+        /// </summary>
         public void Initialize()
         {
             m_NextWaveIndex = 0;
 
             m_EnemyPool = new EnemyPool();
-            // Manual injection
+            // Manual injection to DIManager : There will be only one instance of EnemyPool.
             DIManager.Instance.Inject(m_EnemyPool);
 
             StartNextWaveWithEntityTags();
         }
 
+        /// <summary>
+        /// When an enemy dies, this method is called by the enemy controller of the enemy that died.
+        /// </summary>
         public void OnEnemyDeath()
         {
             m_EnemyDeathCountData.Value++;
             TryStartNextWave();
         }
 
+        /// <summary>
+        /// Starts the next wave with the entity tags of the next wave.
+        /// </summary>
         public void StartNextWaveWithEntityTags()
         {
             if (!m_EnemyWaves.TryGetEntityTagsForNextWave(m_NextWaveIndex, out TagSO[] tags))

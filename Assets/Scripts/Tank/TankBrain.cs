@@ -5,7 +5,6 @@ using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,8 +13,7 @@ namespace BTG.Tank
 {
     /// <summary>
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
-    /// TankMovementController, TankFiringController and TankUltimateController.
-    /// It is like a Facade/Mediator for the tank.
+    /// PrimaryAction, UltimateAction, HealthController.
     /// </summary>
     public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
@@ -77,7 +75,12 @@ namespace BTG.Tank
             m_HealthController = new (m_Model, this);
         }
 
-
+        /// <summary>
+        /// Initialize the tank brain.
+        /// It sets the tank state to idle, enables the primary and ultimate actions, resets the health controller.
+        /// It registers the tank to update and destroy callbacks.
+        /// It raises the initialized event.
+        /// </summary>
         public void Init()
         {
             m_Model.State = TankState.Idle;
@@ -92,7 +95,7 @@ namespace BTG.Tank
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
 
-            _ = RaiseInitializedEventAsync();
+            _ = HelperMethods.InvokeInNextFrame(()=> OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
@@ -114,6 +117,9 @@ namespace BTG.Tank
             OnEntityInitialized = null;
         }
 
+        /// <summary>
+        /// This method is called from the tank health controller when the tank's health reaches zero.
+        /// </summary>
         public void Die()
         {
             SetState(TankState.Dead);
@@ -136,7 +142,7 @@ namespace BTG.Tank
 
         public void StopPrimaryFire() => m_PrimaryAction.StopAction();
 
-        public void ChargeUltimate(float amount) => m_UltimateAction.Charge(amount);
+        
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
@@ -205,17 +211,18 @@ namespace BTG.Tank
             OnAfterDeath?.Invoke();
             OnAfterDeath = null;
 
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
 
             m_Pool.ReturnTank(this);
         }
 
-        private async Task RaiseInitializedEventAsync()
-        {
-            await Task.Yield();
-            OnEntityInitialized?.Invoke(m_Model.Icon);
-        }
+#if UNITY_EDITOR
+        /// <summary>
+        /// Charge the ultimate action by the given amount using the inspector of a view.
+        /// </summary>
+        public void ChargeUltimate(float amount) => m_UltimateAction.Charge(amount);
+#endif
     }
 }
 
