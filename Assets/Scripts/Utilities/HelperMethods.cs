@@ -1,5 +1,7 @@
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace BTG.Utilities
 {
@@ -51,6 +53,32 @@ namespace BTG.Utilities
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// This method is used to copy the properties of the source component to the target component.
+        /// </summary>
+        public static void CopyComponentProperties(Component sourceComponent, Component targetComponent)
+        {
+            // Get the type of the source and target components
+            System.Type type = sourceComponent.GetType();
+
+            // Get all properties of the component
+            PropertyInfo[] properties = type.GetProperties();
+
+            // Iterate through each property and copy its value
+            foreach (PropertyInfo property in properties)
+            {
+                // Check if the property can be read and written
+                if (property.CanRead && property.CanWrite)
+                {
+                    // Get the value of the property from the source component
+                    object value = property.GetValue(sourceComponent, null);
+
+                    // Set the value of the property in the target component
+                    property.SetValue(targetComponent, value, null);
+                }
             }
         }
     }

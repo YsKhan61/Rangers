@@ -10,9 +10,29 @@ namespace BTG.Entity
         public event System.Action OnDamageTaken;
 
         /// <summary>
+        /// Set the controller of the entity.
+        /// Can be player or enemy.
+        /// </summary>
+        public void SetController(IEntityController controller);
+
+        /// <summary>
+        /// Set the collider that will be used to detect the damage.
+        /// </summary>
+        public void SetCollider(UnityEngine.Collider collider);
+
+        /// <summary>
+        /// Activate or deactivate the collider to decide whether the entity can take damage or not.
+        /// </summary>
+        public void ToggleCollider(bool value);
+
+        /// <summary>
         /// This method is used to take damage.
         /// </summary>
-        /// <param name="damage"></param>
         public void TakeDamage(int damage);
+
+        /// <summary>
+        /// Reset the health of the entity.
+        /// </summary>
+        public void Reset();
     }
 }

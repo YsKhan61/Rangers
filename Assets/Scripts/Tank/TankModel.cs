@@ -17,9 +17,6 @@ namespace BTG.Tank
 
         public float CurrentMoveSpeed => m_Brain.Rigidbody.velocity.magnitude;
 
-        private int m_CurrentHealth;
-        public int CurrentHealth => m_CurrentHealth;
-
         public int MaxHealth => m_TankData.MaxHealth;
         public float Acceleration => m_TankData.Acceleration;
         public int MaxSpeed => m_TankData.MaxSpeed;
@@ -41,16 +38,9 @@ namespace BTG.Tank
             m_Brain = brain;
         }
 
-        public void AddHealth(int health)
-        {
-            m_CurrentHealth += health;
-            Mathf.Clamp(m_CurrentHealth, 0, m_TankData.MaxHealth);
-        }
-
         public void Reset()
         {
             IsPlayer = false;
-            m_CurrentHealth = 0;
             OppositionLayer = 0;
         }
     }

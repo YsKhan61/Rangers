@@ -14,7 +14,7 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
-            Debug.Log("Enemy died!");
+            
         }
 
         public override void Exit()

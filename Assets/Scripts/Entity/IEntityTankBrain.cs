@@ -1,5 +1,6 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
+using BTG.Utilities;
 using System;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ namespace BTG.Entity
     public interface IEntityTankBrain : IEntityBrain, IPrimaryActor, IUltimateActor
     {
         public event Action<Sprite> OnEntityInitialized;
-        public event Action OnAfterDeath;
         public event Action<bool> OnEntityVisibilityToggled;
 
         /// <summary>
@@ -28,15 +28,9 @@ namespace BTG.Entity
         public Transform CameraTarget { get; }
 
         /// <summary>
-        /// Get the health controller of the tank.
+        /// Get the damage collider of the tank.
         /// </summary>
-        public IEntityHealthController HealthController { get; }
-
-        /// <summary>
-        /// Set the self and opposition layers of the tank.
-        /// This layers helps the tank to identify the opposition tanks.
-        /// </summary>
-        public void SetLayers(int selfLayer, int oppositionLayer);
+        public Collider DamageCollider { get; }
 
         /// <summary>
         /// Set the parent of the tank view.
@@ -48,5 +42,16 @@ namespace BTG.Entity
         /// Set the rigidbody of the tank.
         /// </summary>
         public void SetRigidbody(Rigidbody rb);
+
+        /// <summary>
+        /// Set the damageable of the tank.
+        /// </summary>
+        /// <param name="damageable"></param>
+        public void SetDamageable(IDamageable damageable);
+
+        /// <summary>
+        /// Inform the tank that it is dead.
+        /// </summary>
+        public void Die();
     }
 }

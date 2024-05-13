@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 namespace BTG.Enemy
 {
-    public class EnemyTankController
+    public class EnemyTankController : IEntityController
     {
         private EnemyDataSO m_Data;
         public EnemyDataSO Data => m_Data;
@@ -26,6 +26,8 @@ namespace BTG.Enemy
         public IPlayerView TargetView { get; private set; }
         public bool IsTargetInRange  => TargetView != null;
         public bool IsUltimateReady { get; private set; }
+        public int OppositionLayer => 1 << m_Data.OppositionLayer;
+        public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
 
         public EnemyTankController(EnemyDataSO data, EnemyPool pool)
@@ -33,20 +35,22 @@ namespace BTG.Enemy
             m_Pool = pool;
             m_Data = data;
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
+            m_View.gameObject.layer = m_Data.SelfLayer;
             m_View.SetController(this);
+
+            CreateHealthController();
+
             m_Agent = m_View.GetComponent<NavMeshAgent>();
             m_StateMachine = new (this);
 
             Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
 
+        
+
         ~EnemyTankController()
         {
-            m_EntityBrain.OnAfterDeath -= OnTankDeath;
-            m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
-            m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
-            m_EntityHealthController.OnDamageTaken -= OnDamageTaken;
-            m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
+            UnsubscribeFromEntityEvents();
             m_EntityBrain = null;
         }
 
@@ -57,6 +61,8 @@ namespace BTG.Enemy
         /// </summary>
         public void Init()
         {
+            m_EntityHealthController.Reset();
+
             m_Agent.speed = m_EntityBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
             m_Agent.stoppingDistance = m_Data.StoppingDistance;
 
@@ -81,27 +87,23 @@ namespace BTG.Enemy
         /// <summary>
         /// Set the entity brain and it's properties to the controller
         /// </summary>
-        /// <param name="entity"></param>
         public void SetEntityBrain(IEntityBrain entity)
         {
             m_EntityBrain = entity as IEntityTankBrain;
-            m_EntityHealthController = m_EntityBrain.HealthController;
+            
             if (m_EntityBrain == null)
             {
-                Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type ITankBrain");
+                Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type IEntityTankBrain");
                 return;
             }
 
             m_EntityBrain.Model.IsPlayer = false;
-            m_EntityBrain.SetLayers(m_Data.SelfLayer, m_Data.OppositionLayer);
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
-            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
-            m_EntityBrain.OnAfterDeath += OnTankDeath;
-            m_EntityBrain.OnEntityVisibilityToggled += m_View.ToggleVisibility;
-            m_EntityHealthController.OnDamageTaken += OnDamageTaken;
-            m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
+            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
+
+            CreateCollider();
+            SubscribeToEvents();
         }
 
         /// <summary>
@@ -128,6 +130,31 @@ namespace BTG.Enemy
             m_EntityBrain.Transform.rotation = Rigidbody.rotation;
         }
 
+        public void Die()
+        {
+            m_StateMachine.OnDeath();
+            m_EntityBrain.Die();
+            UnsubscribeFromEntityEvents();
+            m_EntityBrain = null;
+            m_Pool.ReturnEnemy(this);
+
+            m_Service.OnEnemyDeath();
+        }
+
+        private void CreateHealthController()
+        {
+            m_EntityHealthController = m_View.gameObject.AddComponent<EntityHealthController>();
+            m_EntityHealthController.SetController(this);
+        }
+
+        private void CreateCollider()
+        {
+            string name = m_View.gameObject.name;
+            Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
+            HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
+            m_View.gameObject.name = name;
+            m_EntityHealthController.SetCollider(collider as Collider);
+        }
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
         private void OnUltimateExecuted()
@@ -138,20 +165,28 @@ namespace BTG.Enemy
 
         private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
 
-        private void OnTankDeath()
+        private void OnEntityVisibilityToggled(bool value)
         {
+            m_View.ToggleVisibility(value);
+            m_EntityHealthController.ToggleCollider(value);
+        }
+
+        private void SubscribeToEvents()
+        {
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
+            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
+            m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
+            m_EntityHealthController.OnDamageTaken += OnDamageTaken;
+            m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
+        }
+
+        private void UnsubscribeFromEntityEvents()
+        {
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
-            m_EntityBrain.OnAfterDeath -= OnTankDeath;
-            m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleVisibility;
+            m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;
             m_EntityHealthController.OnDamageTaken -= OnDamageTaken;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
-
-            m_StateMachine.OnDeath();
-
-            m_EntityBrain = null;
-            m_Pool.ReturnEnemy(this);
-
-            m_Service.OnEnemyDeath();
         }
 
 #if UNITY_EDITOR
