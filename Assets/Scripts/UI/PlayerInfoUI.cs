@@ -47,9 +47,9 @@ namespace BTG.UI
             m_PlayerHealthEventChannel.OnEventRaised -= UpdateHealth;
         }
 
-        private void OnPlayerIconDataChanged(Sprite icon)
+        private void OnPlayerIconDataChanged()
         {
-            SetTankIcon(icon);
+            SetTankIcon(m_PlayerIcon.Value);
             Show();
         }
 

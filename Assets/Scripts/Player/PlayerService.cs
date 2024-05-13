@@ -34,12 +34,12 @@ namespace BTG.Player
             
             m_PlayerStats.ResetStats();
 
-            m_PlayerStats.TankIDSelected.OnValueChanged += Respawn;
+            m_PlayerStats.TankIDSelected.OnValueChanged += OnPlayerTankIDSelected;
         }
 
         ~PlayerService()
         {
-            m_PlayerStats.TankIDSelected.OnValueChanged -= Respawn;
+            m_PlayerStats.TankIDSelected.OnValueChanged -= OnPlayerTankIDSelected;
 
             HelperMethods.DisposeCancellationTokenSource(m_CTS);
         }
@@ -62,7 +62,7 @@ namespace BTG.Player
             playerInput.Initialize();
         }
 
-        private void Respawn(int _)
+        private void OnPlayerTankIDSelected()
         {
             bool entityFound = CreateAndSpawnPlayerEntity(out IEntityBrain entity);
             if (!entityFound)

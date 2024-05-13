@@ -23,9 +23,9 @@ namespace BTG.DIExample
             healthData.OnValueChanged -= UpdateHealthUI;
         }
 
-        private void UpdateHealthUI(int newValue)
+        private void UpdateHealthUI()
         {
-            healthText.text = $"Health: {newValue}";
+            healthText.text = $"Health: {healthData.Value}";
         }
     }
 }

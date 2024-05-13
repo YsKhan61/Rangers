@@ -4,11 +4,16 @@ using UnityEngine;
 
 namespace BTG.Utilities
 {
+    /// <summary>
+    /// This is a generic data scriptable object that can be used to store any type of data.
+    /// It has an event that can be subscribed to, to get notified when the value changes.
+    /// </summary>
+    /// <typeparam name="T">Type of the stored data</typeparam>
     public abstract class GenericDataSO<T> : ScriptableObject
     {
         private T m_Value;
 
-        public event Action<T> OnValueChanged;
+        public event Action OnValueChanged;
 
         public T Value
         {
@@ -16,7 +21,7 @@ namespace BTG.Utilities
             set
             {
                 m_Value = value;
-                OnValueChanged?.Invoke(m_Value);
+                OnValueChanged?.Invoke();
             }
         }
 

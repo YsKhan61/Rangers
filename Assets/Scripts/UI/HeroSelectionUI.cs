@@ -44,7 +44,7 @@ namespace BTG.UI
 
         private void HidePanel() => m_Panel.SetActive(false);
 
-        private void OnPlayerDeath(int _) => ShowPanel();
+        private void OnPlayerDeath() => ShowPanel();
 
         private void OnToggleVisibilityInputPerformed(InputAction.CallbackContext context)
         {

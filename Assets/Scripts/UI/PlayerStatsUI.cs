@@ -50,9 +50,10 @@ namespace BTG.UI
 
         private void HidePanel() => m_PlayerStatsPanel.SetActive(false);
 
-        private void OnDeathCountChanged(int deathCount) => m_DeathCountText.text = deathCount.ToString();
+        private void OnDeathCountChanged() => m_DeathCountText.text = m_PlayerStatsData.DeathCount.Value.ToString();
 
-        private void OnEliminatedEnemiesCountChanged(int eliminatedEnemiesCount) => m_EliminatedEnemiesCountText.text = eliminatedEnemiesCount.ToString();
+        private void OnEliminatedEnemiesCountChanged() 
+            => m_EliminatedEnemiesCountText.text = m_PlayerStatsData.EliminatedEnemiesCount.Value.ToString();
     
         private void OnInputActionPerformed(InputAction.CallbackContext context)
         {
