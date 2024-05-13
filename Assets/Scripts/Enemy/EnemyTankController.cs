@@ -6,6 +6,9 @@ using UnityEngine.AI;
 
 namespace BTG.Enemy
 {
+    /// <summary>
+    /// A Controller for the enemy tank
+    /// </summary>
     public class EnemyTankController : IEntityController
     {
         private EnemyDataSO m_Data;
