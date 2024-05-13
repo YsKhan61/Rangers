@@ -43,7 +43,7 @@ namespace BTG.Player
             m_Controller.SetRotateValue(m_RotateInputAction.ReadValue<float>());
         }
 
-        public void OnDestroy()
+        public void Destroy()
         {
             m_InputControls.Player.Fire.started -= OnFireInputStarted;
             m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;

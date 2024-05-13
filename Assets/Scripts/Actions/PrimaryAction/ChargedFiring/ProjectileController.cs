@@ -29,7 +29,7 @@ namespace BTG.Actions.PrimaryAction
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
-        public void OnDestroy()
+        public void Destroy()
         {
             HelperMethods.DisposeCancellationTokenSource(m_Cts);
         }

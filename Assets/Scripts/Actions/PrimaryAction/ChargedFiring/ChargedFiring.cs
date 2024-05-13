@@ -63,7 +63,7 @@ namespace BTG.Actions.PrimaryAction
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
 
-        public void OnDestroy()
+        public void Destroy()
         {
             // Remove all the event listeners of OnTankShoot
             OnPlayerCamShake = null;

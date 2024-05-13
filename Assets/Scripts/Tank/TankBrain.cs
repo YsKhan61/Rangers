@@ -1,11 +1,8 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Entity;
-using BTG.Events;
 using BTG.Utilities;
-using BTG.Utilities.EventBus;
 using System;
-using System.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -14,41 +11,35 @@ namespace BTG.Tank
 {
     /// <summary>
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
-    /// TankMovementController, TankFiringController and TankUltimateController.
-    /// It is like a Facade/Mediator for the tank.
+    /// PrimaryAction, UltimateAction.
     /// </summary>
     public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
     {
-        // public event Action<float, float> OnPlayerCamShake;
         public event Action<Sprite> OnEntityInitialized;
-        public event Action OnAfterDeath;
+        public event Action<bool> OnEntityVisibilityToggled;
 
         public enum TankState
         {
             Idle,
-            Driving,
+            Moving,
             Dead
         }
 
 
         private TankModel m_Model;
         IEntityTankModel IEntityTankBrain.Model => m_Model;
-
         private TankView m_View;
         private IPrimaryAction m_PrimaryAction;
         public IPrimaryAction PrimaryAction => m_PrimaryAction;
-        
         private IUltimateAction m_UltimateAction;
         public IUltimateAction UltimateAction => m_UltimateAction;
-        
-        private TankHealthController m_HealthController;
-        public IEntityHealthController HealthController => m_HealthController;
         public Transform Transform => m_View.transform;
         public Transform CameraTarget => m_View.CameraTarget;
         public Rigidbody Rigidbody { get; private set; }
         public Transform FirePoint => m_View.FirePoint;
-        public IDamageable Damageable => m_View.Damageable;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
+        public Collider DamageCollider => m_View.DamageCollider;
+        public IDamageable Damageable { get; private set; }
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
         public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
@@ -74,10 +65,14 @@ namespace BTG.Tank
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
             m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
-            m_HealthController = new TankHealthController(m_Model, this);
         }
 
-
+        /// <summary>
+        /// Initialize the tank brain.
+        /// It sets the tank state to idle, enables the primary and ultimate actions, resets the health controller.
+        /// It registers the tank to update and destroy callbacks.
+        /// It raises the initialized event.
+        /// </summary>
         public void Init()
         {
             m_Model.State = TankState.Idle;
@@ -87,21 +82,15 @@ namespace BTG.Tank
 
             m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
-            m_HealthController.Reset();
 
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
 
-            _ = RaiseInitializedEventAsync();
+            _ = HelperMethods.InvokeInNextFrame(()=> OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
-
-        public void SetLayers(int selfLayer, int oppositionLayer)
-        {
-            m_View.SetDamageableLayer(selfLayer);
-            m_Model.OppositionLayer = 1 << oppositionLayer;
-        }
+        public void SetDamageable(IDamageable damageable) => Damageable = damageable;
 
         public void Update()
         {
@@ -109,24 +98,23 @@ namespace BTG.Tank
             UpdateMoveSound();
         }
 
-        public void OnDestroy()
+        public void Destroy()
         {
             OnEntityInitialized = null;
         }
 
         public void Die()
         {
-            SetState(TankState.Dead);
+            m_Model.State = TankState.Dead;
             OnTankStateChangedToDead();
         }
-        
 
-        /// <summary>
-        /// True - Make tank visible, False - Make tank invisible
-        /// </summary>
-        /// <param name="value"></param>
-        public void ToggleActorVisibility(bool value) => m_View.ToggleVisible(value);
-
+        public void ToggleActorVisibility(bool value)
+        {
+            OnEntityVisibilityToggled?.Invoke(value);
+            m_View.ToggleVisible(value);
+            m_View.ToggleMuteAudio(!value);
+        }
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
 
@@ -136,20 +124,6 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
-        public void TakeDamage(int damage)
-        {
-            m_HealthController.TakeDamage(damage);
-            if (m_Model.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0.5f, ShakeDuration = 0.2f }); // OnPlayerCamShake?.Invoke(0.5f, 0.2f);           // shake values are hardcoded for now
-        }
-
-        /*public void ShakePlayerCamera(float amount, float duration)
-        {
-            if (!IsPlayer) return;
-
-            OnPlayerCamShake?.Invoke(amount, duration);
-        }*/
-
         private void UpdateState()
         {
             switch (m_Model.State)
@@ -157,25 +131,23 @@ namespace BTG.Tank
                 case TankState.Idle:
                     if (Rigidbody.velocity.sqrMagnitude > 0.05f)
                     {
-                        SetState(TankState.Driving);
+                        m_Model.State = TankState.Moving;
                         OnTankStateChangedToDriving();
                     }
                     break;
-                case TankState.Driving:
+                case TankState.Moving:
                     if (Rigidbody.velocity.sqrMagnitude <= 0.05f)
                     {
-                        SetState(TankState.Idle);
+                        m_Model.State = TankState.Idle;
                         OnTankStateChangedToIdle();
                     }
                     break;
             }
         }
 
-        private void SetState(TankState state) => m_Model.State = state;
-
         private void UpdateMoveSound()
         {
-            if (m_Model.State != TankState.Driving)
+            if (m_Model.State != TankState.Moving)
                 return;
 
             m_View.AudioView.UpdateEngineDrivingClipPitch(
@@ -205,20 +177,18 @@ namespace BTG.Tank
 
             SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
 
-            OnAfterDeath?.Invoke();
-            OnAfterDeath = null;
-
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
 
             m_Pool.ReturnTank(this);
         }
 
-        private async Task RaiseInitializedEventAsync()
-        {
-            await Task.Yield();
-            OnEntityInitialized?.Invoke(m_Model.Icon);
-        }
+#if UNITY_EDITOR
+        /// <summary>
+        /// Charge the ultimate action by the given amount using the inspector of a view.
+        /// </summary>
+        public void ChargeUltimate(float amount) => m_UltimateAction.Charge(amount);
+#endif
     }
 }
 

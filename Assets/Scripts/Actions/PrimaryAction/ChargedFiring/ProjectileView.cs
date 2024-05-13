@@ -1,4 +1,3 @@
-using BTG.Utilities;
 using UnityEngine;
 
 
@@ -18,17 +17,24 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = true;
         }
 
+        /// <summary>
+        /// This is for environment objects
+        /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
             m_Controller.OnHitObject(collision.collider);
             m_Collider.enabled = false;
         }
 
+        /*/// <summary>
+        /// This is for entities. Entities have a trigger collider
+        /// </summary>
+        /// <param name="other"></param>
         private void OnTriggerEnter(Collider other)
         {
             m_Controller.OnHitObject(other);
             m_Collider.enabled = false;
-        }
+        }*/
 
         private void OnDisable()
         {

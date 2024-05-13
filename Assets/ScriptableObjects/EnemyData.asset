@@ -28,3 +28,5 @@ MonoBehaviour:
     type: 3}
   m_StoppingDistance: 1
   m_MaxSpeedMultiplier: 0.2
+  m_InitialState: 0
+  m_InitializeState: 1

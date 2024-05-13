@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BTG.Utilities;
+using UnityEngine;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -27,11 +28,11 @@ namespace BTG.Actions.PrimaryAction
 
         private void OnCollisionEnter(Collision collision)
         {
-            Reset();
-        }
+            if (collision.collider.TryGetComponent(out IDamageable damageable))
+            {
+                damageable.TakeDamage(m_Damage);
+            }
 
-        private void OnTriggerEnter(Collider other)
-        {
             Reset();
         }
 
@@ -40,21 +41,34 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = false;
         }
 
+        /// <summary>
+        /// Initialize the tesla ball.
+        /// It will be shown and the particle system will start playing
+        /// </summary>
         public void Init()
         {
             Show();
         }
 
+        /// <summary>
+        /// Add impulse force to the tesla ball to move it forward
+        /// </summary>
         public void AddImpulseForce(float force)
         {
             m_Rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
         }
 
+        /// <summary>
+        /// Set the pool to return the tesla ball to
+        /// </summary>
         public void SetPool(TeslaBallPool pool)
         {
             m_Pool = pool;
         }
 
+        /// <summary>
+        /// Set the damage the tesla ball will do
+        /// </summary>
         public void SetDamage(int damage)
         {
             m_Damage = damage;

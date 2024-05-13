@@ -24,11 +24,12 @@ namespace BTG.Tank
         public TankAudioView AudioView => m_TankAudio;
 
         [SerializeField]
-        private TankDamageableView m_DamageableView;
-        public IDamageable Damageable => m_DamageableView;
+        private Collider m_DamageCollider;
+        public Collider DamageCollider => m_DamageCollider;
 
         // dependencies
         private TankBrain m_Brain;
+        public TankBrain TankBrain => m_Brain;
 
         public Transform Transform => transform;
 
@@ -36,22 +37,30 @@ namespace BTG.Tank
         public void SetBrain(TankBrain brain)
         {
             m_Brain = brain;
-            m_DamageableView.SetBrain(m_Brain);
         }
-
-        public void SetDamageableLayer(int layer) 
-            => m_DamageableView.gameObject.layer = layer;
 
 
         public void UpdateChargedAmountUI(float chargeAmount)
             => m_TankUI.UpdateChargedAmountUI(chargeAmount);
 
-        public void ToggleVisible(bool isVisible)
+        /// <summary>
+        /// Make the tank visible or invisible
+        /// </summary>
+        /// <param name="show">true - visible</param>
+        public void ToggleVisible(bool show)
         {
-            m_Graphics.gameObject.SetActive(isVisible);
-            m_DamageableView.ToogleDamageableCollider(isVisible);
-            m_TankAudio.ToggleMuteEngineAudio(!isVisible);
-            m_TankAudio.ToggleMuteShootingAudio(!isVisible);
+            m_Graphics.gameObject.SetActive(show);
+            
+        }
+
+        /// <summary>
+        /// Mute/Unmute the audio of the tank
+        /// </summary>
+        /// <param name="mute">yes - mute</param>
+        public void ToggleMuteAudio(bool mute)
+        {
+            m_TankAudio.ToggleMuteEngineAudio(mute);
+            m_TankAudio.ToggleMuteShootingAudio(mute);
         }
     }
 }

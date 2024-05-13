@@ -77,9 +77,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7556362761219353126}
   - component: {fileID: 5353289944543359656}
-  - component: {fileID: 8647166367981316567}
   m_Layer: 0
-  m_Name: Damageable
+  m_Name: Damageable Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,19 +120,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5762839, y: 1.7587739, z: 1.9220543}
   m_Center: {x: 0.009604692, y: 0.9844851, z: -0.028814077}
---- !u!114 &8647166367981316567
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1532483733680906918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 576933cacdedd9c4794e7b23dbbcf0a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_DamageableCollider: {fileID: 5353289944543359656}
 --- !u!1 &2571957331697108734
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,12 +174,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_CameraTarget: {fileID: 7945974898630701512}
   m_Graphics: {fileID: 2165065266451995825}
-  m_Rigidbody: {fileID: 0}
-  m_Collider: {fileID: 0}
   m_FirePoint: {fileID: 7782211647504060980}
   m_TankUI: {fileID: 1870917013688007187}
   m_TankAudio: {fileID: 5165964390985742851}
-  m_DamageableView: {fileID: 8647166367981316567}
+  m_DamageCollider: {fileID: 5353289944543359656}
+  m_DamageableView: {fileID: 0}
 --- !u!114 &1870917013688007187
 MonoBehaviour:
   m_ObjectHideFlags: 0
