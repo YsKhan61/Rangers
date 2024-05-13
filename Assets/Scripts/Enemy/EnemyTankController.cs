@@ -35,10 +35,7 @@ namespace BTG.Enemy
             m_Pool = pool;
             m_Data = data;
             m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
-            m_View.gameObject.layer = m_Data.SelfLayer;
             m_View.SetController(this);
-
-            CreateHealthController();
 
             m_Agent = m_View.GetComponent<NavMeshAgent>();
             m_StateMachine = new (this);
@@ -102,7 +99,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
 
-            CreateCollider();
+            IntializeDamageCollider();
             SubscribeToEvents();
         }
 
@@ -130,10 +127,10 @@ namespace BTG.Enemy
             m_EntityBrain.Transform.rotation = Rigidbody.rotation;
         }
 
-        public void Die()
+        public void EntityDied()
         {
-            m_StateMachine.OnDeath();
-            m_EntityBrain.Die();
+            m_StateMachine.OnEntityDead();
+            m_EntityBrain.DeInit();
             UnsubscribeFromEntityEvents();
             m_EntityBrain = null;
             m_Pool.ReturnEnemy(this);
@@ -141,19 +138,17 @@ namespace BTG.Enemy
             m_Service.OnEnemyDeath();
         }
 
-        private void CreateHealthController()
+        private void IntializeDamageCollider()
         {
-            m_EntityHealthController = m_View.gameObject.AddComponent<EntityHealthController>();
-            m_EntityHealthController.SetController(this);
-        }
-
-        private void CreateCollider()
-        {
-            string name = m_View.gameObject.name;
+            /*string name = m_View.gameObject.name;
             Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
             HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
             m_View.gameObject.name = name;
-            m_EntityHealthController.SetCollider(collider as Collider);
+            m_EntityHealthController.SetCollider(collider as Collider);*/
+
+            m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
+            m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
+            m_EntityHealthController.SetController(this);
         }
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
@@ -168,7 +163,6 @@ namespace BTG.Enemy
         private void OnEntityVisibilityToggled(bool value)
         {
             m_View.ToggleVisibility(value);
-            m_EntityHealthController.ToggleCollider(value);
         }
 
         private void SubscribeToEvents()

@@ -156,7 +156,10 @@ namespace BTG.Enemy
         /// </summary>
         internal void ReAllign() => m_Controller.ReAllign();
 
-        internal void OnDeath()
+        /// <summary>
+        /// Inform the state machine that the entity has died
+        /// </summary>
+        internal void OnEntityDead()
         {
             ChangeState(EnemyTankState.Dead);
             DeInit();

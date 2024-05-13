@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6767178579650365144}
   - component: {fileID: 5218707044388087957}
   - component: {fileID: 4370414885675258852}
-  - component: {fileID: 8148108928916990801}
+  - component: {fileID: 4216145189627842819}
   m_Layer: 0
   m_Name: PlayerView
   m_TagString: Untagged
@@ -73,8 +73,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9fb53e6351359c44ac6f5f09b5ee795, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &8148108928916990801
-BoxCollider:
+--- !u!135 &4216145189627842819
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -88,9 +88,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6021945, y: 1.8795209, z: 2.1410003}
-  m_Center: {x: -0.007923603, y: 0.90725374, z: -0.031694412}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

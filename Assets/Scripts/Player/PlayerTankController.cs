@@ -28,10 +28,7 @@ namespace BTG.Player
             m_PlayerService = service;
             m_Model = new PlayerModel(data);
             m_View = Object.Instantiate(data.Prefab);
-            m_View.gameObject.layer = data.SelfLayer;
             m_Transform = m_View.transform;
-
-            CreateHealthController();
         }
 
         ~PlayerTankController()
@@ -60,11 +57,8 @@ namespace BTG.Player
             m_EntityBrain.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
 
-            CreateCollider();
+            InitializeDamageCollider();
             SubscribeToEntityEvents();
-
-            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
         }
 
         /// <summary>
@@ -85,6 +79,9 @@ namespace BTG.Player
 
             m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
             m_EntityHealthController.Reset();
+
+            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
         }
 
         public void SetMoveValue(in float value)
@@ -145,23 +142,42 @@ namespace BTG.Player
             CalculateInputSpeed();
         }
 
-        public void Die()
+        public void EntityDied()
+        {  
+            DeInit();
+
+            // wait for the next frame to notify the player service to make sure that the entity completes all necessary actions
+            _ = HelperMethods.InvokeInNextFrame(() => m_PlayerService.OnPlayerDeath());
+        }
+
+        /// <summary>
+        /// Deinitialize the controller and it's entity brain.
+        /// </summary>
+        public void DeInit()
         {
+            // If the entity brain is null, then the entity is already deinitialized.
+            if (m_EntityBrain == null) return;
+
             m_Model.IsEnabled = false;
-            m_EntityBrain.Die();
+            m_EntityBrain.DeInit();
             UnsubscribeFromEntityEvents();
             m_EntityBrain = null;
             m_EntityHealthController.OnHealthUpdated -= OnEntityHealthUpdated;
-
-            m_PlayerService.OnPlayerDeath();
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
-        private void CreateHealthController()
+        private void InitializeDamageCollider()
         {
-            m_EntityHealthController = m_View.gameObject.AddComponent<EntityHealthController>();
+            /*string name = m_View.gameObject.name;
+            Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
+            HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
+            m_View.gameObject.name = name;
+            m_EntityHealthController.SetCollider(collider as Collider);*/
+
+            m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
+            m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
         }
 
@@ -188,17 +204,6 @@ namespace BTG.Player
         private void CalculateInputSpeed()
             => m_Model.Acceleration = m_Model.EntityAcceleration * m_Model.MoveInputValue;
 
-        private void CreateCollider()
-        {
-            string name = m_View.gameObject.name;
-            Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
-            HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
-            m_View.gameObject.name = name;
-            m_EntityHealthController.SetCollider(collider as Collider);
-        }
-
-        private void OnEntityVisibilityToggled(bool value) => m_EntityHealthController.ToggleCollider(value);
-
         private void SubscribeToEntityEvents()
         {
             m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
@@ -206,7 +211,6 @@ namespace BTG.Player
             m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
-            m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
         }
 
         private void UnsubscribeFromEntityEvents()
@@ -216,7 +220,6 @@ namespace BTG.Player
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
-            m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;
         }
     }
 }

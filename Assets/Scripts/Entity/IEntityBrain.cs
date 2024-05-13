@@ -15,6 +15,11 @@ namespace BTG.Entity
         /// It should be called after the brain is created or gotten from the pool
         /// </summary>
         public void Init();
+
+        /// <summary>
+        /// De-initialize the brain.
+        /// </summary>
+        public void DeInit();
     }
 
 }

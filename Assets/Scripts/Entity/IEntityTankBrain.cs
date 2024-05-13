@@ -48,10 +48,5 @@ namespace BTG.Entity
         /// </summary>
         /// <param name="damageable"></param>
         public void SetDamageable(IDamageable damageable);
-
-        /// <summary>
-        /// Inform the tank that it is dead.
-        /// </summary>
-        public void Die();
     }
 }

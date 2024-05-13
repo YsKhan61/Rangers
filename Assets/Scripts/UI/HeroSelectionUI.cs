@@ -34,6 +34,10 @@ namespace BTG.UI
             m_InputActionReference.action.Disable();
         }
 
+        /// <summary>
+        /// This method is called when a tank is selected.
+        /// </summary>
+        /// <param name="id">id of the selected tank</param>
         public void TankIDSelect(int id)
         {
             m_TankIDSelectedData.Value = id;

@@ -19,8 +19,6 @@ namespace BTG.Entity
         public void SetController(IEntityController controller) => m_Controller = controller;
         public void SetCollider(Collider collider) => m_DamageCollider = collider;
 
-        public void ToggleCollider(bool value) => m_DamageCollider.enabled = value;
-
         public void TakeDamage(int damage)
         {
             AddHealth(-damage);
@@ -28,7 +26,7 @@ namespace BTG.Entity
 
             if (m_CurrentHealth == 0)
             {
-                m_Controller.Die();
+                m_Controller.EntityDied();
             }
         }
 

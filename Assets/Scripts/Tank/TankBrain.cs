@@ -22,7 +22,7 @@ namespace BTG.Tank
         {
             Idle,
             Moving,
-            Dead
+            Deactive
         }
 
 
@@ -65,6 +65,8 @@ namespace BTG.Tank
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
             m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
+
+            Deactivate();
         }
 
         /// <summary>
@@ -79,6 +81,7 @@ namespace BTG.Tank
 
             OnTankStateChangedToIdle();
             ToggleActorVisibility(true);
+            DamageCollider.enabled = true;
 
             m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
@@ -103,17 +106,26 @@ namespace BTG.Tank
             OnEntityInitialized = null;
         }
 
-        public void Die()
+        public void DeInit()
         {
-            m_Model.State = TankState.Dead;
-            OnTankStateChangedToDead();
+            Deactivate();
+
+            SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
+
+            m_Pool.ReturnTank(this);
         }
+        
 
         public void ToggleActorVisibility(bool value)
         {
             OnEntityVisibilityToggled?.Invoke(value);
             m_View.ToggleVisible(value);
             m_View.ToggleMuteAudio(!value);
+
+            DamageCollider.enabled = value;
         }
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
@@ -160,8 +172,9 @@ namespace BTG.Tank
         private void OnTankStateChangedToDriving() =>
             m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
 
-        private void OnTankStateChangedToDead()
+        private void Deactivate()
         {
+            m_Model.State = TankState.Deactive;
             ToggleActorVisibility(false);
 
             m_Model.Reset();
@@ -170,17 +183,11 @@ namespace BTG.Tank
 
             m_View.AudioView.StopEngineAudio();
 
+            DamageCollider.enabled = false;
+
+            Rigidbody = null;
             OnEntityInitialized = null;
-
-            Rigidbody.velocity = Vector3.zero;
-            Rigidbody.angularVelocity = Vector3.zero;
-
-            SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
-
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
-
-            m_Pool.ReturnTank(this);
+            OnEntityVisibilityToggled = null;
         }
 
 #if UNITY_EDITOR

@@ -51,6 +51,7 @@ namespace BTG.Player
 
         public void OnPlayerDeath()
         {
+            m_Controller = null;
             m_PlayerStats.DeathCount.Value++;
         }
 
@@ -63,6 +64,17 @@ namespace BTG.Player
         }
 
         private void OnPlayerTankIDSelected()
+        {
+            if (m_Controller != null)
+            {
+                /// The current player entity is not null, so we need to deinitialize it.
+                m_Controller.DeInit();
+            }
+
+            _ = HelperMethods.InvokeInNextFrame(Respawn);
+        }
+
+        private void Respawn()
         {
             bool entityFound = CreateAndSpawnPlayerEntity(out IEntityBrain entity);
             if (!entityFound)

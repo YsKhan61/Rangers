@@ -14,8 +14,8 @@ namespace BTG.Entity
         public int MaxHealth { get; }
 
         /// <summary>
-        /// This method is used to inform the entity that it is dead.
+        /// This method is used to inform that the entity has died.
         /// </summary>
-        public void Die();
+        public void EntityDied();
     }
 }
