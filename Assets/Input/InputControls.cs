@@ -167,6 +167,15 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleHeroSelectionPanel"",
+                    ""type"": ""Button"",
+                    ""id"": ""3dafc1c5-dbf1-468e-b6df-e4ca253e4aed"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -178,6 +187,17 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""TogglePlayerStatsPanel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57e22dad-ff09-4e69-8494-0b83db5fa6a7"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ToggleHeroSelectionPanel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -195,6 +215,7 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_TogglePlayerStatsPanel = m_UI.FindAction("TogglePlayerStatsPanel", throwIfNotFound: true);
+        m_UI_ToggleHeroSelectionPanel = m_UI.FindAction("ToggleHeroSelectionPanel", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -327,11 +348,13 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_UI;
     private List<IUIActions> m_UIActionsCallbackInterfaces = new List<IUIActions>();
     private readonly InputAction m_UI_TogglePlayerStatsPanel;
+    private readonly InputAction m_UI_ToggleHeroSelectionPanel;
     public struct UIActions
     {
         private @InputControls m_Wrapper;
         public UIActions(@InputControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @TogglePlayerStatsPanel => m_Wrapper.m_UI_TogglePlayerStatsPanel;
+        public InputAction @ToggleHeroSelectionPanel => m_Wrapper.m_UI_ToggleHeroSelectionPanel;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -344,6 +367,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @TogglePlayerStatsPanel.started += instance.OnTogglePlayerStatsPanel;
             @TogglePlayerStatsPanel.performed += instance.OnTogglePlayerStatsPanel;
             @TogglePlayerStatsPanel.canceled += instance.OnTogglePlayerStatsPanel;
+            @ToggleHeroSelectionPanel.started += instance.OnToggleHeroSelectionPanel;
+            @ToggleHeroSelectionPanel.performed += instance.OnToggleHeroSelectionPanel;
+            @ToggleHeroSelectionPanel.canceled += instance.OnToggleHeroSelectionPanel;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -351,6 +377,9 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
             @TogglePlayerStatsPanel.started -= instance.OnTogglePlayerStatsPanel;
             @TogglePlayerStatsPanel.performed -= instance.OnTogglePlayerStatsPanel;
             @TogglePlayerStatsPanel.canceled -= instance.OnTogglePlayerStatsPanel;
+            @ToggleHeroSelectionPanel.started -= instance.OnToggleHeroSelectionPanel;
+            @ToggleHeroSelectionPanel.performed -= instance.OnToggleHeroSelectionPanel;
+            @ToggleHeroSelectionPanel.canceled -= instance.OnToggleHeroSelectionPanel;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -378,5 +407,6 @@ public partial class @InputControls: IInputActionCollection2, IDisposable
     public interface IUIActions
     {
         void OnTogglePlayerStatsPanel(InputAction.CallbackContext context);
+        void OnToggleHeroSelectionPanel(InputAction.CallbackContext context);
     }
 }

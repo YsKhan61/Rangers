@@ -145,6 +145,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ToggleHeroSelectionPanel",
+                    "type": "Button",
+                    "id": "3dafc1c5-dbf1-468e-b6df-e4ca253e4aed",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -156,6 +165,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "TogglePlayerStatsPanel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "57e22dad-ff09-4e69-8494-0b83db5fa6a7",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ToggleHeroSelectionPanel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
