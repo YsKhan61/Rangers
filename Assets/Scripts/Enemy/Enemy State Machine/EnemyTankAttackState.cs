@@ -5,7 +5,7 @@ namespace BTG.Enemy
     public class EnemyTankAttackState : EnemyTankAliveState
     {
         private const float ROTATE_THRESHOLD = 0.1f;
-        private const float ROTATE_SPEED = 5f;
+        private const float ROTATE_SPEED = 2f;
         private const float SHOOT_COOLDOWN = 2f;
 
         private float m_ShootTimer;
@@ -42,7 +42,7 @@ namespace BTG.Enemy
                 return;
             }
 
-            if (HasRotatedTowardsTarget())
+            if (HasRotatedTowardsTarget() && !owner.IsPrimaryActionExecuting)
             {
                 TryShoot();
                 return;

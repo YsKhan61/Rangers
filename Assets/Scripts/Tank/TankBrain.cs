@@ -65,8 +65,6 @@ namespace BTG.Tank
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
             m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
-
-            Deactivate();
         }
 
         /// <summary>
@@ -108,7 +106,20 @@ namespace BTG.Tank
 
         public void DeInit()
         {
-            Deactivate();
+            m_Model.State = TankState.Deactive;
+            ToggleActorVisibility(false);
+
+            m_Model.Reset();
+            m_PrimaryAction.Disable();
+            m_UltimateAction.Disable();
+
+            m_View.AudioView.StopEngineAudio();
+
+            DamageCollider.enabled = false;
+
+            Rigidbody = null;
+            OnEntityInitialized = null;
+            OnEntityVisibilityToggled = null;
 
             SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
 
@@ -172,23 +183,6 @@ namespace BTG.Tank
         private void OnTankStateChangedToDriving() =>
             m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
 
-        private void Deactivate()
-        {
-            m_Model.State = TankState.Deactive;
-            ToggleActorVisibility(false);
-
-            m_Model.Reset();
-            m_PrimaryAction.Disable();
-            m_UltimateAction.Disable();
-
-            m_View.AudioView.StopEngineAudio();
-
-            DamageCollider.enabled = false;
-
-            Rigidbody = null;
-            OnEntityInitialized = null;
-            OnEntityVisibilityToggled = null;
-        }
 
 #if UNITY_EDITOR
         /// <summary>

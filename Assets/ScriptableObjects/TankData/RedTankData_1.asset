@@ -17,7 +17,7 @@ MonoBehaviour:
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 391f4fd004d1b9a49be031b9f94cd476,
     type: 3}
   m_MaxHealth: 175
-  m_Acceleration: 14
+  m_Acceleration: 20
   m_MaxSpeed: 20
   m_RotateSpeed: 27
   m_EngineIdleClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}

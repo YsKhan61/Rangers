@@ -9,25 +9,53 @@ namespace BTG.Enemy
     public class EnemyTankController : IEntityController
     {
         private EnemyDataSO m_Data;
+        /// <summary>
+        /// Get the data of the enemy
+        /// </summary>
         public EnemyDataSO Data => m_Data;
+
+        private NavMeshAgent m_Agent;
+        /// <summary>
+        /// Get the agent of the enemy
+        /// </summary>
+        public NavMeshAgent Agent => m_Agent;
+
+        /// <summary>
+        /// Get the rigidbody of the enemy
+        /// </summary>
+        public Rigidbody Rigidbody => m_View.Rigidbody;
+
+        /// <summary>
+        /// Get the transform of the enemy
+        /// </summary>
+        public Transform Transform => m_View.transform;
+
+        /// <summary>
+        /// Get the target view that is in range and detected
+        /// </summary>
+        public IPlayerView TargetView { get; private set; }
+
+        /// <summary>
+        /// Is Ultimate ready to be executed
+        /// </summary>
+        public bool IsUltimateReady { get; private set; }
+
+        /// <summary>
+        /// Get the layer of the opposition
+        /// </summary>
+        public int OppositionLayer => 1 << m_Data.OppositionLayer;
+
+        /// <summary>
+        /// Get the max health of the enemy
+        /// </summary>
+        public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
         private EnemyPool m_Pool;
         private EnemyService m_Service;
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         private EnemyView m_View;
-        private NavMeshAgent m_Agent;
-        public NavMeshAgent Agent => m_Agent;
-
         private EnemyTankStateMachine m_StateMachine;
-        public Rigidbody Rigidbody => m_View.Rigidbody;
-        public Transform Transform => m_View.transform;
-
-        public IPlayerView TargetView { get; private set; }
-        public bool IsTargetInRange  => TargetView != null;
-        public bool IsUltimateReady { get; private set; }
-        public int OppositionLayer => 1 << m_Data.OppositionLayer;
-        public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
 
         public EnemyTankController(EnemyDataSO data, EnemyPool pool)
@@ -152,6 +180,7 @@ namespace BTG.Enemy
         }
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
+        
         private void OnUltimateExecuted()
         {
             IsUltimateReady = false;
@@ -167,6 +196,7 @@ namespace BTG.Enemy
 
         private void SubscribeToEvents()
         {
+            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted += m_StateMachine.OnPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
             m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
@@ -176,6 +206,7 @@ namespace BTG.Enemy
 
         private void UnsubscribeFromEntityEvents()
         {
+            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
             m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;

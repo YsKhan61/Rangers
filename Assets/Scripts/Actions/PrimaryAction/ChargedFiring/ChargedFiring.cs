@@ -10,6 +10,8 @@ namespace BTG.Actions.PrimaryAction
     /// </summary>
     public class ChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
     {
+        public event Action OnPrimaryActionExecuted;
+
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
         private ChargedFiringDataSO m_Data;
@@ -41,7 +43,6 @@ namespace BTG.Actions.PrimaryAction
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this as IDestroyable);
             ToggleMuteFiringAudio(false);
 
-            // Add all the event listeners of OnTankShoot
             m_IsEnabled = true;
         }
 
@@ -51,6 +52,8 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             UpdateChargeAmount();
+
+            ShootOnFullyCharged();
         }
 
         public void Disable()
@@ -65,7 +68,6 @@ namespace BTG.Actions.PrimaryAction
 
         public void Destroy()
         {
-            // Remove all the event listeners of OnTankShoot
             OnPlayerCamShake = null;
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
@@ -91,11 +93,12 @@ namespace BTG.Actions.PrimaryAction
             if (m_ChargeAmount <= 0f)
                 return;
 
-            SpawnProjectile(out ProjectileController projectile);
-            projectile.AddImpulseForce(CalculateProjectileInitialSpeed());
+            SpawnProjectileAndShoot();
 
             if (m_Actor.IsPlayer)
                 OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
+
+            OnPrimaryActionExecuted?.Invoke();
 
             PlayShotFiredClip();
             ResetCharging();
@@ -108,8 +111,21 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
-            // m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
             UpdateChargingClipPitch(m_ChargeAmount);
+        }
+
+        private void ShootOnFullyCharged()
+        {
+            if (m_ChargeAmount >= 1f)
+            {
+                StopAction();
+            }
+        }
+
+        private void SpawnProjectileAndShoot()
+        {
+            SpawnProjectile(out ProjectileController projectile);
+            projectile.AddImpulseForce(CalculateProjectileInitialSpeed());
         }
 
         private void ResetCharging()

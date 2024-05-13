@@ -17,14 +17,42 @@ namespace BTG.Enemy
 
     public class EnemyTankStateMachine : BaseStateMachine<EnemyTankState>, IUpdatable, IDestroyable
     {
-        private EnemyTankController m_Controller;
-
+        /// <summary>
+        /// Get the patrol points of the entity
+        /// </summary>
         internal Vector3[] PatrolPoints => m_Controller.Data.PatrolPoints;
+
+        /// <summary>
+        /// Get the agent of the entity
+        /// </summary>
         internal NavMeshAgent Agent => m_Controller.Agent;
-        internal bool IsTargetInRange => m_Controller.IsTargetInRange;
+
+        /// <summary>
+        /// Is the target in range
+        /// </summary>
+        internal bool IsTargetInRange => m_Controller.TargetView != null;
+
+        /// <summary>
+        /// Get the transform of the entity
+        /// </summary>
         internal Transform Transform => m_Controller.Transform;
+
+        /// <summary>
+        /// Get the target transform
+        /// </summary>
         internal Transform TargetTransform => m_Controller.TargetView.Transform;
+
+        /// <summary>
+        /// Is the ultimate ready
+        /// </summary>
         internal bool IsUltimateReady => m_Controller.IsUltimateReady;
+
+        /// <summary>
+        /// Is the primary action executing
+        /// </summary>
+        internal bool IsPrimaryActionExecuting { get; private set; }
+
+        private EnemyTankController m_Controller;
 
 
         public EnemyTankStateMachine(EnemyTankController controller)
@@ -81,65 +109,53 @@ namespace BTG.Enemy
         }
 
         /// <summary>
+        /// Inform the state machine that the primary action has been executed
+        /// </summary>
+        public void OnPrimaryActionExecuted() => IsPrimaryActionExecuting = false;
+
+        /// <summary>
         /// Inform the state machine that the ultimate action has been executed
         /// </summary>
-        public void OnUltimateExecuted()
-        {
-            ChangeState(EnemyTankState.PrimaryAttack);
-        }
+        public void OnUltimateExecuted() => ChangeState(EnemyTankState.PrimaryAttack);
 
         /// <summary>
         /// Inform the state machine that the entity has taken damage
         /// </summary>
-        public void OnDamageTaken()
-        {
-            ChangeState(EnemyTankState.Damaged);
-        }
+        public void OnDamageTaken() => ChangeState(EnemyTankState.Damaged);
 
         /// <summary>
         /// Inform the state machine that the Idle state is complete
         /// </summary>
-        internal void OnIdleStateComplete()
-        {
-            ChangeState(EnemyTankState.Patrol);
-        }
+        internal void OnIdleStateComplete() => ChangeState(EnemyTankState.Patrol);
 
         /// <summary>
         /// Inform the state machine that the Patrol state is complete
         /// </summary>
-        internal void OnPatrolStateComplete()
-        {
-            ChangeState(EnemyTankState.Idle);
-        }
+        internal void OnPatrolStateComplete() => ChangeState(EnemyTankState.Idle);
 
         /// <summary>
         /// Inform the state machine that the Damaged state is complete
         /// </summary>
-        internal void OnDamagedStateComplete()
-        {
-            ChangeState(EnemyTankState.Idle);
-        }
+        internal void OnDamagedStateComplete() => ChangeState(EnemyTankState.Idle);
 
         /// <summary>
         /// Inform the state machine that the target is in range
         /// </summary>
-        internal void OnTargetInRange()
-        {
-            ChangeState(EnemyTankState.PrimaryAttack);
-        }
+        internal void OnTargetInRange() => ChangeState(EnemyTankState.PrimaryAttack);
 
         /// <summary>
         /// Inform the state machine that the target is not in range
         /// </summary>
-        internal void OnTargetNotInRange()
-        {
-            ChangeState(EnemyTankState.Idle);
-        }
+        internal void OnTargetNotInRange() => ChangeState(EnemyTankState.Idle);
 
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner
         /// </summary>
-        internal void ExecutePrimaryAction() => m_Controller.ExecutePrimaryAction();
+        internal void ExecutePrimaryAction()
+        {
+            IsPrimaryActionExecuting = true;
+            m_Controller.ExecutePrimaryAction();
+        }
 
         /// <summary>
         /// Inform the state machine that the ultimate is ready

@@ -7,6 +7,8 @@ namespace BTG.Actions.PrimaryAction
 {
     public class TeslaFiring : IPrimaryAction, IUpdatable
     {
+        public event System.Action OnPrimaryActionExecuted;
+
         private TeslaFiringDataSO m_Data;
         private IPrimaryActor m_Actor;
         private TeslaBallPool m_Pool;
@@ -67,14 +69,21 @@ namespace BTG.Actions.PrimaryAction
 
             m_IsCharging = false;
 
-            CalculateBallDamage(out int damage);
-            m_BallInCharge?.SetDamage(damage);
-            m_BallInCharge.AddImpulseForce(CalculateProjectileInitialSpeed());
+            SetDamageToBallAndShoot();
+
+            OnPrimaryActionExecuted?.Invoke();
 
             if (m_Actor.IsPlayer)
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });  // OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
-                
+
             ResetCharging();
+        }
+
+        private void SetDamageToBallAndShoot()
+        {
+            CalculateBallDamage(out int damage);
+            m_BallInCharge?.SetDamage(damage);
+            m_BallInCharge.AddImpulseForce(CalculateProjectileInitialSpeed());
         }
 
         private void ResetCharging()

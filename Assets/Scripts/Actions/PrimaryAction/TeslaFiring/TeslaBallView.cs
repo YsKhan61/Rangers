@@ -21,10 +21,6 @@ namespace BTG.Actions.PrimaryAction
 
         private int m_Damage;
 
-        private void OnEnable()
-        {
-            m_Collider.enabled = true;
-        }
 
         private void OnCollisionEnter(Collision collision)
         {
@@ -34,11 +30,8 @@ namespace BTG.Actions.PrimaryAction
             }
 
             Reset();
-        }
 
-        private void OnDisable()
-        {
-            m_Collider.enabled = false;
+            DebugCollision(collision.collider.name);
         }
 
         /// <summary>
@@ -54,25 +47,17 @@ namespace BTG.Actions.PrimaryAction
         /// Add impulse force to the tesla ball to move it forward
         /// </summary>
         public void AddImpulseForce(float force)
-        {
-            m_Rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
-        }
+            => m_Rigidbody.AddForce(transform.forward * force, ForceMode.Impulse);
 
         /// <summary>
         /// Set the pool to return the tesla ball to
         /// </summary>
-        public void SetPool(TeslaBallPool pool)
-        {
-            m_Pool = pool;
-        }
+        public void SetPool(TeslaBallPool pool) => m_Pool = pool;
 
         /// <summary>
         /// Set the damage the tesla ball will do
         /// </summary>
-        public void SetDamage(int damage)
-        {
-            m_Damage = damage;
-        }
+        public void SetDamage(int damage) => m_Damage = damage;
 
         private void Reset()
         {
@@ -90,13 +75,22 @@ namespace BTG.Actions.PrimaryAction
         {
             gameObject.SetActive(true);
             m_ParticleSytem.Play();
+            m_Collider.enabled = true;
         }
 
         private void Hide()
         {
             m_ParticleSytem.Stop();
             gameObject.SetActive(false);
+            m_Collider.enabled = false;
         }
+
+#if UNITY_EDITOR
+
+        private void DebugCollision(string colliderName)
+            => Debug.Log("Tesla ball collided with " + colliderName);
+
+#endif
     }
 }
 

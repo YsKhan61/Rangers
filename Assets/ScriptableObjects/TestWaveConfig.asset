@@ -17,6 +17,7 @@ MonoBehaviour:
   - ID: 1
     EntityTags:
     - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
+    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
     EnemyTankIDs: 
   m_SpawnPose:
   - position: {x: -14, y: 0, z: 6}

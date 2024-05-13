@@ -7,6 +7,8 @@ namespace BTG.Actions.PrimaryAction
     /// </summary>
     public interface IPrimaryAction
     {
+        public event System.Action OnPrimaryActionExecuted;
+
         /// <summary>
         /// Enable the action.
         /// </summary>
