@@ -1,5 +1,6 @@
 ﻿using BTG.StateMachine;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -52,14 +53,25 @@ namespace BTG.Enemy
         /// </summary>
         internal bool IsPrimaryActionExecuting { get; private set; }
 
+        [Inject]
+        private EnemyTankUltimateStateFactoryContainerSO m_UltimateStateFactoryContainer;
+
         private EnemyTankController m_Controller;
 
 
-        public EnemyTankStateMachine(EnemyTankController controller)
-        {
-            m_Controller = controller;
+        public EnemyTankStateMachine(EnemyTankController controller) => m_Controller = controller;
 
-            InitializeStates();
+        /// <summary>
+        /// Create the states of the state machine according to the entity
+        /// </summary>
+        public void CreateStates()
+        {
+            AddState(EnemyTankState.Idle, new EnemyTankIdleState(this));
+            AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
+            AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
+            AddState(EnemyTankState.Ultimate, m_UltimateStateFactoryContainer.GetFactory(m_Controller.UltimateTag).CreateState(this));
+            AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
+            AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
 
         /// <summary>
@@ -181,15 +193,6 @@ namespace BTG.Enemy
             DeInit();
         }
 
-        private void InitializeStates()
-        {
-            AddState(EnemyTankState.Idle, new EnemyTankIdleState(this));
-            AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
-            AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
-            AddState(EnemyTankState.Ultimate, new EnemyTankUltimateState(this));
-            AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
-            AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
-        }
 
 #if UNITY_EDITOR
         /// <summary>

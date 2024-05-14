@@ -1,5 +1,6 @@
 using BTG.Entity;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -53,6 +54,11 @@ namespace BTG.Enemy
         /// </summary>
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
+        /// <summary>
+        /// Get the Ultiamte tag of the entity
+        /// </summary>
+        public TagSO UltimateTag => m_EntityBrain.Model.UltimateTag;
+
         private EnemyPool m_Pool;
         private EnemyService m_Service;
         private IEntityTankBrain m_EntityBrain;
@@ -69,7 +75,9 @@ namespace BTG.Enemy
             m_View.SetController(this);
 
             m_Agent = m_View.GetComponent<NavMeshAgent>();
+
             m_StateMachine = new (this);
+            DIManager.Instance.Inject(m_StateMachine);
 
             Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
@@ -131,6 +139,8 @@ namespace BTG.Enemy
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
 
             IntializeDamageCollider();
+            m_StateMachine.CreateStates();
+
             SubscribeToEvents();
         }
 

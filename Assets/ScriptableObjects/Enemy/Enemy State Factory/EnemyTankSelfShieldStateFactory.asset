@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ef7d4248e816d646b8ce4926c3ae3e3, type: 3}
-  m_Name: AirStrike Factory
+  m_Script: {fileID: 11500000, guid: 51f11e31702e5e943bcfafc46c146e41, type: 3}
+  m_Name: EnemyTankSelfShieldStateFactory
   m_EditorClassIdentifier: 
-  m_UltimateTag: {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d, type: 2}
-  m_AirStrikeData: {fileID: 11400000, guid: 2368d4a7f20c6294a923a385af903b5f, type: 2}
+  m_UltimateActionTag: {fileID: 11400000, guid: bfe2cbf5ccbcf0148a045f79622904c5,
+    type: 2}

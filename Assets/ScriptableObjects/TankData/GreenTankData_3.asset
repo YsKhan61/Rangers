@@ -26,5 +26,5 @@ MonoBehaviour:
   m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
   m_PrimaryActionFactory: {fileID: 11400000, guid: 65e3f9c1951e86f42a5b64556eb60103,
     type: 2}
-  m_UltimateActionFactory: {fileID: 11400000, guid: c72ead04cca647a4b97716d7c1f931e6,
+  m_UltimateActionTag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c,
     type: 2}

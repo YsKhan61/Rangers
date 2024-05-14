@@ -1,5 +1,6 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -57,9 +58,8 @@ namespace BTG.Tank
         public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;
 
         [SerializeField]
-        private UltimateActionFactorySO m_UltimateActionFactory;
-        public UltimateActionFactorySO UltimateActionFactory => m_UltimateActionFactory;
+        private TagSO m_UltimateActionTag;
+        public TagSO UltimateTag => m_UltimateActionTag;
 
-        
     }
 }

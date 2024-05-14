@@ -1,3 +1,4 @@
+using BTG.Actions.UltimateAction;
 using BTG.Enemy;
 using BTG.Entity;
 using BTG.Player;
@@ -5,11 +6,13 @@ using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using UnityEngine;
-using VContainer;
-using VContainer.Unity;
+
 
 namespace BTG.Services
 {
+    /// <summary>
+    /// This service provides the dependencies to other services such as class instances and scriptable objects.
+    /// </summary>
     public class DependencyProviderService : MonoBehaviour, IDependencyProviderForOthers
     {
         [SerializeField]
@@ -17,7 +20,6 @@ namespace BTG.Services
 
         [Provide]
         public EntityFactoryContainerSO ProvideEntityFactoryContainer() => m_EntityFactoryContainer;
-
 
 
         [SerializeField]
@@ -32,6 +34,18 @@ namespace BTG.Services
 
         [Provide]
         public EnemyDataSO ProvideEnemyData() => m_EnemyData;
+
+        [SerializeField]
+        UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+        [Provide]
+        public UltimateActionFactoryContainerSO ProvideUltimateActionFactoryContainer() => m_UltimateActionFactoryContainer;
+
+
+        [SerializeField]
+        EnemyTankUltimateStateFactoryContainerSO m_EnemyTankUltimateStateFactoryContainer;
+
+        [Provide]
+        public EnemyTankUltimateStateFactoryContainerSO ProvideEnemyTankUltimateStateFactoryContainer() => m_EnemyTankUltimateStateFactoryContainer;
 
 
         [SerializeField]
@@ -57,7 +71,6 @@ namespace BTG.Services
 
         [Provide]
         public WaveConfigSO ProvideEnemyWaves() => m_EnemyWaves;
-
 
 
         [SerializeField]

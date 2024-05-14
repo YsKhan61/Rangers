@@ -1,5 +1,6 @@
 
 using BTG.Utilities;
+using BTG.Utilities.DI;
 
 namespace BTG.Actions.UltimateAction
 {

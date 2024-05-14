@@ -2,6 +2,7 @@ using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -43,7 +44,10 @@ namespace BTG.Tank
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
         public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
-        
+
+        [Inject]
+        private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+
         private TankPool m_Pool;
 
 
@@ -64,7 +68,19 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
-            m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
+        }
+
+        /// <summary>
+        /// Create the ultimate action for the tank.
+        /// If Tag is not provided, it will use the default tag from the tank data.
+        /// This method is called when the tank needs to create new ultimate action.
+        /// </summary>
+        public void CreateUltimateAction(TagSO ultimateTag = null)
+        {
+            if (ultimateTag == null)
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, m_Model.TankData.UltimateTag);
+            else
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, ultimateTag);
         }
 
         /// <summary>
