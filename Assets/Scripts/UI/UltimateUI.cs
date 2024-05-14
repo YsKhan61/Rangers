@@ -6,18 +6,21 @@ using UnityEngine.UI;
 
 namespace BTG.UI
 {
+    /// <summary>
+    /// This class is responsible for updating the ultimate UI of player
+    /// </summary>
     public class UltimateUI : MonoBehaviour
     {
-        [SerializeField]
-        StringEventChannelSO m_UltimateAssignedEventChannel;
+        [SerializeField, Tooltip("EventChannel raised when the player's ultimate is assigned")]
+        TagEventChannelSO m_UltimateAssignedEventChannel;
 
-        [SerializeField]
+        [SerializeField, Tooltip("EventChannel raised when the player's ultimate charge is updated")]
         IntEventChannelSO m_UltimateChargeUpdateEventChannel;
 
-        [SerializeField]
+        [SerializeField, Tooltip("EventChannel raised when the player's ultimate is fully charged")]
         VoidEventChannelSO m_UltimateFullyChargedEventChannel;
 
-        [SerializeField]
+        [SerializeField, Tooltip("EventChannel raised when the player's ultimate is executed")]
         VoidEventChannelSO m_UltimateExecutedEventChannel;
 
 
@@ -34,9 +37,9 @@ namespace BTG.UI
             m_UltimateExecutedEventChannel.OnEventRaised += OnUltimateExecuted;
         }
 
-        public void Init(string name)
+        public void Init(TagSO tag)
         {
-            m_UltimateNameText.text = name;
+            m_UltimateNameText.text = tag.name;
 
             m_ChargedAmountText.text = "0";
             m_UnreadyImage.gameObject.SetActive(true);

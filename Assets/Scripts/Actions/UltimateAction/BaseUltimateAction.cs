@@ -7,25 +7,28 @@ using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Actions.UltimateAction
 {
-    public abstract class UltimateAction : IUltimateAction
+    /// <summary>
+    /// The base class for the some ultimate actions.
+    /// It contains the common properties and methods of the ultimate actions.
+    /// </summary>
+    public abstract class BaseUltimateAction : IUltimateAction
     {
         public const int FULL_CHARGE = 100;
 
-        public event System.Action<string> OnUltimateActionAssigned;
+        public event System.Action<TagSO> OnUltimateActionAssigned;
         public abstract event System.Action OnFullyCharged;
         public event System.Action<int> OnChargeUpdated;
-        public event System.Action OnUltimateActionExecuted;
+        public event System.Action OnUltimateActionExecuted;        
+
+        public TagSO Tag => m_UltimateActionData.Tag;
+        public State CurrentState { get; protected set; }
+
+        public IUltimateActor Actor { get; protected set; }
 
         protected UltimateActionDataSO m_UltimateActionData;
         protected CancellationTokenSource m_CTS;
 
         private float m_ChargedAmount;
-
-        public string Name => m_UltimateActionData.name;
-        public State CurrentState { get; protected set; }
-
-
-        public IUltimateActor Actor { get; protected set; }
 
         public virtual void Enable()
         {
@@ -51,7 +54,7 @@ namespace BTG.Actions.UltimateAction
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
-        public void ChangeState(State newState)
+        protected void ChangeState(State newState)
         {
             CurrentState = newState;
         }
@@ -91,7 +94,7 @@ namespace BTG.Actions.UltimateAction
         }
 
         protected void RaiseUltimateActionAssignedEvent()
-            => OnUltimateActionAssigned?.Invoke(Name);
+            => OnUltimateActionAssigned?.Invoke(Tag);
 
         protected abstract void RaiseFullyChargedEvent();
 

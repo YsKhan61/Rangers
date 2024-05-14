@@ -4,7 +4,7 @@ using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Actions.UltimateAction
 {
-    public class SelfShield : UltimateAction
+    public class SelfShield : BaseUltimateAction
     {
         public override event System.Action OnFullyCharged;
 

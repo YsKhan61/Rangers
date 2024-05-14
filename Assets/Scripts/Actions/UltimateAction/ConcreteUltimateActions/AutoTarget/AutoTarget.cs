@@ -9,7 +9,7 @@ using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Actions.UltimateAction
 {
-    public class AutoTarget : UltimateAction
+    public class AutoTarget : BaseUltimateAction
     {
         public override event System.Action OnFullyCharged;
 

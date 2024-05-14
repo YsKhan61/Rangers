@@ -8,7 +8,7 @@ using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Actions.UltimateAction
 {
-    public class AirStrike : UltimateAction, IFixedUpdatable
+    public class AirStrike : BaseUltimateAction, IFixedUpdatable
     {
         public override event System.Action OnFullyCharged;
 

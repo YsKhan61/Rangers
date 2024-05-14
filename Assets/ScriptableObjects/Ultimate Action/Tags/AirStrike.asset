@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6235ef0310f84e54a9da5688488c0797, type: 3}
-  m_Name: PlayerUltiamteAssignedEventChannel
+  m_Script: {fileID: 11500000, guid: 85b2c9c30cfe8f64e9fca7973e67b1da, type: 3}
+  m_Name: AirStrike
   m_EditorClassIdentifier: 

@@ -7,7 +7,7 @@ using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 namespace BTG.Actions.UltimateAction
 {
-    public class Invisibility : UltimateAction
+    public class Invisibility : BaseUltimateAction
     {
         public override event System.Action OnFullyCharged;
 
