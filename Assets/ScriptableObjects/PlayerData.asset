@@ -18,7 +18,7 @@ MonoBehaviour:
     type: 3}
   m_OnPlayerHealthUpdated: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
     type: 2}
-  m_OnUltimateAssigned: {fileID: 11400000, guid: 77ac333a9a1485c498883046f90d1664,
+  m_OnUltimateAssigned: {fileID: 11400000, guid: 1cf157a38c10e194c90c3d6bb90ae0e0,
     type: 2}
   m_OnUltimateChargeUpdated: {fileID: 11400000, guid: ac13916834dfd274c91df097160439d0,
     type: 2}
@@ -26,4 +26,3 @@ MonoBehaviour:
     type: 2}
   m_OnUltimateExecuted: {fileID: 11400000, guid: d7e8f69fe6d59414aa71deda1386a6a9,
     type: 2}
-  m_OnCameraShake: {fileID: 11400000, guid: 04be7a5b9910f124c879a2610126305a, type: 2}
