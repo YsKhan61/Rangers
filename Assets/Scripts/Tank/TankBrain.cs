@@ -107,7 +107,10 @@ namespace BTG.Tank
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
+
         public void SetDamageable(IDamageable damageable) => Damageable = damageable;
+
+        public void SetOppositionLayerMask(LayerMask layer) => m_Model.OppositionLayer = layer;
 
         public void Update()
         {

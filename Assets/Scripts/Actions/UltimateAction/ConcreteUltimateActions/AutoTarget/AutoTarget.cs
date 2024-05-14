@@ -79,7 +79,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        private void FilterDamageables(in Collider[] results, out List<IDamageable> damageables)
+        private void FilterDamageables(Collider[] results, out List<IDamageable> damageables)
         {
             damageables = new List<IDamageable>();
 

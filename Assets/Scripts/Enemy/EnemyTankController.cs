@@ -47,7 +47,7 @@ namespace BTG.Enemy
         /// <summary>
         /// Get the layer of the opposition
         /// </summary>
-        public int OppositionLayer => 1 << m_Data.OppositionLayer;
+        public int OppositionLayer => 1 << m_Data.OppositionLayerMask;
 
         /// <summary>
         /// Get the max health of the enemy
@@ -137,6 +137,7 @@ namespace BTG.Enemy
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
+            m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
 
             IntializeDamageCollider();
             m_StateMachine.CreateStates();

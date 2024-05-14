@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3315045629429720504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1913055628500959551}
+  - component: {fileID: 8195383415526773025}
+  - component: {fileID: 6783590809380917348}
+  m_Layer: 0
+  m_Name: DI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1913055628500959551
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315045629429720504}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8195383415526773025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315045629429720504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7765d86454457a4a9fd2dd144a7aa76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6783590809380917348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3315045629429720504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94b9620eddbca42418cc9b95611039fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EntityFactoryContainer: {fileID: 11400000, guid: f332ab77e4d310e418a7b4e0c249277b,
+    type: 2}
+  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
+  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
+  m_UltimateActionFactoryContainer: {fileID: 11400000, guid: 93b7bdf0c911c884f8a40a83a320676e,
+    type: 2}
+  m_EnemyTankUltimateStateFactoryContainer: {fileID: 11400000, guid: 21e113653b82e8e478246e6601f42893,
+    type: 2}
+  m_PlayerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
+  m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
+  m_EnemyWaves: {fileID: 11400000, guid: e28f1f0749746204281077917ae259d4, type: 2}
+  m_pvc: {fileID: 0}

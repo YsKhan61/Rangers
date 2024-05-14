@@ -3428,7 +3428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63284c331942153409c26ee33afbfeb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UltimateAssignedEventChannel: {fileID: 11400000, guid: 77ac333a9a1485c498883046f90d1664,
+  m_UltimateAssignedEventChannel: {fileID: 11400000, guid: 1cf157a38c10e194c90c3d6bb90ae0e0,
     type: 2}
   m_UltimateChargeUpdateEventChannel: {fileID: 11400000, guid: ac13916834dfd274c91df097160439d0,
     type: 2}
