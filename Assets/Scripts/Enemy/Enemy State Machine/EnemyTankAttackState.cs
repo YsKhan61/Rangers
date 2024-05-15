@@ -6,9 +6,9 @@ namespace BTG.Enemy
     {
         private const float ROTATE_THRESHOLD = 0.1f;
         private const float ROTATE_SPEED = 2f;
-        private const float SHOOT_COOLDOWN = 2f;
 
         private float m_ShootTimer;
+        private float m_ShootCooldown;
         private Transform m_TargetTransform;
 
         public EnemyTankAttackState(EnemyTankStateMachine owner) : base(owner)
@@ -18,6 +18,7 @@ namespace BTG.Enemy
         public override void Enter()
         {
             m_ShootTimer = 0f;
+            m_ShootCooldown = 0f;
             m_TargetTransform = owner.TargetTransform;
             owner.Agent.enabled = false;
         }
@@ -68,10 +69,11 @@ namespace BTG.Enemy
         private void TryShoot()
         {
             m_ShootTimer += Time.deltaTime;
-            if (m_ShootTimer >= SHOOT_COOLDOWN)
+            if (m_ShootTimer >= m_ShootCooldown)
             {
                 m_ShootTimer = 0f;
-                owner.ExecutePrimaryAction();
+                m_ShootCooldown = Random.Range(1, 3); 
+                owner.ExecutePrimaryAction((int)m_ShootCooldown);
             }
         }
     }

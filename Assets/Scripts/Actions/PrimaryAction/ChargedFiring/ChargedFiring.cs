@@ -1,5 +1,8 @@
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
+using System.Threading;
 using UnityEngine;
 
 
@@ -10,13 +13,9 @@ namespace BTG.Actions.PrimaryAction
     /// </summary>
     public class ChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
     {
-        public event Action OnPrimaryActionExecuted;
-
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
-        private ChargedFiringDataSO m_Data;
-
-        public event Action<float, float> OnPlayerCamShake;
+        public event Action OnPrimaryActionExecuted;
 
         private IPrimaryActor m_Actor;
         private ProjectilePool m_Pool;
@@ -25,8 +24,10 @@ namespace BTG.Actions.PrimaryAction
         private bool m_IsCharging;
         private float m_ChargeAmount;
 
+        private ChargedFiringDataSO m_Data;
         private readonly AudioSource m_FiringAudioSource;
-        
+        private CancellationTokenSource m_Cts;
+
 
         public ChargedFiring(ChargedFiringDataSO data, IPrimaryActor actor, ProjectilePool pool)
         {
@@ -61,6 +62,7 @@ namespace BTG.Actions.PrimaryAction
             ResetCharging();
             ToggleMuteFiringAudio(true);
             m_IsEnabled = false;
+            m_Cts?.Cancel();
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
@@ -68,8 +70,6 @@ namespace BTG.Actions.PrimaryAction
 
         public void Destroy()
         {
-            OnPlayerCamShake = null;
-
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
         }
@@ -96,12 +96,24 @@ namespace BTG.Actions.PrimaryAction
             SpawnProjectileAndShoot();
 
             if (m_Actor.IsPlayer)
-                OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
             OnPrimaryActionExecuted?.Invoke();
 
             PlayShotFiredClip();
             ResetCharging();
+        }
+
+        public void AutoStartStopAction(int stopTime)
+        {
+            StartAction();
+
+            m_Cts = new CancellationTokenSource();
+
+            _ = HelperMethods.InvokeAfterAsync(stopTime , () =>
+            {
+                StopAction();
+            }, m_Cts.Token);
         }
 
         private void UpdateChargeAmount()
@@ -131,7 +143,6 @@ namespace BTG.Actions.PrimaryAction
         private void ResetCharging()
         {
             m_ChargeAmount = 0f;
-            // m_View.UpdateChargedAmountUI(m_Model.ChargeAmount);
             StopChargingClip();
         }
 

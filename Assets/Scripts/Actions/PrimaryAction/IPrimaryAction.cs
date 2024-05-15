@@ -28,5 +28,10 @@ namespace BTG.Actions.PrimaryAction
         /// Stop executing the action or finishes the action.
         /// </summary>
         public void StopAction();
+
+        /// <summary>
+        /// This method is called to start the action and turn it off after certain time
+        /// </summary>
+        public void AutoStartStopAction(int stopTime);
     }
 }

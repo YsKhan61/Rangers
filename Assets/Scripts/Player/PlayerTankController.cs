@@ -107,7 +107,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_EntityBrain?.StartPrimaryFire();
+            m_EntityBrain?.StartPrimaryAction();
         }
 
         public void StopFire()
@@ -115,7 +115,7 @@ namespace BTG.Player
             if (!m_Model.IsEnabled)
                 return;
 
-            m_EntityBrain?.StopPrimaryFire();
+            m_EntityBrain?.StopPrimaryAction();
         }
 
         public void TryExecuteUltimate()

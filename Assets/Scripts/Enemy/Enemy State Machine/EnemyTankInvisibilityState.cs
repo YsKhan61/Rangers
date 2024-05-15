@@ -28,19 +28,14 @@ namespace BTG.Enemy
 
         private Vector3 GetRandomPositionInNavMesh()
         {
-            Vector3 randomPosition = Vector3.zero;
-
-            while (randomPosition != Vector3.zero)
+            Vector2 randomPoint = Random.insideUnitCircle * TELEPORT_RANGE;
+            Vector3 randomPosition = owner.Transform.position + new Vector3(randomPoint.x, owner.Transform.position.y, randomPoint.y);
+            UnityEngine.AI.NavMeshHit hit;
+            if (UnityEngine.AI.NavMesh.SamplePosition(randomPosition, out hit, TELEPORT_RANGE, UnityEngine.AI.NavMesh.AllAreas))
             {
-                Vector2 randomPoint = Random.insideUnitCircle * TELEPORT_RANGE;
-                randomPosition = owner.Transform.position + new Vector3(randomPoint.x, owner.Transform.position.y, randomPoint.y);
-                UnityEngine.AI.NavMeshHit hit;
-                if (UnityEngine.AI.NavMesh.SamplePosition(randomPosition, out hit, TELEPORT_RANGE, UnityEngine.AI.NavMesh.AllAreas))
-                {
-                    randomPosition = hit.position;
-                }
+                randomPosition = hit.position;
             }
-            
+
 
             return randomPosition;
         }

@@ -153,7 +153,8 @@ namespace BTG.Enemy
         /// <summary>
         /// Execute the primary action
         /// </summary>
-        public void ExecutePrimaryAction() => m_EntityBrain.StartPrimaryFire();
+        public void ExecutePrimaryAction(int stopTime) => 
+            m_EntityBrain.AutoStartStopPrimaryAction(stopTime);
 
         /// <summary>
         /// Execute the ultimate action

@@ -11,7 +11,6 @@ namespace BTG.Actions.PrimaryAction
         private ProjectileView m_View;
         private ProjectilePool m_Pool;
         private CancellationTokenSource m_Cts;
-
         public Transform Transform => m_View.transform;
 
         public ProjectileController(ChargedFiringDataSO projectileData, ProjectilePool pool)

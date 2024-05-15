@@ -163,10 +163,10 @@ namespace BTG.Enemy
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner
         /// </summary>
-        internal void ExecutePrimaryAction()
+        internal void ExecutePrimaryAction(int stopTime)
         {
             IsPrimaryActionExecuting = true;
-            m_Controller.ExecutePrimaryAction();
+            m_Controller.ExecutePrimaryAction(stopTime);
         }
 
         /// <summary>

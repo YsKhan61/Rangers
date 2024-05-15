@@ -1,7 +1,9 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
+using System.Threading;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 namespace BTG.Actions.PrimaryAction
 {
@@ -18,6 +20,7 @@ namespace BTG.Actions.PrimaryAction
         private float m_ChargeAmount;
 
         private TeslaBallView m_BallInCharge;
+        private CancellationTokenSource m_Cts;
 
         public TeslaFiring(TeslaFiringDataSO data, IPrimaryActor actor, TeslaBallPool pool)
         {
@@ -48,6 +51,7 @@ namespace BTG.Actions.PrimaryAction
         public void Disable()
         {
             m_IsEnabled = false;
+            m_Cts?.Cancel();
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
@@ -77,6 +81,18 @@ namespace BTG.Actions.PrimaryAction
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });  // OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
 
             ResetCharging();
+        }
+
+        public void AutoStartStopAction(int stopTime)
+        {
+            StartAction();
+
+            m_Cts = new CancellationTokenSource();
+
+            _ = HelperMethods.InvokeAfterAsync(stopTime, () =>
+            {
+                StopAction();
+            }, m_Cts.Token);
         }
 
         private void SetDamageToBallAndShoot()

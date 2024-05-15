@@ -160,9 +160,11 @@ namespace BTG.Tank
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
 
-        public void StartPrimaryFire() => m_PrimaryAction.StartAction();
+        public void StartPrimaryAction() => m_PrimaryAction.StartAction();
 
-        public void StopPrimaryFire() => m_PrimaryAction.StopAction();
+        public void StopPrimaryAction() => m_PrimaryAction.StopAction();
+
+        public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 

@@ -60,10 +60,21 @@ namespace BTG.Actions.UltimateAction
         /// </summary>
         public void Disable();
 
+        /// <summary>
+        /// Auto charge the ultimate action
+        /// </summary>
         public void AutoCharge();
 
+        /// <summary>
+        /// Charge the ultimate action with a specific amount
+        /// </summary>
+        /// <param name="amount">charge amount to add</param>
         public void Charge(float amount);
 
+        /// <summary>
+        /// Try to execute the ultimate action
+        /// </summary>
+        /// <returns>true if success, false otherwise</returns>
         public bool TryExecute();
     }
 }

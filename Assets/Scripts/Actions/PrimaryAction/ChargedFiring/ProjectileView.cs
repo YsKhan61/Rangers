@@ -26,16 +26,6 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = false;
         }
 
-        /*/// <summary>
-        /// This is for entities. Entities have a trigger collider
-        /// </summary>
-        /// <param name="other"></param>
-        private void OnTriggerEnter(Collider other)
-        {
-            m_Controller.OnHitObject(other);
-            m_Collider.enabled = false;
-        }*/
-
         private void OnDisable()
         {
             m_Collider.enabled = false;
