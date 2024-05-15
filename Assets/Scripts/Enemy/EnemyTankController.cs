@@ -50,7 +50,7 @@ namespace BTG.Enemy
         public int OppositionLayer => 1 << m_Data.OppositionLayerMask;
 
         /// <summary>
-        /// Get the max health of the enemy
+        /// Get the max health of the entity
         /// </summary>
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
@@ -203,10 +203,7 @@ namespace BTG.Enemy
 
         private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
 
-        private void OnEntityVisibilityToggled(bool value)
-        {
-            m_View.ToggleVisibility(value);
-        }
+        private void OnEntityVisibilityToggled(bool value) => m_View.ToggleVisibility(value);
 
         private void SubscribeToEvents()
         {

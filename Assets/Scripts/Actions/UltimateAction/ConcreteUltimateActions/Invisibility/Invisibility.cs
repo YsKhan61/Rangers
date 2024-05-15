@@ -73,7 +73,6 @@ namespace BTG.Actions.UltimateAction
                 Object.Destroy(m_View.gameObject);
                 m_View = null;
                 Actor.ToggleActorVisibility(true);
-                // Actor.ShakePlayerCamera(1f, 1f);
                 if (Actor.IsPlayer)
                     EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
 

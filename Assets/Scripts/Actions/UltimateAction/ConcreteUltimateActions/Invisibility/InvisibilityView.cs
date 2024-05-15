@@ -25,35 +25,22 @@ namespace BTG.Actions.UltimateAction
         /// </summary>
         public float AppearPSDuration => m_AppearPS.main.duration;
 
-        public void PlayDisappearPS()
-        {
-            m_DisappearPS.Play();
-        }
+        /// <summary>
+        /// Play the disappear particle system.
+        /// </summary>
+        public void PlayDisappearPS() => m_DisappearPS.Play();
 
-        public void PlayAppearPS()
-        {
-            m_AppearPS.Play();
-        }
+        public void PlayAppearPS() => m_AppearPS.Play();
 
-        public void StopDisappearPS()
-        {
-            m_DisappearPS.Stop();
-        }
+        public void StopDisappearPS() => m_DisappearPS.Stop();
 
-        public void StopAppearPS()
-        {
-            m_AppearPS.Stop();
-        }
+        public void StopAppearPS() => m_AppearPS.Stop();
 
         public void PlayDisappearAudio()
-        {
-            m_AudioSource.PlayOneShot(m_DisappearAudioClip);
-        }
+            => m_AudioSource.PlayOneShot(m_DisappearAudioClip);
 
         public void PlayAppearAudio()
-        {
-            m_AudioSource.PlayOneShot(m_AppearAudioClip);
-        }
+            => m_AudioSource.PlayOneShot(m_AppearAudioClip);
     }
 }
 
