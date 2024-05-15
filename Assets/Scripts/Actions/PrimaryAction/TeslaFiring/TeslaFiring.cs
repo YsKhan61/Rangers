@@ -137,7 +137,7 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
-            m_BallInCharge.Init();
+            m_BallInCharge.Init(m_Actor.Transform);
             m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;
         }

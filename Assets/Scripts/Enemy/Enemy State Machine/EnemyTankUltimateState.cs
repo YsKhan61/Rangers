@@ -13,7 +13,7 @@
 
         public override void Enter()
         {
-            owner.ExecuteUltimateAction();
+
         }
 
         public override void Exit()

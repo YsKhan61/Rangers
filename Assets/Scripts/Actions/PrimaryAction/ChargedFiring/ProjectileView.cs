@@ -1,16 +1,19 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class ProjectileView : MonoBehaviour
+    public class ProjectileView : MonoBehaviour, IFiringView
     {
         [SerializeField] Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
         [SerializeField] private Collider m_Collider;
 
-        private ProjectileController m_Controller;
+        public Transform Owner {get; private set;}
+
+    private ProjectileController m_Controller;
 
         private void OnEnable()
         {
@@ -31,9 +34,14 @@ namespace BTG.Actions.PrimaryAction
             m_Collider.enabled = false;
         }
 
-        public void SetController(ProjectileController controller)
+        public void Config(ProjectileController controller)
         {
             m_Controller = controller;
+        }
+
+        public void SetOwner(Transform owner)
+        {
+            Owner = owner;
         }
     }
 }

@@ -15,9 +15,9 @@ namespace BTG.Actions.UltimateAction
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
-        public AutoTarget(IUltimateActor controller, AutoTargetDataSO autoTargetData)
+        public AutoTarget(IUltimateActor actor, AutoTargetDataSO autoTargetData)
         {
-            Actor = controller;
+            Actor = actor;
             m_UltimateActionData = autoTargetData;
         }
 
@@ -29,7 +29,7 @@ namespace BTG.Actions.UltimateAction
             if (!ScanForNearbyColliders(out Collider[] results))
                 return false;
 
-            FilterDamageables(results, out List<IDamageable> damageables);
+            FilterDamageables(results, out List<IDamageableView> damageables);
             if (damageables.Count == 0) return false;
 
             ChangeState(State.Executing);
@@ -54,7 +54,7 @@ namespace BTG.Actions.UltimateAction
             AutoCharge();
         }
 
-        public void OnHitDamageable(IDamageable damageable) => damageable.TakeDamage(m_AutoTargetData.Damage);
+        public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(m_AutoTargetData.Damage);
 
         public void CreateExplosion(Vector3 position) => m_AutoTargetData.ExplosionFactory.CreateExplosion(position);
 
@@ -79,16 +79,16 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        private void FilterDamageables(Collider[] results, out List<IDamageable> damageables)
+        private void FilterDamageables(Collider[] results, out List<IDamageableView> damageables)
         {
-            damageables = new List<IDamageable>();
+            damageables = new List<IDamageableView>();
 
             for (int i = 0, count = results.Length; i < count; i++)
             {
                 if (results[i] == null)
                     continue;
 
-                if (results[i].TryGetComponent(out IDamageable damageable))
+                if (results[i].TryGetComponent(out IDamageableView damageable))
                 {
                     if (damageable == Actor.Damageable)
                     {
@@ -99,11 +99,11 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private async Task FireSequenceAsync(List<IDamageable> damageables)
+        private async Task FireSequenceAsync(List<IDamageableView> damageables)
         {
             try
             {
-                foreach (IDamageable damageable in damageables)
+                foreach (IDamageableView damageable in damageables)
                 {
                     SpawnConfigureLaunchProjectile(damageable.Transform);
 
@@ -124,10 +124,10 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private void SpawnConfigureLaunchProjectile(in Transform targetTransform)
+        private void SpawnConfigureLaunchProjectile(Transform targetTransform)
         {
             AutoTargetView projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
-            projectile.Configure(this, targetTransform, m_AutoTargetData.ProjectileSpeed);
+            projectile.Configure(this, targetTransform, m_AutoTargetData.ProjectileSpeed, Actor.Transform);
             projectile.Launch();
         }
     }

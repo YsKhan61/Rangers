@@ -136,6 +136,16 @@ namespace BTG.Enemy
         public void OnDamageTaken() => ChangeState(EnemyTankState.Damaged);
 
         /// <summary>
+        /// Inform the state machine that the target is in range
+        /// </summary>
+        public void OnTargetInRange() => ChangeState(EnemyTankState.PrimaryAttack);
+
+        /// <summary>
+        /// Inform the state machine that the target is not in range
+        /// </summary>
+        public void OnTargetNotInRange() => ChangeState(EnemyTankState.Idle);
+
+        /// <summary>
         /// Inform the state machine that the Idle state is complete
         /// </summary>
         internal void OnIdleStateComplete() => ChangeState(EnemyTankState.Patrol);
@@ -149,16 +159,6 @@ namespace BTG.Enemy
         /// Inform the state machine that the Damaged state is complete
         /// </summary>
         internal void OnDamagedStateComplete() => ChangeState(EnemyTankState.Idle);
-
-        /// <summary>
-        /// Inform the state machine that the target is in range
-        /// </summary>
-        internal void OnTargetInRange() => ChangeState(EnemyTankState.PrimaryAttack);
-
-        /// <summary>
-        /// Inform the state machine that the target is not in range
-        /// </summary>
-        internal void OnTargetNotInRange() => ChangeState(EnemyTankState.Idle);
 
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner

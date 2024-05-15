@@ -21,13 +21,6 @@ namespace BTG.Enemy
 
         public override void Update()
         {
-            // Check if enemy is in range of target, if yes, notify the state machine
-            if (owner.IsTargetInRange)
-            {
-                owner.OnTargetInRange();
-                return;
-            }
-
             // check if enemy is near destination, if yes, notify the state machine
             if (HasReachedDestination())
                 owner.OnPatrolStateComplete();

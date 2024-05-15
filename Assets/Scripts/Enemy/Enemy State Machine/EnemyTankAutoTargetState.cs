@@ -5,5 +5,10 @@
         public EnemyTankAutoTargetState(EnemyTankStateMachine owner) : base(owner)
         {
         }
+
+        public override void Enter()
+        {
+            owner.ExecuteUltimateAction();
+        }
     }
 }

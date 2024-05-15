@@ -40,7 +40,7 @@ namespace BTG.Tank
         public Transform FirePoint => m_View.FirePoint;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
         public Collider DamageCollider => m_View.DamageCollider;
-        public IDamageable Damageable { get; private set; }
+        public IDamageableView Damageable { get; private set; }
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
         public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
@@ -108,7 +108,7 @@ namespace BTG.Tank
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
 
-        public void SetDamageable(IDamageable damageable) => Damageable = damageable;
+        public void SetDamageable(IDamageableView damageable) => Damageable = damageable;
 
         public void SetOppositionLayerMask(LayerMask layer) => m_Model.OppositionLayer = layer;
 

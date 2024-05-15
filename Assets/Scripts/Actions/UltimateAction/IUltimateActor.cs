@@ -32,7 +32,7 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// Get the damage collider of the actor.
         /// </summary>
-        public IDamageable Damageable { get; }
+        public IDamageableView Damageable { get; }
 
         /// <summary>
         /// Try to execute the ultimate action.

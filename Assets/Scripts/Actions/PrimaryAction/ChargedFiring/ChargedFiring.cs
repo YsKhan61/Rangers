@@ -149,7 +149,7 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnProjectile(out ProjectileController projectile)
         {
             projectile = m_Pool.GetProjectile();
-            projectile.Init();
+            projectile.Init(m_Actor.Transform);
             projectile.Transform.position = m_Actor.FirePoint.position;
             projectile.Transform.rotation = m_Actor.FirePoint.rotation;
         }

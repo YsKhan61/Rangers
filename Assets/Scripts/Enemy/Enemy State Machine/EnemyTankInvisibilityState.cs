@@ -15,8 +15,7 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
-            base.Enter();
-
+            owner.ExecuteUltimateAction();
             Teleport();
         }
 

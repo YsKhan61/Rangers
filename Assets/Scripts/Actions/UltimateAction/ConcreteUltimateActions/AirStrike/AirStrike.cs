@@ -17,7 +17,7 @@ namespace BTG.Actions.UltimateAction
         private AirStrikeView m_View;
 
         private Collider[] m_OverlappingColliders = new Collider[10];
-        private readonly List<IDamageable> m_Damageables = new();
+        private readonly List<IDamageableView> m_Damageables = new();
 
         // Create constructor
         public AirStrike(IUltimateActor actor, AirStrikeDataSO airStrikeData)
@@ -144,7 +144,7 @@ namespace BTG.Actions.UltimateAction
                     continue;
                 }
 
-                if (m_OverlappingColliders[i].TryGetComponent(out IDamageable damageable))
+                if (m_OverlappingColliders[i].TryGetComponent(out IDamageableView damageable))
                 {
                     m_Damageables.Add(damageable);
                 }
@@ -158,14 +158,14 @@ namespace BTG.Actions.UltimateAction
                 return;
             }
 
-            foreach (IDamageable damageable in m_Damageables)
+            foreach (IDamageableView damageable in m_Damageables)
             {
                 if (damageable == Actor.Damageable)
                 {
                     continue;
                 }
 
-                damageable.TakeDamage(m_AirStrikeData.Damage);
+                damageable.Damage(m_AirStrikeData.Damage);
             }
         }
     }

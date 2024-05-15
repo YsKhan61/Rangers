@@ -46,7 +46,7 @@ namespace BTG.Entity
         /// <summary>
         /// Set the damageable of the tank.
         /// </summary>
-        public void SetDamageable(IDamageable damageable);
+        public void SetDamageable(IDamageableView damageable);
 
         /// <summary>
         /// Set the opposition layer mask of the tank.

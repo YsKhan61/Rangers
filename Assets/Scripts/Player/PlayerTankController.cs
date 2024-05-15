@@ -56,7 +56,7 @@ namespace BTG.Player
             m_EntityBrain.Model.IsPlayer = true;
             m_EntityBrain.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
+            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 
             InitializeDamageCollider();

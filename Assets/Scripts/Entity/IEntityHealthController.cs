@@ -19,7 +19,7 @@ namespace BTG.Entity
         /// <summary>
         /// This method is used to take damage.
         /// </summary>
-        public void TakeDamage(int damage);
+        public void Damage(int damage);
 
         /// <summary>
         /// Reset the health of the entity.

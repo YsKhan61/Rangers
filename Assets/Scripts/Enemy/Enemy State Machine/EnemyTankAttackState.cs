@@ -4,7 +4,7 @@ namespace BTG.Enemy
 {
     public class EnemyTankAttackState : EnemyTankAliveState
     {
-        private const float ROTATE_THRESHOLD = 0.1f;
+        private const float ROTATE_THRESHOLD = 1f;
         private const float ROTATE_SPEED = 2f;
 
         private float m_ShootTimer;
@@ -31,20 +31,14 @@ namespace BTG.Enemy
 
         public override void Update()
         {
-            if (!owner.IsTargetInRange)
-            {
-                owner.OnTargetNotInRange();
-                return;
-            }
-
-            if (owner.IsUltimateReady)
-            {
-                owner.OnUltimateReady();
-                return;
-            }
-
             if (HasRotatedTowardsTarget() && !owner.IsPrimaryActionExecuting)
             {
+                if (owner.IsUltimateReady)
+                {
+                    owner.OnUltimateReady();
+                    return;
+                }
+
                 TryShoot();
                 return;
             }

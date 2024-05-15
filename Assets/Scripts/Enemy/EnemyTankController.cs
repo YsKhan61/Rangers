@@ -118,8 +118,18 @@ namespace BTG.Enemy
         /// <summary>
         /// Set the player view that has been detected
         /// </summary>
-        public void SetPlayerView(IPlayerView view) => TargetView = view;
-
+        public void SetPlayerView(IPlayerView view)
+        {
+            TargetView = view;
+            if (TargetView == null)
+            {
+                m_StateMachine.OnTargetNotInRange();
+            }
+            else
+            {
+                m_StateMachine.OnTargetInRange();
+            }
+        }
         /// <summary>
         /// Set the entity brain and it's properties to the controller
         /// </summary>
@@ -136,7 +146,7 @@ namespace BTG.Enemy
             m_EntityBrain.Model.IsPlayer = false;
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageable);
+            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
 
             IntializeDamageCollider();
@@ -183,12 +193,6 @@ namespace BTG.Enemy
 
         private void IntializeDamageCollider()
         {
-            /*string name = m_View.gameObject.name;
-            Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
-            HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
-            m_View.gameObject.name = name;
-            m_EntityHealthController.SetCollider(collider as Collider);*/
-
             m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);

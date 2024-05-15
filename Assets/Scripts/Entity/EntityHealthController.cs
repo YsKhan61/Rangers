@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Entity
 {
-    public class EntityHealthController : MonoBehaviour, IEntityHealthController, IDamageable
+    public class EntityHealthController : MonoBehaviour, IEntityHealthController, IDamageableView
     {
         public event Action<int, int> OnHealthUpdated;
         public event Action OnDamageTaken;
@@ -19,7 +19,7 @@ namespace BTG.Entity
         public void SetController(IEntityController controller) => m_Controller = controller;
         public void SetCollider(Collider collider) => m_DamageCollider = collider;
 
-        public void TakeDamage(int damage)
+        public void Damage(int damage)
         {
             AddHealth(-damage);
             OnDamageTaken?.Invoke();

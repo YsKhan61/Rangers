@@ -19,12 +19,13 @@ namespace BTG.Actions.PrimaryAction
             m_Data = projectileData;
             m_Pool = pool;
             m_View = Object.Instantiate(projectileData.ViewPrefab, m_Pool.ProjectileContainer);
-            m_View.SetController(this);
+            m_View.Config(this);
         }
 
-        public void Init()
+        public void Init(Transform owner)
         {
             m_View.gameObject.SetActive(true);
+            m_View.SetOwner(owner);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
@@ -40,9 +41,9 @@ namespace BTG.Actions.PrimaryAction
 
         public void OnHitObject(Collider other)
         {
-            if (other.TryGetComponent(out IDamageable damageable))
+            if (other.TryGetComponent(out IDamageableView damageable))
             {
-                damageable.TakeDamage(m_Data.Damage);
+                damageable.Damage(m_Data.Damage);
             }
 
             m_Data.ExplosionFactory.CreateExplosion(Transform.position);

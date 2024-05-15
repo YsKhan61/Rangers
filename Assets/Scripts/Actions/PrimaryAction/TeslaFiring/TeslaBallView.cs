@@ -5,8 +5,10 @@ using UnityEngine;
 namespace BTG.Actions.PrimaryAction
 {
     [RequireComponent(typeof(Rigidbody), typeof(SphereCollider))]
-    public class TeslaBallView : MonoBehaviour
+    public class TeslaBallView : MonoBehaviour, IFiringView
     {
+        public Transform Owner { get; private set; }
+
         [SerializeField]
         Rigidbody m_Rigidbody;
 
@@ -24,9 +26,9 @@ namespace BTG.Actions.PrimaryAction
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.collider.TryGetComponent(out IDamageable damageable))
+            if (collision.collider.TryGetComponent(out IDamageableView damageable))
             {
-                damageable.TakeDamage(m_Damage);
+                damageable.Damage(m_Damage);
             }
 
             Reset();
@@ -38,8 +40,9 @@ namespace BTG.Actions.PrimaryAction
         /// Initialize the tesla ball.
         /// It will be shown and the particle system will start playing
         /// </summary>
-        public void Init()
+        public void Init(Transform owner)
         {
+            Owner = owner;
             Show();
         }
 
