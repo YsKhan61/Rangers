@@ -136,7 +136,6 @@ namespace BTG.Tank
 
             m_View.AudioView.StopEngineAudio();
 
-            Rigidbody = null;
             OnEntityInitialized = null;
             OnEntityVisibilityToggled = null;
 

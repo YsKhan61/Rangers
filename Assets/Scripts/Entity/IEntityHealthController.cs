@@ -10,6 +10,12 @@ namespace BTG.Entity
         public event System.Action OnDamageTaken;
 
         /// <summary>
+        /// Get or set the enable status of the entity.
+        /// </summary>
+        public bool IsEnabled { get; set; }
+
+
+        /// <summary>
         /// Set the controller of the entity.
         /// Can be player or enemy.
         /// </summary>
@@ -22,8 +28,8 @@ namespace BTG.Entity
         public void Damage(int damage);
 
         /// <summary>
-        /// Reset the health of the entity.
+        /// Set the max health of the entity.
         /// </summary>
-        public void Reset();
+        public void SetMaxHealth();
     }
 }

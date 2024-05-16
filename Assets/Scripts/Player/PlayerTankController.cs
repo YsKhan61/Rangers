@@ -149,9 +149,7 @@ namespace BTG.Player
         public void EntityDied()
         {  
             DeInit();
-
-            // wait for the next frame to notify the player service to make sure that the entity completes all necessary actions
-            _ = HelperMethods.InvokeInNextFrame(() => m_PlayerService.OnPlayerDeath());
+            m_PlayerService.OnPlayerDeath();
         }
 
         private void InitializeDatas()
@@ -170,7 +168,8 @@ namespace BTG.Player
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
-            m_EntityHealthController.Reset();
+            m_EntityHealthController.IsEnabled = true;
+            m_EntityHealthController.SetMaxHealth();
         }
 
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)

@@ -190,7 +190,8 @@ namespace BTG.Enemy
             m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
-            m_EntityHealthController.Reset();
+            m_EntityHealthController.IsEnabled = true;
+            m_EntityHealthController.SetMaxHealth();
         }
 
         private void InitializeAgent()
