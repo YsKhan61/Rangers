@@ -16,6 +16,10 @@ MonoBehaviour:
   m_Waves:
   - ID: 1
     EntityTags:
+    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
     - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
     EnemyTankIDs: 
   - ID: 1
@@ -25,10 +29,6 @@ MonoBehaviour:
   - ID: 1
     EntityTags:
     - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
-    EnemyTankIDs: 
-  - ID: 1
-    EntityTags:
-    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
     EnemyTankIDs: 
   - ID: 1
     EntityTags:

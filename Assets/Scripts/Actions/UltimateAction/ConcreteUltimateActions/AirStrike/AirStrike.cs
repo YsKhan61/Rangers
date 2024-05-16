@@ -62,11 +62,9 @@ namespace BTG.Actions.UltimateAction
             ChangeState(State.Executing);
 
             SpawnView(Actor.Transform);
-            m_View.SetController(this);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();
             RestartAfterDuration(m_AirStrikeData.Duration);
-            // Actor.ShakePlayerCamera(1f, m_AirStrikeData.Duration);
             if (Actor.IsPlayer)
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
 

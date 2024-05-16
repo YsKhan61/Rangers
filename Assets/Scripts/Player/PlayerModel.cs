@@ -20,7 +20,7 @@ namespace BTG.Player
         /// <summary>
         /// Enable when tank is alive, disable when tank is dead
         /// </summary>
-        public bool IsEnabled;
+        public bool IsAlive;
 
         // caches
         

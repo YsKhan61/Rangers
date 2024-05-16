@@ -75,7 +75,7 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// Initialize the state machine
+        /// Initialize the state machine after all the states are created
         /// it will register to update and destroy callbacks
         /// </summary>
         public void Init(EnemyTankState stateToStart)

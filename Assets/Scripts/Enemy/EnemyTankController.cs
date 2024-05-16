@@ -59,8 +59,12 @@ namespace BTG.Enemy
         /// </summary>
         public TagSO UltimateTag => m_EntityBrain.Model.UltimateTag;
 
-        private EnemyPool m_Pool;
+
+
+        [Inject]
         private EnemyService m_Service;
+
+        private EnemyPool m_Pool;
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         private EnemyView m_View;
@@ -76,44 +80,63 @@ namespace BTG.Enemy
 
             m_Agent = m_View.GetComponent<NavMeshAgent>();
 
-            m_StateMachine = new (this);
+            m_StateMachine = new(this);
             DIManager.Instance.Inject(m_StateMachine);
 
             Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
         }
 
-        
-
         ~EnemyTankController()
         {
-            UnsubscribeFromEntityEvents();
+            UnsubscribeFromEvents();
             m_EntityBrain = null;
-        }
-
-        /// <summary>
-        /// Initialize the controller
-        /// It sets the speed and stopping distance of the agent
-        /// It initializes the state machine
-        /// </summary>
-        public void Init()
-        {
-            m_EntityHealthController.Reset();
-
-            m_Agent.speed = m_EntityBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
-            m_Agent.stoppingDistance = m_Data.StoppingDistance;
-
-#if UNITY_EDITOR
-            if (m_Data.InitializeState)
-            {
-                m_StateMachine.Init(m_Data.InitialState);
-            }
-#endif
         }
 
         /// <summary>
         /// Set the pose of the controller's view
         /// </summary>
         public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
+
+        /// <summary>
+        /// Set the entity brain and it's properties to the controller
+        /// </summary>
+        public void SetEntityBrain(IEntityBrain entity)
+        {
+            m_EntityBrain = entity as IEntityTankBrain;
+            if (m_EntityBrain == null)
+            {
+                Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type IEntityTankBrain");
+                return;
+            }
+
+            m_EntityBrain.Model.IsPlayer = false;
+            m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
+            m_EntityBrain.SetRigidbody(Rigidbody);
+            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
+            m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
+        }
+
+        /// <summary>
+        /// Initialize the controller after the Entity is set
+        /// it configures the IEntityHealthCOntroller with damage collider of entity
+        /// It initializes properties of NavMeshAgent
+        /// It initializes the state machine
+        /// It subscribe to events
+        /// </summary>
+        public void Init()
+        {
+            if (m_EntityBrain == null)
+            {
+                Debug.LogError("First initialize the entity brain");
+                return;
+            }
+
+            InitializeHealthAndDamage();
+            InitializeAgent();
+            InitializeStateMachine();
+
+            SubscribeToEvents();
+        }
 
         /// <summary>
         /// Set the player view that has been detected
@@ -130,41 +153,12 @@ namespace BTG.Enemy
                 m_StateMachine.OnTargetInRange();
             }
         }
-        /// <summary>
-        /// Set the entity brain and it's properties to the controller
-        /// </summary>
-        public void SetEntityBrain(IEntityBrain entity)
-        {
-            m_EntityBrain = entity as IEntityTankBrain;
-            
-            if (m_EntityBrain == null)
-            {
-                Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type IEntityTankBrain");
-                return;
-            }
-
-            m_EntityBrain.Model.IsPlayer = false;
-            m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
-            m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
-
-            IntializeDamageCollider();
-            m_StateMachine.CreateStates();
-
-            SubscribeToEvents();
-        }
-
-        /// <summary>
-        /// Set the enemy service
-        /// </summary>
-        public void SetService(EnemyService service) => m_Service = service;
 
         /// <summary>
         /// Execute the primary action
         /// </summary>
-        public void ExecutePrimaryAction(int stopTime) => 
-            m_EntityBrain.AutoStartStopPrimaryAction(stopTime);
+        public void ExecutePrimaryAction(int stopTime) 
+            => m_EntityBrain.AutoStartStopPrimaryAction(stopTime);
 
         /// <summary>
         /// Execute the ultimate action
@@ -184,18 +178,39 @@ namespace BTG.Enemy
         {
             m_StateMachine.OnEntityDead();
             m_EntityBrain.DeInit();
-            UnsubscribeFromEntityEvents();
+            UnsubscribeFromEvents();
             m_EntityBrain = null;
             m_Pool.ReturnEnemy(this);
 
             m_Service.OnEnemyDeath();
         }
 
-        private void IntializeDamageCollider()
+        private void InitializeHealthAndDamage()
         {
             m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
+            m_EntityHealthController.Reset();
+        }
+
+        private void InitializeAgent()
+        {
+            m_Agent.speed = m_EntityBrain.Model.MaxSpeed * m_Data.MaxSpeedMultiplier;
+            m_Agent.stoppingDistance = m_Data.StoppingDistance;
+        }
+
+        private void InitializeStateMachine()
+        {
+            m_StateMachine.CreateStates();
+
+#if UNITY_EDITOR
+            if (m_Data.InitializeState)
+            {
+                m_StateMachine.Init(m_Data.InitialState);
+            }
+#else
+            m_StateMachine.Init(m_Data.InitialState);
+#endif
         }
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
@@ -220,7 +235,7 @@ namespace BTG.Enemy
             m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
         }
 
-        private void UnsubscribeFromEntityEvents()
+        private void UnsubscribeFromEvents()
         {
             m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= OnUltimateExecuted;

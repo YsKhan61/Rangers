@@ -1,5 +1,6 @@
 using BTG.Entity;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 
 
@@ -7,7 +8,9 @@ namespace BTG.Player
 {
     public class PlayerTankController : IEntityController, IFixedUpdatable, IUpdatable
     {
+        [Inject]
         private PlayerService m_PlayerService;
+
         private PlayerModel m_Model;
         private PlayerView m_View;
 
@@ -23,9 +26,8 @@ namespace BTG.Player
         // cached values
         private Transform m_Transform;
 
-        public PlayerTankController(PlayerService service, PlayerDataSO data)
+        public PlayerTankController(PlayerDataSO data)
         {
-            m_PlayerService = service;
             m_Model = new PlayerModel(data);
             m_View = Object.Instantiate(data.Prefab);
             m_Transform = m_View.transform;
@@ -33,13 +35,13 @@ namespace BTG.Player
 
         ~PlayerTankController()
         {
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
-
-            UnsubscribeFromEntityEvents();
-
-            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
+            UnsubscribeFromEvents();
         }
+
+        /// <summary>
+        /// Set the pose of the controller's view
+        /// </summary>
+        public void SetPose(in Pose pose) => m_View.transform.SetPose(pose);
 
         /// <summary>
         /// Set the entity brain for the controller.
@@ -58,37 +60,37 @@ namespace BTG.Player
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
-
-            InitializeDamageCollider();
-            SubscribeToEntityEvents();
         }
 
         /// <summary>
-        /// Initialize the controller.
+        /// Initialize the controller. after the entity is set.
+        /// It configures the health and damage.
+        /// It subscribes to events
         /// </summary>
         public void Init()
         {
-            m_Model.IsEnabled = true;
-            m_Model.EntityMaxSpeed = m_EntityBrain.Model.MaxSpeed;
-            m_Model.EntityRotateSpeed = m_EntityBrain.Model.RotateSpeed;
-            m_Model.EntityAcceleration = m_EntityBrain.Model.Acceleration;
+            InitializeDatas();
+            InitializeHealthAndDamage();
+            SubscribeToEvents();
+        }
 
-            Transform.position = Vector3.zero;
-            Transform.rotation = Quaternion.identity;
+        /// <summary>
+        /// Deinitialize the controller and it's entity brain.
+        /// </summary>
+        public void DeInit()
+        {
+            // If the entity brain is null, then the entity is already deinitialized.
+            if (m_EntityBrain == null) return;
 
-            Rigidbody.centerOfMass = m_EntityBrain.Transform.position;
-            Rigidbody.maxLinearVelocity = m_EntityBrain.Model.MaxSpeed;
-
-            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
-            m_EntityHealthController.Reset();
-
-            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            m_Model.IsAlive = false;
+            m_EntityBrain.DeInit();
+            UnsubscribeFromEvents();
+            m_EntityBrain = null;
         }
 
         public void SetMoveValue(in float value)
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             m_Model.MoveInputValue = value;
@@ -96,7 +98,7 @@ namespace BTG.Player
 
         public void SetRotateValue(in float value)
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             m_Model.RotateInputValue = value;
@@ -104,7 +106,7 @@ namespace BTG.Player
 
         public void StartFire()
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             m_EntityBrain?.StartPrimaryAction();
@@ -112,7 +114,7 @@ namespace BTG.Player
 
         public void StopFire()
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             m_EntityBrain?.StopPrimaryAction();
@@ -120,7 +122,7 @@ namespace BTG.Player
 
         public void TryExecuteUltimate()
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             m_EntityBrain?.TryExecuteUltimate();
@@ -128,7 +130,7 @@ namespace BTG.Player
 
         public void FixedUpdate()
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             Rotate();
@@ -138,7 +140,7 @@ namespace BTG.Player
 
         public void Update()
         {
-            if (!m_Model.IsEnabled)
+            if (!m_Model.IsAlive)
                 return;
 
             CalculateInputSpeed();
@@ -152,35 +154,23 @@ namespace BTG.Player
             _ = HelperMethods.InvokeInNextFrame(() => m_PlayerService.OnPlayerDeath());
         }
 
-        /// <summary>
-        /// Deinitialize the controller and it's entity brain.
-        /// </summary>
-        public void DeInit()
+        private void InitializeDatas()
         {
-            // If the entity brain is null, then the entity is already deinitialized.
-            if (m_EntityBrain == null) return;
+            m_Model.IsAlive = true;
+            m_Model.EntityMaxSpeed = m_EntityBrain.Model.MaxSpeed;
+            m_Model.EntityRotateSpeed = m_EntityBrain.Model.RotateSpeed;
+            m_Model.EntityAcceleration = m_EntityBrain.Model.Acceleration;
 
-            m_Model.IsEnabled = false;
-            m_EntityBrain.DeInit();
-            UnsubscribeFromEntityEvents();
-            m_EntityBrain = null;
-            m_EntityHealthController.OnHealthUpdated -= OnEntityHealthUpdated;
-
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            Rigidbody.centerOfMass = Vector3.zero;
+            Rigidbody.maxLinearVelocity = m_EntityBrain.Model.MaxSpeed;
         }
 
-        private void InitializeDamageCollider()
+        private void InitializeHealthAndDamage()
         {
-            /*string name = m_View.gameObject.name;
-            Component collider = m_View.gameObject.AddComponent(m_EntityBrain.DamageCollider.GetType());
-            HelperMethods.CopyComponentProperties(m_EntityBrain.DamageCollider, collider);
-            m_View.gameObject.name = name;
-            m_EntityHealthController.SetCollider(collider as Collider);*/
-
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
+            m_EntityHealthController.Reset();
         }
 
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
@@ -206,22 +196,32 @@ namespace BTG.Player
         private void CalculateInputSpeed()
             => m_Model.Acceleration = m_Model.EntityAcceleration * m_Model.MoveInputValue;
 
-        private void SubscribeToEntityEvents()
+        private void SubscribeToEvents()
         {
             m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+
+            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
+
+            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
         }
 
-        private void UnsubscribeFromEntityEvents()
+        private void UnsubscribeFromEvents()
         {
             m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+
+            m_EntityHealthController.OnHealthUpdated -= OnEntityHealthUpdated;
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
     }
 }

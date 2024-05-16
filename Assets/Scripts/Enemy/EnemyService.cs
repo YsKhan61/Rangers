@@ -88,13 +88,15 @@ namespace BTG.Enemy
 
             bool controllerFound = GetEnemyController(out EnemyTankController controller);
             if (!controllerFound) return;
+            DIManager.Instance.Inject(controller);
 
+            entity.Init();
             controller.SetEntityBrain(entity);
-            controller.SetService(this);
+            controller.Init();
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
             controller.SetPose(pose);
-            controller.Init();
-            entity.Init();
+
+            
         }
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)

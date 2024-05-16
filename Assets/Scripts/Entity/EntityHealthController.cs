@@ -10,14 +10,12 @@ namespace BTG.Entity
         public event Action OnDamageTaken;
 
         private IEntityController m_Controller;
-        private Collider m_DamageCollider;        // the collider that will be used to detect the damage
         public Transform Transform => transform;
 
         private int m_MaxHealth => m_Controller.MaxHealth;
         private int m_CurrentHealth;
 
         public void SetController(IEntityController controller) => m_Controller = controller;
-        public void SetCollider(Collider collider) => m_DamageCollider = collider;
 
         public void Damage(int damage)
         {

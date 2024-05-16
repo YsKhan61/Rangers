@@ -1,5 +1,4 @@
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 
 namespace BTG.Tank
@@ -34,8 +33,6 @@ namespace BTG.Tank
         protected override TankBrain CreateItem()
         {
             TankBrain tankBrain = new (m_TankData, this);
-            DIManager.Instance.Inject(tankBrain);
-            tankBrain.CreateUltimateAction();
             return tankBrain;
         }
     }

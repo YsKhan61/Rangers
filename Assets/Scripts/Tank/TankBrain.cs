@@ -61,6 +61,8 @@ namespace BTG.Tank
         /// <param name="pool"></param>
         public TankBrain(TankDataSO tankData, TankPool pool)
         {
+            DIManager.Instance.Inject(this);
+
             m_Pool = pool;
 
             m_Model = new TankModel(tankData, this);
@@ -68,6 +70,29 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
+            CreateUltimateAction();
+        }
+
+        /// <summary>
+        /// Initialize the tank brain.
+        /// It sets the tank state to idle, enables the primary and ultimate actions, resets the health controller.
+        /// It registers the tank to update and destroy callbacks.
+        /// It raises the initialized event.
+        /// </summary>
+        public void Init()
+        {
+           m_Model.State = TankState.Idle;
+
+            OnTankStateChangedToIdle();
+            ToggleActorVisibility(true);
+
+            m_PrimaryAction.Enable();
+            m_UltimateAction.Enable();
+
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
+
+            _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
         /// <summary>
@@ -81,29 +106,6 @@ namespace BTG.Tank
                 m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, m_Model.TankData.UltimateTag);
             else
                 m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, ultimateTag);
-        }
-
-        /// <summary>
-        /// Initialize the tank brain.
-        /// It sets the tank state to idle, enables the primary and ultimate actions, resets the health controller.
-        /// It registers the tank to update and destroy callbacks.
-        /// It raises the initialized event.
-        /// </summary>
-        public void Init()
-        {
-            m_Model.State = TankState.Idle;
-
-            OnTankStateChangedToIdle();
-            ToggleActorVisibility(true);
-            DamageCollider.enabled = true;
-
-            m_PrimaryAction.Enable();
-            m_UltimateAction.Enable();
-
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
-
-            _ = HelperMethods.InvokeInNextFrame(()=> OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
@@ -133,8 +135,6 @@ namespace BTG.Tank
             m_UltimateAction.Disable();
 
             m_View.AudioView.StopEngineAudio();
-
-            DamageCollider.enabled = false;
 
             Rigidbody = null;
             OnEntityInitialized = null;
