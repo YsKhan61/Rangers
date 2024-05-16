@@ -11,6 +11,7 @@ namespace BTG.Actions.PrimaryAction
 
         [SerializeField]
         Rigidbody m_Rigidbody;
+        public Rigidbody Rigidbody => m_Rigidbody;
 
         [SerializeField]
         ParticleSystem m_ParticleSytem;

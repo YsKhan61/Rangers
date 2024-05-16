@@ -97,6 +97,8 @@ namespace BTG.Actions.PrimaryAction
 
         private void SetDamageToBallAndShoot()
         {
+            m_BallInCharge.transform.SetParent(m_Pool.Container);
+            m_BallInCharge.Rigidbody.isKinematic = false;
             CalculateBallDamage(out int damage);
             m_BallInCharge?.SetDamage(damage);
             m_BallInCharge.AddImpulseForce(CalculateProjectileInitialSpeed());
@@ -137,7 +139,9 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
+            m_BallInCharge.Rigidbody.isKinematic = true;
             m_BallInCharge.Init(m_Actor.Transform);
+            m_BallInCharge.transform.SetParent(m_Actor.FirePoint);
             m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;
         }
