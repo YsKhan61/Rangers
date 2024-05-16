@@ -32,8 +32,16 @@ namespace BTG.Actions.PrimaryAction
             }
 
             Reset();
+        }
 
-            DebugCollision(collision.collider.name);
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out IDamageableView damageable))
+            {
+                damageable.Damage(m_Damage);
+            }
+
+            Reset();
         }
 
         /// <summary>

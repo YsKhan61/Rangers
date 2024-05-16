@@ -39,7 +39,7 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.AddForce(m_View.transform.forward * initialSpeed, ForceMode.Impulse);
         }
 
-        public void OnHitObject(Collider other)
+        public void OnHitSomething(Collider other)
         {
             if (other.TryGetComponent(out IDamageableView damageable))
             {
@@ -47,6 +47,8 @@ namespace BTG.Actions.PrimaryAction
             }
 
             m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+
+            ResetProjectile();
         }
 
         private void ResetProjectile()
@@ -55,6 +57,7 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.angularVelocity = Vector3.zero;
             m_View.transform.position = Vector3.zero;
             m_View.transform.rotation = Quaternion.identity;
+
             m_View.gameObject.SetActive(false);
             m_Pool.ReturnProjectile(this);
 

@@ -3,7 +3,7 @@ using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 
 namespace BTG.Actions.PrimaryAction
 {

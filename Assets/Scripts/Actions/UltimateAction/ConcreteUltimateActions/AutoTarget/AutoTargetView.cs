@@ -62,6 +62,21 @@ namespace BTG.Actions.UltimateAction
             Destroy(gameObject);
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.TryGetComponent(out IDamageableView damageable))
+            {
+                m_Controller.OnHitDamageable(damageable);
+            }
+
+            m_Controller.CreateExplosion(transform.position);
+
+            m_IsLaunched = false;
+            Destroy(gameObject);
+        }
+
+
+
         private void UpdateProjectilePosition()
         {
             if (!m_IsLaunched)

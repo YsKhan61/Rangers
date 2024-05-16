@@ -13,25 +13,20 @@ namespace BTG.Actions.PrimaryAction
 
         public Transform Owner {get; private set;}
 
-    private ProjectileController m_Controller;
+        private ProjectileController m_Controller;
 
-        private void OnEnable()
-        {
-            m_Collider.enabled = true;
-        }
 
         /// <summary>
         /// This is for environment objects
         /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
-            m_Controller.OnHitObject(collision.collider);
-            m_Collider.enabled = false;
+            m_Controller.OnHitSomething(collision.collider);
         }
 
-        private void OnDisable()
+        private void OnTriggerEnter(Collider other)
         {
-            m_Collider.enabled = false;
+            m_Controller.OnHitSomething(other);
         }
 
         public void Config(ProjectileController controller)
