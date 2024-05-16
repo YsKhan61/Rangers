@@ -58,8 +58,16 @@ namespace BTG.Player
             m_EntityBrain.Model.IsPlayer = true;
             m_EntityBrain.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
+            m_EntityBrain.SetDamageable(m_EntityHealthController);
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
+
+            m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+
+            m_EntityBrain.Init();
         }
 
         /// <summary>
@@ -168,7 +176,16 @@ namespace BTG.Player
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
+            m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
             m_EntityHealthController.IsEnabled = true;
+
+            /// This one needs to be set after the health controller is initialized
+            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
+            /// The m_EntityBrain has already been initialized, so we need to set the visibility of the health controller
+            m_EntityHealthController.SetVisible(true);
+
+            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
+
             m_EntityHealthController.SetMaxHealth();
         }
 
@@ -197,14 +214,6 @@ namespace BTG.Player
 
         private void SubscribeToEvents()
         {
-            m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
-
-            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
-
             UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
         }
@@ -212,6 +221,7 @@ namespace BTG.Player
         private void UnsubscribeFromEvents()
         {
             m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
+            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;

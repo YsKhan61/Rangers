@@ -10,8 +10,10 @@ namespace BTG.Enemy
     /// <summary>
     /// A Controller for the enemy tank
     /// </summary>
-    public class EnemyTankController : IEntityController
+    public class EnemyTankController : IEntityController, IUpdatable
     {
+        private const float DETECT_RANGE = 10f;         // a temporary hard value to detect the player using raycast
+
         private EnemyDataSO m_Data;
         /// <summary>
         /// Get the data of the enemy
@@ -37,7 +39,7 @@ namespace BTG.Enemy
         /// <summary>
         /// Get the target view that is in range and detected
         /// </summary>
-        public IPlayerView TargetView { get; private set; }
+        public IDamageableView TargetView { get; private set; }
 
         /// <summary>
         /// Is Ultimate ready to be executed
@@ -114,6 +116,15 @@ namespace BTG.Enemy
             m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
+
+            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted += m_StateMachine.OnPrimaryActionExecuted;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
+            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
+
+            /// This need to be subscribed here, to ensure that when the entity is initialized, the visibility of the UI is toggled
+            m_EntityBrain.OnEntityVisibilityToggled += m_View.ToggleUIVisibility;
+
+            m_EntityBrain.Init();
         }
 
         /// <summary>
@@ -131,6 +142,7 @@ namespace BTG.Enemy
                 return;
             }
 
+            InitializeController();
             InitializeHealthAndDamage();
             InitializeAgent();
             InitializeStateMachine();
@@ -139,9 +151,9 @@ namespace BTG.Enemy
         }
 
         /// <summary>
-        /// Set the player view that has been detected
+        /// Inform the controller that the player entered or exited the range of the entity
         /// </summary>
-        public void SetPlayerView(IPlayerView view)
+        public void UpdatePlayerView(IDamageableView view)
         {
             TargetView = view;
             if (TargetView == null)
@@ -180,9 +192,38 @@ namespace BTG.Enemy
             m_EntityBrain.DeInit();
             UnsubscribeFromEvents();
             m_EntityBrain = null;
+            m_View.ToggleView(false);
             m_Pool.ReturnEnemy(this);
 
             m_Service.OnEnemyDeath();
+        }
+
+        public void Update()
+        {
+            // CheckIfPlayerStillInRnage();
+        }
+
+        /*private void CheckIfPlayerStillInRnage()
+        {
+            if (TargetView == null) return;
+
+            if (Physics.Linecast(
+                Transform.position, 
+                TargetView.Transform.position, 
+                out RaycastHit hit))
+            {
+                if (!hit.collider.TryGetComponent(out IDamageableView view))
+                {
+                    UpdatePlayerView(null);
+                    return;
+                }
+            }
+        }*/
+
+        private void InitializeController()
+        {
+            IsUltimateReady = false;
+            m_View.ToggleView(true);
         }
 
         private void InitializeHealthAndDamage()
@@ -190,7 +231,17 @@ namespace BTG.Enemy
             m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
             m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
             m_EntityHealthController.SetController(this);
+            m_EntityHealthController.SetOwner(m_EntityBrain.Transform, false);
             m_EntityHealthController.IsEnabled = true;
+
+            m_EntityHealthController.OnDamageTaken += OnDamageTaken;
+            m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
+
+            ///This need to be subscribed here to ensure that the m_EntityHealthController is initialized
+            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
+            // The brain is already been initialized, so the visibility of the health controller is set here
+            m_EntityHealthController.SetVisible(true);      
+
             m_EntityHealthController.SetMaxHealth();
         }
 
@@ -203,15 +254,7 @@ namespace BTG.Enemy
         private void InitializeStateMachine()
         {
             m_StateMachine.CreateStates();
-
-#if UNITY_EDITOR
-            if (m_Data.InitializeState)
-            {
-                m_StateMachine.Init(m_Data.InitialState);
-            }
-#else
             m_StateMachine.Init(m_Data.InitialState);
-#endif
         }
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
@@ -224,16 +267,9 @@ namespace BTG.Enemy
 
         private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
 
-        private void OnEntityVisibilityToggled(bool value) => m_View.ToggleVisibility(value);
-
         private void SubscribeToEvents()
         {
-            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted += m_StateMachine.OnPrimaryActionExecuted;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
-            m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
-            m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
-            m_EntityHealthController.OnDamageTaken += OnDamageTaken;
-            m_EntityHealthController.OnHealthUpdated += m_View.UpdateHealthUI;
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
         }
 
         private void UnsubscribeFromEvents()
@@ -241,9 +277,16 @@ namespace BTG.Enemy
             m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
-            m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;
+            
             m_EntityHealthController.OnDamageTaken -= OnDamageTaken;
             m_EntityHealthController.OnHealthUpdated -= m_View.UpdateHealthUI;
+
+            /// The below two events are subscribed in different methods, first one in SetEntity method, second one in InitializeHealthAndDamage method
+            /// So they needed to be unsubscribed in here separately.
+            m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleUIVisibility;
+            m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
 #if UNITY_EDITOR

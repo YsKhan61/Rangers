@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Entity
 {
-    public class EntityHealthController : MonoBehaviour, IEntityHealthController, IDamageableView
+    public class EntityHealthController : MonoBehaviour, IEntityHealthController
     {
         public event Action<int, int> OnHealthUpdated;
         public event Action OnDamageTaken;
@@ -16,7 +16,21 @@ namespace BTG.Entity
         private int m_CurrentHealth;
         public bool IsEnabled { get; set; }
 
+        public Transform Owner { get; private set; }
+
+        public bool IsPlayer {get; private set; }
+
+        public bool IsVisible { get; private set; }
+
+        public bool CanTakeDamage { get; private set; }
+
         public void SetController(IEntityController controller) => m_Controller = controller;
+
+        public void SetOwner(Transform owner, bool isPlayer)
+        {
+            IsPlayer = isPlayer;
+            Owner = owner;
+        }
 
         public void Damage(int damage)
         {
@@ -44,6 +58,8 @@ namespace BTG.Entity
 
             AddHealth(m_MaxHealth);
         }
+
+        public void SetVisible(bool isVisible) => IsVisible = isVisible;
 
         private void AddHealth(int health)
         {

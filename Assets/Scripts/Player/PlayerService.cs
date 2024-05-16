@@ -45,7 +45,7 @@ namespace BTG.Player
         ~PlayerService()
         {
             m_PlayerStats.TankIDSelected.OnValueChanged -= OnPlayerTankIDSelected;
-            HelperMethods.DisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -90,7 +90,6 @@ namespace BTG.Player
             if (!entityFound)
                 return;
 
-            entity.Init();
             m_Controller.SetEntityBrain(entity);
             m_Controller.Init();
             // Spawn at the origin

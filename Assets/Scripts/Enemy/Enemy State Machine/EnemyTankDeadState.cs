@@ -14,7 +14,7 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
-            
+            owner.OnDeadStateComplete();
         }
 
         public override void Exit()

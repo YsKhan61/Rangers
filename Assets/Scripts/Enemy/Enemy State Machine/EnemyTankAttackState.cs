@@ -31,6 +31,12 @@ namespace BTG.Enemy
 
         public override void Update()
         {
+            if (!owner.IsTargetInRange)
+            {
+                owner.OnTargetNotInRange();
+                return;
+            }
+
             if (HasRotatedTowardsTarget() && !owner.IsPrimaryActionExecuting)
             {
                 if (owner.IsUltimateReady)

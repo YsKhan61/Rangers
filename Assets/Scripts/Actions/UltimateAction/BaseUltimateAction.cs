@@ -44,7 +44,9 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Disable()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+
+            Charge(-FULL_CHARGE);
 
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
@@ -87,7 +89,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Destroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
             
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;

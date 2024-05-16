@@ -31,7 +31,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Destroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_Cts);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
         public void AddImpulseForce(float initialSpeed)
@@ -43,6 +43,10 @@ namespace BTG.Actions.PrimaryAction
         {
             if (other.TryGetComponent(out IDamageableView damageable))
             {
+                if (damageable.Owner == m_View.Owner)
+                {
+                    return;
+                }
                 damageable.Damage(m_Data.Damage);
             }
 

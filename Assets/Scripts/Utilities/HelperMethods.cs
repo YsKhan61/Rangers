@@ -42,12 +42,11 @@ namespace BTG.Utilities
         }
 
         /// <summary>
-        /// This method is used to dispose the given CancellationTokenSource.
-        /// It cancels the token and then disposes it.
+        /// This method is used to cancel and dispose the given CancellationTokenSource.
         /// It helps in avoiding memory leaks
         /// </summary>
         /// <param name="cancellationTokenSource"> the CancellationTokenSource to dispose</param>
-        public static void DisposeCancellationTokenSource(CancellationTokenSource cancellationTokenSource)
+        public static void CancelAndDisposeCancellationTokenSource(CancellationTokenSource cancellationTokenSource)
         {
             if (cancellationTokenSource != null)
             {

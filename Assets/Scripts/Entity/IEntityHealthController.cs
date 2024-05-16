@@ -1,10 +1,12 @@
+using BTG.Utilities;
+
 namespace BTG.Entity
 {
     /// <summary>
     /// An interface for the health controller of an entity.
     /// Any entity that has health and can take damage should implement this interface.
     /// </summary>
-    public interface IEntityHealthController
+    public interface IEntityHealthController : IDamageableView
     {
         public event System.Action<int, int> OnHealthUpdated;        // int - CurrentHealth, int - MaxHealth
         public event System.Action OnDamageTaken;
@@ -21,11 +23,11 @@ namespace BTG.Entity
         /// </summary>
         public void SetController(IEntityController controller);
 
-
         /// <summary>
-        /// This method is used to take damage.
+        /// Set the owner of the entity.
+        /// Also set if the owner is a player or not.
         /// </summary>
-        public void Damage(int damage);
+        public void SetOwner(UnityEngine.Transform owner, bool isPlayer);
 
         /// <summary>
         /// Set the max health of the entity.

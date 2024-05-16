@@ -13,9 +13,33 @@ namespace BTG.Utilities
         public Transform Transform { get; }
 
         /// <summary>
+        /// Get the owner of the object.
+        /// </summary>
+        public Transform Owner { get; }
+
+        /// <summary>
+        /// Is the object a player.
+        /// </summary>
+        public bool IsPlayer { get; }
+
+        /// <summary>
+        /// Is the object visible.
+        /// </summary>
+        public bool IsVisible { get; }
+
+        /// <summary>
+        /// Can the object take damage.
+        /// </summary>
+        public bool CanTakeDamage { get; }
+
+        /// <summary>
         /// Damage the object.
         /// </summary>
-        /// <param name="damage"></param>
         public void Damage(int damage);
+
+        /// <summary>
+        /// Set whether the object is visible.
+        /// </summary>
+        public void SetVisible(bool visible);
     }
 }

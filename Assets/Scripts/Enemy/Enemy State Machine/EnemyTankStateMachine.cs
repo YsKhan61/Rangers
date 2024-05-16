@@ -31,7 +31,7 @@ namespace BTG.Enemy
         /// <summary>
         /// Is the target in range
         /// </summary>
-        internal bool IsTargetInRange => m_Controller.TargetView != null;
+        internal bool IsTargetInRange => m_Controller.TargetView != null && m_Controller.TargetView.IsVisible;
 
         /// <summary>
         /// Get the transform of the entity
@@ -96,6 +96,8 @@ namespace BTG.Enemy
         {
             EditorDeInit();
 
+            m_States.Clear();
+
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
@@ -159,6 +161,11 @@ namespace BTG.Enemy
         /// Inform the state machine that the Damaged state is complete
         /// </summary>
         internal void OnDamagedStateComplete() => ChangeState(EnemyTankState.Idle);
+
+        /// <summary>
+        /// Inform the state machine that the Dead state is complete
+        /// </summary>
+        internal void OnDeadStateComplete() => DeInit();
 
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner

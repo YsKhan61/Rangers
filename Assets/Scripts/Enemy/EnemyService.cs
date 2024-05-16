@@ -37,7 +37,7 @@ namespace BTG.Enemy
 
         ~EnemyService()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_Cts);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
         /// <summary>
@@ -90,13 +90,10 @@ namespace BTG.Enemy
             if (!controllerFound) return;
             DIManager.Instance.Inject(controller);
 
-            entity.Init();
             controller.SetEntityBrain(entity);
             controller.Init();
             Pose pose = m_EnemyWaves.GetRandomSpawnPose();
-            controller.SetPose(pose);
-
-            
+            controller.SetPose(pose);  
         }
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
