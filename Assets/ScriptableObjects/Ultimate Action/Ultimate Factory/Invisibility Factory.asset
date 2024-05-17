@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63d98cacdd9d0b24f8be76bc5f520226, type: 3}
   m_Name: Invisibility Factory
   m_EditorClassIdentifier: 
+  m_UltimateTag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c, type: 2}
   m_InvisibilityData: {fileID: 11400000, guid: 5702fde524e327147bbd5e8d86c08ed3, type: 2}

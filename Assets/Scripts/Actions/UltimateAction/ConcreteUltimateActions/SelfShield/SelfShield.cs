@@ -26,6 +26,7 @@ namespace BTG.Actions.UltimateAction
             }
 
             SpawnView(Actor.Transform);
+            m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
             m_View.SetParticleSystem(m_SelfShieldData.Duration);
             m_View.PlayParticleSystem();
             m_View.PlayAudio();

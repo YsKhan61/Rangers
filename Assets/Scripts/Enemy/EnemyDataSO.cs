@@ -7,12 +7,12 @@ namespace BTG.Enemy
     public class EnemyDataSO : ScriptableObject
     {
         [SerializeField, Tooltip("The layer that will be used to mark the damage collider of player")]
-        int m_SelfLayer;
+        private int m_SelfLayer;
         public int SelfLayer => m_SelfLayer;
 
         [SerializeField, Tooltip("The layer that will be used to mark the damage collider of enemy")]
-        int m_OppositionLayer;
-        public int OppositionLayer => m_OppositionLayer;
+        private int m_OppositionLayer;
+        public int OppositionLayerMask => 1 << m_OppositionLayer;
 
         [SerializeField]
         private Vector3[] m_PatrolPoints;

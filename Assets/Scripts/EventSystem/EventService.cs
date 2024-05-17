@@ -17,9 +17,16 @@ namespace BTG.EventSystem
 
         public EventController<bool> OnBeforeAnyTankDead { get; private set; }
 
+        /// <summary>
+        /// This event is called when a new player is needed to be spawned.
+        /// It will show the HeroSelectionUI panel for the player to select the tank.
+        /// </summary>
+        public EventController OnShowHeroSelectionUI { get; private set; }
+
         public EventService()
         {
             OnBeforeAnyTankDead = new EventController<bool>();
+            OnShowHeroSelectionUI = new EventController();
         }
     }
 }

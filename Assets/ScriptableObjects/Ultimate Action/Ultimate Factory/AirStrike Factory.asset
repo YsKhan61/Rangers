@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ef7d4248e816d646b8ce4926c3ae3e3, type: 3}
   m_Name: AirStrike Factory
   m_EditorClassIdentifier: 
+  m_UltimateTag: {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d, type: 2}
   m_AirStrikeData: {fileID: 11400000, guid: 2368d4a7f20c6294a923a385af903b5f, type: 2}

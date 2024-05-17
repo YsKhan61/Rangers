@@ -1,4 +1,5 @@
 using BTG.Entity;
+using BTG.Utilities;
 using UnityEngine;
 
 namespace BTG.Tank
@@ -31,6 +32,8 @@ namespace BTG.Tank
         /// (Enemy's opposition is Player and vice-versa)
         /// </summary>
         public int OppositionLayer;
+
+        public TagSO UltimateTag => m_TankData.UltimateTag;
 
         public TankModel(TankDataSO m_TankData, TankBrain brain)
         {

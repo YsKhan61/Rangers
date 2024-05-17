@@ -1,7 +1,9 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
+using System.Threading;
 using UnityEngine;
+
 
 namespace BTG.Actions.PrimaryAction
 {
@@ -18,6 +20,7 @@ namespace BTG.Actions.PrimaryAction
         private float m_ChargeAmount;
 
         private TeslaBallView m_BallInCharge;
+        private CancellationTokenSource m_Cts;
 
         public TeslaFiring(TeslaFiringDataSO data, IPrimaryActor actor, TeslaBallPool pool)
         {
@@ -48,6 +51,7 @@ namespace BTG.Actions.PrimaryAction
         public void Disable()
         {
             m_IsEnabled = false;
+            m_Cts?.Cancel();
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
@@ -79,8 +83,22 @@ namespace BTG.Actions.PrimaryAction
             ResetCharging();
         }
 
+        public void AutoStartStopAction(int stopTime)
+        {
+            StartAction();
+
+            m_Cts = new CancellationTokenSource();
+
+            _ = HelperMethods.InvokeAfterAsync(stopTime, () =>
+            {
+                StopAction();
+            }, m_Cts.Token);
+        }
+
         private void SetDamageToBallAndShoot()
         {
+            m_BallInCharge.transform.SetParent(m_Pool.Container);
+            m_BallInCharge.Rigidbody.isKinematic = false;
             CalculateBallDamage(out int damage);
             m_BallInCharge?.SetDamage(damage);
             m_BallInCharge.AddImpulseForce(CalculateProjectileInitialSpeed());
@@ -121,7 +139,9 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
-            m_BallInCharge.Init();
+            m_BallInCharge.Rigidbody.isKinematic = true;
+            m_BallInCharge.Init(m_Actor.Transform);
+            m_BallInCharge.transform.SetParent(m_Actor.FirePoint);
             m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;
         }

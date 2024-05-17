@@ -8,9 +8,9 @@ namespace BTG.Test
     {
         private void OnTriggerStay(Collider collider)
         {
-            if (collider.gameObject.TryGetComponent(out IDamageable damageable))
+            if (collider.gameObject.TryGetComponent(out IDamageableView damageable))
             {
-                damageable.TakeDamage(1);
+                damageable.Damage(1);
             }
         }
     }

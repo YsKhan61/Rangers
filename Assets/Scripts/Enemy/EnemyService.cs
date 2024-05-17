@@ -14,7 +14,7 @@ namespace BTG.Enemy
     public class EnemyService : ISelfDependencyRegister, IDependencyInjector
     {
         [Inject]
-        EntityFactoryContainerSO m_FactoryContainer;
+        EntityFactoryContainerSO m_EntityFactoryContainer;
 
         [Inject]
         private IntDataSO m_EnemyDeathCountData;
@@ -37,7 +37,7 @@ namespace BTG.Enemy
 
         ~EnemyService()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_Cts);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
         /// <summary>
@@ -88,19 +88,18 @@ namespace BTG.Enemy
 
             bool controllerFound = GetEnemyController(out EnemyTankController controller);
             if (!controllerFound) return;
+            DIManager.Instance.Inject(controller);
 
             controller.SetEntityBrain(entity);
-            controller.SetService(this);
-            Pose pose = m_EnemyWaves.GetRandomSpawnPose();
-            controller.SetPose(pose);
             controller.Init();
-            entity.Init();
+            Pose pose = m_EnemyWaves.GetRandomSpawnPose();
+            controller.SetPose(pose);  
         }
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
         {
             entity = null;
-            if (!m_FactoryContainer.TryGetFactory(tag, out EntityFactorySO factory))
+            if (!m_EntityFactoryContainer.TryGetFactory(tag, out EntityFactorySO factory))
             {
                 Debug.Log("Failed to get entity factory of tag: " + tag.name);
                 return false;
@@ -138,4 +137,5 @@ namespace BTG.Enemy
             }, m_Cts.Token);
         }
     }
+
 }

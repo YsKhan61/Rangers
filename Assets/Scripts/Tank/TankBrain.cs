@@ -2,6 +2,7 @@ using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using System;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -39,11 +40,14 @@ namespace BTG.Tank
         public Transform FirePoint => m_View.FirePoint;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
         public Collider DamageCollider => m_View.DamageCollider;
-        public IDamageable Damageable { get; private set; }
+        public IDamageableView Damageable { get; private set; }
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
         public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
-        
+
+        [Inject]
+        private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+
         private TankPool m_Pool;
 
 
@@ -57,6 +61,8 @@ namespace BTG.Tank
         /// <param name="pool"></param>
         public TankBrain(TankDataSO tankData, TankPool pool)
         {
+            DIManager.Instance.Inject(this);
+
             m_Pool = pool;
 
             m_Model = new TankModel(tankData, this);
@@ -64,7 +70,7 @@ namespace BTG.Tank
             m_View.SetBrain(this); 
 
             m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
-            m_UltimateAction = m_Model.TankData.UltimateActionFactory.CreateUltimateAction(this);
+            CreateUltimateAction();
         }
 
         /// <summary>
@@ -75,11 +81,10 @@ namespace BTG.Tank
         /// </summary>
         public void Init()
         {
-            m_Model.State = TankState.Idle;
+           m_Model.State = TankState.Idle;
 
             OnTankStateChangedToIdle();
             ToggleActorVisibility(true);
-            DamageCollider.enabled = true;
 
             m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
@@ -87,11 +92,27 @@ namespace BTG.Tank
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
 
-            _ = HelperMethods.InvokeInNextFrame(()=> OnEntityInitialized?.Invoke(m_Model.Icon));
+            _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
+        }
+
+        /// <summary>
+        /// Create the ultimate action for the tank.
+        /// If Tag is not provided, it will use the default tag from the tank data.
+        /// This method is called when the tank needs to create new ultimate action.
+        /// </summary>
+        public void CreateUltimateAction(TagSO ultimateTag = null)
+        {
+            if (ultimateTag == null)
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, m_Model.TankData.UltimateTag);
+            else
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, ultimateTag);
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
-        public void SetDamageable(IDamageable damageable) => Damageable = damageable;
+
+        public void SetDamageable(IDamageableView damageable) => Damageable = damageable;
+
+        public void SetOppositionLayerMask(LayerMask layer) => m_Model.OppositionLayer = layer;
 
         public void Update()
         {
@@ -115,9 +136,6 @@ namespace BTG.Tank
 
             m_View.AudioView.StopEngineAudio();
 
-            DamageCollider.enabled = false;
-
-            Rigidbody = null;
             OnEntityInitialized = null;
             OnEntityVisibilityToggled = null;
 
@@ -141,9 +159,11 @@ namespace BTG.Tank
         public void SetParentOfView(Transform parent, Vector3 localPos, Quaternion localRot)
             => m_View.transform.SetParent(parent, localPos, localRot);
 
-        public void StartPrimaryFire() => m_PrimaryAction.StartAction();
+        public void StartPrimaryAction() => m_PrimaryAction.StartAction();
 
-        public void StopPrimaryFire() => m_PrimaryAction.StopAction();
+        public void StopPrimaryAction() => m_PrimaryAction.StopAction();
+
+        public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 

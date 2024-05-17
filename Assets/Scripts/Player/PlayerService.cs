@@ -1,8 +1,8 @@
 using BTG.Entity;
+using BTG.EventSystem;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using System.Threading;
-using System.Xml;
 using UnityEngine;
 
 
@@ -10,6 +10,8 @@ namespace BTG.Player
 {
     public class PlayerService : ISelfDependencyRegister, IDependencyInjector
     {
+        private const int RESPAWN_DELAY = 2;
+
         [Inject]
         private EntityFactoryContainerSO m_EntityFactory;
 
@@ -27,21 +29,23 @@ namespace BTG.Player
 
         private CancellationTokenSource m_CTS;
 
+        /// <summary>
+        /// Create and spawn the player entity.
+        /// Create the player controller and input.
+        /// </summary>
         public void Initialize()
         {
-            CreatePlayerControllerAndInput();
             m_CTS = new CancellationTokenSource();
-            
-            m_PlayerStats.ResetStats();
 
+            CreatePlayerControllerAndInput();
+            m_PlayerStats.ResetStats();
             m_PlayerStats.TankIDSelected.OnValueChanged += OnPlayerTankIDSelected;
         }
 
         ~PlayerService()
         {
             m_PlayerStats.TankIDSelected.OnValueChanged -= OnPlayerTankIDSelected;
-
-            HelperMethods.DisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -51,13 +55,22 @@ namespace BTG.Player
 
         public void OnPlayerDeath()
         {
-            m_Controller = null;
             m_PlayerStats.DeathCount.Value++;
+
+            Respawn();
+        }
+
+        private void Respawn()
+        {
+            _ = HelperMethods.InvokeAfterAsync(
+                RESPAWN_DELAY, 
+                () => EventService.Instance.OnShowHeroSelectionUI.InvokeEvent(), 
+                m_CTS.Token);
         }
 
         private void CreatePlayerControllerAndInput()
         {
-            m_Controller = new PlayerTankController(this, m_PlayerData);
+            m_Controller = new PlayerTankController(m_PlayerData);
             DIManager.Instance.Inject(m_Controller);
             PlayerInputs playerInput = new(m_Controller);
             playerInput.Initialize();
@@ -65,16 +78,13 @@ namespace BTG.Player
 
         private void OnPlayerTankIDSelected()
         {
-            if (m_Controller != null)
-            {
-                /// The current player entity is not null, so we need to deinitialize it.
-                m_Controller.DeInit();
-            }
+            /// If there is a player entity already, deinit it.
+            m_Controller.DeInit();
 
-            _ = HelperMethods.InvokeInNextFrame(Respawn);
+            _ = HelperMethods.InvokeInNextFrame(SpawnPlayerEntity);
         }
 
-        private void Respawn()
+        private void SpawnPlayerEntity()
         {
             bool entityFound = CreateAndSpawnPlayerEntity(out IEntityBrain entity);
             if (!entityFound)
@@ -82,7 +92,9 @@ namespace BTG.Player
 
             m_Controller.SetEntityBrain(entity);
             m_Controller.Init();
-            entity.Init();
+            // Spawn at the origin
+            m_Controller.SetPose(new Pose(Vector3.zero, Quaternion.identity));
+
             m_PVCamera.Initialize(m_Controller.CameraTarget);
         }
 

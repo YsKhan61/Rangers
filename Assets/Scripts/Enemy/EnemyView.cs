@@ -22,17 +22,20 @@ namespace BTG.Enemy
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent(out IPlayerView view))
+            if (other.TryGetComponent(out IDamageableView view))
             {
-                m_Controller.SetPlayerView(view);
+                if (view.IsPlayer)
+                {
+                    m_Controller.UpdatePlayerView(view);
+                }
             }
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.TryGetComponent(out IPlayerView _))
+            if (other.TryGetComponent(out IDamageableView view))
             {
-                m_Controller.SetPlayerView(null);
+                m_Controller.UpdatePlayerView(null);
             }
         }
 
@@ -45,10 +48,18 @@ namespace BTG.Enemy
         public void UpdateHealthUI(int currentHealth, int maxHealth)
             => m_HealthUIView.UpdateHealthUI((float)currentHealth/maxHealth);
 
-        public void ToggleVisibility(bool isVisible)
+        /// <summary>
+        /// Toggle the visibility of the health UI.
+        /// </summary>
+        public void ToggleUIVisibility(bool isVisible)
         {
             m_HealthUIView.ToggleVisibility(isVisible);
         }
+
+        /// <summary>
+        /// Show or Hide this view
+        /// </summary>
+        public void ToggleView(bool value) => gameObject.SetActive(value);
 
 
 #if UNITY_EDITOR

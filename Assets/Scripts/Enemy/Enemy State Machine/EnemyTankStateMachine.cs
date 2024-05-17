@@ -1,5 +1,6 @@
 ﻿using BTG.StateMachine;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,7 +31,7 @@ namespace BTG.Enemy
         /// <summary>
         /// Is the target in range
         /// </summary>
-        internal bool IsTargetInRange => m_Controller.TargetView != null;
+        internal bool IsTargetInRange => m_Controller.TargetView != null && m_Controller.TargetView.IsVisible;
 
         /// <summary>
         /// Get the transform of the entity
@@ -52,18 +53,29 @@ namespace BTG.Enemy
         /// </summary>
         internal bool IsPrimaryActionExecuting { get; private set; }
 
+        [Inject]
+        private EnemyTankUltimateStateFactoryContainerSO m_UltimateStateFactoryContainer;
+
         private EnemyTankController m_Controller;
 
 
-        public EnemyTankStateMachine(EnemyTankController controller)
-        {
-            m_Controller = controller;
+        public EnemyTankStateMachine(EnemyTankController controller) => m_Controller = controller;
 
-            InitializeStates();
+        /// <summary>
+        /// Create the states of the state machine according to the entity
+        /// </summary>
+        public void CreateStates()
+        {
+            AddState(EnemyTankState.Idle, new EnemyTankIdleState(this));
+            AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
+            AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
+            AddState(EnemyTankState.Ultimate, m_UltimateStateFactoryContainer.GetFactory(m_Controller.UltimateTag).CreateState(this));
+            AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
+            AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
 
         /// <summary>
-        /// Initialize the state machine
+        /// Initialize the state machine after all the states are created
         /// it will register to update and destroy callbacks
         /// </summary>
         public void Init(EnemyTankState stateToStart)
@@ -83,6 +95,8 @@ namespace BTG.Enemy
         public void DeInit()
         {
             EditorDeInit();
+
+            m_States.Clear();
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
@@ -124,6 +138,16 @@ namespace BTG.Enemy
         public void OnDamageTaken() => ChangeState(EnemyTankState.Damaged);
 
         /// <summary>
+        /// Inform the state machine that the target is in range
+        /// </summary>
+        public void OnTargetInRange() => ChangeState(EnemyTankState.PrimaryAttack);
+
+        /// <summary>
+        /// Inform the state machine that the target is not in range
+        /// </summary>
+        public void OnTargetNotInRange() => ChangeState(EnemyTankState.Idle);
+
+        /// <summary>
         /// Inform the state machine that the Idle state is complete
         /// </summary>
         internal void OnIdleStateComplete() => ChangeState(EnemyTankState.Patrol);
@@ -139,22 +163,17 @@ namespace BTG.Enemy
         internal void OnDamagedStateComplete() => ChangeState(EnemyTankState.Idle);
 
         /// <summary>
-        /// Inform the state machine that the target is in range
+        /// Inform the state machine that the Dead state is complete
         /// </summary>
-        internal void OnTargetInRange() => ChangeState(EnemyTankState.PrimaryAttack);
-
-        /// <summary>
-        /// Inform the state machine that the target is not in range
-        /// </summary>
-        internal void OnTargetNotInRange() => ChangeState(EnemyTankState.Idle);
+        internal void OnDeadStateComplete() => DeInit();
 
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner
         /// </summary>
-        internal void ExecutePrimaryAction()
+        internal void ExecutePrimaryAction(int stopTime)
         {
             IsPrimaryActionExecuting = true;
-            m_Controller.ExecutePrimaryAction();
+            m_Controller.ExecutePrimaryAction(stopTime);
         }
 
         /// <summary>
@@ -181,15 +200,6 @@ namespace BTG.Enemy
             DeInit();
         }
 
-        private void InitializeStates()
-        {
-            AddState(EnemyTankState.Idle, new EnemyTankIdleState(this));
-            AddState(EnemyTankState.Patrol, new EnemyTankPatrolState(this));
-            AddState(EnemyTankState.PrimaryAttack, new EnemyTankAttackState(this));
-            AddState(EnemyTankState.Ultimate, new EnemyTankUltimateState(this));
-            AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
-            AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
-        }
 
 #if UNITY_EDITOR
         /// <summary>

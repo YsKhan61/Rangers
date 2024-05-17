@@ -7,6 +7,7 @@ namespace BTG.Actions.PrimaryAction
     {
         private TeslaFiringDataSO m_Data;
         private Transform m_Container;
+        public Transform Container => m_Container;
 
         public TeslaBallPool(TeslaFiringDataSO data)
         {

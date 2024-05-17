@@ -9,19 +9,19 @@ namespace BTG.Player
     [CreateAssetMenu(fileName = "PlayerData", menuName = "ScriptableObjects/PlayerDataSO")]
     public class PlayerDataSO : ScriptableObject
     {
-        [SerializeField, Tooltip("The layer that will be used to mark the damage collider of player")] 
+        [SerializeField, Tooltip("The layer mask that will be used to mark the damage collider of player")] 
         private int m_SelfLayer;
         /// <summary>
         /// The layer that will be used to mark the damage collider of player
         /// </summary>
         public int SelfLayer => m_SelfLayer;
-        
-        [SerializeField, Tooltip("The layer that will be used to mark the damage collider of enemy")] 
+
+        [SerializeField, Tooltip("The layer mask that will be used to mark the damage collider of enemy")] 
         private int m_OppositionLayer;
         /// <summary>
         /// The layer that will be used to mark the damage collider of enemy
         /// </summary>
-        public int OppositionLayer => m_OppositionLayer;
+        public int OppositionLayerMask => 1 << m_OppositionLayer;
 
         [SerializeField, Tooltip("The prefab of PlayerView")]
         private PlayerView m_Prefab;

@@ -11,7 +11,6 @@ namespace BTG.Actions.PrimaryAction
         private ProjectileView m_View;
         private ProjectilePool m_Pool;
         private CancellationTokenSource m_Cts;
-
         public Transform Transform => m_View.transform;
 
         public ProjectileController(ChargedFiringDataSO projectileData, ProjectilePool pool)
@@ -20,18 +19,19 @@ namespace BTG.Actions.PrimaryAction
             m_Data = projectileData;
             m_Pool = pool;
             m_View = Object.Instantiate(projectileData.ViewPrefab, m_Pool.ProjectileContainer);
-            m_View.SetController(this);
+            m_View.Config(this);
         }
 
-        public void Init()
+        public void Init(Transform owner)
         {
             m_View.gameObject.SetActive(true);
+            m_View.SetOwner(owner);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
         }
 
         public void Destroy()
         {
-            HelperMethods.DisposeCancellationTokenSource(m_Cts);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
         public void AddImpulseForce(float initialSpeed)
@@ -39,14 +39,20 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.AddForce(m_View.transform.forward * initialSpeed, ForceMode.Impulse);
         }
 
-        public void OnHitObject(Collider other)
+        public void OnHitSomething(Collider other)
         {
-            if (other.TryGetComponent(out IDamageable damageable))
+            if (other.TryGetComponent(out IDamageableView damageable))
             {
-                damageable.TakeDamage(m_Data.Damage);
+                if (damageable.Owner == m_View.Owner)
+                {
+                    return;
+                }
+                damageable.Damage(m_Data.Damage);
             }
 
             m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+
+            ResetProjectile();
         }
 
         private void ResetProjectile()
@@ -55,6 +61,7 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.angularVelocity = Vector3.zero;
             m_View.transform.position = Vector3.zero;
             m_View.transform.rotation = Quaternion.identity;
+
             m_View.gameObject.SetActive(false);
             m_Pool.ReturnProjectile(this);
 

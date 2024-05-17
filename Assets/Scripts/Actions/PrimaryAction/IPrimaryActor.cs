@@ -32,11 +32,16 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Start the primary fire
         /// </summary>
-        public void StartPrimaryFire();
+        public void StartPrimaryAction();
 
         /// <summary>
         /// Stop the primary fire
         /// </summary>
-        public void StopPrimaryFire();
+        public void StopPrimaryAction();
+
+        /// <summary>
+        /// Automatically start the primary action and stop it after certain time
+        /// </summary>
+        public void AutoStartStopPrimaryAction(int stopTime);
     }
 }

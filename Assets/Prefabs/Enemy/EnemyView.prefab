@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2606420921856344816}
   - component: {fileID: 5877909051015692282}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TargetDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 10
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &8247961888187048898
 GameObject:
@@ -125,7 +125,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8247961888187048898}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 1
+  m_Radius: 1.3
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50

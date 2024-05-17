@@ -9,6 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02746fb1690d37e4ea4894c2460b0f61, type: 3}
-  m_Name: PlayerUltimateAssignedEvent
+  m_Script: {fileID: 11500000, guid: f0b82ebf001c0e1419c94cafc86f3f8d, type: 3}
+  m_Name: EnemyTankAirStrikeStateFactory
   m_EditorClassIdentifier: 
+  m_UltimateActionTag: {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d,
+    type: 2}
