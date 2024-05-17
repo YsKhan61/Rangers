@@ -17,35 +17,31 @@ MonoBehaviour:
   - ID: 1
     EntityTags:
     - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
-    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
-    - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
     - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
-    EnemyTankIDs: 01000000020000000300000004000000
-  - ID: 2
-    EntityTags: []
-    EnemyTankIDs: 0100000002000000030000000400000005000000
-  - ID: 3
-    EntityTags: []
-    EnemyTankIDs: 03000000
-  - ID: 4
-    EntityTags: []
-    EnemyTankIDs: 04000000
-  - ID: 5
-    EntityTags: []
-    EnemyTankIDs: 0100000002000000
-  - ID: 6
-    EntityTags: []
-    EnemyTankIDs: 0300000004000000
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
+    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
+    - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
+    - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
+    EnemyTankIDs: 
+  - ID: 1
+    EntityTags:
+    - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+    - {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
+    - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
+    - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
+    EnemyTankIDs: 
   m_SpawnPose:
-  - position: {x: 38, y: 0, z: 30}
-    rotation: {x: 0, y: -0.5, z: 0, w: 0.8660254}
-  - position: {x: -37, y: 0, z: 23}
-    rotation: {x: 0, y: 0.86602545, z: 0, w: 0.49999997}
-  - position: {x: -40, y: 0, z: -3}
-    rotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
-  - position: {x: -42, y: 0, z: -25}
-    rotation: {x: 0, y: 0.5, z: 0, w: 0.8660254}
-  - position: {x: 2, y: 0, z: -40}
-    rotation: {x: 0, y: -0.06104854, z: 0, w: 0.9981348}
-  - position: {x: 25, y: 0, z: -40}
-    rotation: {x: 0, y: -0.06104854, z: 0, w: 0.9981348}
+  - position: {x: -14, y: 0, z: 6}
+    rotation: {x: 0, y: 1, z: 0, w: -0.00000004371139}

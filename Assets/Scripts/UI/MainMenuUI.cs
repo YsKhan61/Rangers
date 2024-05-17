@@ -8,11 +8,6 @@ namespace BTG.UI
         [SerializeField]
         private string _gameSceneName = "Game";
 
-        public void TankIDSelect(int id)
-        {
-            PlayerPrefs.SetInt("TankID", id);
-        }
-
         public void StartGame()
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(_gameSceneName);

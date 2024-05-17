@@ -70,7 +70,7 @@ namespace BTG.Actions.UltimateAction
         {
             if (CurrentState != State.Charging)
             {
-                Debug.LogError("This should not happen!");
+                Debug.Log("Not in charging state:!");
                 return;
             }
 
