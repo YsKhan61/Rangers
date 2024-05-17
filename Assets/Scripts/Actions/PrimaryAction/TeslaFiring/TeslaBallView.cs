@@ -46,14 +46,9 @@ namespace BTG.Actions.PrimaryAction
         }
 
         /// <summary>
-        /// Initialize the tesla ball.
-        /// It will be shown and the particle system will start playing
+        /// Set the owner of the tesla ball
         /// </summary>
-        public void Init(Transform owner)
-        {
-            Owner = owner;
-            Show();
-        }
+        public void SetOwner(Transform owner) => Owner = owner;
 
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
@@ -73,8 +68,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void Reset()
         {
-            m_Rigidbody.velocity = Vector3.zero;
-            m_Rigidbody.angularVelocity = Vector3.zero;
+            m_Rigidbody.Sleep();
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
             
@@ -83,7 +77,7 @@ namespace BTG.Actions.PrimaryAction
             m_Pool.ReturnTeslaBall(this);
         }
 
-        private void Show()
+        public void Show()
         {
             gameObject.SetActive(true);
             m_ParticleSytem.Play();

@@ -86,6 +86,10 @@ namespace BTG.Tank
             OnTankStateChangedToIdle();
             ToggleActorVisibility(true);
 
+            Rigidbody.WakeUp();
+            Rigidbody.velocity = Vector3.zero;
+            Rigidbody.angularVelocity = Vector3.zero;
+
             m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
 
@@ -129,6 +133,8 @@ namespace BTG.Tank
         {
             m_Model.State = TankState.Deactive;
             ToggleActorVisibility(false);
+
+            Rigidbody.Sleep();
 
             m_Model.Reset();
             m_PrimaryAction.Disable();
