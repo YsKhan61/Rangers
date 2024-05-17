@@ -44,7 +44,7 @@ namespace BTG.Entity
 
             if (m_CurrentHealth == 0)
             {
-                m_Controller.EntityDied();
+                m_Controller.OnEntityDied();
                 IsEnabled = false;
             }
         }

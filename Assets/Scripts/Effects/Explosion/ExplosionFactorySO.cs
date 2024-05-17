@@ -6,10 +6,10 @@ namespace BTG.Effects
     public class ExplosionFactorySO : ScriptableObject
     {
         [SerializeField]
-        ExplosionDataSO m_Data;
+        private ExplosionDataSO m_Data;
 
-        ExplosionEffectPool m_Pool;
-        ExplosionEffectPool Pool => m_Pool ??= new ExplosionEffectPool(m_Data);
+        private ExplosionEffectPool m_Pool;
+        public ExplosionEffectPool Pool => m_Pool ??= new ExplosionEffectPool(m_Data);
 
         public void CreateExplosion(Vector3 position)
         {

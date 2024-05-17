@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: RedTankData_1
   m_EditorClassIdentifier: 
   m_ID: 1
+  m_Tag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
   m_Icon: {fileID: 21300000, guid: e09360e7a0e51a54d964c2001f7cc509, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 391f4fd004d1b9a49be031b9f94cd476,
     type: 3}

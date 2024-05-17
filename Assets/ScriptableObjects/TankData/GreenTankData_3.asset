@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: GreenTankData_3
   m_EditorClassIdentifier: 
   m_ID: 3
+  m_Tag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
   m_Icon: {fileID: 21300000, guid: bdfe32dda5d992641a216786db1f1d4c, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 262561cd920f4c0469f11498a5309dde,
     type: 3}

@@ -13,6 +13,10 @@ namespace BTG.Tank
         private int m_ID;
         public int ID => m_ID;
 
+        [SerializeField, Tooltip("The tag of the tank")]
+        private TagSO m_Tag;
+        public TagSO Tag => m_Tag;
+
         [SerializeField]
         private Sprite m_Icon;
         public Sprite Icon => m_Icon;
@@ -57,7 +61,7 @@ namespace BTG.Tank
         private PrimaryActionFactorySO m_PrimaryActionFactory;
         public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;
 
-        [SerializeField]
+        [SerializeField, Tooltip("The tag of the ultimate action")]
         private TagSO m_UltimateActionTag;
         public TagSO UltimateTag => m_UltimateActionTag;
 

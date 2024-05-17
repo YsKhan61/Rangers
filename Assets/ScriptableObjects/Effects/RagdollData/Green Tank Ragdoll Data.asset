@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55ad7390323f964d8b7d5b245dea8fe, type: 3}
+  m_Name: Green Tank Ragdoll Data
+  m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+  m_RagdollPrefab: {fileID: 3964854068381461754, guid: 7dbab6a2b51a6ce4bb199de6fe3d0fc7,
+    type: 3}

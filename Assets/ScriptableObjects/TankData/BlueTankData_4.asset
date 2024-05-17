@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BlueTankData_4
   m_EditorClassIdentifier: 
   m_ID: 4
+  m_Tag: {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
   m_Icon: {fileID: 21300000, guid: b4ca51f8689fee04fa6caabad96efdbf, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 92084363dfb297c458e4434ac2695e1d,
     type: 3}

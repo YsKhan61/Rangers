@@ -10,7 +10,7 @@ namespace BTG.Enemy
     /// <summary>
     /// A Controller for the enemy tank
     /// </summary>
-    public class EnemyTankController : IEntityController, IUpdatable
+    public class EnemyTankController : IEntityController
     {
         private const float DETECT_RANGE = 10f;         // a temporary hard value to detect the player using raycast
 
@@ -146,8 +146,6 @@ namespace BTG.Enemy
             InitializeHealthAndDamage();
             InitializeAgent();
             InitializeStateMachine();
-
-            SubscribeToEvents();
         }
 
         /// <summary>
@@ -186,8 +184,10 @@ namespace BTG.Enemy
             m_EntityBrain.Transform.rotation = Rigidbody.rotation;
         }
 
-        public void EntityDied()
+        public void OnEntityDied()
         {
+            m_EntityBrain.ExecuteRagdollEffect();
+
             m_StateMachine.OnEntityDead();
             m_EntityBrain.DeInit();
             UnsubscribeFromEvents();
@@ -198,27 +198,6 @@ namespace BTG.Enemy
             m_Service.OnEnemyDeath();
         }
 
-        public void Update()
-        {
-            // CheckIfPlayerStillInRnage();
-        }
-
-        /*private void CheckIfPlayerStillInRnage()
-        {
-            if (TargetView == null) return;
-
-            if (Physics.Linecast(
-                Transform.position, 
-                TargetView.Transform.position, 
-                out RaycastHit hit))
-            {
-                if (!hit.collider.TryGetComponent(out IDamageableView view))
-                {
-                    UpdatePlayerView(null);
-                    return;
-                }
-            }
-        }*/
 
         private void InitializeController()
         {
@@ -267,11 +246,6 @@ namespace BTG.Enemy
 
         private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
 
-        private void SubscribeToEvents()
-        {
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
-        }
-
         private void UnsubscribeFromEvents()
         {
             m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
@@ -285,8 +259,6 @@ namespace BTG.Enemy
             /// So they needed to be unsubscribed in here separately.
             m_EntityBrain.OnEntityVisibilityToggled -= m_View.ToggleUIVisibility;
             m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
-
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
 #if UNITY_EDITOR

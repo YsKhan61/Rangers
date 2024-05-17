@@ -1,5 +1,6 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
+using BTG.Effects;
 using BTG.Utilities;
 using System;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace BTG.Entity
     /// Player and enemy tank controllers can have references to this interface.
     /// This promotes loose coupling between the tank brain and the tank controllers (playertankcontroller, enemytankcontroller).
     /// </summary>
-    public interface IEntityTankBrain : IEntityBrain, IPrimaryActor, IUltimateActor
+    public interface IEntityTankBrain : IEntityBrain, IPrimaryActor, IUltimateActor, IRagdollOwner, IUpdatable, IDestroyable
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;

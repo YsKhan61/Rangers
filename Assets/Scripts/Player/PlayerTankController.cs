@@ -154,8 +154,10 @@ namespace BTG.Player
             CalculateInputSpeed();
         }
 
-        public void EntityDied()
+        public void OnEntityDied()
         {  
+            m_EntityBrain.ExecuteRagdollEffect();
+
             DeInit();
             m_PlayerService.OnPlayerDeath();
         }

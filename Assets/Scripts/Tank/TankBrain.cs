@@ -1,5 +1,6 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
+using BTG.Effects;
 using BTG.Entity;
 using BTG.Utilities;
 using BTG.Utilities.DI;
@@ -14,7 +15,7 @@ namespace BTG.Tank
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
     /// PrimaryAction, UltimateAction.
     /// </summary>
-    public class TankBrain : IEntityTankBrain, IUpdatable, IDestroyable
+    public class TankBrain : IEntityTankBrain
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;
@@ -26,6 +27,7 @@ namespace BTG.Tank
             Deactive
         }
 
+        public TagSO Tag => m_Model.TankData.Tag;
 
         private TankModel m_Model;
         IEntityTankModel IEntityTankBrain.Model => m_Model;
@@ -47,6 +49,9 @@ namespace BTG.Tank
 
         [Inject]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+
+        [Inject]
+        private RagdollFactoryContainerSO m_RagdollFactoryContainer;
 
         private TankPool m_Pool;
 
@@ -172,6 +177,8 @@ namespace BTG.Tank
         public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
+
+        public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetAndExecuteRagdollEffect(this);
 
         private void UpdateState()
         {

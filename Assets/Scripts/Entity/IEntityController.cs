@@ -16,6 +16,6 @@ namespace BTG.Entity
         /// <summary>
         /// This method is used to inform that the entity has died.
         /// </summary>
-        public void EntityDied();
+        public void OnEntityDied();
     }
 }

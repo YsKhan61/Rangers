@@ -1,4 +1,5 @@
 using BTG.Actions.UltimateAction;
+using BTG.Effects;
 using BTG.Enemy;
 using BTG.Entity;
 using BTG.Player;
@@ -16,40 +17,47 @@ namespace BTG.Services
     public class DependencyProviderService : MonoBehaviour, IDependencyProviderForOthers
     {
         [SerializeField]
-        EntityFactoryContainerSO m_EntityFactoryContainer;
+        private EntityFactoryContainerSO m_EntityFactoryContainer;
 
         [Provide]
         public EntityFactoryContainerSO ProvideEntityFactoryContainer() => m_EntityFactoryContainer;
 
 
         [SerializeField]
-        PlayerDataSO m_PlayerData;
+        private PlayerDataSO m_PlayerData;
 
         [Provide]
         public PlayerDataSO ProvidePlayerData() => m_PlayerData;
 
 
         [SerializeField]
-        EnemyDataSO m_EnemyData;
+        private EnemyDataSO m_EnemyData;
 
         [Provide]
         public EnemyDataSO ProvideEnemyData() => m_EnemyData;
 
         [SerializeField]
-        UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+        private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
         [Provide]
         public UltimateActionFactoryContainerSO ProvideUltimateActionFactoryContainer() => m_UltimateActionFactoryContainer;
 
 
         [SerializeField]
-        EnemyTankUltimateStateFactoryContainerSO m_EnemyTankUltimateStateFactoryContainer;
+        private EnemyTankUltimateStateFactoryContainerSO m_EnemyTankUltimateStateFactoryContainer;
 
         [Provide]
         public EnemyTankUltimateStateFactoryContainerSO ProvideEnemyTankUltimateStateFactoryContainer() => m_EnemyTankUltimateStateFactoryContainer;
 
 
         [SerializeField]
-        PlayerStatsSO m_PlayerStats;
+        private RagdollFactoryContainerSO m_RagdollFactoryContainer;
+
+        [Provide]
+        public RagdollFactoryContainerSO ProvideRagdollFactoryContainer() => m_RagdollFactoryContainer;
+
+
+        [SerializeField]
+        private PlayerStatsSO m_PlayerStats;
 
         [Provide]
         public PlayerStatsSO ProvidePlayerStats() => m_PlayerStats;
@@ -60,21 +68,21 @@ namespace BTG.Services
 
 
         [SerializeField]
-        TankDataContainerSO m_TankDataList;
+        private TankDataContainerSO m_TankDataList;
 
         [Provide]
         public TankDataContainerSO ProvideTankDataList() => m_TankDataList;
 
 
         [SerializeField]
-        WaveConfigSO m_EnemyWaves;
+        private WaveConfigSO m_EnemyWaves;
 
         [Provide]
         public WaveConfigSO ProvideEnemyWaves() => m_EnemyWaves;
 
 
         [SerializeField]
-        PlayerVirtualCamera m_pvc;
+        private PlayerVirtualCamera m_pvc;
 
         [Provide]
         public PlayerVirtualCamera ProvidePlayerVirtualCamera() => m_pvc;

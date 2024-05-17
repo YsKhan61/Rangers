@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: YellowTankData_2
   m_EditorClassIdentifier: 
   m_ID: 2
+  m_Tag: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
   m_Icon: {fileID: 21300000, guid: 27e064f75a10a4346bdaf00a2264db8f, type: 3}
   m_TankViewPrefab: {fileID: 9016891696666167597, guid: 864fa32bc455b864cb075d87e9cfafcb,
     type: 3}
