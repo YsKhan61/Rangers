@@ -12,7 +12,8 @@ namespace BTG.Utilities
             Assembly_BTG_Enemy,
             Assembly_BTG_Player,
             Assembly_BTG_Services,
-            Assembly_BTG_DIExample
+            Assembly_BTG_DIExample,
+            Assembly_BTG_AudioSystem,
         }
 
         /// <summary>
@@ -47,6 +48,7 @@ namespace BTG.Utilities
             AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Player], types, interfaceType);
             AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_Services], types, interfaceType);
             // AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_DIExample], types, interfaceType);
+            AddTypesFromAssemblyUsingInterfaceType(assemblyTypes[AssemblyType.Assembly_BTG_AudioSystem], types, interfaceType);
 
             return types;
         }
@@ -65,6 +67,7 @@ namespace BTG.Utilities
                 "BTG.Player" => AssemblyType.Assembly_BTG_Player,
                 "BTG.Services" => AssemblyType.Assembly_BTG_Services,
                 "BTG.DIExample" => AssemblyType.Assembly_BTG_DIExample,
+                "BTG.AudioSystem" => AssemblyType.Assembly_BTG_AudioSystem,
                 _ => null
             };
         }
