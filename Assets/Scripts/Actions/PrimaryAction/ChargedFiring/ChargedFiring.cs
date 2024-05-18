@@ -1,5 +1,7 @@
+using BTG.AudioSystem;
 using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using BTG.Utilities.EventBus;
 using System;
 using System.Threading;
@@ -18,7 +20,8 @@ namespace BTG.Actions.PrimaryAction
         public event Action OnPrimaryActionExecuted;
 
         private IPrimaryActor m_Actor;
-        private ProjectilePool m_Pool;
+        private ProjectilePool m_ProjectilePool;
+        private AudioPool m_AudioPool;
 
         private bool m_IsEnabled;
         private bool m_IsCharging;
@@ -29,19 +32,17 @@ namespace BTG.Actions.PrimaryAction
         private CancellationTokenSource m_Cts;
 
 
-        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool pool)
+        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool)
         {
             m_Data = data;
-            m_Pool = pool;
-
-            InitializeFiringAudio();
+            m_ProjectilePool = projectilePool;
         }
 
         public void Enable()
         {
-            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this as IDestroyable);
-            ToggleMuteFiringAudio(false);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
+            InitializeFiringAudio();
 
             m_IsEnabled = true;
         }
@@ -59,24 +60,23 @@ namespace BTG.Actions.PrimaryAction
         public void Disable()
         {
             ResetCharging();
-            ToggleMuteFiringAudio(true);
+            DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
 
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void Destroy()
         {
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void SetActor(IPrimaryActor actor)
         {
             m_Actor = actor;
-            m_FiringAudioSource.transform.SetParent(m_Actor.Transform);
         }
 
         public void StartAction()
@@ -153,7 +153,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void SpawnProjectile(out ProjectileController projectile)
         {
-            projectile = m_Pool.GetProjectile();
+            projectile = m_ProjectilePool.GetProjectile();
             projectile.Init(m_Actor.Transform);
             projectile.Transform.position = m_Actor.FirePoint.position;
             projectile.Transform.rotation = m_Actor.FirePoint.rotation;
@@ -167,7 +167,6 @@ namespace BTG.Actions.PrimaryAction
                 m_ChargeAmount) + m_Actor.CurrentMoveSpeed;
         }
 
-        private void ToggleMuteFiringAudio(bool mute) => m_FiringAudioSource.mute = mute;
         private void PlayChargingClip()
         {
             m_FiringAudioSource.clip = m_Data.ChargeClip;
@@ -184,10 +183,24 @@ namespace BTG.Actions.PrimaryAction
 
         private void InitializeFiringAudio()
         {
-            m_FiringAudioSource = new GameObject(FIRING_AUDIO_SOURCE_NAME).AddComponent<AudioSource>();
+            m_AudioPool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
+            if (m_AudioPool == null)
+            {
+                Debug.LogError("No Audio pool found!");
+                return;
+            }
+
+            m_FiringAudioSource = m_AudioPool.GetAudio().AudioSource;
+            m_FiringAudioSource.gameObject.name = FIRING_AUDIO_SOURCE_NAME;
+            m_FiringAudioSource.transform.SetParent(m_Actor.Transform, Vector3.zero, Quaternion.identity);
             m_FiringAudioSource.spatialBlend = 1f;
             m_FiringAudioSource.playOnAwake = false;
             m_FiringAudioSource.loop = false;
+        }
+
+        private void DeInitializeFiringAudio()
+        {
+            m_AudioPool.ReturnItem(m_FiringAudioSource.GetComponent<AudioView>());
         }
     }
 
