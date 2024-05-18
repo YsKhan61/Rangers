@@ -13,7 +13,7 @@ namespace BTG.Player
         private const int RESPAWN_DELAY = 2;
 
         [Inject]
-        private EntityFactoryContainerSO m_EntityFactory;
+        private EntityFactoryContainerSO m_EntityFactoryContainer;
 
         [Inject]
         private PlayerDataSO m_PlayerData;
@@ -39,12 +39,12 @@ namespace BTG.Player
 
             CreatePlayerControllerAndInput();
             m_PlayerStats.ResetStats();
-            m_PlayerStats.TankIDSelected.OnValueChanged += OnPlayerTankIDSelected;
+            m_PlayerStats.EntityTagSelected.OnValueChanged += OnPlayerTankIDSelected;
         }
 
         ~PlayerService()
         {
-            m_PlayerStats.TankIDSelected.OnValueChanged -= OnPlayerTankIDSelected;
+            m_PlayerStats.EntityTagSelected.OnValueChanged -= OnPlayerTankIDSelected;
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
@@ -86,7 +86,7 @@ namespace BTG.Player
 
         private void SpawnPlayerEntity()
         {
-            bool entityFound = CreateAndSpawnPlayerEntity(out IEntityBrain entity);
+            bool entityFound = TryGetEntity(out IEntityBrain entity);
             if (!entityFound)
                 return;
 
@@ -98,20 +98,10 @@ namespace BTG.Player
             m_PVCamera.Initialize(m_Controller.CameraTarget);
         }
 
-        private bool CreateAndSpawnPlayerEntity(out IEntityBrain entity)
+        private bool TryGetEntity(out IEntityBrain entity)
         {
-            entity = null;
-
-            bool factoryFound = m_EntityFactory.TryGetFactory(m_PlayerStats.TankIDSelected.Value, out EntityFactorySO factory);
-            if (!factoryFound)
-            {
-                Debug.Log("Factory not found!");
-                return false;
-            }
-
-            entity = factory.GetEntity();
-
-            return true;
+            entity = m_EntityFactoryContainer.GetEntity(m_PlayerStats.EntityTagSelected.Value);
+            return entity != null;
         }
     }
 }

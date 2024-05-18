@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfc62f8f64ce274ab743b27f014ff3a, type: 3}
   m_Name: RedTankFactory
   m_EditorClassIdentifier: 
-  m_EntityTag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
+  m_Tag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
   m_Data: {fileID: 11400000, guid: fa5c13bacbef7c0488a015a26e7a6c5c, type: 2}

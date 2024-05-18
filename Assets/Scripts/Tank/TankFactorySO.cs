@@ -1,24 +1,23 @@
 using BTG.Entity;
-using BTG.Utilities;
 using UnityEngine;
+
 
 namespace BTG.Tank
 {
+    /// <summary>
+    /// This factory is responsible for creating the tanks.
+    /// It can create all types of tanks according to the data given
+    /// </summary>
     [CreateAssetMenu(fileName = "TankFactory", menuName = "ScriptableObjects/Factory/EntityFactory/TankFactorySO")]
     public class TankFactorySO : EntityFactorySO
     {
-        [SerializeField]
-        TagSO m_EntityTag;
-
         [SerializeField]
         TankDataSO m_Data;
 
         TankPool m_Pool;
         public TankPool Pool => m_Pool ??= new(m_Data);
 
-        public override IEntityBrain GetEntity() => Pool.GetTank();
-
-        public override void ReturnEntity(IEntityBrain tank) => Pool.ReturnTank(tank as TankBrain);
+        public override IEntityBrain GetItem() => Pool.GetTank();
     }
 }
 

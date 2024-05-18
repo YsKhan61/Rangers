@@ -1,5 +1,5 @@
+using BTG.Factory;
 using BTG.Utilities;
-using UnityEngine;
 
 
 namespace BTG.Entity
@@ -8,7 +8,7 @@ namespace BTG.Entity
     /// An interface for the brain of an entity.
     /// Any entity of the game should have a brain that implements this interface.
     /// </summary>
-    public interface IEntityBrain : ITransform
+    public interface IEntityBrain : ITransform, IFactoryItem
     {
         /// <summary>
         /// Initialize the brain

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfc62f8f64ce274ab743b27f014ff3a, type: 3}
   m_Name: YellowTankFactory
   m_EditorClassIdentifier: 
-  m_EntityTag: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
+  m_Tag: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
   m_Data: {fileID: 11400000, guid: 0ca898b414ba0674ba6cc146c15d806f, type: 2}

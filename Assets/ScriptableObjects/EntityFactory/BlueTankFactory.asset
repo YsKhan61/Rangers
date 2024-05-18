@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfc62f8f64ce274ab743b27f014ff3a, type: 3}
   m_Name: BlueTankFactory
   m_EditorClassIdentifier: 
-  m_EntityTag: {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
+  m_Tag: {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
   m_Data: {fileID: 11400000, guid: 52cc7f1259b548645a22381c95480256, type: 2}

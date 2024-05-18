@@ -8,19 +8,19 @@ namespace BTG.Utilities
     public class PlayerStatsSO : ScriptableObject
     {
         [SerializeField]
-        IntDataSO m_TankIDSelected;
-        public IntDataSO TankIDSelected => m_TankIDSelected;
+        private TagDataSO m_TankTagSelected;
+        public TagDataSO EntityTagSelected => m_TankTagSelected;
 
         [SerializeField]
-        SpriteDataSO m_PlayerIcon;
+        private SpriteDataSO m_PlayerIcon;
         public SpriteDataSO PlayerIcon => m_PlayerIcon;
 
         [SerializeField]
-        IntDataSO m_DeathCount;
+        private IntDataSO m_DeathCount;
         public IntDataSO DeathCount => m_DeathCount;
 
         [SerializeField]
-        IntDataSO m_EliminatedEnemiesCount;
+        private IntDataSO m_EliminatedEnemiesCount;
         public IntDataSO EliminatedEnemiesCount => m_EliminatedEnemiesCount;
 
         public void ResetStats()

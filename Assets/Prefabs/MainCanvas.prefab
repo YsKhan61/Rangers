@@ -821,7 +821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7814376044405553343}
   m_Layer: 5
-  m_Name: TankSelect Panel
+  m_Name: EntitySelect Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -970,13 +970,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4905754985990571797}
-        m_TargetAssemblyTypeName: BTG.UI.TankSelectionUI, BTG.UI
-        m_MethodName: TankIDSelect
-        m_Mode: 3
+        m_TargetAssemblyTypeName: BTG.UI.EntitySelectionUI, BTG.UI
+        m_MethodName: EntityTagSelectAndHide
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_ObjectArgument: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: BTG.Utilities.TagSO, BTG.Utilities
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1386,12 +1387,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4905754985990571797}
-        m_TargetAssemblyTypeName: BTG.UI.TankSelectionUI, BTG.UI
-        m_MethodName: TankIDSelect
-        m_Mode: 3
+        m_TargetAssemblyTypeName: BTG.UI.EntitySelectionUI, BTG.UI
+        m_MethodName: EntityTagSelectAndHide
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: BTG.Utilities.TagSO, BTG.Utilities
           m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2003,12 +2005,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4905754985990571797}
-        m_TargetAssemblyTypeName: BTG.UI.TankSelectionUI, BTG.UI
-        m_MethodName: TankIDSelect
-        m_Mode: 3
+        m_TargetAssemblyTypeName: BTG.UI.EntitySelectionUI, BTG.UI
+        m_MethodName: EntityTagSelectAndHide
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: BTG.Utilities.TagSO, BTG.Utilities
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
@@ -2694,13 +2697,14 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4905754985990571797}
-        m_TargetAssemblyTypeName: BTG.UI.TankSelectionUI, BTG.UI
-        m_MethodName: TankIDSelect
-        m_Mode: 3
+        m_TargetAssemblyTypeName: BTG.UI.HeroSelectionUI, BTG.UI
+        m_MethodName: TankTagSelect
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_ObjectArgument: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: BTG.Utilities.TagSO, BTG.Utilities
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -3126,7 +3130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Panel: {fileID: 3283392772649605364}
-  m_TankIDSelectedData: {fileID: 11400000, guid: 8b0c58c2ef2afa94b857b31f535be511,
+  m_EntityTagSelected: {fileID: 11400000, guid: 21bbdbf9b8393284585bd57c4c0acc8d,
     type: 2}
   m_InputActionReference: {fileID: -1760529668008292023, guid: dce30368c114aca4080cd3a58b2379c9,
     type: 3}

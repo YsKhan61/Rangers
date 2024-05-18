@@ -6,17 +6,17 @@ using UnityEngine.InputSystem;
 namespace BTG.UI
 {
     /// <summary>
-    /// Script that manages the tank selection UI.
-    /// Don't add the script to the tank selection UI panel.
+    /// Script that manages the entity selection UI.
+    /// Don't add the script to the entity selection UI panel.
     /// As the script is attached to the panel, it will be enabled and disabled when the panel is enabled and disabled.
     /// </summary>
-    public class HeroSelectionUI : MonoBehaviour
+    public class EntitySelectionUI : MonoBehaviour
     {
-        [SerializeField, Tooltip("The UI panel of tank selection")]
+        [SerializeField, Tooltip("The UI panel of entity selection")]
         private GameObject m_Panel;
 
         [SerializeField]
-        private IntDataSO m_TankIDSelectedData;
+        private TagDataSO m_EntityTagSelected;
 
         [SerializeField]
         private InputActionReference m_InputActionReference;
@@ -37,13 +37,15 @@ namespace BTG.UI
             m_InputActionReference.action.Disable();
         }
 
+
         /// <summary>
-        /// This method is called when a tank is selected.
+        /// This method is called when a entity is selected by player
+        /// Then the panel is hidden.
         /// </summary>
-        /// <param name="id">id of the selected tank</param>
-        public void TankIDSelect(int id)
+        /// <param name="tag">tag of the entity selected</param>
+        public void EntityTagSelectAndHide(TagSO tag)
         {
-            m_TankIDSelectedData.Value = id;
+            m_EntityTagSelected.Value = tag;
             HidePanel();
         }
 

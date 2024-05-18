@@ -98,15 +98,8 @@ namespace BTG.Enemy
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
         {
-            entity = null;
-            if (!m_EntityFactoryContainer.TryGetFactory(tag, out EntityFactorySO factory))
-            {
-                Debug.Log("Failed to get entity factory of tag: " + tag.name);
-                return false;
-            }
-
-            entity = factory.GetEntity();
-            return true;
+            entity = m_EntityFactoryContainer.GetEntity(tag);
+            return entity != null;
         }
 
         private bool GetEnemyController(out EnemyTankController controller)

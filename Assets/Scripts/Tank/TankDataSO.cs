@@ -1,5 +1,3 @@
-using BTG.Actions.PrimaryAction;
-using BTG.Actions.UltimateAction;
 using BTG.Utilities;
 using UnityEngine;
 
@@ -9,10 +7,6 @@ namespace BTG.Tank
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
     public class TankDataSO : ScriptableObject
     {
-        [SerializeField]
-        private int m_ID;
-        public int ID => m_ID;
-
         [SerializeField, Tooltip("The tag of the tank")]
         private TagSO m_Tag;
         public TagSO Tag => m_Tag;
@@ -57,13 +51,8 @@ namespace BTG.Tank
         private AudioClip m_ShotChargingClip;
         public AudioClip ShotChargingClip => m_ShotChargingClip;
 
-        /*[SerializeField]
-        private PrimaryActionFactorySO m_PrimaryActionFactory;
-        public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;*/
-
         [SerializeField, Tooltip("The tag of the primary action")]
         private TagSO m_PrimaryActionTag;
-
         public TagSO PrimaryTag => m_PrimaryActionTag;
 
         [SerializeField, Tooltip("The tag of the ultimate action")]

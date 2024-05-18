@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdfc62f8f64ce274ab743b27f014ff3a, type: 3}
   m_Name: GreenTankFactory
   m_EditorClassIdentifier: 
-  m_EntityTag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+  m_Tag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
   m_Data: {fileID: 11400000, guid: 0677f758e72acb045bf21101182b6f3d, type: 2}

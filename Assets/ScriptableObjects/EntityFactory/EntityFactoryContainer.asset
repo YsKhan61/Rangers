@@ -12,16 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5b49aa5a83f9374990647d7fd065f01, type: 3}
   m_Name: EntityFactoryContainer
   m_EditorClassIdentifier: 
-  EntityFactories:
-  - EntityID: 1
-    EntityTag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
-    EntityFactory: {fileID: 11400000, guid: ca60d94dcc0729d40bdc3bdb0b2e8d38, type: 2}
-  - EntityID: 2
-    EntityTag: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
-    EntityFactory: {fileID: 11400000, guid: c8b7334b3cc160248b0950493bc6986c, type: 2}
-  - EntityID: 3
-    EntityTag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
-    EntityFactory: {fileID: 11400000, guid: 35f5c58f58d22f64c8b26cadfd5c4548, type: 2}
-  - EntityID: 4
-    EntityTag: {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
-    EntityFactory: {fileID: 11400000, guid: c7bdbd16b776ca0489337668986eb7d9, type: 2}
+  m_Factories:
+  - {fileID: 11400000, guid: c7bdbd16b776ca0489337668986eb7d9, type: 2}
+  - {fileID: 11400000, guid: 35f5c58f58d22f64c8b26cadfd5c4548, type: 2}
+  - {fileID: 11400000, guid: ca60d94dcc0729d40bdc3bdb0b2e8d38, type: 2}
+  - {fileID: 11400000, guid: c8b7334b3cc160248b0950493bc6986c, type: 2}

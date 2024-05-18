@@ -59,8 +59,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EntityFactoryContainer: {fileID: 11400000, guid: f332ab77e4d310e418a7b4e0c249277b,
     type: 2}
-  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
-  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
   m_PrimaryActionFactoryContainer: {fileID: 11400000, guid: 27e82887f5ddac74994b520630318db1,
     type: 2}
   m_UltimateActionFactoryContainer: {fileID: 11400000, guid: 93b7bdf0c911c884f8a40a83a320676e,
@@ -69,6 +67,8 @@ MonoBehaviour:
     type: 2}
   m_RagdollFactoryContainer: {fileID: 11400000, guid: 50e48e470f85de2459a4f5eb2fbdb69b,
     type: 2}
+  m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
+  m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
   m_PlayerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
   m_TankDataList: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6, type: 2}
   m_EnemyWaves: {fileID: 11400000, guid: e28f1f0749746204281077917ae259d4, type: 2}
