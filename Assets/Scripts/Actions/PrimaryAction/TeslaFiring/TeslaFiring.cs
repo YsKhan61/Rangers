@@ -16,6 +16,8 @@ namespace BTG.Actions.PrimaryAction
         public event System.Action OnPrimaryActionExecuted;
 
         private TeslaFiringDataSO m_Data;
+        public TeslaFiringDataSO Data => m_Data;
+
         private IPrimaryActor m_Actor;
         private TeslaBallPool m_TeslaBallPool;
         private AudioPool m_AudioPool;
@@ -155,6 +157,7 @@ namespace BTG.Actions.PrimaryAction
             m_BallInCharge.Rigidbody.WakeUp();
             m_BallInCharge.Rigidbody.isKinematic = true;
             m_BallInCharge.SetOwner(m_Actor.Transform);
+            m_BallInCharge.SetTeslaFiring(this);
             m_BallInCharge.transform.SetParent(m_Actor.FirePoint);
             m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;

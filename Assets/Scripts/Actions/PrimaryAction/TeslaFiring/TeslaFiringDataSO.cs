@@ -54,6 +54,10 @@ namespace BTG.Actions.PrimaryAction
         private AudioClip m_ChargingClip;
         public AudioClip ChargingClip => m_ChargingClip;
 
+        [SerializeField, Tooltip("The sound clip when bullet hits or other action views hit")]
+        private AudioClip m_ActionImpactclip;
+        public AudioClip ActionImpactClip => m_ActionImpactclip;
+
         [SerializeField]
         ExplosionFactorySO m_ExplosionFactory;
         public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;

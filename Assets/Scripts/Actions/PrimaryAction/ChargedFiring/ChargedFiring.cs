@@ -26,13 +26,9 @@ namespace BTG.Actions.PrimaryAction
         private AudioSource m_FiringAudioSource;
         private CancellationTokenSource m_Cts;
 
-
         private bool m_IsEnabled;
         private bool m_IsCharging;
         private float m_ChargeAmount;
-
-        
-
 
         public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool)
         {

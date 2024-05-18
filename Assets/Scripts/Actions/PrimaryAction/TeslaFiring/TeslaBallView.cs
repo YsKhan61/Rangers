@@ -1,4 +1,6 @@
-﻿using BTG.Utilities;
+﻿using BTG.AudioSystem;
+using BTG.Utilities;
+using BTG.Utilities.DI;
 using UnityEngine;
 
 
@@ -20,28 +22,24 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
+        private TeslaFiring m_TeslaFiring;
         private TeslaBallPool m_Pool;
 
         private int m_Damage;
 
 
-        private void OnCollisionEnter(Collision collision)
-        {
-            if (collision.collider.TryGetComponent(out IDamageableView damageable))
-            {
-                damageable.Damage(m_Damage);
-            }
+        private void OnCollisionEnter(Collision collision) => OnHitSomething(collision.collider);
 
-            Reset();
-        }
+        private void OnTriggerEnter(Collider other) => OnHitSomething(other);
 
-        private void OnTriggerEnter(Collider other)
+        private void OnHitSomething(Collider other)
         {
             if (other.TryGetComponent(out IDamageableView damageable))
             {
                 damageable.Damage(m_Damage);
             }
 
+            DoExplosionAudio();
             Reset();
         }
 
@@ -49,6 +47,11 @@ namespace BTG.Actions.PrimaryAction
         /// Set the owner of the tesla ball
         /// </summary>
         public void SetOwner(Transform owner) => Owner = owner;
+
+        /// <summary>
+        /// Set the tesla firing that fired the tesla ball
+        /// </summary>
+        public void SetTeslaFiring(TeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
 
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
@@ -66,12 +69,19 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         public void SetDamage(int damage) => m_Damage = damage;
 
+        private void DoExplosionAudio()
+        {
+            AudioPool pool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
+            pool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
+        }
+
         private void Reset()
         {
             m_Rigidbody.Sleep();
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
-            
+            m_TeslaFiring = null;
+
             Hide();
 
             m_Pool.ReturnTeslaBall(this);
