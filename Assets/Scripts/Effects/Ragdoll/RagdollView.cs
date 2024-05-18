@@ -36,7 +36,7 @@ namespace BTG.Effects
         internal void Initialize()
         {
             m_Cts = new CancellationTokenSource();
-            StoreInitialPoses();
+            StoreInitialLocalPoses();
             Hide();
             ToggleRigidbodyKinematics(true);
         }
@@ -73,25 +73,25 @@ namespace BTG.Effects
         {
             Hide();
             ToggleRigidbodyKinematics(true);
-            ResetPoses();
+            ResetLocalPoses();
             m_Pool.ReturnRagdoll(this);
         }
 
-        private void StoreInitialPoses()
+        private void StoreInitialLocalPoses()
         {
             m_InitialPoses = new Pose[m_Rigidbodies.Length];
             for (int i = 0; i < m_Rigidbodies.Length; i++)
             {
-                m_InitialPoses[i] = new Pose(m_Rigidbodies[i].transform.position, m_Rigidbodies[i].transform.rotation);
+                m_InitialPoses[i] = new Pose(m_Rigidbodies[i].transform.localPosition, m_Rigidbodies[i].transform.localRotation);
             }
         }
 
-        private void ResetPoses()
+        private void ResetLocalPoses()
         {
             for (int i = 0; i < m_Rigidbodies.Length; i++)
             {
-                m_Rigidbodies[i].transform.position = m_InitialPoses[i].position;
-                m_Rigidbodies[i].transform.rotation = m_InitialPoses[i].rotation;
+                m_Rigidbodies[i].transform.localPosition = m_InitialPoses[i].position;
+                m_Rigidbodies[i].transform.localRotation = m_InitialPoses[i].rotation;
             }
         }
 
