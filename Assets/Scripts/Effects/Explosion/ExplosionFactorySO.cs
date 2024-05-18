@@ -1,9 +1,14 @@
+using BTG.Factory;
 using UnityEngine;
+
 
 namespace BTG.Effects
 {
+    /// <summary>
+    /// A factory to create the explosion effect depending on data.
+    /// </summary>
     [CreateAssetMenu(fileName = "Explosion Factory", menuName = "ScriptableObjects/Factory/Effects Factory/ExplosionFactorySO")]
-    public class ExplosionFactorySO : ScriptableObject
+    public class ExplosionFactorySO : FactorySO<ExplosionView>
     {
         [SerializeField]
         private ExplosionDataSO m_Data;
@@ -13,10 +18,11 @@ namespace BTG.Effects
 
         public void CreateExplosion(Vector3 position)
         {
-            var effect = Pool.GetExplosionEffect();
+            var effect = GetItem();
             effect.transform.position = position;
             effect.Play();
         }
-    }
 
+        public override ExplosionView GetItem() => Pool.GetExplosionEffect();
+    }
 }

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 841545e3fc7238a4a9e087fef258fcd1, type: 3}
   m_Name: AutoTargetExplosionFactory
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: ff449acedbb99664dae572a6d2a39ccd, type: 2}
   m_Data: {fileID: 11400000, guid: f2ac399b275f6814e992aae5b5bdeca7, type: 2}

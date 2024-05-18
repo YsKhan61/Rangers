@@ -1,10 +1,17 @@
-﻿using BTG.Utilities;
+﻿using BTG.Factory;
+using BTG.Utilities;
 using System.Threading;
 using UnityEngine;
 
 namespace BTG.Effects
 {
-    public class RagdollView : MonoBehaviour
+    /// <summary>
+    /// The view of the ragdoll.
+    /// It is responsible for the visual representation of the ragdoll
+    /// It can be created using the factory as it implements the IFactoryItem interface
+    /// It has a reference to the pool to return itself after the effect is done
+    /// </summary>
+    public class RagdollView : MonoBehaviour, IFactoryItem
     {
         private RagdollPool m_Pool;
         private IRagdollOwner m_Owner;      // maybe needed for resetting early during revive

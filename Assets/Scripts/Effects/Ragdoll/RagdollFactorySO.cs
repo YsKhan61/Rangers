@@ -1,9 +1,10 @@
-﻿using UnityEngine;
+﻿using BTG.Factory;
+using UnityEngine;
 
 namespace BTG.Effects
 {
     [CreateAssetMenu(fileName = "Ragdoll Factory", menuName = "ScriptableObjects/Factory/Effects Factory/RagdollFactorySO")]
-    public class RagdollFactorySO : ScriptableObject
+    public class RagdollFactorySO : FactorySO<RagdollView>
     {
         [SerializeField]
         private RagdollDataSO m_Data;
@@ -12,9 +13,6 @@ namespace BTG.Effects
         private RagdollPool m_Pool;
         private RagdollPool Pool => m_Pool ??= new RagdollPool(m_Data);
 
-        /// <summary>
-        /// Get a ragdoll from the pool and set the owner
-        /// </summary>
-        public RagdollView GetRagdoll() => Pool.GetRagdoll();
+        public override RagdollView GetItem() => Pool.GetRagdoll();
     }
 }

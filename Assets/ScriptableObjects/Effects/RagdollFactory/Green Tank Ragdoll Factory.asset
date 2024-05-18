@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90f4707028728a4eb4411f61c8fcba4, type: 3}
   m_Name: Green Tank Ragdoll Factory
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
   m_Data: {fileID: 11400000, guid: 68e0f3b64e8023240a60b95ff577343d, type: 2}

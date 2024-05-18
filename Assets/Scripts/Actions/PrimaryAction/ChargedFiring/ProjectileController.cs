@@ -50,9 +50,14 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Data.Damage);
             }
 
-            m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+            DoExplosionEffect();
 
             ResetProjectile();
+        }
+
+        private void DoExplosionEffect()
+        {
+            m_Data.ExplosionFactory.CreateExplosion(Transform.position);
         }
 
         private void ResetProjectile()

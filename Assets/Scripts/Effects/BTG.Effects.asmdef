@@ -2,7 +2,8 @@
     "name": "BTG.Effects",
     "rootNamespace": "",
     "references": [
-        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256"
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:5bbdbd3d1d0b81949b3f81b5188e2c1c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

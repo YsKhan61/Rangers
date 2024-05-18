@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f90f4707028728a4eb4411f61c8fcba4, type: 3}
   m_Name: Red Tank Ragdoll Factory
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
   m_Data: {fileID: 11400000, guid: ceb9c3bd351b5c048b8a4474460238d4, type: 2}
