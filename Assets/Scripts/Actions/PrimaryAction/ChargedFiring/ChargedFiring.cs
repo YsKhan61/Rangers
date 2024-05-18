@@ -21,16 +21,14 @@ namespace BTG.Actions.PrimaryAction
 
         private IPrimaryActor m_Actor;
         private ProjectilePool m_ProjectilePool;
+        private ChargedFiringDataSO m_Data;
         private AudioPool m_AudioPool;
+        private AudioSource m_FiringAudioSource;
+        private CancellationTokenSource m_Cts;
 
         private bool m_IsEnabled;
         private bool m_IsCharging;
         private float m_ChargeAmount;
-
-        private ChargedFiringDataSO m_Data;
-        private AudioSource m_FiringAudioSource;
-        private CancellationTokenSource m_Cts;
-
 
         public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool)
         {
@@ -175,11 +173,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void UpdateChargingClipPitch(float amount) => m_FiringAudioSource.pitch = 0.5f + amount;
         private void StopChargingClip() => m_FiringAudioSource.Stop();
-        private void PlayShotFiredClip()
-        {
-            m_FiringAudioSource.pitch = 1f;
-            m_FiringAudioSource.PlayOneShot(m_Data.ShotFiredClip);
-        }
+        private void PlayShotFiredClip() => m_AudioPool.GetAudioView().PlayOneShot(m_Data.ShotFiredClip, m_Actor.Transform.position);
 
         private void InitializeFiringAudio()
         {
@@ -190,18 +184,16 @@ namespace BTG.Actions.PrimaryAction
                 return;
             }
 
-            m_FiringAudioSource = m_AudioPool.GetAudio().AudioSource;
+            m_FiringAudioSource = m_AudioPool.GetAudioView().AudioSource;
             m_FiringAudioSource.gameObject.name = FIRING_AUDIO_SOURCE_NAME;
             m_FiringAudioSource.transform.SetParent(m_Actor.Transform, Vector3.zero, Quaternion.identity);
             m_FiringAudioSource.spatialBlend = 1f;
             m_FiringAudioSource.playOnAwake = false;
             m_FiringAudioSource.loop = false;
+            m_FiringAudioSource.gameObject.SetActive(true);
         }
 
-        private void DeInitializeFiringAudio()
-        {
-            m_AudioPool.ReturnItem(m_FiringAudioSource.GetComponent<AudioView>());
-        }
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
     }
 
 }

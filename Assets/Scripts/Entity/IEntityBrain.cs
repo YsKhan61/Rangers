@@ -20,6 +20,12 @@ namespace BTG.Entity
         /// De-initialize the brain.
         /// </summary>
         public void DeInit();
+
+        /// <summary>
+        /// It is called when the entity is dead.
+        /// It is separate from DeInit.
+        /// </summary>
+        public void OnDead();
     }
 
 }

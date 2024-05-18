@@ -22,5 +22,7 @@ MonoBehaviour:
   m_MaxScale: 1
   m_MinDamage: 10
   m_MaxDamage: 80
-  m_ShotFiredClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_ShotFiredClip: {fileID: 8300000, guid: 5c27182a28a7eb942a362e6d198fe0e6, type: 3}
+  m_ChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
+  m_ActionImpactclip: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
   m_ExplosionFactory: {fileID: 11400000, guid: ba47f56c150137543af4a66e80fd7292, type: 2}

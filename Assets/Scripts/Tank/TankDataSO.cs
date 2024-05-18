@@ -59,5 +59,9 @@ namespace BTG.Tank
         private TagSO m_UltimateActionTag;
         public TagSO UltimateTag => m_UltimateActionTag;
 
+        [SerializeField, Tooltip("The death sound clip")]
+        private AudioClip m_DeathSoundClip;
+        public AudioClip DeathSoundClip => m_DeathSoundClip;
+
     }
 }

@@ -1,5 +1,7 @@
-﻿using BTG.Events;
+﻿using BTG.AudioSystem;
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
@@ -9,28 +11,36 @@ namespace BTG.Actions.PrimaryAction
 {
     public class TeslaFiring : IPrimaryAction, IUpdatable
     {
+        private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
+
         public event System.Action OnPrimaryActionExecuted;
 
         private TeslaFiringDataSO m_Data;
+        public TeslaFiringDataSO Data => m_Data;
+
         private IPrimaryActor m_Actor;
-        private TeslaBallPool m_Pool;
+        private TeslaBallPool m_TeslaBallPool;
+        private AudioPool m_AudioPool;
+        private AudioSource m_FiringAudioSource;
+        private TeslaBallView m_BallInCharge;
+        private CancellationTokenSource m_Cts;
 
         private bool m_IsEnabled;
         private bool m_IsCharging;
         private float m_ChargeAmount;
 
-        private TeslaBallView m_BallInCharge;
-        private CancellationTokenSource m_Cts;
+        
 
         public TeslaFiring(TeslaFiringDataSO data, TeslaBallPool pool)
         {
             m_Data = data;
-            m_Pool = pool;
+            m_TeslaBallPool = pool;
         }
 
         public void Enable()
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            InitializeFiringAudio();
 
             m_IsEnabled = true;
         }
@@ -49,6 +59,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Disable()
         {
+            DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
 
@@ -63,7 +74,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-
+            PlayChargingClip();
             SpawnBall();
         }
 
@@ -81,6 +92,7 @@ namespace BTG.Actions.PrimaryAction
             if (m_Actor.IsPlayer)
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });  // OnPlayerCamShake?.Invoke(m_ChargeAmount, 0.5f);
 
+            PlayShotFiredClip();
             ResetCharging();
         }
 
@@ -98,7 +110,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void SetDamageToBallAndShoot()
         {
-            m_BallInCharge.transform.SetParent(m_Pool.Container);
+            m_BallInCharge.transform.SetParent(m_TeslaBallPool.Container);
             m_BallInCharge.Rigidbody.isKinematic = false;
             CalculateBallDamage(out int damage);
             m_BallInCharge?.SetDamage(damage);
@@ -108,6 +120,7 @@ namespace BTG.Actions.PrimaryAction
         private void ResetCharging()
         {
             m_ChargeAmount = 0;
+            StopChargingClip();
             m_BallInCharge = null;
         }
 
@@ -117,7 +130,8 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
-            m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);   
+            m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
+            UpdateChargingClipPitch(m_ChargeAmount);
         }
 
         private void UpdateBallSize()
@@ -139,10 +153,11 @@ namespace BTG.Actions.PrimaryAction
 
         private void SpawnBall()
         {
-            m_BallInCharge = m_Pool.GetTeslaBall();
+            m_BallInCharge = m_TeslaBallPool.GetTeslaBall();
             m_BallInCharge.Rigidbody.WakeUp();
             m_BallInCharge.Rigidbody.isKinematic = true;
             m_BallInCharge.SetOwner(m_Actor.Transform);
+            m_BallInCharge.SetTeslaFiring(this);
             m_BallInCharge.transform.SetParent(m_Actor.FirePoint);
             m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;
@@ -161,6 +176,36 @@ namespace BTG.Actions.PrimaryAction
         {
             damage = (int)Mathf.Lerp(m_Data.MinDamage, m_Data.MaxDamage, m_ChargeAmount);
         }
+
+        private void PlayChargingClip()
+        {
+            m_FiringAudioSource.clip = m_Data.ChargingClip;
+            m_FiringAudioSource.Play();
+        }
+
+        private void UpdateChargingClipPitch(float amount) => m_FiringAudioSource.pitch = 0.5f + amount;
+        private void StopChargingClip() => m_FiringAudioSource.Stop();
+        private void PlayShotFiredClip() => m_AudioPool.GetAudioView().PlayOneShot(m_Data.ShotFiredClip, m_Actor.Transform.position);
+
+        private void InitializeFiringAudio()
+        {
+            m_AudioPool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
+            if (m_AudioPool == null)
+            {
+                Debug.LogError("No Audio pool found!");
+                return;
+            }
+
+            m_FiringAudioSource = m_AudioPool.GetAudioView().AudioSource;
+            m_FiringAudioSource.gameObject.name = FIRING_AUDIO_SOURCE_NAME;
+            m_FiringAudioSource.transform.SetParent(m_Actor.Transform, Vector3.zero, Quaternion.identity);
+            m_FiringAudioSource.spatialBlend = 1f;
+            m_FiringAudioSource.playOnAwake = false;
+            m_FiringAudioSource.loop = false;
+            m_FiringAudioSource.gameObject.SetActive(true);
+        }
+
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
     }
 }
 

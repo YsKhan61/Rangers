@@ -1,4 +1,6 @@
+using BTG.AudioSystem;
 using BTG.Utilities;
+using BTG.Utilities.DI;
 using System.Threading;
 using UnityEngine;
 
@@ -51,13 +53,16 @@ namespace BTG.Actions.PrimaryAction
             }
 
             DoExplosionEffect();
-
+            DoExplosionAudio();
             ResetProjectile();
         }
 
-        private void DoExplosionEffect()
+        private void DoExplosionEffect() => m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+
+        private void DoExplosionAudio()
         {
-            m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+            AudioPool pool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
+            pool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
         }
 
         private void ResetProjectile()
