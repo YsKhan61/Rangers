@@ -1,3 +1,4 @@
+using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Effects;
 using BTG.Enemy;
@@ -36,8 +37,17 @@ namespace BTG.Services
         [Provide]
         public EnemyDataSO ProvideEnemyData() => m_EnemyData;
 
+
+        [SerializeField]
+        private PrimaryActionFactoryContainerSO m_PrimaryActionFactoryContainer;
+
+        [Provide]
+        public PrimaryActionFactoryContainerSO ProvidePrimaryActionFactoryContainer() => m_PrimaryActionFactoryContainer;
+
+
         [SerializeField]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
+        
         [Provide]
         public UltimateActionFactoryContainerSO ProvideUltimateActionFactoryContainer() => m_UltimateActionFactoryContainer;
 

@@ -56,6 +56,8 @@ namespace BTG.Actions.UltimateAction
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
+        public void SetActor(IUltimateActor actor) => Actor = actor;
+
         protected void ChangeState(State newState)
         {
             CurrentState = newState;

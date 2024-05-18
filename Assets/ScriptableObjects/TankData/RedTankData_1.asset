@@ -25,7 +25,6 @@ MonoBehaviour:
   m_EngineDrivingClip: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
   m_ShotFiringClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
   m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
-  m_PrimaryActionFactory: {fileID: 11400000, guid: 1ff57e768db6dcc44a0837fdea432c5b,
-    type: 2}
+  m_PrimaryActionTag: {fileID: 11400000, guid: d9e19b7c219517d40a8455a93ab43d9d, type: 2}
   m_UltimateActionTag: {fileID: 11400000, guid: ff449acedbb99664dae572a6d2a39ccd,
     type: 2}

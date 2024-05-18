@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c057ceec8a29b41aa4d370834650f9, type: 3}
   m_Name: Tesla Firing Factory
   m_EditorClassIdentifier: 
+  m_Tag: {fileID: 11400000, guid: d9e19b7c219517d40a8455a93ab43d9d, type: 2}
   m_Data: {fileID: 11400000, guid: 9d249cfd6356c1f47a73f289f297d27d, type: 2}

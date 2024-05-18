@@ -23,6 +23,12 @@ namespace BTG.Enemy
 
         public void ReturnEnemy(EnemyTankController enemy) => ReturnItem(enemy);
 
-        protected override EnemyTankController CreateItem() => new(m_Data, this);
+        protected override EnemyTankController CreateItem()
+        {
+            EnemyTankController  controller = new(m_Data, this);
+            DIManager.Instance.Inject(controller);
+            return controller;
+        }
     }
+
 }

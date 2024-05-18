@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BTG.Factory
 {
-    public class FactoryContainerSO<T> : ScriptableObject
-        where T : IItem
+    public abstract class FactoryContainerSO<T> : ScriptableObject
+        where T : IFactoryItem
     {
         [SerializeField, Tooltip("The factories to create the items")]
         List<FactorySO<T>> m_Factories;

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BTG.Factory
 {
     public abstract class FactorySO<T> : ScriptableObject
-        where T : IItem
+        where T : IFactoryItem
     {
         [SerializeField, Tooltip("Tag of item to be created")]
         TagSO m_Tag;

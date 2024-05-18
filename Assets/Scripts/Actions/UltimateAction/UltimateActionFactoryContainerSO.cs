@@ -1,5 +1,5 @@
-﻿using BTG.Utilities;
-using System.Collections.Generic;
+﻿using BTG.Factory;
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -9,23 +9,11 @@ namespace BTG.Actions.UltimateAction
     /// An container for the ultimate action factories
     /// </summary>
     [CreateAssetMenu(fileName = "UltimateActionFactoryContainer", menuName = "ScriptableObjects/Factory/UltimateActionFactory/UltimateActionFactoryContainerSO")]
-    public class UltimateActionFactoryContainerSO : ScriptableObject
+    public class UltimateActionFactoryContainerSO : FactoryContainerSO<IUltimateAction>
     {
-        [SerializeField]
-        List<UltimateActionFactorySO> m_UltimateActionFactories;
-
-        public IUltimateAction GetUltimateAction(IUltimateActor actor, TagSO tag)
-        {
-            foreach (var factory in m_UltimateActionFactories)
-            {
-                if (factory.UltimateTag == tag)
-                {
-                    return factory.CreateUltimateAction(actor);
-                }
-            }
-
-            Debug.Log("No factory found for the tag: " + tag.name);
-            return null;
-        }
+        /// <summary>
+        /// Get the ultimate action from the factory based on the item tag
+        /// </summary>
+        public IUltimateAction GetUltimateAction(TagSO tag) => GetItem(tag);
     }
 }

@@ -1,11 +1,12 @@
-using BTG.Utilities;
+using BTG.Factory;
+
 
 namespace BTG.Actions.PrimaryAction
 {
     /// <summary>
     /// Any primary action of an actor should implement this interface.
     /// </summary>
-    public interface IPrimaryAction
+    public interface IPrimaryAction : IFactoryItem
     {
         public event System.Action OnPrimaryActionExecuted;
 
@@ -18,6 +19,11 @@ namespace BTG.Actions.PrimaryAction
         /// Disable the action.
         /// </summary>
         public void Disable();
+
+        /// <summary>
+        /// Set the actor of the action
+        /// </summary>
+        public void SetActor(IPrimaryActor actor);
 
         /// <summary>
         /// Start executing the action. It will keep executing until it is stopped.

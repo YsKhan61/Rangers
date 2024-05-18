@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e3dfea2a994f543bc20fce6aabf69c, type: 3}
   m_Name: UltimateActionFactoryContainer
   m_EditorClassIdentifier: 
-  m_UltimateActionFactories:
+  m_Factories:
   - {fileID: 11400000, guid: 01bfb6f0c08676c45b5ca508ece0404a, type: 2}
   - {fileID: 11400000, guid: c72ead04cca647a4b97716d7c1f931e6, type: 2}
   - {fileID: 11400000, guid: 4487d5efdec43e044b1b954224d9668a, type: 2}

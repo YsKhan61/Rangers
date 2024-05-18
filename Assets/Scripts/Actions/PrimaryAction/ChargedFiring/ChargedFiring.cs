@@ -25,17 +25,16 @@ namespace BTG.Actions.PrimaryAction
         private float m_ChargeAmount;
 
         private ChargedFiringDataSO m_Data;
-        private readonly AudioSource m_FiringAudioSource;
+        private AudioSource m_FiringAudioSource;
         private CancellationTokenSource m_Cts;
 
 
-        public ChargedFiring(ChargedFiringDataSO data, IPrimaryActor actor, ProjectilePool pool)
+        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool pool)
         {
             m_Data = data;
-            m_Actor = actor;
             m_Pool = pool;
-            m_FiringAudioSource = new GameObject(FIRING_AUDIO_SOURCE_NAME).AddComponent<AudioSource>();
-            ConfigureAudioSource();
+
+            InitializeFiringAudio();
         }
 
         public void Enable()
@@ -72,6 +71,12 @@ namespace BTG.Actions.PrimaryAction
         {
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this as IUpdatable);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this as IDestroyable);
+        }
+
+        public void SetActor(IPrimaryActor actor)
+        {
+            m_Actor = actor;
+            m_FiringAudioSource.transform.SetParent(m_Actor.Transform);
         }
 
         public void StartAction()
@@ -162,14 +167,6 @@ namespace BTG.Actions.PrimaryAction
                 m_ChargeAmount) + m_Actor.CurrentMoveSpeed;
         }
 
-        private void ConfigureAudioSource()
-        {
-            m_FiringAudioSource.transform.SetParent(m_Actor.Transform);
-            m_FiringAudioSource.spatialBlend = 1f;
-            m_FiringAudioSource.playOnAwake = false;
-            m_FiringAudioSource.loop = false;
-        }
-
         private void ToggleMuteFiringAudio(bool mute) => m_FiringAudioSource.mute = mute;
         private void PlayChargingClip()
         {
@@ -183,6 +180,14 @@ namespace BTG.Actions.PrimaryAction
         {
             m_FiringAudioSource.pitch = 1f;
             m_FiringAudioSource.PlayOneShot(m_Data.ShotFiredClip);
+        }
+
+        private void InitializeFiringAudio()
+        {
+            m_FiringAudioSource = new GameObject(FIRING_AUDIO_SOURCE_NAME).AddComponent<AudioSource>();
+            m_FiringAudioSource.spatialBlend = 1f;
+            m_FiringAudioSource.playOnAwake = false;
+            m_FiringAudioSource.loop = false;
         }
     }
 

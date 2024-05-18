@@ -15,9 +15,8 @@ namespace BTG.Actions.UltimateAction
 
         private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
 
-        public AutoTarget(IUltimateActor actor, AutoTargetDataSO autoTargetData)
+        public AutoTarget(AutoTargetDataSO autoTargetData)
         {
-            Actor = actor;
             m_UltimateActionData = autoTargetData;
         }
 

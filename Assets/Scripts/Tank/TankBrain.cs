@@ -48,6 +48,9 @@ namespace BTG.Tank
         public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
 
         [Inject]
+        private PrimaryActionFactoryContainerSO m_PrimaryActionFactoryContainer;
+
+        [Inject]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
 
         [Inject]
@@ -72,9 +75,9 @@ namespace BTG.Tank
 
             m_Model = new TankModel(tankData, this);
             m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
-            m_View.SetBrain(this); 
+            m_View.SetBrain(this);
 
-            m_PrimaryAction = m_Model.TankData.PrimaryActionFactory.CreatePrimaryAction(this);
+            CreatePrimaryAction();
             CreateUltimateAction();
         }
 
@@ -104,6 +107,16 @@ namespace BTG.Tank
             _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
+        public void CreatePrimaryAction(TagSO primaryTag = null)
+        {
+            if (primaryTag == null)
+                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetPrimaryAction(m_Model.TankData.PrimaryTag);
+            else
+                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetPrimaryAction(primaryTag);
+
+            m_PrimaryAction.SetActor(this);
+        }
+
         /// <summary>
         /// Create the ultimate action for the tank.
         /// If Tag is not provided, it will use the default tag from the tank data.
@@ -112,9 +125,11 @@ namespace BTG.Tank
         public void CreateUltimateAction(TagSO ultimateTag = null)
         {
             if (ultimateTag == null)
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, m_Model.TankData.UltimateTag);
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(m_Model.TankData.UltimateTag);
             else
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(this, ultimateTag);
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(ultimateTag);
+
+            m_UltimateAction.SetActor(this);
         }
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;

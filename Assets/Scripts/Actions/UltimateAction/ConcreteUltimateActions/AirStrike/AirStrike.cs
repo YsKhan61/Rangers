@@ -20,9 +20,8 @@ namespace BTG.Actions.UltimateAction
         private readonly List<IDamageableView> m_Damageables = new();
 
         // Create constructor
-        public AirStrike(IUltimateActor actor, AirStrikeDataSO airStrikeData)
+        public AirStrike(AirStrikeDataSO airStrikeData)
         {
-            Actor = actor;
             m_UltimateActionData = airStrikeData;
         }
 

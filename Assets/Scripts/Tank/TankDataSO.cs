@@ -57,9 +57,14 @@ namespace BTG.Tank
         private AudioClip m_ShotChargingClip;
         public AudioClip ShotChargingClip => m_ShotChargingClip;
 
-        [SerializeField]
+        /*[SerializeField]
         private PrimaryActionFactorySO m_PrimaryActionFactory;
-        public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;
+        public PrimaryActionFactorySO PrimaryActionFactory => m_PrimaryActionFactory;*/
+
+        [SerializeField, Tooltip("The tag of the primary action")]
+        private TagSO m_PrimaryActionTag;
+
+        public TagSO PrimaryTag => m_PrimaryActionTag;
 
         [SerializeField, Tooltip("The tag of the ultimate action")]
         private TagSO m_UltimateActionTag;

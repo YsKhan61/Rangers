@@ -61,6 +61,8 @@ MonoBehaviour:
     type: 2}
   m_PlayerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
   m_EnemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
+  m_PrimaryActionFactoryContainer: {fileID: 11400000, guid: 27e82887f5ddac74994b520630318db1,
+    type: 2}
   m_UltimateActionFactoryContainer: {fileID: 11400000, guid: 93b7bdf0c911c884f8a40a83a320676e,
     type: 2}
   m_EnemyTankUltimateStateFactoryContainer: {fileID: 11400000, guid: 21e113653b82e8e478246e6601f42893,

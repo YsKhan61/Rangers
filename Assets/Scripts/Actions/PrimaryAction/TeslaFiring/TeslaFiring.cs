@@ -22,10 +22,9 @@ namespace BTG.Actions.PrimaryAction
         private TeslaBallView m_BallInCharge;
         private CancellationTokenSource m_Cts;
 
-        public TeslaFiring(TeslaFiringDataSO data, IPrimaryActor actor, TeslaBallPool pool)
+        public TeslaFiring(TeslaFiringDataSO data, TeslaBallPool pool)
         {
             m_Data = data;
-            m_Actor = actor;
             m_Pool = pool;
         }
 
@@ -55,6 +54,8 @@ namespace BTG.Actions.PrimaryAction
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
+
+        public void SetActor(IPrimaryActor actor) => m_Actor = actor;
 
         public void StartAction()
         {

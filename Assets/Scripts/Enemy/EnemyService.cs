@@ -88,7 +88,7 @@ namespace BTG.Enemy
 
             bool controllerFound = GetEnemyController(out EnemyTankController controller);
             if (!controllerFound) return;
-            DIManager.Instance.Inject(controller);
+            
 
             controller.SetEntityBrain(entity);
             controller.Init();

@@ -12,9 +12,8 @@ namespace BTG.Actions.UltimateAction
 
         private SelfShieldView m_View;
 
-        public SelfShield(IUltimateActor controller, SelfShieldDataSO selfShieldData)
+        public SelfShield(SelfShieldDataSO selfShieldData)
         {
-            Actor = controller;
             m_UltimateActionData = selfShieldData;
         }
 

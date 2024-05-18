@@ -1,6 +1,6 @@
-
+using BTG.Factory;
 using BTG.Utilities;
-using BTG.Utilities.DI;
+
 
 namespace BTG.Actions.UltimateAction
 {
@@ -8,7 +8,7 @@ namespace BTG.Actions.UltimateAction
     /// An interface for the ultimate action
     /// An ultimate action is a special ability that can be executed by the IUltimateActor
     /// </summary>
-    public interface IUltimateAction : IDestroyable
+    public interface IUltimateAction : IDestroyable, IFactoryItem
     {
         public enum State
         {
@@ -59,6 +59,11 @@ namespace BTG.Actions.UltimateAction
         /// Disable the ultimate action
         /// </summary>
         public void Disable();
+
+        /// <summary>
+        /// Set the actor of the ultimate action
+        /// </summary>
+        public void SetActor(IUltimateActor actor);
 
         /// <summary>
         /// Auto charge the ultimate action

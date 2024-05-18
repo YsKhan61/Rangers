@@ -15,9 +15,8 @@ namespace BTG.Actions.UltimateAction
 
         private InvisibilityView m_View;
 
-        public Invisibility(IUltimateActor controller, InvisibilityDataSO invisibilityData)
+        public Invisibility(InvisibilityDataSO invisibilityData)
         {
-            Actor = controller;
             m_UltimateActionData = invisibilityData;
         }
 

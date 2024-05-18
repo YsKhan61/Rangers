@@ -16,11 +16,11 @@ MonoBehaviour:
   m_Waves:
   - ID: 1
     EntityTags:
-    - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
+    - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
     EnemyTankIDs: 
   - ID: 1
     EntityTags:
-    - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
+    - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
     EnemyTankIDs: 
   - ID: 1
     EntityTags:
