@@ -2697,8 +2697,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 4905754985990571797}
-        m_TargetAssemblyTypeName: BTG.UI.HeroSelectionUI, BTG.UI
-        m_MethodName: TankTagSelect
+        m_TargetAssemblyTypeName: BTG.UI.EntitySelectionUI, BTG.UI
+        m_MethodName: EntityTagSelectAndHide
         m_Mode: 2
         m_Arguments:
           m_ObjectArgument: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711,

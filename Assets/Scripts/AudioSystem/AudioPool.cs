@@ -17,7 +17,12 @@ namespace BTG.AudioSystem
         /// <summary>
         /// Get the audio view from the pool
         /// </summary>
-        public AudioView GetAudioView() => GetItem();
+        public AudioView GetAudioView()
+        {
+            AudioView view = GetItem();
+            view.Show();
+            return view;
+        }
 
         /// <summary>
         /// Return the audio view to the pool

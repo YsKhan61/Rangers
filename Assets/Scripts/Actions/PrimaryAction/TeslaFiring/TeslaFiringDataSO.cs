@@ -50,6 +50,10 @@ namespace BTG.Actions.PrimaryAction
         AudioClip m_ShotFiredClip;
         public AudioClip ShotFiredClip => m_ShotFiredClip;
 
+        [SerializeField, Tooltip("The charging sound clip")]
+        private AudioClip m_ChargingClip;
+        public AudioClip ChargingClip => m_ChargingClip;
+
         [SerializeField]
         ExplosionFactorySO m_ExplosionFactory;
         public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;

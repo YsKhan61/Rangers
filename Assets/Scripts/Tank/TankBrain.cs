@@ -205,7 +205,7 @@ namespace BTG.Tank
             ExecuteDeadAudio();
         }
 
-        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip);
+        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
 
         private void UpdateState()
         {

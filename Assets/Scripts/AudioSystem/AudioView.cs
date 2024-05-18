@@ -26,11 +26,6 @@ namespace BTG.AudioSystem
             m_AudioSource.spatialBlend = 1;
         }
 
-        private void OnDisable()
-        {
-            m_Cts.Cancel();
-        }
-
         private void OnDestroy()
         {
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
@@ -39,10 +34,11 @@ namespace BTG.AudioSystem
         /// <summary>
         /// Play once the audio clip
         /// And return the audio view to the pool after the clip is played
+        /// Play the audio clip at the given position
         /// </summary>
-        /// <param name="clip"></param>
-        public void PlayOneShot(AudioClip clip)
+        public void PlayOneShot(AudioClip clip, Vector3 position)
         {
+            transform.position = position;
             m_AudioSource.PlayOneShot(clip);
 
             _ = HelperMethods.InvokeAfterAsync((int)clip.length , () =>
