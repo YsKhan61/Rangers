@@ -14,8 +14,15 @@ namespace BTG.AudioSystem
             m_Container = new GameObject("AudioContainer").transform;
         }
 
-        public AudioView GetAudio() => GetItem();
+        /// <summary>
+        /// Get the audio view from the pool
+        /// </summary>
+        public AudioView GetAudioView() => GetItem();
 
+        /// <summary>
+        /// Return the audio view to the pool
+        /// </summary>
+        /// <param name="audioView"></param>
         public void ReturnAudio(AudioView audioView)
         {
             audioView.Hide();
@@ -27,6 +34,7 @@ namespace BTG.AudioSystem
         {
             AudioView view = new GameObject("AudioView").AddComponent<AudioView>();
             view.transform.SetParent(m_Container);
+            view.SetPool(this);
             view.Show();
             return view;
         }

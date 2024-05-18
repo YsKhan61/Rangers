@@ -1,5 +1,6 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
+using BTG.AudioSystem;
 using BTG.Effects;
 using BTG.Entity;
 using BTG.Utilities;
@@ -55,6 +56,9 @@ namespace BTG.Tank
 
         [Inject]
         private RagdollFactoryContainerSO m_RagdollFactoryContainer;
+
+        [Inject]
+        private AudioPool m_AudioPool;
 
         private TankPool m_Pool;
 
@@ -194,6 +198,14 @@ namespace BTG.Tank
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
         public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetAndExecuteRagdollEffect(this);
+
+        public void OnDead()
+        {
+            ExecuteRagdollEffect();
+            ExecuteDeadAudio();
+        }
+
+        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip);
 
         private void UpdateState()
         {

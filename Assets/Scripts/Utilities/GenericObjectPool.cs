@@ -52,7 +52,7 @@ namespace BTG.Utilities
         /// Return an item to the pool
         /// </summary>
         /// <param name="item"></param>
-        public void ReturnItem(T item)
+        protected void ReturnItem(T item)
         {
             PooledItem<T> pooledItem = pooledItems.Find(i => i.Item.Equals(item));
             pooledItem.isUsed = false;

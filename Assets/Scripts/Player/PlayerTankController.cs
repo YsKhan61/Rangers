@@ -155,8 +155,8 @@ namespace BTG.Player
         }
 
         public void OnEntityDied()
-        {  
-            m_EntityBrain.ExecuteRagdollEffect();
+        {
+            m_EntityBrain.OnDead();
 
             DeInit();
             m_PlayerService.OnPlayerDeath();

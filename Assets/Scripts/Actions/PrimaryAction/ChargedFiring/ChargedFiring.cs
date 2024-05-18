@@ -190,7 +190,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
             }
 
-            m_FiringAudioSource = m_AudioPool.GetAudio().AudioSource;
+            m_FiringAudioSource = m_AudioPool.GetAudioView().AudioSource;
             m_FiringAudioSource.gameObject.name = FIRING_AUDIO_SOURCE_NAME;
             m_FiringAudioSource.transform.SetParent(m_Actor.Transform, Vector3.zero, Quaternion.identity);
             m_FiringAudioSource.spatialBlend = 1f;
@@ -198,10 +198,7 @@ namespace BTG.Actions.PrimaryAction
             m_FiringAudioSource.loop = false;
         }
 
-        private void DeInitializeFiringAudio()
-        {
-            m_AudioPool.ReturnItem(m_FiringAudioSource.GetComponent<AudioView>());
-        }
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
     }
 
 }
