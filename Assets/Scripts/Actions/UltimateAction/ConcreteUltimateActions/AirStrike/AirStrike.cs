@@ -28,12 +28,12 @@ namespace BTG.Actions.UltimateAction
         public override void Enable()
         {
             base.Enable();
-            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this as IFixedUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
         }
 
         public override void Disable()
         {
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this as IFixedUpdatable);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
 
             if (m_View != null) 
             {
