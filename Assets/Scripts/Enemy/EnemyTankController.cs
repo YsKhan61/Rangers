@@ -12,8 +12,6 @@ namespace BTG.Enemy
     /// </summary>
     public class EnemyTankController : IEntityController
     {
-        private const float DETECT_RANGE = 10f;         // a temporary hard value to detect the player using raycast
-
         private EnemyDataSO m_Data;
         /// <summary>
         /// Get the data of the enemy
@@ -167,13 +165,16 @@ namespace BTG.Enemy
         /// <summary>
         /// Execute the primary action
         /// </summary>
-        public void ExecutePrimaryAction(int stopTime) 
-            => m_EntityBrain.AutoStartStopPrimaryAction(stopTime);
+        public void ExecutePrimaryAction(int stopTime) => m_EntityBrain.AutoStartStopPrimaryAction(stopTime);
 
         /// <summary>
         /// Execute the ultimate action
         /// </summary>
-        public void ExecuteUltimateAction() => m_EntityBrain.TryExecuteUltimate();
+        public void ExecuteUltimateAction()
+        {
+            m_EntityBrain.TryExecuteUltimate();
+            IsUltimateReady = false;
+        }
 
         /// <summary>
         /// Reallign the entity brain's transform with the rigidbody's transform
@@ -238,11 +239,7 @@ namespace BTG.Enemy
 
         private void OnUltimateFullyCharged() => IsUltimateReady = true;
         
-        private void OnUltimateExecuted()
-        {
-            IsUltimateReady = false;
-            m_StateMachine.OnUltimateExecuted();
-        }
+        private void OnUltimateExecuted() => m_StateMachine.OnUltimateExecuted();
 
         private void OnDamageTaken() => m_StateMachine.OnDamageTaken();
 

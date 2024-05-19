@@ -41,7 +41,18 @@ namespace BTG.Enemy
         /// <summary>
         /// Get the target transform
         /// </summary>
-        internal Transform TargetTransform => m_Controller.TargetView.Transform;
+        internal Transform TargetTransform
+        {
+            get
+            {
+                /// Null check is required because the target view can be null
+                if (m_Controller.TargetView == null)
+                {
+                    return null;
+                }
+                return m_Controller.TargetView.Transform;
+            }
+        }
 
         /// <summary>
         /// Is the ultimate ready
@@ -170,10 +181,10 @@ namespace BTG.Enemy
         /// <summary>
         /// Inform the state machine to execute the primary action of the owner
         /// </summary>
-        internal void ExecutePrimaryAction(int stopTime)
+        internal void ExecutePrimaryAction(int duration)
         {
             IsPrimaryActionExecuting = true;
-            m_Controller.ExecutePrimaryAction(stopTime);
+            m_Controller.ExecutePrimaryAction(duration);
         }
 
         /// <summary>

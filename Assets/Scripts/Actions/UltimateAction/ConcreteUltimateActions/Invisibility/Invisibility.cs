@@ -1,6 +1,6 @@
 using BTG.Events;
+using BTG.Utilities;
 using BTG.Utilities.EventBus;
-using System.Threading.Tasks;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
@@ -49,7 +49,7 @@ namespace BTG.Actions.UltimateAction
             m_View.PlayAppearPS();
             m_View.PlayAppearAudio();
 
-            _ = ResetAfterDelay(m_CTS.Token);
+            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => ResetAfterDelay(), m_CTS.Token);
         }
 
         protected override void RaiseFullyChargedEvent()
@@ -64,28 +64,19 @@ namespace BTG.Actions.UltimateAction
             m_View.transform.localRotation = Quaternion.identity;
         }
 
-        private async Task ResetAfterDelay(System.Threading.CancellationToken token)
+        private void ResetAfterDelay()
         {
-            try
-            {
-                await Task.Delay((int)(m_View.AppearPSDuration * 1000), token);
-                Object.Destroy(m_View.gameObject);
-                m_View = null;
-                Actor.ToggleActorVisibility(true);
-                if (Actor.IsPlayer)
-                    EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
+            Object.Destroy(m_View.gameObject);
+            m_View = null;
+            Actor.ToggleActorVisibility(true);
+            if (Actor.IsPlayer)
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
 
-                RaiseUltimateActionExecutedEvent();
+            RaiseUltimateActionExecutedEvent();
 
-                ChangeState(State.Charging);
-                Charge(-FULL_CHARGE);
-                AutoCharge();
-            }
-            catch (TaskCanceledException)
-            {
-                // Do nothing
-            }
-            
+            ChangeState(State.Charging);
+            Charge(-FULL_CHARGE);
+            AutoCharge();
         }
     }
 }

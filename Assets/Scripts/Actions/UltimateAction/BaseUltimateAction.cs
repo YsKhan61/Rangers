@@ -129,6 +129,7 @@ namespace BTG.Actions.UltimateAction
                 {
                     await Task.Delay(1000, m_CTS.Token);
                     Charge(m_UltimateActionData.ChargeRate);
+                    // Debug.Log("Charging : " + m_ChargedAmount + " : " + Actor.Transform.gameObject.name);
                 }
             }
             catch (TaskCanceledException)

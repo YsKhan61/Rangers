@@ -17,9 +17,16 @@ namespace BTG.Enemy
 
         public override void Enter()
         {
+            if (owner.TargetTransform == null)
+            {
+                owner.OnTargetNotInRange();
+                return;
+            }
+            m_TargetTransform = owner.TargetTransform;
+
             m_ShootTimer = 0f;
             m_ShootCooldown = 0f;
-            m_TargetTransform = owner.TargetTransform;
+            
             owner.Agent.enabled = false;
         }
 

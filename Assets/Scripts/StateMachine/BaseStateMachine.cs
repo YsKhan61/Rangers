@@ -30,9 +30,8 @@ namespace BTG.StateMachine
 
             currentState?.Exit();
             currentState = nextState;
-            currentState.Enter();
-
             OnStateChanged?.Invoke(state);
+            currentState.Enter();
         }
 
         /// <summary>
