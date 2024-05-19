@@ -12,13 +12,21 @@ This is a fun project where we have tank rangers of various abilities who can fi
   - Ultimate Ability: Auto Target
 
 # Design Pattern used
+
+  * Scriptable Objects use cases
+    - Used for creating Factory classes so that they can easily be referenced in the editor for DI.
+    - Data Containers for Flyweight Pattern
+    - Observable Generic Data Containers - if the data inside the scriptable object changes, it can invoke events. [GenericDataSO etc]
+    - Extendable Enums - Helpful to get rid of enums, and a class to know all types of enums for fetching the item. [TagSO etc]
+    - Generic Event Channels - To facilitate observer pattern. [GenericEventChannelSO etc.]
+    
 - Flyweight
-- Dependency Injection
+- Dependency Injection [Created own lightweight Dependency Injection Framework]
 - Model-view-controller
 - Observer pattern (Event Channel, EventBus)
-- Factory pattern
-- Dynamic Object Pooling
-- State Machine
+- Generic Factory pattern
+- Dynamic Generic Object Pooling
+- Generic State Machine
 
 # Sceeenshots
 Tank Selection Panel
