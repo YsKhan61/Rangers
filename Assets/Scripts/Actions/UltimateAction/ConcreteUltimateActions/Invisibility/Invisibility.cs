@@ -20,6 +20,16 @@ namespace BTG.Actions.UltimateAction
             m_UltimateActionData = invisibilityData;
         }
 
+        public override void Disable()
+        {
+            if (m_View != null)
+            {
+                Object.Destroy(m_View.gameObject);
+            }
+
+            base.Disable();
+        }
+
         public override bool TryExecute()
         {
             if (CurrentState != State.FullyCharged)

@@ -1117,7 +1117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9d6ee73856e67d439b8ab682921151f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_OnPlayerCamShake: {fileID: 11400000, guid: 04be7a5b9910f124c879a2610126305a, type: 2}
   m_PVC1: {fileID: 1894154697}
   m_MinShakeIntensity: 1
   m_MaxShakeIntensity: 5

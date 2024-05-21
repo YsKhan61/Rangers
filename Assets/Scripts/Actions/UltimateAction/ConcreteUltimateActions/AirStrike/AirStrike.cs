@@ -35,11 +35,9 @@ namespace BTG.Actions.UltimateAction
         {
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
 
-            if (m_View != null) 
+            if (m_View != null)
             {
-                m_View.StopParticleSystem();
-                m_View.StopAudio();
-                m_View = null;
+                Object.Destroy(m_View.gameObject);
             }
 
             base.Disable();

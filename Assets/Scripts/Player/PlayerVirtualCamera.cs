@@ -1,5 +1,4 @@
 using BTG.Events;
-using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using Cinemachine;
 using System.Collections;
@@ -12,9 +11,6 @@ namespace BTG.Player
     {
         EventBinding<CameraShakeEvent> m_CameraShakeEventBinding;
 
-        [SerializeField]
-        FloatFloatEventChannelSO m_OnPlayerCamShake;
-
         [SerializeField] CinemachineVirtualCamera m_PVC1;
 
         [SerializeField] float m_MinShakeIntensity;
@@ -24,45 +20,35 @@ namespace BTG.Player
         private WaitForSeconds m_WaitForSeconds;
         private Coroutine m_StopShakeCoroutine;
 
+        private void Awake()
+        {
+            m_Perlin = m_PVC1.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            ResetProperties();
+        }
+
         private void OnEnable()
         {
             m_CameraShakeEventBinding = new EventBinding<CameraShakeEvent>(OnPlayerCamShake);
             EventBus<CameraShakeEvent>.Register(m_CameraShakeEventBinding);
-            // m_OnPlayerCamShake.OnEventRaised += OnPlayerCamShake;
         }
 
         private void OnDisable()
         {
             EventBus<CameraShakeEvent>.Unregister(m_CameraShakeEventBinding);
-            // m_OnPlayerCamShake.OnEventRaised -= OnPlayerCamShake;
         }
         
 
-        public void Initialize(Transform target)
-        {
-            m_PVC1.Follow = target;
-            m_Perlin = m_PVC1.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-            Reset();
-        }
-
-        private void OnPlayerCamShake(float amount, float duration)
-        {
-            StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * amount),
-                duration);
-        }
+        public void SetTarget(Transform target) => m_PVC1.Follow = target;
 
         private void OnPlayerCamShake(CameraShakeEvent data)
-        {
-            StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * data.ShakeAmount),
-                               data.ShakeDuration);
-        }
+            => StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * data.ShakeAmount), data.ShakeDuration);
 
         void StartShake(float intensity, float duration)
         {
             if (m_StopShakeCoroutine != null)
             {
                 StopCoroutine(m_StopShakeCoroutine);
-                Reset();
+                ResetProperties();
             }
 
             m_Perlin.m_AmplitudeGain = intensity;
@@ -73,10 +59,10 @@ namespace BTG.Player
         IEnumerator StopShake()
         {
             yield return m_WaitForSeconds;
-            Reset();
+            ResetProperties();
         }
 
-        private void Reset()
+        private void ResetProperties()
         {
             m_Perlin.m_AmplitudeGain = 0;
             m_WaitForSeconds = null;

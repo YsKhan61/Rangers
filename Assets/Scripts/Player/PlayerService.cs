@@ -1,7 +1,9 @@
 using BTG.Entity;
+using BTG.Events;
 using BTG.EventSystem;
 using BTG.Utilities;
 using BTG.Utilities.DI;
+using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
 
@@ -78,6 +80,8 @@ namespace BTG.Player
 
         private void OnPlayerTankIDSelected()
         {
+            EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0f, ShakeDuration = 0f });
+
             /// If there is a player entity already, deinit it.
             m_Controller.DeInit();
 
@@ -95,7 +99,7 @@ namespace BTG.Player
             // Spawn at the origin
             m_Controller.SetPose(new Pose(Vector3.zero, Quaternion.identity));
 
-            m_PVCamera.Initialize(m_Controller.CameraTarget);
+            m_PVCamera.SetTarget(m_Controller.CameraTarget);
         }
 
         private bool TryGetEntity(out IEntityBrain entity)
