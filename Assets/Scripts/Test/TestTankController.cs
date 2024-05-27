@@ -1,4 +1,6 @@
-﻿using BTG.Tank;
+﻿#if false
+
+using BTG.Tank;
 using UnityEngine;
 
 
@@ -17,3 +19,5 @@ namespace BTG.Test
     }
 
 }
+
+#endif

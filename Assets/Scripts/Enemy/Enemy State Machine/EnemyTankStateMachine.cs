@@ -91,7 +91,9 @@ namespace BTG.Enemy
         /// </summary>
         public void Init(EnemyTankState stateToStart)
         {
+#if UNITY_EDITOR
             EditorInit();
+#endif
 
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
@@ -105,7 +107,9 @@ namespace BTG.Enemy
         /// </summary>
         public void DeInit()
         {
+#if UNITY_EDITOR
             EditorDeInit();
+#endif
 
             m_States.Clear();
 
