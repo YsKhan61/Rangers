@@ -60,3 +60,4 @@ crashlytics-build.properties
 *.log
 *.log
 *.log
+/Logs
