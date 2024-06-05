@@ -34,6 +34,9 @@ namespace BTG.Gameplay.GameState
         [SerializeField]
         private GameObject _signInSpinner;
 
+        [SerializeField]
+        private string _singlePlayerScene;
+
         private AuthenticationServiceFacade _authServiceFacade;
         private LocalLobbyUser _localLobbyUser;
         private LocalLobby _localLobby;
@@ -126,6 +129,14 @@ namespace BTG.Gameplay.GameState
                 return;
 
             await _authServiceFacade.UpdatePlayerNameAsync(name);
+        }
+
+        /// <summary>
+        /// UI Button callback to start the game in single player mode.
+        /// </summary>
+        public void StartSinglePlayerMode()
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(_singlePlayerScene);
         }
 
         public void OnLobbyStartButtonClicked()
