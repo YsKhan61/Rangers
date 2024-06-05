@@ -1,0 +1,28 @@
+{
+    "name": "BTG.Gameplay",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:c2633c40320e242449b2934fd5f80311",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:f2d49d9fa7e7eb3418e39723a7d3b92f",
+        "GUID:c957296194fb0164eab1f662ec2d809e",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:dfb78632e9bfdc649943860eb5b54466",
+        "GUID:4454828dde2e78846a3d1d550ce7a43d",
+        "GUID:4c3f49d89436d478ea78315c03159dcc",
+        "GUID:5540e30183c82e84b954c033c388e06c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

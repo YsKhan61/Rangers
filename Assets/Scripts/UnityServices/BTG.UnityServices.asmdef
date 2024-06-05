@@ -1,0 +1,21 @@
+{
+    "name": "BTG.UnityServices",
+    "rootNamespace": "",
+    "references": [
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:5540e30183c82e84b954c033c388e06c",
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:4c3f49d89436d478ea78315c03159dcc",
+        "GUID:9f589beecac4b0647ad2197f9cb3d505"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

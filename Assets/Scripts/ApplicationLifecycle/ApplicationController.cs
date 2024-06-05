@@ -1,5 +1,6 @@
 using BTG.Utilities;
 using System;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
@@ -10,6 +11,12 @@ namespace BTG.ApplicationLifecycle
 {
     public class ApplicationController : LifetimeScope
     {
+        [SerializeField]
+        private NetworkManager _networkManager;
+
+        [SerializeField]
+        private UpdateRunner _updateRunner;
+
         [SerializeField]
         private string _nextScene;
 
@@ -27,6 +34,9 @@ namespace BTG.ApplicationLifecycle
         protected override void Configure(IContainerBuilder builder)
         {
             base.Configure(builder);
+
+            builder.RegisterComponent(_networkManager);
+            builder.RegisterComponent(_updateRunner);
         }
 
         private void Start()
