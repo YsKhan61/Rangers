@@ -776,8 +776,9 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 242809874}
-  _networkManager: {fileID: 1710468955}
   _updateRunner: {fileID: 1317782517}
+  _connectionManager: {fileID: 1523047073}
+  _networkManager: {fileID: 1710468955}
   _nextScene: MainMenu
 --- !u!1 &1361801416
 GameObject:
@@ -929,6 +930,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1523047072}
+  - component: {fileID: 1523047073}
   m_Layer: 0
   m_Name: ConnectionManager
   m_TagString: Untagged
@@ -951,6 +953,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1523047073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523047071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a9befcbb7db63c41b1a751a12a1deb9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reconnectAttempts: 2
+  MaxConnectedPlayers: 4
 --- !u!114 &1551776466 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1140967810606784115, guid: fa39758ad5b970d4699eb20af6f595c9,
