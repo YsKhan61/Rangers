@@ -44,6 +44,10 @@ namespace BTG.Gameplay.GameState
         public override GameState ActiveState => GameState.MainMenu;
 
         public AccountType AccountType => _authServiceFacade.AccountType;
+
+        private string _profileName;
+        
+        
         protected override void Awake()
         {
             base.Awake();
@@ -53,7 +57,7 @@ namespace BTG.Gameplay.GameState
 
             if (string.IsNullOrEmpty(Application.cloudProjectId))
             {
-                OnSignInFailed();
+                OnAuthSignInFailed();
                 return;
             }
 
@@ -71,14 +75,14 @@ namespace BTG.Gameplay.GameState
 
             _authServiceFacade.SubscribeToAuthenticationEvents();
 
-            _authServiceFacade.onAuthSignInSuccess += OnAuthSignInSuccess;
-            _authServiceFacade.onAuthSignInFailed += OnSignInFailed;
-            _authServiceFacade.onAuthSignedOutSuccess += OnAuthSignedOutSuccess;
-            _authServiceFacade.onLinkedInWithUnitySuccess += OnLinkSuccess;
-            _authServiceFacade.onLinkedInWithUnityFailed += OnLinkFailed;
-            _authServiceFacade.onUnlinkFromUnitySuccess += OnUnlinkSuccess;
-            _authServiceFacade.onAccountNameUpdateSuccess += UpdateNameSuccess;
-            _authServiceFacade.onAccountNameUpdateFailed += UpdateNameFailed;
+            _authServiceFacade.OnAuthSignInSuccess += OnAuthSignInSuccess;
+            _authServiceFacade.OnAuthSignInFailed += OnAuthSignInFailed;
+            _authServiceFacade.OnAuthSignedOutSuccess += OnAuthSignedOutSuccess;
+            _authServiceFacade.OnLinkedInWithUnitySuccess += OnLinkSuccess;
+            _authServiceFacade.OnLinkedInWithUnityFailed += OnLinkFailed;
+            _authServiceFacade.OnUnlinkFromUnitySuccess += OnUnlinkSuccess;
+            _authServiceFacade.OnAccountNameUpdateSuccess += UpdateNameSuccess;
+            _authServiceFacade.OnAccountNameUpdateFailed += UpdateNameFailed;
 
             Application.wantsToQuit += OnApplicationWantsToQuit;
 
@@ -90,14 +94,14 @@ namespace BTG.Gameplay.GameState
             // Application.wantsToQuit -= OnApplicationWantsToQuit;
             base.OnDestroy();
 
-            _authServiceFacade.onAuthSignInSuccess -= OnAuthSignInSuccess;
-            _authServiceFacade.onAuthSignInFailed -= OnSignInFailed;
-            _authServiceFacade.onAuthSignedOutSuccess -= OnAuthSignedOutSuccess;
-            _authServiceFacade.onLinkedInWithUnitySuccess -= OnLinkSuccess;
-            _authServiceFacade.onLinkedInWithUnityFailed -= OnLinkFailed;
-            _authServiceFacade.onUnlinkFromUnitySuccess -= OnUnlinkSuccess;
-            _authServiceFacade.onAccountNameUpdateSuccess -= UpdateNameSuccess;
-            _authServiceFacade.onAccountNameUpdateFailed -= UpdateNameFailed;
+            _authServiceFacade.OnAuthSignInSuccess -= OnAuthSignInSuccess;
+            _authServiceFacade.OnAuthSignInFailed -= OnAuthSignInFailed;
+            _authServiceFacade.OnAuthSignedOutSuccess -= OnAuthSignedOutSuccess;
+            _authServiceFacade.OnLinkedInWithUnitySuccess -= OnLinkSuccess;
+            _authServiceFacade.OnLinkedInWithUnityFailed -= OnLinkFailed;
+            _authServiceFacade.OnUnlinkFromUnitySuccess -= OnUnlinkSuccess;
+            _authServiceFacade.OnAccountNameUpdateSuccess -= UpdateNameSuccess;
+            _authServiceFacade.OnAccountNameUpdateFailed -= UpdateNameFailed;
             _authServiceFacade.UnsubscribeFromAuthenticationEvents();
         }
 
@@ -163,6 +167,7 @@ namespace BTG.Gameplay.GameState
                 await _authServiceFacade.InitializeUnityServicesAsync(options);
 
                 _authServiceFacade.SwitchProfile(profileName);
+                _profileName = profileName;
 
                 switch (accountType)
                 {
@@ -178,8 +183,12 @@ namespace BTG.Gameplay.GameState
             }
             catch (Exception)
             {
-                // OnSignInFailed();
+                OnAuthSignInFailed();
                 return;
+            }
+            finally
+            {
+                _signInSpinner.SetActive(false);
             }
             return;
         }
@@ -259,21 +268,22 @@ namespace BTG.Gameplay.GameState
             }
         }
 
-        private void OnAuthSignInSuccess()
+        private async void OnAuthSignInSuccess()
         {
             _signInSpinner.SetActive(false);
             _signInUIMediator.HidePanel();
-
-            _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(_authServiceFacade.GetPlayerName());
-
-            Debug.Log($"Signed in. Unity Player ID {_authServiceFacade.GetPlayerId()}");
-            Debug.Log($"Signed in. Unity Player Name {_authServiceFacade.GetPlayerName()}");
 
             UpdateLocalLobbyUser();
 
             // The local lobby user object will be hooked into UI before the LocalLobby is populated during lobby join, so the LocalLobby must know about it already
             // when that happens.
             _localLobby.AddUser(_localLobbyUser);
+
+            await _authServiceFacade.UpdatePlayerNameAsync(_profileName);
+            _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(_authServiceFacade.GetPlayerName());
+
+            Debug.Log($"Signed in. Unity Player ID {_authServiceFacade.GetPlayerId()}");
+            Debug.Log($"Signed in. Unity Player Name {_authServiceFacade.GetPlayerName()}");
 
             PopupManager.DisplayStatus("Signed in success!", 3);
         }
@@ -289,7 +299,7 @@ namespace BTG.Gameplay.GameState
             PopupManager.DisplayStatus("Signed out success!", 3);
         }
 
-        private void OnSignInFailed()
+        private void OnAuthSignInFailed()
         {
             if (_signInSpinner)
             {
