@@ -665,6 +665,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c8d8c59ebf5f4149a30fc251f75f26e, type: 3}
+--- !u!1 &1462700311 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5802120268272999310, guid: 5c8d8c59ebf5f4149a30fc251f75f26e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1462700310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503484128
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,13 +700,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1503484128}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.45399043, y: 0, z: 0, w: 0.8910066}
+  m_LocalPosition: {x: 0, y: 1.3, z: 21}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -54, y: 0, z: 0}
 --- !u!114 &1503484130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -746,7 +752,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0518ff3831b1a42b6fa5a45cc093ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AvatarConfigurations: []
+  m_TankDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
+    type: 2}
   ConnectionManager: {fileID: 0}
 --- !u!114 &1503484133
 MonoBehaviour:
@@ -761,20 +768,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: BTG.ApplicationLifecycle.ApplicationController
   autoRun: 1
-  autoInjectGameObjects: []
-  m_NetcodeHooks: {fileID: 0}
-  m_NetworkCharSelection: {fileID: 0}
-  m_PlayerSeats: []
-  m_IdentifiersForEachPlayerNumber: []
-  m_ReadyButtonText: {fileID: 0}
-  m_ReadyButtonImage: {fileID: 0}
-  m_UIElementsForNoSeatChosen: []
-  m_UIElementsForSeatChosen: []
-  m_UIElementsForLobbyEnding: []
-  m_UIElementsForFatalError: []
-  m_CharacterGraphicsParent: {fileID: 0}
+  autoInjectGameObjects:
+  - {fileID: 1503484128}
+  - {fileID: 72791172752845974}
+  - {fileID: 1462700311}
+  m_NetcodeHooks: {fileID: 1503484131}
+  m_NetworkCharSelection: {fileID: 1503484132}
+  m_PlayerSeats:
+  - {fileID: 4683512257754727125}
+  - {fileID: 674767938047053009}
+  - {fileID: 5282178386499800303}
+  - {fileID: 6438991100449096524}
+  m_IdentifiersForEachPlayerNumber:
+  - Indicator: {fileID: 21300000, guid: 4efd4bc875cf78440a2bba2df426df59, type: 3}
+    Color: {r: 1, g: 0.99437773, b: 0, a: 1}
+  - Indicator: {fileID: 21300000, guid: 56cece0ac197c064b9ea82690ee1c3c2, type: 3}
+    Color: {r: 1, g: 0.06326783, b: 0, a: 1}
+  - Indicator: {fileID: 21300000, guid: bf1b853244ff07e43ba602f75217963c, type: 3}
+    Color: {r: 0, g: 0.5104327, b: 1, a: 1}
+  - Indicator: {fileID: 21300000, guid: e7498245504d2964081d33c8f58d414a, type: 3}
+    Color: {r: 0, g: 1, b: 0.2536037, a: 1}
+  m_ReadyButtonText: {fileID: 1642935491043047159}
+  m_ReadyButtonImage: {fileID: 2693224107675342762}
+  m_UIElementsForNoSeatChosen:
+  - {fileID: 3956962558490053998}
+  m_UIElementsForSeatChosen:
+  - {fileID: 2455471739692165507}
+  m_UIElementsForLobbyEnding:
+  - {fileID: 2745606793397305093}
+  m_UIElementsForFatalError:
+  - {fileID: 5525934935300185689}
+  m_CharacterGraphicsParent: {fileID: 1789289728}
 --- !u!114 &1503484134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -788,11 +814,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: 
+    TypeName: BTG.ApplicationLifecycle.ApplicationController
   autoRun: 1
   autoInjectGameObjects: []
-  m_NetcodeHooks: {fileID: 0}
-  _nextSceneName: Cosmos
+  m_NetcodeHooks: {fileID: 1503484131}
+--- !u!1 &1789289727
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1789289728}
+  m_Layer: 0
+  m_Name: AvatarGraphicsParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1789289728
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789289727}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!223 &24703354779013222
 Canvas:
   m_ObjectHideFlags: 0
@@ -905,8 +961,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 222f76e9081efb6428be38c0e10f7bde, type: 3}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 9aaa92f8db77e8445a81dca585779414, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2826,7 +2882,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 222f76e9081efb6428be38c0e10f7bde, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 58a6ea68d07e1da4493b73502381604e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3515,7 +3571,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ac1ab0ffbf410094088db89d509a3a4a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 298518cc35452404bbec1592572f23eb, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -8453,7 +8509,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 48555.477}
+  m_AnchoredPosition: {x: 0, y: 126172.64}
   m_SizeDelta: {x: 0, y: 2000}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &7526888466751163223
@@ -10325,3 +10381,4 @@ SceneRoots:
   - {fileID: 1462700310}
   - {fileID: 38221577}
   - {fileID: 789436913}
+  - {fileID: 1789289728}

@@ -779,7 +779,7 @@ MonoBehaviour:
   _updateRunner: {fileID: 1317782517}
   _connectionManager: {fileID: 1523047073}
   _networkManager: {fileID: 1710468955}
-  _nextScene: MainMenu
+  _sceneNameList: {fileID: 11400000, guid: 8750af9d759bb9f419dff7790f64ef8c, type: 2}
 --- !u!1 &1361801416
 GameObject:
   m_ObjectHideFlags: 0

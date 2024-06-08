@@ -1,4 +1,6 @@
-﻿using BTG.Utilities;
+﻿using BTG.UnityServices.Lobbies;
+using BTG.Utilities;
+using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Multiplayer.Samples.Utilities;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,35 +14,37 @@ namespace BTG.ConnectionManagement
     /// </summary>
     internal class HostingState : OnlineState
     {
-        private const string CHAR_SELECT_SCENE_NAME = "CharSelect";
         private const int MAX_CONNECTED_PAYLOAD = 1024;
 
-        /*[Inject]
-        private LobbyServiceFacade _lobbyServiceFacade;*/
+        [Inject]
+        private SceneNameListSO _sceneNameList;
+
+        [Inject]
+        private LobbyServiceFacade _lobbyServiceFacade;
 
         [Inject]
         private IPublisher<ConnectionEventMessage> _connectionEventPublisher;
 
         public override void Enter()
         {
-            /*// The "Cosmos" server always advances to CharSelect immediately on Start.
+            // The "Cosmos" server always advances to CharSelect immediately on Start.
             // Different games may do this differently.
-            SceneLoaderWrapper.Instance.LoadScene(CHAR_SELECT_SCENE_NAME, useNetworkSceneManager: true);
+            SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.CharSelectScene, useNetworkSceneManager: true);
 
             if (_lobbyServiceFacade.CurrentUnityLobby != null)
             {
                 _lobbyServiceFacade.BeginTracking();
-            }*/
+            }
         }
 
         public override void Exit()
         {
-            // SessionManager<SessionPlayerData>.Instance.OnServerEnded();
+            SessionManager<SessionPlayerData>.Instance.OnServerEnded();
         }
 
         public override void OnClientConnected(ulong clientId)
         {
-            /*SessionPlayerData? sessionPlayerData = SessionManager<SessionPlayerData>.Instance.GetPlayerData(clientId);
+            SessionPlayerData? sessionPlayerData = SessionManager<SessionPlayerData>.Instance.GetPlayerData(clientId);
             if (sessionPlayerData != null)
             {
                 _connectionEventPublisher.Publish(new ConnectionEventMessage() { ConnectStatus = ConnectStatus.Success, PlayerName = sessionPlayerData.Value.PlayerName });
@@ -51,12 +55,12 @@ namespace BTG.ConnectionManagement
                 Debug.LogError($"No player data associated with client {clientId}");
                 string reason = JsonUtility.ToJson(ConnectStatus.GenericDisconnect);
                 _connectionManager.NetworkManager.DisconnectClient(clientId, reason);
-            }*/
+            }
         }
 
         public override void OnClientDisconnect(ulong clientId)
         {
-            /*if (clientId != _connectionManager.NetworkManager.LocalClientId)
+            if (clientId != _connectionManager.NetworkManager.LocalClientId)
             {
                 string playerId = SessionManager<SessionPlayerData>.Instance.GetPlayerId(clientId);
                 if (playerId != null)
@@ -68,7 +72,7 @@ namespace BTG.ConnectionManagement
                     }
                     SessionManager<SessionPlayerData>.Instance.DisconnectClient(clientId);
                 }
-            }*/
+            }
         }
 
         public override void OnUserRequestedShutdown()
@@ -122,7 +126,7 @@ namespace BTG.ConnectionManagement
             ConnectionPayload connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload); // https://docs.unity3d.com/2020.2/Documentation/Manual/JSONSerialization.html
             ConnectStatus gameReturnStatus = GetConnectStatus(connectionPayload);
 
-            /*if (gameReturnStatus == ConnectStatus.Success)
+            if (gameReturnStatus == ConnectStatus.Success)
             {
                 SessionManager<SessionPlayerData>.Instance.SetupConnectingPlayerSessionData(clientId, connectionPayload.playerId,
                     new SessionPlayerData(clientId, connectionPayload.playerName, new NetworkGuid(), true));
@@ -140,7 +144,7 @@ namespace BTG.ConnectionManagement
             if (_lobbyServiceFacade.CurrentUnityLobby != null)
             {
                 _lobbyServiceFacade.RemovePlayerFromLobbyAsync(connectionPayload.playerId);
-            }*/
+            }
         }
 
         private ConnectStatus GetConnectStatus(ConnectionPayload connectionPayload)
@@ -155,11 +159,8 @@ namespace BTG.ConnectionManagement
                 return ConnectStatus.IncompatibleBuildType;
             }
 
-            /*return SessionManager<SessionPlayerData>.Instance.IsDuplicateConnection(connectionPayload.playerId) ?
-                ConnectStatus.LoggedInAgain : ConnectStatus.Success;*/
-
-            // Delete later
-            return default;
+            return SessionManager<SessionPlayerData>.Instance.IsDuplicateConnection(connectionPayload.playerId) ?
+                ConnectStatus.LoggedInAgain : ConnectStatus.Success;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BTG.Utilities;
+using System;
+using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -10,7 +12,7 @@ namespace BTG.ConnectionManagement
     /// </summary>
     internal class StartingHostState : OnlineState
     {
-        // private ConnectionMethodBase _connectionMethodBase;
+        private ConnectionMethodBase _connectionMethodBase;
 
         public override void Enter()
         {
@@ -20,11 +22,11 @@ namespace BTG.ConnectionManagement
 
         public override void Exit() { }
 
-        /*internal StartingHostState Configure(ConnectionMethodBase connectionMethodBase)
+        internal StartingHostState Configure(ConnectionMethodBase connectionMethodBase)
         {
             _connectionMethodBase = connectionMethodBase;
             return this;
-        }*/
+        }
 
         public override void OnServerStarted()
         {
@@ -34,7 +36,7 @@ namespace BTG.ConnectionManagement
 
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
         {
-            /*byte[] connectionData = request.Payload;
+            byte[] connectionData = request.Payload;
             ulong clientId = request.ClientNetworkId;
 
             // This happens when starting as a host, before the end of the StartHost call. In that case, we simply approve ourselves.
@@ -49,7 +51,7 @@ namespace BTG.ConnectionManagement
                 // connection approval will create a player object for you
                 response.Approved = true;
                 response.CreatePlayerObject = true;
-            }*/
+            }
         }
 
         public override void OnServerStopped()
@@ -59,7 +61,7 @@ namespace BTG.ConnectionManagement
 
         private async void StartHost()
         {
-            /*try
+            try
             {
                 await _connectionMethodBase.SetupHostConnectionAsync();
 
@@ -73,7 +75,7 @@ namespace BTG.ConnectionManagement
             {
                 StartHostFailed();
                 throw;
-            }*/
+            }
         }
 
         private void StartHostFailed()

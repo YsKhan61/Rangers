@@ -1,4 +1,7 @@
-﻿using UnityEngine.SceneManagement;
+﻿using BTG.UnityServices.Lobbies;
+using BTG.Utilities;
+using Unity.Multiplayer.Samples.Utilities;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace BTG.ConnectionManagement
@@ -10,58 +13,59 @@ namespace BTG.ConnectionManagement
     /// </summary>
     internal class OfflineState : ConnectionState
     {
-        private const string MAIN_MENU_SCENE_NAME = "MainMenu";
+        [Inject]
+        private SceneNameListSO _sceneNameList;
 
-        /*[Inject]
+        [Inject]
         private LobbyServiceFacade _lobbyServiceFacade;
 
         [Inject]
-        private LocalLobby _localLobby;*/
+        private LocalLobby _localLobby;
 
         public override void Enter()
         {
-            /*_lobbyServiceFacade.EndTracking();
+            _lobbyServiceFacade.EndTracking();
             _connectionManager.NetworkManager.Shutdown();
-            if (SceneManager.GetActiveScene().name != MAIN_MENU_SCENE_NAME)
+            if (SceneManager.GetActiveScene().name != _sceneNameList.MainMenuScene)
             {
-                SceneLoaderWrapper.Instance.LoadScene(MAIN_MENU_SCENE_NAME, useNetworkSceneManager: false);
-            }*/
+                SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.MainMenuScene, useNetworkSceneManager: false);
+            }
         }
 
         public override void Exit() { }
 
-        public override void StartHostLobby(string playerName)
+        public override void StartHostLobby(string lobbyName)
         {
-            /*ConnectionMethodRelay connectionMethodRelay =
-                new(_lobbyServiceFacade, _localLobby, _connectionManager, playerName);
+            ConnectionMethodRelay connectionMethodRelay =
+                new(_lobbyServiceFacade, _localLobby, _connectionManager, lobbyName);
 
-            _connectionManager.ChangeState(_connectionManager._startingHostState.Configure(connectionMethodRelay));*/
+            _connectionManager.ChangeState(_connectionManager._startingHostState.Configure(connectionMethodRelay));
         }
 
         public override void StartClientLobby(string playerName)
         {
-            /*ConnectionMethodRelay connectionMethodRelay =
+            ConnectionMethodRelay connectionMethodRelay =
                 new(_lobbyServiceFacade, _localLobby, _connectionManager, playerName);
 
             _connectionManager._clientReconnectingState.Configure(connectionMethodRelay);
-            _connectionManager.ChangeState(_connectionManager._clientConnectingState.Configure(connectionMethodRelay));*/
+            _connectionManager.ChangeState(_connectionManager._clientConnectingState.Configure(connectionMethodRelay));
         }
 
         public override void StartHostIP(string playerName, string ipAddress, int port)
         {
-            /*ConnectionMethodIP connectionMethodIP =
+            ConnectionMethodIP connectionMethodIP =
                 new(ipAddress, (ushort)port, _connectionManager, playerName);
 
-            _connectionManager.ChangeState(_connectionManager._startingHostState.Configure(connectionMethodIP));*/
+            _connectionManager.ChangeState(_connectionManager._startingHostState.Configure(connectionMethodIP));
         }
 
         public override void StartClientIP(string playerName, string ipAddress, int port)
         {
-            /*ConnectionMethodIP connectionMethodIP =
+            ConnectionMethodIP connectionMethodIP =
                 new(ipAddress, (ushort)port, _connectionManager, playerName);
 
             _connectionManager._clientReconnectingState.Configure(connectionMethodIP);
-            _connectionManager.ChangeState(_connectionManager._clientConnectingState.Configure(connectionMethodIP));*/
+            _connectionManager.ChangeState(_connectionManager._clientConnectingState.Configure(connectionMethodIP));
         }
     }
 }

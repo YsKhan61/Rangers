@@ -28,8 +28,8 @@ namespace BTG.ApplicationLifecycle
         [SerializeField]
         private NetworkManager _networkManager;
 
-        [SerializeField, Tooltip("Next scene to load")]
-        private string _nextScene;
+        [SerializeField]
+        private SceneNameListSO _sceneNameList;
 
         private LocalLobby _localLobby;
         private LobbyServiceFacade _lobbyServiceFacade;
@@ -54,7 +54,7 @@ namespace BTG.ApplicationLifecycle
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(_updateRunner.gameObject);
 
-            SceneManager.LoadScene(_nextScene);
+            SceneManager.LoadScene(_sceneNameList.MainMenuScene);
         }
 
 
@@ -81,6 +81,7 @@ namespace BTG.ApplicationLifecycle
             builder.RegisterComponent(_updateRunner);
             builder.RegisterComponent(_connectionManager);
             builder.RegisterComponent(_networkManager);
+            builder.RegisterInstance(_sceneNameList);
 
             // the following singletons represent the local representations of the lobby that we're in and the user that we are.
             // they can persist longer than the lifetime of the UI in MainMenu, where we setup the lobby that we create or join.
@@ -98,7 +99,7 @@ namespace BTG.ApplicationLifecycle
             builder.RegisterComponent(new NetworkedMessageChannel<ConnectionEventMessage>()).AsImplementedInterfaces();
 
             // this one is for chatting amoung the clients in the lobby (team - members)
-            // builder.RegisterComponent(new NetworkedMessageChannel<NetworkChatMessage>()).AsImplementedInterfaces();
+            builder.RegisterComponent(new NetworkedMessageChannel<NetworkChatMessage>()).AsImplementedInterfaces();
 
             // this message channel is essential and persists for the lifetime of the lobby and relay services.
             builder.RegisterInstance(new MessageChannel<ReconnectMessage>()).AsImplementedInterfaces();

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BTG.UnityServices.Lobbies;
+using UnityEngine;
 using VContainer;
 
 namespace BTG.ConnectionManagement
@@ -11,14 +12,14 @@ namespace BTG.ConnectionManagement
     internal class ClientConnectedState : OnlineState
     {
         [Inject]
-        // protected LobbyServiceFacade _lobbyServiceFacade;
+        protected LobbyServiceFacade _lobbyServiceFacade;
 
         public override void Enter()
         {
-            /*if (_lobbyServiceFacade.CurrentUnityLobby != null)
+            if (_lobbyServiceFacade.CurrentUnityLobby != null)
             {
                 _lobbyServiceFacade.BeginTracking();
-            }*/
+            }
         }
 
         public override void Exit() { }

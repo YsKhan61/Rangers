@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using BTG.UnityServices.Lobbies;
+using BTG.Utilities;
+using System.Threading.Tasks;
 using Unity.Netcode.Transports.UTP;
 using Unity.Networking.Transport.Relay;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
 using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
@@ -71,14 +75,13 @@ namespace BTG.ConnectionManagement
         /// show an error popup and ask your player to connect to the internet.
         protected string GetPlayerId()
         {
-            /*if (Unity.Services.Core.UnityServices.State != ServicesInitializationState.Initialized)
+            if (Unity.Services.Core.UnityServices.State != ServicesInitializationState.Initialized)
             {
                 return ClientPrefs.GetGUID() + _playerName;
             }
 
             return AuthenticationService.Instance.IsSignedIn ? AuthenticationService.Instance.PlayerId
-                : ClientPrefs.GetGUID() + _playerName;*/
-            return null;
+                : ClientPrefs.GetGUID() + _playerName;
         }
     }
 
@@ -128,7 +131,7 @@ namespace BTG.ConnectionManagement
     /// </summary>
     internal class ConnectionMethodRelay : ConnectionMethodBase
     {
-        /*private LobbyServiceFacade _lobbyServiceFacade;
+        private LobbyServiceFacade _lobbyServiceFacade;
         private LocalLobby _localLobby;
 
         public ConnectionMethodRelay(LobbyServiceFacade lobbyServiceFacade, LocalLobby localLobby, ConnectionManager connectionManager, string playerName)
@@ -137,18 +140,11 @@ namespace BTG.ConnectionManagement
             _connectionManager = connectionManager;
             _lobbyServiceFacade = lobbyServiceFacade;
             _localLobby = localLobby;
-        }*/
-
-        // Temp fix for now
-        public ConnectionMethodRelay(ConnectionManager connectionManager, string playerName)
-            : base(connectionManager, playerName)
-        {
-            _connectionManager = connectionManager;
         }
 
         public override async Task SetupHostConnectionAsync()
         {
-            /*Debug.Log("Setting up Unity Relay Host Connection");
+            Debug.Log("Setting up Unity Relay Host Connection");
 
             SetConnectionPayload(GetPlayerId(), _playerName);
 
@@ -168,12 +164,12 @@ namespace BTG.ConnectionManagement
             UnityTransport utp = (UnityTransport)_connectionManager.NetworkManager.NetworkConfig.NetworkTransport;
             utp.SetRelayServerData(new RelayServerData(hostAllocation, DTLS_CONNECTION_TYPE));  // This is with DTLS enabled for a secure connection
 
-            Debug.Log($"Created relay allocation with join code {_localLobby.RelayJoinCode}");*/
+            Debug.Log($"Created relay allocation with join code {_localLobby.RelayJoinCode}");
         }
 
         public override async Task SetupClientConnectionAsync()
         {
-            /*Debug.Log("Setting up Unity Relay Client");
+            Debug.Log("Setting up Unity Relay Client");
 
             SetConnectionPayload(GetPlayerId(), _playerName);
 
@@ -194,12 +190,12 @@ namespace BTG.ConnectionManagement
 
             // Configure UTP with allocation
             UnityTransport utp = (UnityTransport)_connectionManager.NetworkManager.NetworkConfig.NetworkTransport;
-            utp.SetRelayServerData(new RelayServerData(joinedAllocation, DTLS_CONNECTION_TYPE));  // This is with DTLS enabled for a secure connection*/
+            utp.SetRelayServerData(new RelayServerData(joinedAllocation, DTLS_CONNECTION_TYPE));  // This is with DTLS enabled for a secure connection
         }
 
         public override async Task<(bool success, bool shouldTryAgain)> SetupClientReconnectionAsync()
         {
-            /*if (_lobbyServiceFacade.CurrentUnityLobby == null)
+            if (_lobbyServiceFacade.CurrentUnityLobby == null)
             {
                 Debug.Log("Lobby does not exist anymore, stopping reconnection attempts.");
                 return (false, false);
@@ -213,12 +209,7 @@ namespace BTG.ConnectionManagement
             Lobby lobby = await _lobbyServiceFacade.ReconnectToLobbyAsync();
             bool success = lobby != null;
             Debug.Log(success ? "Successfully reconnected to Lobby." : "Failed to reconnect to Lobby.");
-            return (success, true); // return a success if reconnecting to lobby returns a lobby.*/
-
-
-            // Temp fix for now, delete later
-            await Task.CompletedTask;
-            return (true, true);
+            return (success, true); // return a success if reconnecting to lobby returns a lobby.
         }
     }
 }

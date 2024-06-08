@@ -1,5 +1,6 @@
 ﻿using BTG.Utilities;
 using System.Collections;
+using System.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 
@@ -89,13 +90,10 @@ namespace BTG.ConnectionManagement
 
         IEnumerator ReconnectCoroutine()
         {
-            // Temp fix to avoid infinite loop
-            yield return new WaitForEndOfFrame();
-
             // If not on first attempt, wait some time before trying again, so that if the issue causing the disconnect is temporary,
             // it has time to fix itself before we try again. Here we are using a simple fixed cooldown but we could want to use exponential backoff instead,
             // to wait a longer time between each failed attempt.
-            /*if (_reconnectAttempts > 0)
+            if (_reconnectAttempts > 0)
             {
                 yield return new WaitForSeconds(TIME_BETWEEN_ATTEMPTS);
             }
@@ -135,7 +133,7 @@ namespace BTG.ConnectionManagement
                 }
                 // Calling OnClientDisconnect to mark this attempt as failed and either start a new one or give up and return to the Offline state.
                 OnClientDisconnect(0);
-            }*/
+            }
         }
     }
 }
