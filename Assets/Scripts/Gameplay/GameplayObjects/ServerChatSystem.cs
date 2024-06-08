@@ -1,0 +1,33 @@
+using BTG.Utilities;
+using Unity.Netcode;
+using VContainer;
+
+
+namespace BTG.Gameplay
+{
+    /// <summary>
+    /// Send and receive chat messages on the server.
+    /// </summary>
+    public class ServerChatSystem : NetworkBehaviour
+    {
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer)
+            {
+                enabled = false;
+                return;
+            }
+        }
+
+        [Inject]
+        IPublisher<NetworkChatMessage> m_networkClientChatPublisher;
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SendChatMessageServerRpc(NetworkChatMessage message)
+        {
+            m_networkClientChatPublisher.Publish(message);
+        }
+    }
+}
+

@@ -1,4 +1,4 @@
-using BTG.Configuration;
+using BTG.Gameplay.Configuration;
 using BTG.UnityServices.Auth;
 using TMPro;
 using UnityEngine;

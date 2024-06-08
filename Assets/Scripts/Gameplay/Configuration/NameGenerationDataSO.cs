@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BTG.Configuration
+namespace BTG.Gameplay.Configuration
 {
     /// <summary>
     /// Data storage of all the valid strings used to create a player's name.
