@@ -28,5 +28,4 @@ namespace BTG.Utilities
         // Create implicit conversion from IntDataSO to int
         public static implicit operator T(GenericDataSO<T> data) => data.Value;
     }
-
 }

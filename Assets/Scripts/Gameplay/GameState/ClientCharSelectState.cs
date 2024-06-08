@@ -1,5 +1,6 @@
 using BTG.Gameplay.Configuration;
 using BTG.Gameplay.UI;
+using BTG.Tank;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -265,7 +266,8 @@ namespace BTG.Gameplay.GameState
                     // change character preview when selecting a new seat
                     if (isNewSeat)
                     {
-                        var selectedCharacterGraphics = GetCharacterGraphics(m_NetworkCharSelection.AvatarConfigurations[seatIdx]);
+                        TankDataSO tankData = m_NetworkCharSelection.TankDataContainer.GetTankDataBySeatIndex(seatIdx);
+                        var selectedCharacterGraphics = GetCharacterGraphics(tankData);
 
                         if (m_CurrentCharacterGraphics)
                         {
@@ -387,12 +389,12 @@ namespace BTG.Gameplay.GameState
             }
         }
 
-        GameObject GetCharacterGraphics(AvatarSO avatar)
+        GameObject GetCharacterGraphics(TankDataSO tankData)
         {
-            if (!m_SpawnedCharacterGraphics.TryGetValue(avatar.Guid, out GameObject characterGraphics))
+            if (!m_SpawnedCharacterGraphics.TryGetValue(tankData.Guid, out GameObject characterGraphics))
             {
-                characterGraphics = Instantiate(avatar.GraphicsCharacterSelect, m_CharacterGraphicsParent);
-                m_SpawnedCharacterGraphics.Add(avatar.Guid, characterGraphics);
+                characterGraphics = Instantiate(tankData.Graphics, m_CharacterGraphicsParent);
+                m_SpawnedCharacterGraphics.Add(tankData.Guid, characterGraphics);
             }
 
             return characterGraphics;

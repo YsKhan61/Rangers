@@ -8,6 +8,7 @@ using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 using BTG.Utilities;
+using BTG.Tank;
 
 
 namespace BTG.Gameplay.GameState
@@ -21,9 +22,6 @@ namespace BTG.Gameplay.GameState
         [SerializeField]
         NetcodeHooks m_NetcodeHooks;
 
-        [SerializeField]
-        private string _nextSceneName = "Cosmos";
-
         public override GameState ActiveState => GameState.CharSelect;
 
         public NetworkCharSelection networkCharSelection { get; private set; }
@@ -32,6 +30,9 @@ namespace BTG.Gameplay.GameState
 
         [Inject]
         ConnectionManager m_ConnectionManager;
+
+        [Inject]
+        private SceneNameListSO _sceneNameList;
 
         protected override void Awake()
         {
@@ -223,8 +224,11 @@ namespace BTG.Gameplay.GameState
                 {
                     // pass avatar GUID to PersistentPlayer
                     // it'd be great to simplify this with something like a NetworkScriptableObjects :(
+
+                    TankDataSO tankData = networkCharSelection.TankDataContainer.GetTankDataBySeatIndex(playerInfo.SeatIdx);
+
                     persistentPlayer.NetworkAvatarGuidState.n_AvatarNetworkGuid.Value =
-                        networkCharSelection.AvatarConfigurations[playerInfo.SeatIdx].Guid.ToNetworkGuid();
+                        tankData.Guid.ToNetworkGuid();
                 }
             }
         }
@@ -304,7 +308,7 @@ namespace BTG.Gameplay.GameState
         IEnumerator WaitToEndLobby()
         {
             yield return new WaitForSeconds(3);
-            SceneLoaderWrapper.Instance.LoadScene(_nextSceneName, useNetworkSceneManager: true);
+            SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.MultiplayerScene, useNetworkSceneManager: true);
         }
     }
 }

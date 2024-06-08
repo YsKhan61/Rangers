@@ -1,4 +1,4 @@
-using BTG.Gameplay.Configuration;
+using BTG.Tank;
 using BTG.Utilities;
 using System;
 using Unity.Netcode;
@@ -16,11 +16,11 @@ namespace BTG.Gameplay.GameplayObjects
         public NetworkVariable<NetworkGuid> n_AvatarNetworkGuid = new NetworkVariable<NetworkGuid>();
 
         [SerializeField]
-        AvatarRegistrySO m_AvatarRegistry;
+        TankDataContainerSO m_AvatarRegistry;
 
-        AvatarSO m_Avatar;
+        TankDataSO m_Avatar;
 
-        public AvatarSO RegisteredAvatar
+        public TankDataSO RegisteredAvatar
         {
             get
             {
@@ -35,7 +35,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void SetRandomAvatar()
         {
-            n_AvatarNetworkGuid.Value = m_AvatarRegistry.GetRandomAvatar().Guid.ToNetworkGuid();
+            n_AvatarNetworkGuid.Value = m_AvatarRegistry.GetRandomTankData().Guid.ToNetworkGuid();
         }
 
         void RegisterAvatar(Guid guid)
@@ -47,7 +47,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             // based on the Guid received, Avatar is fetched from AvatarRegistry
-            if (!m_AvatarRegistry.TryGetAvatar(guid, out AvatarSO avatar))
+            if (!m_AvatarRegistry.TryGetTankData(guid, out TankDataSO avatar))
             {
                 Debug.LogError("Avatar not found!");
                 return;

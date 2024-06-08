@@ -1,8 +1,9 @@
 using BTG.ConnectionManagement;
-using BTG.Gameplay.Configuration;
+using BTG.Tank;
 using BTG.Utilities;
 using System;
 using Unity.Netcode;
+using UnityEngine;
 
 
 namespace BTG.Gameplay.GameState
@@ -71,8 +72,11 @@ namespace BTG.Gameplay.GameState
 
         private NetworkList<LobbyPlayerState> _lobbyPlayers;
 
-        public AvatarSO[] AvatarConfigurations;
+        [SerializeField]
+        TankDataContainerSO m_TankDataContainer;
+        public TankDataContainerSO TankDataContainer => m_TankDataContainer;
 
+        [HideInInspector]
         public ConnectionManager ConnectionManager;
 
         private void Awake()
@@ -92,6 +96,7 @@ namespace BTG.Gameplay.GameState
 
         /// <summary>
         /// Server notification when a client requests a different lobby-seat, or locks in their seat choice
+        /// ulong - clientId, int - seatIdx, bool - lockedIn status
         /// </summary>
         public event Action<ulong, int, bool> OnClientChangedSeat;
 

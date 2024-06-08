@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BTG.Tank
 {
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
-    public class TankDataSO : ScriptableObject
+    public class TankDataSO : GuidSO
     {
         [SerializeField, Tooltip("The tag of the tank")]
         private TagSO m_Tag;
@@ -15,9 +15,17 @@ namespace BTG.Tank
         private Sprite m_Icon;
         public Sprite Icon => m_Icon;
 
+        [SerializeField]
+        private int m_CharSelectSeatIndex;
+        public int CharSelectSeatIndex => m_CharSelectSeatIndex;
+
         [SerializeField] 
         private TankView m_TankViewPrefab;
         public TankView TankViewPrefab => m_TankViewPrefab;
+
+        [SerializeField]
+        private GameObject m_Graphics;
+        public GameObject Graphics => m_Graphics;
 
         [SerializeField]
         private int m_MaxHealth;
