@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Authentication.PlayerAccounts;
 using Unity.Services.Core;
+using UnityEngine;
 using VContainer;
 
 namespace BTG.UnityServices.Auth
@@ -16,6 +17,15 @@ namespace BTG.UnityServices.Auth
         None,
         UnityPlayerAccount,
         GuestAccount,
+    }
+
+    /// <summary>
+    /// This struct is used to store the access token and session token.
+    /// </summary>
+    public struct UserTokens
+    {
+        public string AccessToken;
+        public string SessionToken;
     }
 
     /// <summary>
@@ -33,49 +43,60 @@ namespace BTG.UnityServices.Auth
         public event Action OnAccountNameUpdateSuccess;
         public event Action OnAccountNameUpdateFailed;
 
-        [Inject]
         private IPublisher<UnityServiceErrorMessage> _unityServiceErrorMessagePublisher;
+        
+        private PlayerAccountFacade _playerAccountFacade;
 
-        private bool _linkWithUnityPlayerAccount;
+        public bool LinkAccount;
 
         public AccountType AccountType { get; private set; }
 
-        public void SubscribeToAuthenticationEvents()
+        [Inject]
+        public void InjectAndInitializeDependencies()
         {
-            PlayerAccountService.Instance.SignedIn += SignInWithUnityPlayerAccount;
+            AccountType = AccountType.None;
+            _playerAccountFacade = new PlayerAccountFacade();
+        }
+
+
+        public void SubscribeToAuthenticationEvents()
+        {   
             AuthenticationService.Instance.SignedIn += AuthSignedIn;
             AuthenticationService.Instance.SignedOut += AuthSignedOut;
-            AuthenticationService.Instance.SignedOut += ClearSessionToken;
+
+            PlayerAccountService.Instance.SignedIn += LinkPlayerAccountWithAuthentication;
+            _playerAccountFacade.SubscribeToEvents();
         }
 
         public void UnsubscribeFromAuthenticationEvents()
         {
-            PlayerAccountService.Instance.SignedIn -= SignInWithUnityPlayerAccount;
             AuthenticationService.Instance.SignedIn -= AuthSignedIn;
             AuthenticationService.Instance.SignedOut -= AuthSignedOut;
-            AuthenticationService.Instance.SignedOut -= ClearSessionToken;
+
+            PlayerAccountService.Instance.SignedIn -= LinkPlayerAccountWithAuthentication;
+            _playerAccountFacade.UnsubscribeFromEvents();
         }
 
-        public InitializationOptions GenerateAuthenticationInitOptions(string profileName = null)
+        /// <summary>
+        /// Generate the initialization options for Unity Services
+        /// </summary>
+        /// <param name="profileName">the profile name to be set in the options</param>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/profile-management</remarks>
+        public InitializationOptions GenerateInitializationOption(string profileName = null)
         {
-            try
-            {
-                var initializationOptions = new InitializationOptions();
-                if (!string.IsNullOrEmpty(profileName))
-                {
-                    initializationOptions.SetProfile(profileName);
-                }
-
-                return initializationOptions;
-            }
-            catch (Exception e)
-            {
-                PublishError("Authentication Error", e);
-                throw;
-            }
+            InitializationOptions initializationOptions = new();
+            initializationOptions.SetProfile(profileName);
+            return initializationOptions;
         }
 
-        public async Task InitializeUnityServicesAsync()
+        /// <summary>
+        ///  Asynchronously initializes Unity Services. 
+        ///  It need to be called before any other Unity Services API is used.
+        ///  If already initialized, the method returns. 
+        ///  In case of an exception, it publishes an error and re-throws the exception.
+        /// </summary>
+        /// <returns></returns>
+        public async Task InitializeAndSubscribeToUnityServicesAsync(InitializationOptions options = null)
         {
             if (Unity.Services.Core.UnityServices.State == ServicesInitializationState.Initialized)
             {
@@ -84,7 +105,8 @@ namespace BTG.UnityServices.Auth
 
             try
             {
-                await Unity.Services.Core.UnityServices.InitializeAsync();
+                await Unity.Services.Core.UnityServices.InitializeAsync(options);
+                SubscribeToAuthenticationEvents();
                 AccountType = AccountType.None;
             }
             catch (Exception e)
@@ -94,50 +116,269 @@ namespace BTG.UnityServices.Auth
             }
         }
 
-        public async Task InitializeUnityServicesAsync(InitializationOptions initializationOptions)
+        /// <summary>
+        /// Sign in with third party account such as Unity Player Account, Google, Facebook etc.
+        /// </summary>
+        public async Task SignInAsync(AccountType accountType)
         {
             try
             {
-                await Unity.Services.Core.UnityServices.InitializeAsync(initializationOptions);
-                AccountType = AccountType.None;
-            }
-            catch (Exception e)
-            {
-                PublishError("Initialization to UnityServices Error", e);
-                throw;
-            }
-        }
-
-        public async Task SignInWithUnityAsync()
-        {
-            _linkWithUnityPlayerAccount = false;
-
-            if (PlayerAccountService.Instance.IsSignedIn)
-            {
-                SignInWithUnityPlayerAccount();
-                return;
-            }
-
-            try
-            {
-                await PlayerAccountService.Instance.StartSignInAsync();
+                switch (accountType)
+                {
+                    case AccountType.UnityPlayerAccount:
+                        await _playerAccountFacade.SignInWithUnityPlayerAccountAsync();
+                        break;
+                    case AccountType.GuestAccount:
+                        await SignInAnonymouslyAsync();
+                        break;
+                }
             }
             catch (Exception e)
             {
                 OnAuthSignInFailed?.Invoke();
                 PublishError("Authentication Error", e);
+                throw;
             }
         }
 
-        public async Task SignInAnonymously()
+        /// <summary>
+        /// Signing out resets the access token and player ID. 
+        /// The Authentication service preserves the session token to allow the player to sign in to the same account in the future.
+        /// If you want to sign in to a different account, clear your session token or switch profiles while you are signed out.
+        /// </summary>
+        /// <param name="clearCredentials">clear playerID, access token, session token</param>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/sign-out</remarks>
+        public void SignOut(bool clearCredentials = false)
+        {
+            switch (AccountType)
+            {
+                case AccountType.UnityPlayerAccount:
+                    _playerAccountFacade.SignOutUnityPlayerAccount();
+                    break;
+            }
+
+            SignOutAuthenticationService(true);
+        }
+
+        /// <summary>
+        /// Sign out from the Unity Authentication service
+        /// </summary>
+        /// <param name="clearCredentials"></param>
+        public void SignOutAuthenticationService(bool clearCredentials = false)
+        {
+            if (IsSignedInToAuthenticationService())
+            {
+                AuthenticationService.Instance.SignOut(clearCredentials);
+                AccountType = AccountType.None;
+            }
+        }
+
+        /// <summary>
+        /// DeleteAccountAsync() only deletes the player’s Unity Authentication account.
+        /// Upon such a deletion request, you must delete all associated player data connected to the player’s Unity Authentication account and other UGS services you use.
+        /// </summary>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/delete-accounts</remarks>
+        public async void DeleteAccount()
         {
             try
             {
-                if (AuthenticationService.Instance.IsSignedIn)
-                {
-                    throw new Exception("Already signed in.");
-                }
+                await AuthenticationService.Instance.DeleteAccountAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Delete account failed: " + e.Message);
+            }
+        }
 
+        /// <summary>
+        /// Sign in the cached user account if the session token exists
+        /// </summary>
+        /// <remarks></remarks>
+        public async Task SignInCachedUserAccount()
+        {
+            // Check if a cached player already exists by checking if the session token exists
+            if (!IsSessionTokenExisting())
+            {
+                return;
+            }
+
+            try
+            {
+                await SignInAnonymouslyAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Sign in cached user account failed: " + e.Message);
+            }
+        }
+
+        public async void SignUserWithCustomTokenWithAutoRefresh()
+        {
+            try
+            {
+                if (IsSessionTokenExisting())
+                {
+                    await SignInCachedUserAccount();
+                }
+                else
+                {
+                    UserTokens userTokens = new();
+                    AuthenticationService.Instance.ProcessAuthenticationTokens(userTokens.AccessToken, userTokens.SessionToken);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Sign in with custom token failed: " + e.Message);
+            }
+        }
+
+        public string GetPlayerId()
+        {
+            return AuthenticationService.Instance.PlayerId;
+        }
+
+        /// <summary>
+        /// Get the player name from the Authentication service
+        /// </summary>
+        public async Task<string> GetPlayerName()
+        {
+            if (!IsAuthorizedToAuthenticationService())
+                return null;
+
+            string playerName = AuthenticationService.Instance.PlayerName;
+            if (!string.IsNullOrEmpty(playerName))
+            {
+                return playerName;
+            }
+
+            try
+            {
+                playerName = await AuthenticationService.Instance.GetPlayerNameAsync();
+                return playerName;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Failed to get player name: " + e.Message);
+                return null;
+            }
+        }
+
+        public bool IsSignedInToAuthenticationService() => AuthenticationService.Instance.IsSignedIn;
+        public bool IsSessionTokenExisting() => AuthenticationService.Instance.SessionTokenExists;
+        public bool IsAuthorizedToAuthenticationService() => AuthenticationService.Instance.IsAuthorized;
+
+        /// <summary>
+        /// Update the player name
+        /// </summary>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/player-name-management</remarks>
+        public async void UpdatePlayerNameAsync(string name)
+        {
+            if (!IsSignedInToAuthenticationService())
+            {
+                Debug.Log("Authentication Service not signed in!");
+                return;
+            }
+            if (string.IsNullOrEmpty(name))
+            {
+                Debug.Log("Player name is empty!");
+                return;
+            }
+
+            try
+            {
+                await AuthenticationService.Instance.UpdatePlayerNameAsync(name.RemoveWhiteSpaceAndLimitLength(10));
+                OnAccountNameUpdateSuccess?.Invoke();
+            }
+            catch (Exception e)
+            {
+                OnAccountNameUpdateFailed?.Invoke();
+                PublishError("Authentication Error", e);
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Link the current player account with the Unity Player Accounts credentials.
+        /// </summary>
+        public void LinkWithUnityPlayerAccountAsync()
+        {
+            if (!IsAuthorizedToAuthenticationService())
+            {
+                Debug.Log("Not authorized with Unity Authentication");
+                return;
+            }
+
+            LinkAccount = true;
+
+            if (_playerAccountFacade.IsPlayerAccountServiceSignedIn())
+            {
+                LinkPlayerAccountWithAuthentication();
+            }
+            else
+            {
+                _ = _playerAccountFacade.SignInWithUnityPlayerAccountAsync();
+            }
+        }
+
+        /// <summary>
+        /// Unlink the current player account from the Unity Player Accounts credentials.
+        /// </summary>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/unity-player-accounts</remarks>
+        public async Task UnlinkUnityPlayerAccountAsync()
+        {
+            if (!IsAuthorizedToAuthenticationService())
+            {
+                Debug.Log("Not signed in with Unity Authentication");
+                return;
+            }
+
+            try
+            {
+                await AuthenticationService.Instance.UnlinkUnityAsync();
+                AccountType = AccountType.GuestAccount;
+                _playerAccountFacade.SignOutUnityPlayerAccount();
+                OnUnlinkFromUnitySuccess?.Invoke();
+            }
+            catch (Exception e)
+            {
+                PublishError("Unlink Account Error", e);
+            }
+        }
+
+        public void SwitchProfile(string profileName)
+        {
+            if (IsSignedInToAuthenticationService())
+                return;
+
+            AuthenticationService.Instance.SwitchProfile(profileName.FilterStringToLetterDigitDashUnderscoreMaxLength(30));
+        }
+
+        /// <summary>
+        /// Clear the cached session token for the current profile.
+        /// </summary>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/session-token-management</remarks>
+        public void ClearCachedSessionToken()
+        {
+            if (IsSessionTokenExisting())
+            {
+                AuthenticationService.Instance.ClearSessionToken();
+            }
+        }
+
+        /// <summary>
+        /// Sign in annonmously
+        /// </summary>
+        /// <remarks>https://docs.unity.com/ugs/en-us/manual/authentication/manual/use-anon-sign-in</remarks>
+        private async Task SignInAnonymouslyAsync()
+        {
+            if (IsSignedInToAuthenticationService())
+            {
+                Debug.Log("Already signed in");
+                return;
+            }
+
+            try
+            {
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 AccountType = AccountType.GuestAccount;
             }
@@ -149,142 +390,16 @@ namespace BTG.UnityServices.Auth
             }
         }
 
-        public async Task LinkAccountWithUnityAsync()
+        private void AuthSignedIn()
         {
-            _linkWithUnityPlayerAccount = true;
+            Debug.Log($"Signed in as {AuthenticationService.Instance.PlayerName}.");
 
-            try
-            {
-                if (!AuthenticationService.Instance.SessionTokenExists)
-                {
-                    return;
-                }
+            // Shows how to get a playerID
+            Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
 
-                await PlayerAccountService.Instance.StartSignInAsync();
-            }
-            catch (Exception e)
-            {
-                OnLinkedInWithUnityFailed?.Invoke();
-                _linkWithUnityPlayerAccount = false;
-                PublishError("Authentication Error", e);
-            }
-        }
+            // Shows how to get an access token
+            Debug.Log($"Access Token: {AuthenticationService.Instance.AccessToken}");
 
-        public async Task UnlinkAccountWithUnityAsync()
-        {
-            try
-            {
-                if (string.IsNullOrEmpty(PlayerAccountService.Instance.IdToken))
-                {
-                    return;
-                }
-
-                await AuthenticationService.Instance.UnlinkUnityAsync();
-                OnUnlinkFromUnitySuccess?.Invoke();
-            }
-            catch (Exception e)
-            {
-                PublishError("Unlink Account Error", e);
-            }
-        }
-
-        public async Task<bool> EnsurePlayerIsAuthorized()
-        {
-            if (AuthenticationService.Instance.IsAuthorized)
-            {
-                return true;
-            }
-
-            try
-            {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                return true;
-            }
-            catch (AuthenticationException e)
-            {
-                PublishError("Authentication Error", e);
-                return false;
-            }
-            catch (Exception e)
-            {
-                PublishError("Authentication Error", e);
-                throw;
-            }
-        }
-
-        public async Task UpdatePlayerNameAsync(string playerName)
-        {
-            if (string.IsNullOrEmpty(playerName) || !AuthenticationService.Instance.IsSignedIn)
-            {
-                return;
-            }
-
-            playerName = playerName.Substring(0, Math.Min(playerName.Length, 10));
-
-            try
-            {
-                await AuthenticationService.Instance.UpdatePlayerNameAsync(playerName);
-                OnAccountNameUpdateSuccess?.Invoke();
-            }
-            catch (Exception e)
-            {
-                OnAccountNameUpdateFailed?.Invoke();
-                PublishError("Authentication Error", e);
-                throw;
-            }
-        }
-
-        public void ClearSessionToken()
-        {
-            if (AuthenticationService.Instance.SessionTokenExists)
-            {
-                AuthenticationService.Instance.ClearSessionToken();
-            }
-        }
-
-        public void SignOutFromAuthService(bool clearCredentials = false)
-        {
-            if (IsSignedIn())
-            {
-                AuthenticationService.Instance.SignOut(clearCredentials);
-                AccountType = AccountType.None;
-            }
-        }
-
-        public void SignOutFromPlayerAccountService()
-        {
-            PlayerAccountService.Instance.SignOut();
-            AccountType = AccountType.GuestAccount;
-        }
-
-        public string GetPlayerName()
-        {
-            return AuthenticationService.Instance.PlayerName;
-        }
-
-        public string GetPlayerId()
-        {
-            return AuthenticationService.Instance.PlayerId;
-        }
-
-        public void SwitchProfile(string profileName)
-        {
-            if (AuthenticationService.Instance.IsSignedIn)
-            {
-                SignOutFromAuthService(true);
-            }
-
-            AuthenticationService.Instance.SwitchProfile(profileName);
-        }
-
-        public bool IsSignedIn()
-        {
-            return AuthenticationService.Instance.IsSignedIn;
-        }
-
-        private async void AuthSignedIn()
-        {
-            await GetPlayerNameAsync();
             OnAuthSignInSuccess?.Invoke();
         }
 
@@ -294,38 +409,36 @@ namespace BTG.UnityServices.Auth
             OnAuthSignedOutSuccess?.Invoke();
         }
 
-        private async Task GetPlayerNameAsync()
+        private async void LinkPlayerAccountWithAuthentication()
         {
-            if (AuthenticationService.Instance.SessionTokenExists)
+            if (!_playerAccountFacade.IsPlayerAccountServiceSignedIn())
             {
-                await AuthenticationService.Instance.GetPlayerNameAsync();
+                Debug.Log("Player Account Service not signed in");
+                return;
             }
-        }
 
-        private async void SignInWithUnityPlayerAccount()
-        {
             try
             {
-                if (_linkWithUnityPlayerAccount)
+                // now connect the Unity Player Account with the Unity Authentication
+                string accessToken = _playerAccountFacade.GetPlayerAccountAccessToken();
+
+                if (LinkAccount)
                 {
-                    await AuthenticationService.Instance.LinkWithUnityAsync(PlayerAccountService.Instance.AccessToken);
+                    await AuthenticationService.Instance.LinkWithUnityAsync(accessToken);
                     OnLinkedInWithUnitySuccess?.Invoke();
                 }
                 else
                 {
-                    await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
+                    await AuthenticationService.Instance.SignInWithUnityAsync(accessToken);
                 }
+
                 AccountType = AccountType.UnityPlayerAccount;
-            }
-            catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
-            {
-                OnLinkedInWithUnityFailed?.Invoke();
-                PublishError("Link Account Error", ex);
             }
             catch (Exception ex)
             {
                 OnLinkedInWithUnityFailed?.Invoke();
                 PublishError("Link Account Error", ex);
+                _playerAccountFacade.SignOutUnityPlayerAccount();
             }
         }
 

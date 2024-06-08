@@ -1,10 +1,9 @@
 using BTG.Configuration;
-using BTG.Gameplay.GameState;
 using BTG.UnityServices.Auth;
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 
 namespace BTG.Gameplay.UI
@@ -16,9 +15,6 @@ namespace BTG.Gameplay.UI
     {
         [SerializeField]
         private CanvasGroup _canvasGroup;
-
-        [SerializeField]
-        private ClientMainMenuState _clientMainMenuState;
 
         [SerializeField]
         private TMP_InputField _playerNameInputField;
@@ -43,6 +39,9 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         private NameGenerationDataSO _nameGenerationData;
 
+        [Inject]
+        private AuthenticationServiceFacade _authenticationServiceFacade;
+
         private void Awake()
         {
             _lobbyButton.interactable = false;
@@ -51,11 +50,11 @@ namespace BTG.Gameplay.UI
         }
 
         /// <summary>
-        /// called froim Link button of Start Main Menu UI
+        /// called froim Link With Unity Player Account button of Start Main Menu UI
         /// </summary>
         public void LinkAccountWithUnity()
         {
-            _clientMainMenuState.LinkAccountWithUnityAsync();
+            _authenticationServiceFacade.LinkWithUnityPlayerAccountAsync();
         }
 
         /// <summary>
@@ -63,7 +62,7 @@ namespace BTG.Gameplay.UI
         /// </summary>
         public void UnlinkAccountWithUnity() 
         {
-            _clientMainMenuState.UnlinkAccountWithUnityAsync();
+            _ = _authenticationServiceFacade.UnlinkUnityPlayerAccountAsync();
         }
 
         /// <summary>
@@ -71,7 +70,8 @@ namespace BTG.Gameplay.UI
         /// </summary>
         public void SignOut()
         {
-            _clientMainMenuState.TrySignOut();
+            _authenticationServiceFacade.SignOut(true);
+            _authenticationServiceFacade.ClearCachedSessionToken();
         }
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace BTG.Gameplay.UI
         /// </summary>
         public void SavePlayerName()
         {
-            _clientMainMenuState.SavePlayerName(_playerNameInputField.text);
+            _authenticationServiceFacade.UpdatePlayerNameAsync(_playerNameInputField.text);
         }
 
         internal void ConfigureStartMenuAfterSignInSuccess(string playerName)
@@ -97,7 +97,7 @@ namespace BTG.Gameplay.UI
             HideLobbyButtonTooltip();
             _playerNameInputField.text = playerName;
 
-            if (_clientMainMenuState.AccountType == AccountType.GuestAccount)
+            if (_authenticationServiceFacade.AccountType == AccountType.GuestAccount)
             {
                 if (!_linkAccountButton.gameObject.activeSelf)
                     _linkAccountButton.gameObject.SetActive(true);

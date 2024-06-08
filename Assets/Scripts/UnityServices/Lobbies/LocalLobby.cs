@@ -272,6 +272,9 @@ namespace BTG.UnityServices.Lobbies
 
         private void DoRemoveUser(LocalLobbyUser localLobbyUser)
         {
+            if (localLobbyUser.ID == null)
+                return;
+
             if (!_localLobbyUsers.ContainsKey(localLobbyUser.ID))
             {
                 Debug.LogWarning($"Player {localLobbyUser.PlayerName}({localLobbyUser.ID}) does not exist in lobby: { LobbyID}");

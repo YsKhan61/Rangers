@@ -81,9 +81,7 @@ namespace BTG.Gameplay.UI
 
             BlockUIWhileLoadingIsInProgress();
 
-            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
-
-            if (!playerIsAuthorized)
+            if (!_authenticationServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 UnblockUIAfterLoadingIsComplete();
                 return;
@@ -126,9 +124,7 @@ namespace BTG.Gameplay.UI
                 BlockUIWhileLoadingIsInProgress();
             }
 
-            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
-
-            if (blockUI && !playerIsAuthorized)
+            if (blockUI && !_authenticationServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 UnblockUIAfterLoadingIsComplete();
                 return;
@@ -152,9 +148,7 @@ namespace BTG.Gameplay.UI
         {
             BlockUIWhileLoadingIsInProgress();
 
-            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
-
-            if (!playerIsAuthorized)
+            if (!_authenticationServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 UnblockUIAfterLoadingIsComplete();
                 return;
@@ -182,9 +176,7 @@ namespace BTG.Gameplay.UI
         {
             BlockUIWhileLoadingIsInProgress();
 
-            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
-
-            if (!playerIsAuthorized)
+            if (!_authenticationServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 UnblockUIAfterLoadingIsComplete();
                 return;
@@ -212,9 +204,7 @@ namespace BTG.Gameplay.UI
         {
             BlockUIWhileLoadingIsInProgress();
 
-            bool playerIsAuthorized = await _authenticationServiceFacade.EnsurePlayerIsAuthorized();
-
-            if (!playerIsAuthorized)
+            if (!_authenticationServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 UnblockUIAfterLoadingIsComplete();
                 return;

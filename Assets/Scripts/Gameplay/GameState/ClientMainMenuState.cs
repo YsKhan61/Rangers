@@ -1,8 +1,6 @@
 using BTG.Gameplay.UI;
 using BTG.UnityServices.Auth;
 using BTG.UnityServices.Lobbies;
-using System;
-using Unity.Services.Core;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -43,8 +41,6 @@ namespace BTG.Gameplay.GameState
 
         public override GameState ActiveState => GameState.MainMenu;
 
-        public AccountType AccountType => _authServiceFacade.AccountType;
-
         private string _profileName;
         
         
@@ -61,19 +57,12 @@ namespace BTG.Gameplay.GameState
                 return;
             }
 
-
-            /*InitializationOptions options = new InitializationOptions();
-            options.SetProfile(profileManager.ProfileName);
-            _ = _authServiceFacade.InitializeToUnityServicesAsync(options);*/
-
-            _ = _authServiceFacade.InitializeUnityServicesAsync();
+            _ = _authServiceFacade.InitializeAndSubscribeToUnityServicesAsync();
         }
 
         protected override void Start()
         {
             base.Start();
-
-            _authServiceFacade.SubscribeToAuthenticationEvents();
 
             _authServiceFacade.OnAuthSignInSuccess += OnAuthSignInSuccess;
             _authServiceFacade.OnAuthSignInFailed += OnAuthSignInFailed;
@@ -91,7 +80,6 @@ namespace BTG.Gameplay.GameState
 
         protected override void OnDestroy()
         {
-            // Application.wantsToQuit -= OnApplicationWantsToQuit;
             base.OnDestroy();
 
             _authServiceFacade.OnAuthSignInSuccess -= OnAuthSignInSuccess;
@@ -117,22 +105,10 @@ namespace BTG.Gameplay.GameState
             AuthenticationServiceFacade authServiceFacade,
             LocalLobbyUser localLobbyUser,
             LocalLobby localLobby)
-        // ProfileManager profileManager)
         {
             _authServiceFacade = authServiceFacade;
             _localLobbyUser = localLobbyUser;
             _localLobby = localLobby;
-        }
-
-        /// <summary>
-        /// Called from the On Edit End event of the Name Display UI(InputField).
-        /// </summary>
-        public async void SavePlayerName(string name)
-        {
-            if (name == _localLobbyUser.PlayerName)
-                return;
-
-            await _authServiceFacade.UpdatePlayerNameAsync(name);
         }
 
         /// <summary>
@@ -155,112 +131,19 @@ namespace BTG.Gameplay.GameState
             _ipUIMediator.Show();
         }
 
-        internal async void TrySignIn(AccountType accountType, string profileName)
-        {
-            try
-            {
-                _signInSpinner.SetActive(true);
-
-                _authServiceFacade.SignOutFromAuthService(true);
-
-                InitializationOptions options = _authServiceFacade.GenerateAuthenticationInitOptions(profileName);
-                await _authServiceFacade.InitializeUnityServicesAsync(options);
-
-                _authServiceFacade.SwitchProfile(profileName);
-                _profileName = profileName;
-
-                switch (accountType)
-                {
-                    case AccountType.UnityPlayerAccount:
-                        await _authServiceFacade.SignInWithUnityAsync();
-                        break;
-                    case AccountType.GuestAccount:
-                        await _authServiceFacade.SignInAnonymously();
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(accountType), accountType, null);
-                }
-            }
-            catch (Exception)
-            {
-                OnAuthSignInFailed();
-                return;
-            }
-            finally
-            {
-                _signInSpinner.SetActive(false);
-            }
-            return;
-        }
-
-        internal async void LinkAccountWithUnityAsync()
-        {
-            _signInSpinner.SetActive(true);
-
-            try
-            {
-                await _authServiceFacade.LinkAccountWithUnityAsync();
-            }
-            catch (Exception)
-            {
-
-            }
-            finally
-            {
-                _signInSpinner.SetActive(false);
-            }
-        }
-
-        internal async void UnlinkAccountWithUnityAsync()
-        {
-            _signInSpinner.SetActive(true);
-
-            try
-            {
-                await _authServiceFacade.UnlinkAccountWithUnityAsync();
-
-                OnUnlinkSuccess();
-            }
-            catch (Exception)
-            {
-
-            }
-            finally
-            {
-                _signInSpinner.SetActive(false);
-            }
-        }
-
-        internal void TrySignOut()
-        {
-            _authServiceFacade.SignOutFromAuthService(true);
-            Debug.Log("ClientMainMenuState: Player Signed out from Authentication services!");
-
-            switch (AccountType)
-            {
-                case AccountType.UnityPlayerAccount:
-                    _authServiceFacade.SignOutFromPlayerAccountService();
-                    Debug.Log("ClientMainMenuState: Player Signed out from Unity Player Account!");
-                    break;
-                case AccountType.GuestAccount:
-                    break;
-                default:
-                    break;
-            }
-        }
-
 
         /// <summary>
         /// Temporary method to configure the main menu UI at start.
         /// If the player just starts the game, then show SignIn Panel, 
         /// if the player is returning back from lobby/game scene, then show Start Main Menu Panel.
         /// </summary>
-        private void ConfigureMainMenuAtStart()
+        private async void ConfigureMainMenuAtStart()
         {
-            if (_authServiceFacade.IsSignedIn())
+            if (_authServiceFacade.IsAuthorizedToAuthenticationService())
             {
                 _signInUIMediator.HidePanel();
-                _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(_authServiceFacade.GetPlayerName());
+                string savedName = await _authServiceFacade.GetPlayerName();
+                _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(savedName);
             }
             else
             {
@@ -273,17 +156,17 @@ namespace BTG.Gameplay.GameState
             _signInSpinner.SetActive(false);
             _signInUIMediator.HidePanel();
 
+            string savedName = await _authServiceFacade.GetPlayerName();
+            _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(savedName);
+
+            Debug.Log($"Signed in. Unity Player ID {_authServiceFacade.GetPlayerId()}");
+            Debug.Log($"Signed in. Unity Player Name {savedName}");
+
             UpdateLocalLobbyUser();
 
             // The local lobby user object will be hooked into UI before the LocalLobby is populated during lobby join, so the LocalLobby must know about it already
             // when that happens.
             _localLobby.AddUser(_localLobbyUser);
-
-            await _authServiceFacade.UpdatePlayerNameAsync(_profileName);
-            _startMenuUIMediator.ConfigureStartMenuAfterSignInSuccess(_authServiceFacade.GetPlayerName());
-
-            Debug.Log($"Signed in. Unity Player ID {_authServiceFacade.GetPlayerId()}");
-            Debug.Log($"Signed in. Unity Player Name {_authServiceFacade.GetPlayerName()}");
 
             PopupManager.DisplayStatus("Signed in success!", 3);
         }
@@ -320,8 +203,6 @@ namespace BTG.Gameplay.GameState
 
         private void OnLinkFailed()
         {
-            _authServiceFacade.SignOutFromPlayerAccountService();
-
             if (_signInSpinner)
             {
                 _signInSpinner.SetActive(false);
@@ -334,11 +215,7 @@ namespace BTG.Gameplay.GameState
 
         private void OnUnlinkSuccess()
         {
-            _authServiceFacade.SignOutFromPlayerAccountService();
-            Debug.Log("ClientMainMenuState: Player Signed out from Unity Player Account!");
-
             _startMenuUIMediator.ConfigureStartMenuAfterUnlinkAccount();
-
             PopupManager.DisplayStatus("Unlink account success!", 3);
         }
 
@@ -357,11 +234,11 @@ namespace BTG.Gameplay.GameState
             PopupManager.DisplayStatus("Name update failed!", 2);
         }
 
-        private void UpdateLocalLobbyUser()
+        private async void UpdateLocalLobbyUser()
         {
             _localLobbyUser.ID = _authServiceFacade.GetPlayerId();
 
-            string playerName = _authServiceFacade.GetPlayerName();
+            string playerName = await _authServiceFacade.GetPlayerName();
 
             // trim the player name from '#' character
             int hashIndex = playerName.IndexOf('#');
@@ -376,7 +253,7 @@ namespace BTG.Gameplay.GameState
         private bool OnApplicationWantsToQuit()
         {
             Application.wantsToQuit -= OnApplicationWantsToQuit;
-            TrySignOut();
+            _authServiceFacade.SignOut(true);
             _authServiceFacade.UnsubscribeFromAuthenticationEvents();
             return true;
         }

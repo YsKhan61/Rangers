@@ -273,6 +273,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 70424593}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &436463993 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8273523971783415076, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1000430721}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &436463994 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8165988103677514980, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1000430721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &581673401 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1332043670740300, guid: 0aac6aef14f064c3fb626270cff2683b,
@@ -391,6 +403,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1960048336}
+    - target: {fileID: 843860893584467290, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1072364450969378422, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -671,6 +688,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3912839060423845481, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -100
+      objectReference: {fileID: 0}
     - target: {fileID: 4356243549888040403, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -776,6 +798,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6920126189914347256, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -250
+      objectReference: {fileID: 0}
     - target: {fileID: 7462205357845736329, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -858,6 +885,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8909450976578618121, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
         type: 3}
+      propertyPath: _signInSpinner
+      value: 
+      objectReference: {fileID: 1000430726}
+    - target: {fileID: 8909450976578618121, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+        type: 3}
       propertyPath: _clientMainMenuState
       value: 
       objectReference: {fileID: 1960048336}
@@ -884,7 +916,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1000430721}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 436463993}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d995991de17c3144b6095e4248748f4, type: 3}
@@ -896,7 +928,7 @@ MonoBehaviour:
     type: 3}
   m_PrefabInstance: {fileID: 1000430721}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 436463994}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcbf77920f690274d8946ececf143eb6, type: 3}
@@ -1292,6 +1324,8 @@ MonoBehaviour:
     TypeName: BTG.ApplicationLifecycle.ApplicationController
   autoRun: 1
   autoInjectGameObjects:
+  - {fileID: 436463994}
+  - {fileID: 436463993}
   - {fileID: 716746077}
   - {fileID: 716746076}
   - {fileID: 70424594}

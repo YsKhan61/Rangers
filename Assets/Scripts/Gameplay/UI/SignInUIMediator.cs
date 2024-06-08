@@ -1,8 +1,7 @@
-using BTG.Gameplay.GameState;
 using BTG.UnityServices.Auth;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using VContainer;
 
 
 namespace BTG.Gameplay.UI
@@ -16,20 +15,26 @@ namespace BTG.Gameplay.UI
         private CanvasGroup _canvasGroup;
 
         [SerializeField]
-        private ClientMainMenuState _clientMainMenuState;
-
-        [SerializeField]
         private Button _signInWithPlayerAccountButton;
 
         [SerializeField]
         private Button _signInAsGuestButton;
 
         [SerializeField]
-        private TMP_InputField _profileNameInputField;
+        private GameObject _signInSpinner;
+
+        private AuthenticationServiceFacade _authServiceFacade;
 
         private void Awake()
         {
             ShowPanel();
+        }
+
+        [Inject]
+        private void InjectDependencies(
+            AuthenticationServiceFacade authServiceFacade)
+        {
+            _authServiceFacade = authServiceFacade;
         }
 
         /// <summary>
@@ -37,15 +42,8 @@ namespace BTG.Gameplay.UI
         /// </summary>
         public void SignInWithUnityPlayerAccount()
         {
-            if (string.IsNullOrEmpty(_profileNameInputField.text))
-            {
-                PopupManager.DisplayStatus("Profile name can't be empty!", 2);
-                return;
-            }
+            SignInAsync(AccountType.UnityPlayerAccount);
 
-            _clientMainMenuState.TrySignIn(AccountType.UnityPlayerAccount, _profileNameInputField.text);
-            _signInWithPlayerAccountButton.interactable = false;
-            _signInAsGuestButton.interactable = false;
         }
 
         /// <summary>
@@ -53,15 +51,7 @@ namespace BTG.Gameplay.UI
         /// </summary>
         public void SignInAsGuest()
         {
-            if (string.IsNullOrEmpty(_profileNameInputField.text))
-            {
-                PopupManager.DisplayStatus("Profile name can't be empty!", 2);
-                return;
-            }
-
-            _clientMainMenuState.TrySignIn(AccountType.GuestAccount, _profileNameInputField.text);
-            _signInAsGuestButton.interactable = false;
-            _signInWithPlayerAccountButton.interactable = false;
+            SignInAsync(AccountType.GuestAccount);
         }
 
         internal void ConfigurePanelOnSignInFailed()
@@ -84,5 +74,30 @@ namespace BTG.Gameplay.UI
             _canvasGroup.gameObject.SetActive(false);
             _canvasGroup.interactable = false;
         }    
+
+        private async void SignInAsync(AccountType accountType)
+        {
+            _signInWithPlayerAccountButton.interactable = false;
+            _signInAsGuestButton.interactable = false;
+            _signInSpinner.SetActive(true);
+            _authServiceFacade.SignOut(true);
+            _authServiceFacade.ClearCachedSessionToken();
+
+            try
+            {
+                await _authServiceFacade.InitializeAndSubscribeToUnityServicesAsync();
+                _authServiceFacade.LinkAccount = false;
+                await _authServiceFacade.SignInAsync(AccountType.UnityPlayerAccount);
+            }
+            catch
+            {
+                _signInWithPlayerAccountButton.interactable = true;
+                _signInAsGuestButton.interactable = true;
+            }
+            finally
+            {
+                _signInSpinner.SetActive(false);
+            }
+        }
     }
 }
