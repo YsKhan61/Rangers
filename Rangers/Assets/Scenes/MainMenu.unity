@@ -584,6 +584,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3050836568363434502, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+        type: 3}
+      propertyPath: m_TextViewport
+      value: 
+      objectReference: {fileID: 1478556167}
     - target: {fileID: 3099113050730173406, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1117,6 +1122,12 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!224 &1478556167 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1272250090209103398, guid: 61408cfbabc76fb4c8610e1e703f6aa6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1000430721}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1960048333
 GameObject:
   m_ObjectHideFlags: 0
