@@ -51,12 +51,12 @@ namespace BTG.Gameplay.GameplayObjects
                     _networkNameState.Name.Value = playerData.PlayerName;
                     if (playerData.HasCharacterSpawned)
                     {
-                        m_NetworkAvatarGuidState.n_AvatarNetworkGuid.Value = playerData.AvatarNetworkGuid;
+                        m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value = playerData.AvatarNetworkGuid;
                     }
                     else
                     {
                         m_NetworkAvatarGuidState.SetRandomAvatar();
-                        playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_AvatarNetworkGuid.Value;
+                        playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
                         SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                     }
                 }
@@ -84,7 +84,7 @@ namespace BTG.Gameplay.GameplayObjects
                 {
                     var playerData = sessionPlayerData.Value;
                     playerData.PlayerName = _networkNameState.Name.Value;
-                    playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_AvatarNetworkGuid.Value;
+                    playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
                     SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                 }
             }

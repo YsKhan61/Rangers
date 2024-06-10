@@ -227,7 +227,7 @@ namespace BTG.Gameplay.GameState
 
                     TankDataSO tankData = networkCharSelection.TankDataContainer.GetTankDataBySeatIndex(playerInfo.SeatIdx);
 
-                    persistentPlayer.NetworkAvatarGuidState.n_AvatarNetworkGuid.Value =
+                    persistentPlayer.NetworkAvatarGuidState.n_EntityNetworkGuid.Value =
                         tankData.Guid.ToNetworkGuid();
                 }
             }

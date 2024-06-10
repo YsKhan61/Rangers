@@ -13,10 +13,10 @@ namespace BTG.Gameplay.GameplayObjects
     public class NetworkAvatarGuidState : NetworkBehaviour
     {
         [HideInInspector]
-        public NetworkVariable<NetworkGuid> n_AvatarNetworkGuid = new NetworkVariable<NetworkGuid>();
+        public NetworkVariable<NetworkGuid> n_EntityNetworkGuid = new NetworkVariable<NetworkGuid>();
 
         [SerializeField]
-        TankDataContainerSO m_AvatarRegistry;
+        TankDataContainerSO m_TankDataContainer;
 
         TankDataSO m_Avatar;
 
@@ -26,7 +26,7 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 if (m_Avatar == null)
                 {
-                    RegisterAvatar(n_AvatarNetworkGuid.Value.ToGuid());
+                    RegisterAvatar(n_EntityNetworkGuid.Value.ToGuid());
                 }
 
                 return m_Avatar;
@@ -35,7 +35,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void SetRandomAvatar()
         {
-            n_AvatarNetworkGuid.Value = m_AvatarRegistry.GetRandomTankData().Guid.ToNetworkGuid();
+            n_EntityNetworkGuid.Value = m_TankDataContainer.GetRandomTankData().Guid.ToNetworkGuid();
         }
 
         void RegisterAvatar(Guid guid)
@@ -47,7 +47,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             // based on the Guid received, Avatar is fetched from AvatarRegistry
-            if (!m_AvatarRegistry.TryGetTankData(guid, out TankDataSO avatar))
+            if (!m_TankDataContainer.TryGetTankData(guid, out TankDataSO avatar))
             {
                 Debug.LogError("Avatar not found!");
                 return;
