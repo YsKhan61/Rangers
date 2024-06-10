@@ -87,7 +87,7 @@ namespace BTG.Gameplay.UI
             {
                 await _authServiceFacade.InitializeAndSubscribeToUnityServicesAsync();
                 _authServiceFacade.LinkAccount = false;
-                await _authServiceFacade.SignInAsync(AccountType.UnityPlayerAccount);
+                await _authServiceFacade.SignInAsync(accountType);
             }
             catch
             {
