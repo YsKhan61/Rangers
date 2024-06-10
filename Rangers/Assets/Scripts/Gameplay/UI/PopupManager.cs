@@ -16,9 +16,6 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         private GameObject _popupPanelPrefab;
 
-        [SerializeField, Tooltip("The parent canvas of the Popup that will not be destroyed")]
-        private GameObject _canvas;
-
         [SerializeField]
         private NotificationUI _notificationUI;
 
@@ -29,8 +26,7 @@ namespace BTG.Gameplay.UI
         private void Awake()
         {
             if (_instance != null) throw new System.Exception("Invalid state, instance already exists");
-            _instance = this;
-            DontDestroyOnLoad(_canvas);             // since DontdestroyOnLoad only works on root objects, we need to make sure the canvas is a root object
+            _instance = this;            // since DontdestroyOnLoad only works on root objects, we need to make sure the canvas is a root object
         }
 
         private void OnDestroy()
@@ -56,6 +52,9 @@ namespace BTG.Gameplay.UI
             return null;
         }
 
+        /// <summary>
+        /// Used to display a status message notification at the top of the screen for a short duration
+        /// </summary>
         public static void DisplayStatus(string status, int duration)
         {
             _instance._notificationUI.DisplayStatus(status, duration);

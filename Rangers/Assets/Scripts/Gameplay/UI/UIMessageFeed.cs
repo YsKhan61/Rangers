@@ -51,6 +51,10 @@ namespace BTG.Gameplay.UI
 
         DisposableGroup m_Subscriptions;
 
+        Coroutine m_HideRoutine;
+
+        PopupManager m_PopupManager;
+
         private void Start()
         {
             HideMessageWindow();
@@ -59,9 +63,10 @@ namespace BTG.Gameplay.UI
         [Inject]
         void InjectDependencies(
             ISubscriber<ConnectionEventMessage> connectionEventSubscriber,
-            ISubscriber<NetworkChatMessage> networkClientChatSubscriber
-        )
+            ISubscriber<NetworkChatMessage> networkClientChatSubscriber,
+            PopupManager popupManager)
         {
+            m_PopupManager = popupManager;
             m_Subscriptions = new DisposableGroup();
             m_Subscriptions.Add(connectionEventSubscriber.Subscribe(OnConnectionEvent));
             m_Subscriptions.Add(networkClientChatSubscriber.Subscribe(OnChatMessageReceived));
@@ -107,11 +112,24 @@ namespace BTG.Gameplay.UI
             m_ChatButton.gameObject.SetActive(true);
         }
 
+        public void ResetHideRoutine()
+        {
+            if (m_Animator.GetBool(IS_OPEN) && m_HideRoutine != null)
+            {
+                StopCoroutine(m_HideRoutine);
+                m_HideRoutine = StartCoroutine(HideRoutine());
+            }
+        }
+
         private void OnChatMessageReceived(NetworkChatMessage chat)
         {
-            DisplayMessage($"{chat.Name}: {chat.Message}",
-                chat.Name == m_OwnerClientName,
-                false);
+            if (chat.Name != m_OwnerClientName)
+            {
+                PopupManager.DisplayStatus($"{chat.Name}: {chat.Message}", 2);
+            }
+
+            DisplayChat($"{chat.Name}: {chat.Message}",
+                chat.Name == m_OwnerClientName);
         }
 
         void OnConnectionEvent(ConnectionEventMessage eventMessage)
@@ -119,10 +137,10 @@ namespace BTG.Gameplay.UI
             switch (eventMessage.ConnectStatus)
             {
                 case ConnectStatus.Success:
-                    DisplayMessage($"{eventMessage.PlayerName} has joined the game!");
+                    PopupManager.DisplayStatus($"{eventMessage.PlayerName} has joined the game!", 2);
                     break;
                 case ConnectStatus.KickedByHost:
-                    DisplayMessage($"{eventMessage.PlayerName} has been kicked by the host!");
+                    PopupManager.DisplayStatus($"{eventMessage.PlayerName} has been kicked by the host!", 2);
                     break;
                 case ConnectStatus.ServerFull:
                 case ConnectStatus.LoggedInAgain:
@@ -130,25 +148,32 @@ namespace BTG.Gameplay.UI
                 case ConnectStatus.GenericDisconnect:
                 case ConnectStatus.IncompatibleBuildType:
                 case ConnectStatus.HostEndedSession:
-                    DisplayMessage($"{eventMessage.PlayerName} has left the game!");
+                    PopupManager.DisplayStatus($"{eventMessage.PlayerName} has left the game!", 2);
                     break;
             }
         }
 
-        void DisplayMessage(string text, bool isRightAlligned  = false, bool autoClose = true)
+        void DisplayChat(string text, bool isRightAlligned  = false, bool autoOpen = false, bool autoClose = false)
         {
-            ShowMessageWindow();
+            if (autoOpen)
+            {
+                ShowMessageWindow();
+            }
+        
             var messageSlot = GetAvailableSlot();
             messageSlot.Display(text, isRightAlligned);
 
             if (autoClose)
-                StartCoroutine(HideRoutine());
+            {
+                m_HideRoutine = StartCoroutine(HideRoutine());
+            }
         }
 
         IEnumerator HideRoutine()
         {
             yield return new WaitForSeconds(3);
             HideMessageWindow();
+            m_HideRoutine = null;
         }
 
         UIMessageSlot GetAvailableSlot()

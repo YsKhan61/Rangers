@@ -1,7 +1,5 @@
 using BTG.Utilities;
-using Unity.Multiplayer.Samples.Utilities;
 using Unity.Netcode;
-using UnityEngine;
 using VContainer;
 
 
@@ -9,34 +7,22 @@ namespace BTG.Gameplay
 {
     /// <summary>
     /// Send and receive chat messages on the server.
+    /// This is a server-only component.
     /// </summary>
-    public class ServerChatSystem : MonoBehaviour
+    public class ServerChatSystem : NetworkBehaviour
     {
+        [Inject]
+        IPublisher<NetworkChatMessage> m_networkClientChatPublisher;
 
-        [SerializeField]
-        private NetcodeHooks m_netcodeHooks;
-
-        private void Awake()
-        {
-            m_netcodeHooks.OnNetworkSpawnHook += OnNetworkSpawn;
-        }
-
-        private void OnDestroy()
-        {
-            m_netcodeHooks.OnNetworkSpawnHook -= OnNetworkSpawn;
-        }
-
-        private void OnNetworkSpawn()
+        public override void OnNetworkSpawn()
         {
             if (!NetworkManager.Singleton.IsServer)
             {
-                enabled = false;
-                return;
+                Destroy(this);
             }
-        }
 
-        [Inject]
-        IPublisher<NetworkChatMessage> m_networkClientChatPublisher;
+            DontDestroyOnLoad(gameObject);
+        }
 
         [ServerRpc(RequireOwnership = false)]
         public void SendChatMessageServerRpc(NetworkChatMessage message)
@@ -45,4 +31,3 @@ namespace BTG.Gameplay
         }
     }
 }
-

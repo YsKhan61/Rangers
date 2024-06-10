@@ -1,4 +1,5 @@
 using BTG.ConnectionManagement;
+using BTG.Gameplay.UI;
 using BTG.UnityServices;
 using BTG.UnityServices.Auth;
 using BTG.UnityServices.Lobbies;
@@ -30,6 +31,9 @@ namespace BTG.ApplicationLifecycle
 
         [SerializeField]
         private SceneNameListSO _sceneNameList;
+
+        [SerializeField]
+        private PopupManager _popupManager;
 
         private LocalLobby _localLobby;
         private LobbyServiceFacade _lobbyServiceFacade;
@@ -82,6 +86,7 @@ namespace BTG.ApplicationLifecycle
             builder.RegisterComponent(_connectionManager);
             builder.RegisterComponent(_networkManager);
             builder.RegisterInstance(_sceneNameList);
+            builder.RegisterComponent(_popupManager);
 
             // the following singletons represent the local representations of the lobby that we're in and the user that we are.
             // they can persist longer than the lifetime of the UI in MainMenu, where we setup the lobby that we create or join.

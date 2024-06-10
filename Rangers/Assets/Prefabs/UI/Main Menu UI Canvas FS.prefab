@@ -3058,11 +3058,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1757093104410944392}
-  - {fileID: 6765026732149730972}
   - {fileID: 3272531714286948574}
   - {fileID: 7407331832838605106}
   - {fileID: 1251594088834437958}
   - {fileID: 5029818248097130257}
+  - {fileID: 6765026732149730972}
   - {fileID: 632624026902760354}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3395,7 +3395,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 5120920067894536067}
-  m_TextViewport: {fileID: 0}
+  m_TextViewport: {fileID: 1272250090209103398}
   m_TextComponent: {fileID: 6398494519140486462}
   m_Placeholder: {fileID: 8477607281038479770}
   m_VerticalScrollbar: {fileID: 0}

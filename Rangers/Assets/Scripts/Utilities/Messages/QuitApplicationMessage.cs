@@ -1,4 +1,4 @@
-﻿namespace BTG.ApplicationLifecycle
+﻿namespace BTG.Utilities
 {
     public struct QuitApplicationMessage
     {

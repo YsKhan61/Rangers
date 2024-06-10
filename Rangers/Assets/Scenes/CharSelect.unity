@@ -864,6 +864,7 @@ MonoBehaviour:
   - {fileID: 1503484128}
   - {fileID: 72791172752845974}
   - {fileID: 1462700311}
+  - {fileID: 1278191319308520015}
   m_NetcodeHooks: {fileID: 1503484131}
   m_NetworkCharSelection: {fileID: 1503484132}
   m_PlayerSeats:
@@ -2165,23 +2166,29 @@ PrefabInstance:
     - target: {fileID: 1999929320550910981, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 162352.81
+      value: 175386.95
       objectReference: {fileID: 0}
-    - target: {fileID: 3622866467670639421, guid: 85936fff3789d6e4d9d1f00859705c3b,
-        type: 3}
-      propertyPath: m_netcodeHooks
-      value: 
-      objectReference: {fileID: 1503484131}
     - target: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_Name
       value: ChatSystem
+      objectReference: {fileID: 0}
+    - target: {fileID: 6819369891916203380, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1743691042
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85936fff3789d6e4d9d1f00859705c3b, type: 3}
+--- !u!1 &1278191319308520015 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1278191319308520014}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1281637906685132737
 MonoBehaviour:
   m_ObjectHideFlags: 0
