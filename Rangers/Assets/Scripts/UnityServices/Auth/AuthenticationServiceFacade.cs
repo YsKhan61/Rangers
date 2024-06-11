@@ -106,7 +106,10 @@ namespace BTG.UnityServices.Auth
             try
             {
                 await Unity.Services.Core.UnityServices.InitializeAsync(options);
+
+                UnsubscribeFromAuthenticationEvents();
                 SubscribeToAuthenticationEvents();
+
                 AccountType = AccountType.None;
             }
             catch (Exception e)

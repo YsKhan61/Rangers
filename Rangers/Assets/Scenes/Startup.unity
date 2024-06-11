@@ -324,7 +324,7 @@ PrefabInstance:
     - target: {fileID: 1906347318797931974, guid: fa39758ad5b970d4699eb20af6f595c9,
         type: 3}
       propertyPath: m_Name
-      value: LoadingScreen
+      value: LoadingScreen - Global UI
       objectReference: {fileID: 0}
     - target: {fileID: 2799301380764994550, guid: fa39758ad5b970d4699eb20af6f595c9,
         type: 3}
@@ -1196,7 +1196,7 @@ PrefabInstance:
     - target: {fileID: 1091342545238397060, guid: 9962657de01f61449b156d94147cf92a,
         type: 3}
       propertyPath: m_Name
-      value: PopupUIManager
+      value: PopupUIManager - Global UI
       objectReference: {fileID: 0}
     - target: {fileID: 5289514559709026827, guid: 9962657de01f61449b156d94147cf92a,
         type: 3}
@@ -1263,8 +1263,8 @@ SceneRoots:
   - {fileID: 1710468954}
   - {fileID: 242809875}
   - {fileID: 853347095670205215}
+  - {fileID: 290238141}
   - {fileID: 1025290631}
   - {fileID: 1361801417}
   - {fileID: 629982484}
-  - {fileID: 290238141}
   - {fileID: 7006806314590232825}

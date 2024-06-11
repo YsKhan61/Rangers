@@ -90,7 +90,6 @@ namespace BTG.Gameplay.GameState
             _authServiceFacade.OnUnlinkFromUnitySuccess -= OnUnlinkSuccess;
             _authServiceFacade.OnAccountNameUpdateSuccess -= UpdateNameSuccess;
             _authServiceFacade.OnAccountNameUpdateFailed -= UpdateNameFailed;
-            _authServiceFacade.UnsubscribeFromAuthenticationEvents();
         }
 
         protected override void Configure(IContainerBuilder builder)
