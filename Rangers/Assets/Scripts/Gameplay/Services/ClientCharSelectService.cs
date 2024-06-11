@@ -16,14 +16,8 @@ namespace BTG.Gameplay.GameState
     /// </summary>
     // [RequireComponent(typeof(NetcodeHooks))] 
     // NOTE: ServerCharSelectState game object and ClientCharSelectState game object in CharSelect Scene are separated, in order to keep the ServerCharSelectState game object activated at the start of the scene. This is needed in order to toggle between FS and VR mode.
-    public class ClientCharSelectState : GameStateBehaviour
+    public class ClientCharSelectService : Singleton<ClientCharSelectService>
     {
-        /// <summary>
-        /// Reference to the scene's state object so that UI can access state
-        /// </summary>
-        public static ClientCharSelectState Instance { get; private set; }
-        public override GameState ActiveState { get { return GameState.CharSelect; } }
-
         [SerializeField]
         NetcodeHooks m_NetcodeHooks;
 
@@ -98,10 +92,9 @@ namespace BTG.Gameplay.GameState
         /*[Inject]
         ConnectionManager m_ConnectionManager;*/
 
-        protected override void Awake()
+        public override void Awake()
         {
             base.Awake();
-            Instance = this;
 
             m_NetcodeHooks.OnNetworkSpawnHook += OnNetworkSpawn;
             m_NetcodeHooks.OnNetworkDespawnHook += OnNetworkDespawn;
@@ -115,9 +108,8 @@ namespace BTG.Gameplay.GameState
             };
         }
 
-        protected override void Start()
+        public void Start()
         {
-            base.Start();
             for (int i = 0; i < m_PlayerSeats.Count; ++i)
             {
                 m_PlayerSeats[i].Initialize(i);
@@ -125,16 +117,6 @@ namespace BTG.Gameplay.GameState
 
             ConfigureUIForLobbyMode(LobbyMode.ChooseSeat);
             UpdateCharacterSelection(NetworkCharSelection.SeatState.Inactive);
-        }
-
-        protected override void OnDestroy()
-        {
-            if (Instance == this)
-            {
-                Instance = null;
-            }
-
-            base.OnDestroy();
         }
 
         /// <summary>

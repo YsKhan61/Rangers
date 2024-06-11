@@ -1,9 +1,10 @@
-using BTG.Utilities;
+using BTG.Entity;
 using UnityEngine;
+
 
 namespace BTG.Tank
 {
-    public class TankView : MonoBehaviour
+    public class TankView : MonoBehaviour, IEntityView
     {
         [SerializeField]
         Transform m_CameraTarget;

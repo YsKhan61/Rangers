@@ -52,7 +52,7 @@ namespace BTG.Gameplay.UI
         // Called directly by Button in UI
         public void OnClickedSeat()
         {
-            ClientCharSelectState.Instance.OnPlayerClickedSeat(m_SeatIndex);
+            ClientCharSelectService.Instance.OnPlayerClickedSeat(m_SeatIndex);
         }
 
         public void SetState(NetworkCharSelection.SeatState state, int playerIndex, string playerName)
@@ -93,16 +93,16 @@ namespace BTG.Gameplay.UI
             else // either active or locked-in... these states are visually very similar
             {
                 m_InactiveStateVisuals.SetActive(false);
-                m_PlayerNumberHolder.sprite = ClientCharSelectState.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Indicator;
+                m_PlayerNumberHolder.sprite = ClientCharSelectService.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Indicator;
                 m_ActiveStateVisuals.SetActive(true);
 
                 m_PlayerNameHolder.gameObject.SetActive(true);
-                m_PlayerNameHolder.color = ClientCharSelectState.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Color;
+                m_PlayerNameHolder.color = ClientCharSelectService.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Color;
                 m_SeatButton.interactable = m_IsDisabled ? false : true;
 
                 if (m_State == NetworkCharSelection.SeatState.LockedIn)
                 {
-                    m_Glow.color = ClientCharSelectState.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Color;
+                    m_Glow.color = ClientCharSelectService.Instance.m_IdentifiersForEachPlayerNumber[m_PlayerNumber].Color;
                     m_Glow.gameObject.SetActive(true);
                     m_Checkbox.gameObject.SetActive(true);
                     m_SeatButton.interactable = false;

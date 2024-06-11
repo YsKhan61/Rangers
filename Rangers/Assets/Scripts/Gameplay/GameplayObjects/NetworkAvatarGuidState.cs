@@ -26,19 +26,19 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 if (m_EntityData == null)
                 {
-                    RegisterAvatar(n_EntityNetworkGuid.Value.ToGuid());
+                    RegisterEntity(n_EntityNetworkGuid.Value.ToGuid());
                 }
 
                 return m_EntityData;
             }
         }
 
-        public void SetRandomAvatar()
+        public void SetRandomEntity()
         {
             n_EntityNetworkGuid.Value = m_EntityDataContainer.GetRandomTankData().Guid.ToNetworkGuid();
         }
 
-        void RegisterAvatar(Guid guid)
+        void RegisterEntity(Guid guid)
         {
             if (guid.Equals(Guid.Empty))
             {

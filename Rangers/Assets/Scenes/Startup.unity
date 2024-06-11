@@ -738,7 +738,7 @@ GameObject:
   - component: {fileID: 1350356973}
   - component: {fileID: 1350356974}
   m_Layer: 0
-  m_Name: ApplicationController
+  m_Name: Application Service
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -781,6 +781,10 @@ MonoBehaviour:
   _networkManager: {fileID: 1710468955}
   _sceneNameList: {fileID: 11400000, guid: 8750af9d759bb9f419dff7790f64ef8c, type: 2}
   _popupManager: {fileID: 2107779818}
+  _entityFactoryContainer: {fileID: 11400000, guid: f332ab77e4d310e418a7b4e0c249277b,
+    type: 2}
+  _playerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
+  _playerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
 --- !u!1 &1361801416
 GameObject:
   m_ObjectHideFlags: 0

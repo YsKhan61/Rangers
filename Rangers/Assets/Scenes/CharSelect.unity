@@ -755,12 +755,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c8d8c59ebf5f4149a30fc251f75f26e, type: 3}
---- !u!1 &1462700311 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5802120268272999310, guid: 5c8d8c59ebf5f4149a30fc251f75f26e,
-    type: 3}
-  m_PrefabInstance: {fileID: 1462700310}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503484128
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,17 +848,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1503484128}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b151e1c7c1e42458e8e26a9b891cd0, type: 3}
+  m_Script: {fileID: 11500000, guid: 3fe9c239be3059f4884da2fd67c164fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parentReference:
-    TypeName: BTG.ApplicationLifecycle.ApplicationController
-  autoRun: 1
-  autoInjectGameObjects:
-  - {fileID: 1503484128}
-  - {fileID: 72791172752845974}
-  - {fileID: 1462700311}
-  - {fileID: 1278191319308520015}
   m_NetcodeHooks: {fileID: 1503484131}
   m_NetworkCharSelection: {fileID: 1503484132}
   m_PlayerSeats:
@@ -2019,9 +2005,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Cosmos.Gameplay.GameState.ClientCharSelectState,
-          Cosmos.Gameplay
+      - m_Target: {fileID: 1503484133}
+        m_TargetAssemblyTypeName: BTG.Gameplay.GameState.ClientCharSelectState, BTG.Gameplay
         m_MethodName: OnPlayerClickedReady
         m_Mode: 1
         m_Arguments:
@@ -2166,7 +2151,7 @@ PrefabInstance:
     - target: {fileID: 1999929320550910981, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 189607.3
+      value: 201819.84
       objectReference: {fileID: 0}
     - target: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
@@ -2183,12 +2168,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85936fff3789d6e4d9d1f00859705c3b, type: 3}
---- !u!1 &1278191319308520015 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1278191319308520014}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1281637906685132737
 MonoBehaviour:
   m_ObjectHideFlags: 0

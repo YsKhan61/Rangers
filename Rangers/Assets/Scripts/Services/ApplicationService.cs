@@ -1,5 +1,7 @@
 using BTG.ConnectionManagement;
+using BTG.Entity;
 using BTG.Gameplay.UI;
+using BTG.Player;
 using BTG.UnityServices;
 using BTG.UnityServices.Auth;
 using BTG.UnityServices.Lobbies;
@@ -13,12 +15,12 @@ using VContainer;
 using VContainer.Unity;
 
 
-namespace BTG.ApplicationLifecycle
+namespace BTG.Services
 {
     /// <summary>
     /// An entry point to the application, where we bind all the common dependencies to the root DI Scope
     /// </summary>
-    public class ApplicationController : LifetimeScope
+    public class ApplicationService : LifetimeScope
     {
         [SerializeField]
         private UpdateRunner _updateRunner;
@@ -34,6 +36,15 @@ namespace BTG.ApplicationLifecycle
 
         [SerializeField]
         private PopupManager _popupManager;
+
+        [SerializeField]
+        private EntityFactoryContainerSO _entityFactoryContainer;
+
+        [SerializeField]
+        private PlayerDataSO _playerData;
+
+        [SerializeField]
+        private PlayerStatsSO _playerStats;
 
         private LocalLobby _localLobby;
         private LobbyServiceFacade _lobbyServiceFacade;
@@ -87,6 +98,9 @@ namespace BTG.ApplicationLifecycle
             builder.RegisterComponent(_networkManager);
             builder.RegisterInstance(_sceneNameList);
             builder.RegisterComponent(_popupManager);
+            builder.RegisterComponent(_entityFactoryContainer);
+            builder.RegisterInstance(_playerData);
+            builder.RegisterInstance(_playerStats);
 
             // the following singletons represent the local representations of the lobby that we're in and the user that we are.
             // they can persist longer than the lifetime of the UI in MainMenu, where we setup the lobby that we create or join.
@@ -117,6 +131,8 @@ namespace BTG.ApplicationLifecycle
 
             // LobbyServiceFacade is registered as entrypoint because it wants a callback after container is built to do it's initialization
             builder.RegisterEntryPoint<LobbyServiceFacade>(Lifetime.Singleton).AsSelf();
+
+            builder.Register<PlayerService>(Lifetime.Singleton);
         }
 
         private bool OnApplicationWantsToQuit()

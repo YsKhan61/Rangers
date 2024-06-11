@@ -55,7 +55,7 @@ namespace BTG.Gameplay.GameplayObjects
                     }
                     else
                     {
-                        m_NetworkAvatarGuidState.SetRandomAvatar();
+                        m_NetworkAvatarGuidState.SetRandomEntity();
                         playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
                         SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                     }
