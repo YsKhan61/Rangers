@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 242809877}
   - component: {fileID: 242809878}
   m_Layer: 0
-  m_Name: UIMessageManager
+  m_Name: UIMessageManager - NO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1113,7 +1113,7 @@ PrefabInstance:
     - target: {fileID: 921169319092270107, guid: 23104fe63d135ea4e97f57d5802a0b2f,
         type: 3}
       propertyPath: m_Name
-      value: SceneLoader
+      value: SceneLoader - NO
       objectReference: {fileID: 0}
     - target: {fileID: 5450529120693290328, guid: 23104fe63d135ea4e97f57d5802a0b2f,
         type: 3}

@@ -776,7 +776,7 @@ GameObject:
   - component: {fileID: 1503484134}
   - component: {fileID: 1503484133}
   m_Layer: 0
-  m_Name: CharSelectState
+  m_Name: CharSelectState - NO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2166,12 +2166,12 @@ PrefabInstance:
     - target: {fileID: 1999929320550910981, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 175386.95
+      value: 180309.38
       objectReference: {fileID: 0}
     - target: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_Name
-      value: ChatSystem
+      value: ChatSystem - NO
       objectReference: {fileID: 0}
     - target: {fileID: 6819369891916203380, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1210678810139876342}
   - component: {fileID: 3315752124360672720}
   m_Layer: 0
-  m_Name: LoadingProgressTracker
+  m_Name: LoadingProgressTracker - NO
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
