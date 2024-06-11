@@ -1,5 +1,5 @@
 using BTG.ConnectionManagement;
-using BTG.Tank;
+using BTG.Entity;
 using BTG.Utilities;
 using System;
 using Unity.Netcode;
@@ -73,8 +73,8 @@ namespace BTG.Gameplay.GameState
         private NetworkList<LobbyPlayerState> _lobbyPlayers;
 
         [SerializeField]
-        TankDataContainerSO m_TankDataContainer;
-        public TankDataContainerSO TankDataContainer => m_TankDataContainer;
+        EntityDataContainerSO m_EntityDataContainer;
+        public EntityDataContainerSO EntityDataContainer => m_EntityDataContainer;
 
         [HideInInspector]
         public ConnectionManager ConnectionManager;

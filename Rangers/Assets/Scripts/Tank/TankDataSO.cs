@@ -1,3 +1,4 @@
+using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
 
@@ -5,7 +6,7 @@ using UnityEngine;
 namespace BTG.Tank
 {
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
-    public class TankDataSO : GuidSO
+    public class TankDataSO : EntityDataSO
     {
         [SerializeField, Tooltip("The tag of the tank")]
         private TagSO m_Tag;
@@ -17,7 +18,7 @@ namespace BTG.Tank
 
         [SerializeField]
         private int m_CharSelectSeatIndex;
-        public int CharSelectSeatIndex => m_CharSelectSeatIndex;
+        public override int CharSelectSeatIndex => m_CharSelectSeatIndex;
 
         [SerializeField] 
         private TankView m_TankViewPrefab;
@@ -25,7 +26,7 @@ namespace BTG.Tank
 
         [SerializeField]
         private GameObject m_Graphics;
-        public GameObject Graphics => m_Graphics;
+        public override GameObject Graphics => m_Graphics;
 
         [SerializeField]
         private int m_MaxHealth;

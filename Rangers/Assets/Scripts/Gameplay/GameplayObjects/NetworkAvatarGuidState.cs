@@ -1,4 +1,4 @@
-using BTG.Tank;
+using BTG.Entity;
 using BTG.Utilities;
 using System;
 using Unity.Netcode;
@@ -16,26 +16,26 @@ namespace BTG.Gameplay.GameplayObjects
         public NetworkVariable<NetworkGuid> n_EntityNetworkGuid = new NetworkVariable<NetworkGuid>();
 
         [SerializeField]
-        TankDataContainerSO m_TankDataContainer;
+        EntityDataContainerSO m_EntityDataContainer;
 
-        TankDataSO m_Avatar;
+        EntityDataSO m_EntityData;
 
-        public TankDataSO RegisteredAvatar
+        public EntityDataSO RegisteredEntityData
         {
             get
             {
-                if (m_Avatar == null)
+                if (m_EntityData == null)
                 {
                     RegisterAvatar(n_EntityNetworkGuid.Value.ToGuid());
                 }
 
-                return m_Avatar;
+                return m_EntityData;
             }
         }
 
         public void SetRandomAvatar()
         {
-            n_EntityNetworkGuid.Value = m_TankDataContainer.GetRandomTankData().Guid.ToNetworkGuid();
+            n_EntityNetworkGuid.Value = m_EntityDataContainer.GetRandomTankData().Guid.ToNetworkGuid();
         }
 
         void RegisterAvatar(Guid guid)
@@ -47,19 +47,19 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             // based on the Guid received, Avatar is fetched from AvatarRegistry
-            if (!m_TankDataContainer.TryGetTankData(guid, out TankDataSO avatar))
+            if (!m_EntityDataContainer.TryGetTankData(guid, out EntityDataSO entityData))
             {
                 Debug.LogError("Avatar not found!");
                 return;
             }
 
-            if (m_Avatar != null)
+            if (m_EntityData != null)
             {
                 // already set, this is an idempotent call, we don't want to Instantiate twice
                 return;
             }
 
-            m_Avatar = avatar;
+            m_EntityData = entityData;
 
             /*if (TryGetComponent<ServerCharacter>(out ServerCharacter serverCharacter))
             {

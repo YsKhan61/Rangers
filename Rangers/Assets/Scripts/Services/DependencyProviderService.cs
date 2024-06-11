@@ -8,6 +8,7 @@ using BTG.Tank;
 using BTG.Utilities;
 using BTG.Utilities.DI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 
 namespace BTG.Services
@@ -80,11 +81,11 @@ namespace BTG.Services
         [Provide]
         public IntDataSO ProvideEliminatedEnemiesCount() => m_PlayerStats.EliminatedEnemiesCount;
 
-
+        [FormerlySerializedAs("m_TankDataList")]
         [SerializeField]
-        private TankDataContainerSO m_TankDataList;
+        private EntityDataContainerSO m_EntityDataContainer;
         [Provide]
-        public TankDataContainerSO ProvideTankDataList() => m_TankDataList;
+        public EntityDataContainerSO ProvideEntityDataList() => m_EntityDataContainer;
 
 
         [SerializeField]

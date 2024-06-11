@@ -8,7 +8,7 @@ using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 using BTG.Utilities;
-using BTG.Tank;
+using BTG.Entity;
 
 
 namespace BTG.Gameplay.GameState
@@ -225,10 +225,10 @@ namespace BTG.Gameplay.GameState
                     // pass avatar GUID to PersistentPlayer
                     // it'd be great to simplify this with something like a NetworkScriptableObjects :(
 
-                    TankDataSO tankData = networkCharSelection.TankDataContainer.GetTankDataBySeatIndex(playerInfo.SeatIdx);
+                    EntityDataSO entityData = networkCharSelection.EntityDataContainer.GetTankDataBySeatIndex(playerInfo.SeatIdx);
 
                     persistentPlayer.NetworkAvatarGuidState.n_EntityNetworkGuid.Value =
-                        tankData.Guid.ToNetworkGuid();
+                        entityData.Guid.ToNetworkGuid();
                 }
             }
         }
