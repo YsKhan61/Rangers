@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6574843482933245408}
   - component: {fileID: 392186904043036380}
   - component: {fileID: 2430051567881296130}
+  - component: {fileID: 3996968325675060795}
   m_Layer: 6
   m_Name: NetworkPlayerView
   m_TagString: Untagged
@@ -94,3 +95,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
     type: 2}
+--- !u!114 &3996968325675060795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3062781867384982620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UseUnreliableDeltas: 0
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0

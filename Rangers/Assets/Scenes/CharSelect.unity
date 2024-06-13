@@ -755,6 +755,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c8d8c59ebf5f4149a30fc251f75f26e, type: 3}
+--- !u!1 &1462700311 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5802120268272999310, guid: 5c8d8c59ebf5f4149a30fc251f75f26e,
+    type: 3}
+  m_PrefabInstance: {fileID: 1462700310}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1503484128
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,7 +899,10 @@ MonoBehaviour:
   parentReference:
     TypeName: BTG.Services.ApplicationService
   autoRun: 1
-  autoInjectGameObjects: []
+  autoInjectGameObjects:
+  - {fileID: 72791172752845974}
+  - {fileID: 1462700311}
+  - {fileID: 1278191319308520015}
   m_NetcodeHooks: {fileID: 1503484131}
 --- !u!1 &1789289727
 GameObject:
@@ -2151,7 +2160,7 @@ PrefabInstance:
     - target: {fileID: 1999929320550910981, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 202659
+      value: 204574.56
       objectReference: {fileID: 0}
     - target: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
@@ -2168,6 +2177,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 85936fff3789d6e4d9d1f00859705c3b, type: 3}
+--- !u!1 &1278191319308520015 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1278191319308520014}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1281637906685132737
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,7 +2,6 @@ using BTG.Enemy;
 using BTG.Player;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 
 namespace BTG.Gameplay.GameState
