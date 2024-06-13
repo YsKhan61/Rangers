@@ -99,7 +99,7 @@ namespace BTG.Enemy
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
         {
-            entity = m_EntityFactoryContainer.GetEntity(tag);
+            entity = m_EntityFactoryContainer.GetFactory(tag).GetItem();
             return entity != null;
         }
 

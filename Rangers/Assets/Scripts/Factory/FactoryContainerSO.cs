@@ -28,7 +28,7 @@ namespace BTG.Factory
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Get the item from the factory based on the item tag
         /// </summary>
         public T GetItem(TagSO tag)
@@ -43,7 +43,7 @@ namespace BTG.Factory
 
             Debug.LogError("No factory found for the tag: " + tag.name);
             return default;
-        }
+        }*/
 
         public FactorySO<T> GetFactory(TagSO tag)
         {

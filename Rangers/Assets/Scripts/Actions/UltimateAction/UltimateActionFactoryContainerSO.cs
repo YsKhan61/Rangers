@@ -11,9 +11,9 @@ namespace BTG.Actions.UltimateAction
     [CreateAssetMenu(fileName = "UltimateActionFactoryContainer", menuName = "ScriptableObjects/Factory/UltimateActionFactory/UltimateActionFactoryContainerSO")]
     public class UltimateActionFactoryContainerSO : FactoryContainerSO<IUltimateAction>
     {
-        /// <summary>
+        /*/// <summary>
         /// Get the ultimate action from the factory based on the item tag
         /// </summary>
-        public IUltimateAction GetUltimateAction(TagSO tag) => GetItem(tag);
+        public IUltimateAction GetUltimateAction(TagSO tag) => GetItem(tag);*/
     }
 }

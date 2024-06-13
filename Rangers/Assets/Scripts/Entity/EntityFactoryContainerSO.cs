@@ -8,7 +8,7 @@ namespace BTG.Entity
     [CreateAssetMenu(fileName = "EntityFactoryContainer", menuName = "ScriptableObjects/Factory/EntityFactory/EntityFactoryContainerSO")]
     public class EntityFactoryContainerSO : FactoryContainerSO<IEntityBrain>
     {
-        public IEntityBrain GetEntity(TagSO tag) => GetItem(tag);
+        // public IEntityBrain GetEntity(TagSO tag) => GetItem(tag);
     }
 }
 

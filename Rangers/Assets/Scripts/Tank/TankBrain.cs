@@ -129,9 +129,9 @@ namespace BTG.Tank
         public void CreatePrimaryAction(TagSO primaryTag = null)
         {
             if (primaryTag == null)
-                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetPrimaryAction(m_Model.TankData.PrimaryTag);
+                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetFactory(m_Model.TankData.PrimaryTag).GetItem();
             else
-                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetPrimaryAction(primaryTag);
+                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetFactory(primaryTag).GetItem();
 
             m_PrimaryAction.SetActor(this);
         }
@@ -144,9 +144,9 @@ namespace BTG.Tank
         public void CreateUltimateAction(TagSO ultimateTag = null)
         {
             if (ultimateTag == null)
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(m_Model.TankData.UltimateTag);
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetFactory(m_Model.TankData.UltimateTag).GetItem();
             else
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetUltimateAction(ultimateTag);
+                m_UltimateAction = m_UltimateActionFactoryContainer.GetFactory(ultimateTag).GetItem();
 
             m_UltimateAction.SetActor(this);
         }
@@ -212,7 +212,7 @@ namespace BTG.Tank
 
         public void TryExecuteUltimate() => UltimateAction.TryExecute();
 
-        public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetAndExecuteRagdollEffect(this);
+        public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetFactory(m_Model.TankData.Tag).GetItem().ExecuteRagdollEffect(this);
 
         public void OnDead()
         {

@@ -107,7 +107,7 @@ namespace BTG.Player
 
         private bool TryGetEntity(out IEntityBrain entity)
         {
-            entity = m_EntityFactoryContainer.GetEntity(m_PlayerStats.EntityTagSelected.Value);
+            entity = m_EntityFactoryContainer.GetFactory(m_PlayerStats.EntityTagSelected.Value).GetItem();
             return entity != null;
         }
     }
