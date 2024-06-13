@@ -3,13 +3,19 @@ This is a fun project where we have tank rangers of various abilities who can fi
 
 # Rangers
 - Red ranger
-  - Ultimate Ability: Invisibility
 - Blue ranger
-  - Ultimate Ability: Air Strike
 - Yellow ranger
-  - Ultimate Ability: Self Shield
 - Green ranger
-  - Ultimate Ability: Auto Target
+
+# Primary Actions
+- Tesla Ball
+- Projectile
+
+# Ultimate Actions
+- AirStrike
+- Self Shield
+- Invisibility
+- Auto Target
 
 # Design Pattern used
 
