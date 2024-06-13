@@ -1,7 +1,7 @@
 using BTG.Entity;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Player

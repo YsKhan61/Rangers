@@ -1,10 +1,10 @@
 ﻿using BTG.AudioSystem;
 using BTG.Events;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -18,9 +18,11 @@ namespace BTG.Actions.PrimaryAction
         private TeslaFiringDataSO m_Data;
         public TeslaFiringDataSO Data => m_Data;
 
+        [Inject]
+        private AudioPool m_AudioPool;
+
         private IPrimaryActor m_Actor;
         private TeslaBallPool m_TeslaBallPool;
-        private AudioPool m_AudioPool;
         private AudioSource m_FiringAudioSource;
         private TeslaBallView m_BallInCharge;
         private CancellationTokenSource m_Cts;
@@ -189,7 +191,6 @@ namespace BTG.Actions.PrimaryAction
 
         private void InitializeFiringAudio()
         {
-            m_AudioPool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
             if (m_AudioPool == null)
             {
                 Debug.LogError("No Audio pool found!");

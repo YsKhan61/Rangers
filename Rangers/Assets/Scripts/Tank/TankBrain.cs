@@ -4,9 +4,9 @@ using BTG.AudioSystem;
 using BTG.Effects;
 using BTG.Entity;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using System;
 using UnityEngine;
+using VContainer;
 using Object = UnityEngine.Object;
 
 
@@ -62,28 +62,43 @@ namespace BTG.Tank
 
         private TankPool m_Pool;
 
-
-
-        /// <summary>
-        /// This constructor creates all the respective properties of the tank that are mandatory
-        /// for the tank to function properly.
-        /// TankView, TankModel, TankMovementController, TankFiringController, TankUltimateController, TankHealthController
-        /// </summary>
-        /// <param name="tankData"></param>
-        /// <param name="pool"></param>
-        public TankBrain(TankDataSO tankData, TankPool pool)
+        public class Builder
         {
-            DIManager.Instance.Inject(this);
+            private TankModel tankModel;
+            private TankPool tankPool;
+            private TankView tankView;
 
-            m_Pool = pool;
+            public Builder WithTankModel(TankModel model)
+            {
+                tankModel = model;
+                return this;
+            }
 
-            m_Model = new TankModel(tankData, this);
-            m_View = Object.Instantiate(tankData.TankViewPrefab, m_Pool.TankContainer);
-            m_View.SetBrain(this);
+            public Builder WithTankPool(TankPool pool)
+            {
+                tankPool = pool;
+                return this;
+            }
 
-            CreatePrimaryAction();
-            CreateUltimateAction();
+            public Builder WithTankView(TankView view)
+            {
+                tankView = view;
+                return this;
+            }
+
+            public TankBrain Build()
+            {
+                return new TankBrain
+                {
+                    m_Model = tankModel,
+                    m_Pool = tankPool,
+                    m_View = tankView,
+                };
+            }
         }
+
+        private TankBrain() { }
+
 
         /// <summary>
         /// Initialize the tank brain.

@@ -1,5 +1,6 @@
 using BTG.Utilities;
 using UnityEngine;
+using VContainer;
 
 namespace BTG.Actions.PrimaryAction
 {
@@ -8,6 +9,9 @@ namespace BTG.Actions.PrimaryAction
         private ChargedFiringDataSO m_ProjectileData;
         private Transform m_ProjectileContainer;
         public Transform ProjectileContainer => m_ProjectileContainer;
+
+        [Inject]
+        private IObjectResolver m_Resolver;
 
         public ProjectilePool(ChargedFiringDataSO projectileData)
         {
@@ -20,7 +24,12 @@ namespace BTG.Actions.PrimaryAction
 
         public void ReturnProjectile(ProjectileController projectile) => ReturnItem(projectile);
 
-        protected override ProjectileController CreateItem() => new ProjectileController(m_ProjectileData, this);
+        protected override ProjectileController CreateItem()
+        {
+            ProjectileController pc = new (m_ProjectileData, this);
+            m_Resolver.Inject(pc);
+            return pc;
+        }
     }
 }
 

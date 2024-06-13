@@ -1,6 +1,7 @@
 ﻿using BTG.Utilities;
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 namespace BTG.Factory
 {
@@ -16,6 +17,17 @@ namespace BTG.Factory
         [SerializeField, Tooltip("The factories to create the items")]
         List<FactorySO<T>> m_Factories;
 
+        public List<FactorySO<T>> Factories => m_Factories;
+
+        [Inject]
+        public void InjectIntoFactories(IObjectResolver resolver)
+        {
+            foreach (var factory in m_Factories)
+            {
+                resolver.Inject(factory);
+            }
+        }
+
         /// <summary>
         /// Get the item from the factory based on the item tag
         /// </summary>
@@ -26,6 +38,20 @@ namespace BTG.Factory
                 if (factory.Tag == tag)
                 {
                     return factory.GetItem();
+                }
+            }
+
+            Debug.LogError("No factory found for the tag: " + tag.name);
+            return default;
+        }
+
+        public FactorySO<T> GetFactory(TagSO tag)
+        {
+            foreach (var factory in m_Factories)
+            {
+                if (factory.Tag == tag)
+                {
+                    return factory;
                 }
             }
 

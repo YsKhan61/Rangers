@@ -1,7 +1,8 @@
-using BTG.Utilities.DI;
+using BTG.ConnectionManagement;
 using BTG.Utilities;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace BTG.Gameplay.UI
 {
@@ -10,7 +11,7 @@ namespace BTG.Gameplay.UI
     /// </summary>
     public class ConnectionStatusMessageUIManager : MonoBehaviour
     {
-        /*private DisposableGroup _disposableGroup;
+        private DisposableGroup _disposableGroup;
 
         private PopupPanel _currentReconnectPopupPanel;
 
@@ -104,6 +105,6 @@ namespace BTG.Gameplay.UI
                 _currentReconnectPopupPanel.Hide();
                 _currentReconnectPopupPanel = null;
             }
-        }*/
+        }
     }
 }

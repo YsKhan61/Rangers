@@ -1,9 +1,8 @@
 ﻿using BTG.Utilities;
-using BTG.Utilities.DI;
 using TMPro;
 using UnityEngine;
 
-namespace BTG.DIExample
+namespace BTG.DI_Own.Example
 {
     public class HealthUI : MonoBehaviour, IDependencyInjector
     {

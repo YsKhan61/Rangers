@@ -1184,9 +1184,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: BTG.ApplicationLifecycle.ApplicationController
+    TypeName: BTG.Services.ApplicationService
   autoRun: 1
   autoInjectGameObjects:
+  - {fileID: 1960048333}
   - {fileID: 436463994}
   - {fileID: 436463993}
   - {fileID: 716746077}
@@ -1197,7 +1198,6 @@ MonoBehaviour:
   _lobbyUIMediator: {fileID: 1000430722}
   _ipUIMediator: {fileID: 1000430725}
   _signInSpinner: {fileID: 1000430726}
-  _singlePlayerScene: SinglePlayerScene
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -783,8 +783,21 @@ MonoBehaviour:
   _popupManager: {fileID: 2107779818}
   _entityFactoryContainer: {fileID: 11400000, guid: f332ab77e4d310e418a7b4e0c249277b,
     type: 2}
+  _primaryActionFactoryContainer: {fileID: 11400000, guid: 27e82887f5ddac74994b520630318db1,
+    type: 2}
+  _ultimateActionFactoryContainer: {fileID: 11400000, guid: 93b7bdf0c911c884f8a40a83a320676e,
+    type: 2}
+  _enemyTankUltimateStateFactoryContainer: {fileID: 11400000, guid: 21e113653b82e8e478246e6601f42893,
+    type: 2}
+  _ragdollFactoryContainer: {fileID: 11400000, guid: 50e48e470f85de2459a4f5eb2fbdb69b,
+    type: 2}
   _playerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
+  _enemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
   _playerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
+  _entityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
+    type: 2}
+  _enemyWaveConfig: {fileID: 11400000, guid: 11beb4bc5b018064f924ca498e423c84, type: 2}
+  _enemyDeathCount: {fileID: 11400000, guid: 5f30b61b42d928541b0ca790e6b83a5a, type: 2}
 --- !u!1 &1361801416
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,6 +1214,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PopupUIManager - Global UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 1729405855930182127, guid: 9962657de01f61449b156d94147cf92a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5224578973417336538, guid: 9962657de01f61449b156d94147cf92a,
+        type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5289514559709026827, guid: 9962657de01f61449b156d94147cf92a,
         type: 3}

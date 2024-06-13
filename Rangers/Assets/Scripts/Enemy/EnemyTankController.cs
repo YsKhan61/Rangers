@@ -1,8 +1,8 @@
 using BTG.Entity;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 using UnityEngine.AI;
+using VContainer;
 
 
 namespace BTG.Enemy
@@ -59,8 +59,6 @@ namespace BTG.Enemy
         /// </summary>
         public TagSO UltimateTag => m_EntityBrain.Model.UltimateTag;
 
-
-
         [Inject]
         private EnemyService m_Service;
 
@@ -70,27 +68,68 @@ namespace BTG.Enemy
         private EnemyView m_View;
         private EnemyTankStateMachine m_StateMachine;
 
-
-        public EnemyTankController(EnemyDataSO data, EnemyPool pool)
+        public class Builder
         {
-            m_Pool = pool;
-            m_Data = data;
-            m_View = Object.Instantiate(m_Data.EnemyPrefab, pool.EnemyContainer);
-            m_View.SetController(this);
+            private EnemyDataSO data;
+            private EnemyPool pool;
+            private EnemyView view;
+            private NavMeshAgent agent;
+            private EnemyTankStateMachine stateMachine;
+            private EnemyService service;
 
-            m_Agent = m_View.GetComponent<NavMeshAgent>();
+            public Builder WithEnemyData(EnemyDataSO data)
+            {
+                this.data = data;
+                return this;
+            }
 
-            m_StateMachine = new(this);
-            DIManager.Instance.Inject(m_StateMachine);
+            public Builder WithEnemyPool(EnemyPool pool)
+            {
+                this.pool = pool;
+                return this;
+            }
 
-            Rigidbody.maxLinearVelocity = m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier;
+            public Builder WithEnemyView(EnemyView view)
+            {
+                this.view = view;
+                return this;
+            }
+
+            public Builder WithNavMeshAgent(NavMeshAgent agent)
+            {
+                this.agent = agent;
+                return this;
+            }
+
+            public Builder WithStateMachine(EnemyTankStateMachine stateMachine)
+            {
+                this.stateMachine = stateMachine;
+                return this;
+            }
+
+            public EnemyTankController Build()
+            {
+                return new EnemyTankController
+                {
+                    m_Data = data,
+                    m_Pool = pool,
+                    m_View = view,
+                    m_Agent = agent,
+                    m_StateMachine = stateMachine,
+                };
+            }
         }
+
+        private EnemyTankController() { }
 
         ~EnemyTankController()
         {
             UnsubscribeFromEvents();
             m_EntityBrain = null;
         }
+
+        public void SetMaxLinearVelocity(float maxLinearVelocity) 
+            => Rigidbody.maxLinearVelocity = maxLinearVelocity;
 
         /// <summary>
         /// Set the pose of the controller's view

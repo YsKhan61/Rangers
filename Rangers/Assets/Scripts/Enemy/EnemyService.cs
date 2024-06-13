@@ -1,8 +1,8 @@
 using BTG.Entity;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using System.Threading;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Enemy
@@ -11,8 +11,11 @@ namespace BTG.Enemy
     /// The service that manages everything related to the enemies of the game.
     /// It is responsible for spawning the enemies, starting the waves, and keeping track of the enemy death count.
     /// </summary>
-    public class EnemyService : ISelfDependencyRegister, IDependencyInjector
+    public class EnemyService
     {
+        [Inject]
+        private IObjectResolver m_ObjectResolver;
+
         [Inject]
         EntityFactoryContainerSO m_EntityFactoryContainer;
 
@@ -23,12 +26,11 @@ namespace BTG.Enemy
         private WaveConfigSO m_EnemyWaves;
 
         private CancellationTokenSource m_Cts;
+        private EnemyPool m_EnemyPool;
 
         private int m_NextWaveIndex = 0;
         private int m_TankCountInCurrentWave = 0;
 
-        private EnemyPool m_EnemyPool;
-        
 
         public EnemyService()
         {
@@ -49,8 +51,7 @@ namespace BTG.Enemy
             m_NextWaveIndex = 0;
 
             m_EnemyPool = new EnemyPool();
-            // Manual injection to DIManager : There will be only one instance of EnemyPool.
-            DIManager.Instance.Inject(m_EnemyPool);
+            m_ObjectResolver.Inject(m_EnemyPool);
 
             StartNextWaveWithEntityTags();
         }

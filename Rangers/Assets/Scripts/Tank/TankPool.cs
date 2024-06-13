@@ -1,5 +1,9 @@
+using BTG.Actions.PrimaryAction;
+using BTG.Actions.UltimateAction;
+using BTG.Effects;
 using BTG.Utilities;
 using UnityEngine;
+using VContainer;
 
 namespace BTG.Tank
 {
@@ -8,6 +12,9 @@ namespace BTG.Tank
     /// </summary>
     public class TankPool : GenericObjectPool<TankBrain>
     {
+        [Inject]
+        private IObjectResolver m_Resolver;
+
         private TankDataSO m_TankData;
         private Transform m_TankContainer;
         public Transform TankContainer => m_TankContainer;
@@ -32,8 +39,22 @@ namespace BTG.Tank
 
         protected override TankBrain CreateItem()
         {
-            TankBrain tankBrain = new (m_TankData, this);
-            return tankBrain;
+            TankModel model = new TankModel(m_TankData);
+            TankView view = Object.Instantiate(m_TankData.TankViewPrefab, TankContainer);
+
+            TankBrain brain = new TankBrain.Builder()
+                .WithTankModel(model)
+                .WithTankPool(this)
+                .WithTankView(view)
+                .Build();
+
+            m_Resolver.Inject(brain);
+            model.SetBrain(brain);
+            view.SetBrain(brain);
+            brain.CreatePrimaryAction();
+            brain.CreateUltimateAction();
+
+            return brain;
         }
     }
 }

@@ -1,11 +1,10 @@
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 
 
 namespace BTG.AudioSystem
 {
-    public class AudioPool : GenericObjectPool<AudioView>, ISelfDependencyRegister
+    public class AudioPool : GenericObjectPool<AudioView>
     {
         private Transform m_Container;
 

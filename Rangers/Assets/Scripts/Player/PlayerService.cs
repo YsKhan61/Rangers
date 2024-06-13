@@ -2,17 +2,20 @@ using BTG.Entity;
 using BTG.Events;
 using BTG.EventSystem;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Player
 {
-    public class PlayerService : ISelfDependencyRegister, IDependencyInjector
+    public class PlayerService
     {
         private const int RESPAWN_DELAY = 2;
+
+        [Inject]
+        IObjectResolver m_ObjectResolver;
 
         [Inject]
         private EntityFactoryContainerSO m_EntityFactoryContainer;
@@ -23,12 +26,8 @@ namespace BTG.Player
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
-        [Inject]
         private PlayerVirtualCamera m_PVCamera;
-
-
         private PlayerTankController m_Controller;
-
         private CancellationTokenSource m_CTS;
 
         /// <summary>
@@ -48,6 +47,11 @@ namespace BTG.Player
         {
             m_PlayerStats.EntityTagSelected.OnValueChanged -= OnPlayerTankIDSelected;
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+        }
+
+        public void SetPlayerVirtualCamera(PlayerVirtualCamera pvc)
+        {
+            m_PVCamera = pvc;
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -73,7 +77,7 @@ namespace BTG.Player
         private void CreatePlayerControllerAndInput()
         {
             m_Controller = new PlayerTankController(m_PlayerData);
-            DIManager.Instance.Inject(m_Controller);
+            m_ObjectResolver.Inject(m_Controller);
             PlayerInputs playerInput = new(m_Controller);
             playerInput.Initialize();
         }
@@ -98,7 +102,6 @@ namespace BTG.Player
             m_Controller.Init();
             // Spawn at the origin
             m_Controller.SetPose(new Pose(Vector3.zero, Quaternion.identity));
-
             m_PVCamera.SetTarget(m_Controller.CameraTarget);
         }
 

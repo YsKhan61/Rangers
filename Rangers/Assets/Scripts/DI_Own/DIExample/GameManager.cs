@@ -1,8 +1,6 @@
-using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 
-namespace BTG.DIExample
+namespace BTG.DI_Own.Example
 {
     public class GameManager : ISelfDependencyRegister, IDependencyInjector
     {

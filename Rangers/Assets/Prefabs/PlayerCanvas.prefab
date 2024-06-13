@@ -1254,7 +1254,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3114807698988893637}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: BTG.UI.GameMenuUI, BTG.UI
         m_MethodName: GoToMainMenu
         m_Mode: 1
@@ -3006,12 +3006,11 @@ GameObject:
   - component: {fileID: 6935647228156194404}
   - component: {fileID: 7822433687850925988}
   - component: {fileID: 1852841736905248738}
-  - component: {fileID: 3114807698988893637}
   - component: {fileID: 4905754985990571797}
   - component: {fileID: 358044019316057812}
   - component: {fileID: 1787192625859995482}
   m_Layer: 5
-  m_Name: MainCanvas
+  m_Name: PlayerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3104,19 +3103,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &3114807698988893637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8008469139444748733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d56e2023b732e6649aff07377db551f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MainMenuSceneName: MainMenu
 --- !u!114 &4905754985990571797
 MonoBehaviour:
   m_ObjectHideFlags: 0

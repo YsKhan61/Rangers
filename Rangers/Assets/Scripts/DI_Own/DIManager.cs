@@ -3,8 +3,9 @@ using System.Reflection;
 using System;
 using UnityEngine;
 using System.Linq;
+using BTG.Utilities;
 
-namespace BTG.Utilities.DI
+namespace BTG.DI_Own
 {
     [DefaultExecutionOrder(-1000)]
     public class DIManager : SingletonPersistent<DIManager>

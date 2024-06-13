@@ -1,6 +1,6 @@
 using System;
 
-namespace BTG.Utilities.DI
+namespace BTG.DI_Own
 {
     /// <summary>
     /// Attributes to mark fields and methods that should be injected by the DI system

@@ -35,9 +35,13 @@ namespace BTG.Tank
 
         public TagSO UltimateTag => m_TankData.UltimateTag;
 
-        public TankModel(TankDataSO m_TankData, TankBrain brain)
+        public TankModel(TankDataSO m_TankData)
         {
             this.m_TankData = m_TankData;
+        }
+
+        public void SetBrain(TankBrain brain)
+        {
             m_Brain = brain;
         }
 

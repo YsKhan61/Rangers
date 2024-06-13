@@ -1,14 +1,17 @@
 using BTG.AudioSystem;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using System.Threading;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
 {
     public class ProjectileController : IDestroyable
     {
+        [Inject]
+        private AudioPool m_AudioPool;
+
         private ChargedFiringDataSO m_Data;
         private ProjectileView m_View;
         private ProjectilePool m_Pool;
@@ -61,8 +64,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void DoExplosionAudio()
         {
-            AudioPool pool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
-            pool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
+            m_AudioPool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
         }
 
         private void ResetProjectile()

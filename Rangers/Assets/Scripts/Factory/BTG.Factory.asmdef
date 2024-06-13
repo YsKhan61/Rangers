@@ -2,7 +2,8 @@
     "name": "BTG.Factory",
     "rootNamespace": "",
     "references": [
-        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256"
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

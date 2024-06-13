@@ -1,6 +1,7 @@
 using BTG.Gameplay.UI;
 using BTG.UnityServices.Auth;
 using BTG.UnityServices.Lobbies;
+using BTG.Utilities;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -32,8 +33,8 @@ namespace BTG.Gameplay.GameState
         [SerializeField]
         private GameObject _signInSpinner;
 
-        [SerializeField]
-        private string _singlePlayerScene;
+        [Inject]
+        private SceneNameListSO _sceneNameList;
 
         private AuthenticationServiceFacade _authServiceFacade;
         private LocalLobbyUser _localLobbyUser;
@@ -115,7 +116,7 @@ namespace BTG.Gameplay.GameState
         /// </summary>
         public void StartSinglePlayerMode()
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(_singlePlayerScene);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(_sceneNameList.SinglePlayerScene);
         }
 
         public void OnLobbyStartButtonClicked()

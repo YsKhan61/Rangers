@@ -31,7 +31,7 @@ namespace BTG.Gameplay.GameState
 
         private List<Transform> m_PlayerSpawnPointsList = null;
 
-        public override GameState ActiveState { get { return GameState.Cosmos; } }
+        public override GameState ActiveState { get { return GameState.Multiplay; } }
 
         /// <summary>
         /// Has the ServerBossRoomState already hit its initial spawn? (i.e. spawned players following load from character select).

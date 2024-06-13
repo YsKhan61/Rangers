@@ -1,7 +1,7 @@
 ﻿using BTG.AudioSystem;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -21,6 +21,9 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField]
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
+
+        [Inject]
+        private AudioPool m_AudioPool;
 
         private TeslaFiring m_TeslaFiring;
         private TeslaBallPool m_Pool;
@@ -71,8 +74,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void DoExplosionAudio()
         {
-            AudioPool pool = (AudioPool)DIManager.Instance.Resolve(typeof(AudioPool));
-            pool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
+            m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
         }
 
         private void Reset()

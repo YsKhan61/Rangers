@@ -1,10 +1,8 @@
-﻿using BTG.Utilities.DI;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace BTG.DIExample
+
+namespace BTG.DI_Own.Example
 {
-    [Register]
-    [Injector]
     public class  EnemyService
     {
         [Inject]

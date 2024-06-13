@@ -13,5 +13,3 @@ namespace BTG.Actions.UltimateAction
         public override IUltimateAction GetItem() => new AirStrike(m_AirStrikeData);
     }
 }
-
-

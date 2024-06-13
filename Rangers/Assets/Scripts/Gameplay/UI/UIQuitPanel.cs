@@ -12,11 +12,11 @@ namespace BTG.Gameplay.UI
     {
         private enum QuitMode
         {
-            ReturnToMenu,
+            ReturnToMainMenu,
             QuitApplication         // Quit can only be possible from the StartMainMenu panel of MainMenu Scene
         }
 
-        [SerializeField] private QuitMode _quitMode = QuitMode.ReturnToMenu;
+        [SerializeField] private QuitMode _quitMode = QuitMode.ReturnToMainMenu;
 
         [SerializeField] private Button _confirmButton;
         [SerializeField] private Button _cancelButton;
@@ -43,7 +43,7 @@ namespace BTG.Gameplay.UI
         {
             switch (_quitMode)
             {
-                case QuitMode.ReturnToMenu:
+                case QuitMode.ReturnToMainMenu:
                     _connectionManager?.RequestShutdown();
                     break;
                 case QuitMode.QuitApplication:

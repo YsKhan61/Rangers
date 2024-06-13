@@ -1,8 +1,8 @@
 ﻿using BTG.StateMachine;
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
 using UnityEngine.AI;
+using VContainer;
 
 namespace BTG.Enemy
 {
@@ -69,9 +69,6 @@ namespace BTG.Enemy
 
         private EnemyTankController m_Controller;
 
-
-        public EnemyTankStateMachine(EnemyTankController controller) => m_Controller = controller;
-
         /// <summary>
         /// Create the states of the state machine according to the entity
         /// </summary>
@@ -84,6 +81,8 @@ namespace BTG.Enemy
             AddState(EnemyTankState.Damaged, new EnemyTankDamagedState(this));
             AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
+
+        public void SetController(EnemyTankController controller) => m_Controller = controller;
 
         /// <summary>
         /// Initialize the state machine after all the states are created

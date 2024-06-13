@@ -1,6 +1,7 @@
 using BTG.Utilities;
-using BTG.Utilities.DI;
 using UnityEngine;
+using UnityEngine.AI;
+using VContainer;
 
 namespace BTG.Enemy
 { 
@@ -12,11 +13,12 @@ namespace BTG.Enemy
         [Inject]
         private EnemyDataSO m_Data;
 
-        // public EnemyPool(EnemyDataSO data)
+        [Inject]
+        private IObjectResolver m_Resolver;
+
         public EnemyPool()
         {
             m_EnemyContainer = new GameObject("EnemyContainer").transform;
-            // m_Data = data;
         }
 
         public EnemyTankController GetEnemy() => GetItem();
@@ -25,8 +27,24 @@ namespace BTG.Enemy
 
         protected override EnemyTankController CreateItem()
         {
-            EnemyTankController  controller = new(m_Data, this);
-            DIManager.Instance.Inject(controller);
+            EnemyView view = Object.Instantiate(m_Data.EnemyPrefab, m_EnemyContainer);
+            NavMeshAgent agent = (NavMeshAgent)view.gameObject.GetOrAddComponent<NavMeshAgent>();
+            EnemyTankStateMachine stateMachine = new EnemyTankStateMachine();
+
+            EnemyTankController controller = new EnemyTankController.Builder()
+                .WithEnemyData(m_Data)
+                .WithEnemyPool(this)
+                .WithEnemyView(view)
+                .WithNavMeshAgent(agent)
+                .WithStateMachine(stateMachine)
+                .Build();
+
+            view.SetController(controller);
+            stateMachine.SetController(controller);
+            m_Resolver.Inject(stateMachine);
+            controller.SetMaxLinearVelocity(m_Data.MaxSpeedMultiplier * m_Data.MaxSpeedMultiplier);
+            m_Resolver.Inject(controller);
+
             return controller;
         }
     }

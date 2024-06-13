@@ -1,4 +1,4 @@
-﻿namespace BTG.Utilities.DI
+﻿namespace BTG.DI_Own
 {
     /// <summary>
     /// An empty interface to mark a class as a dependency provider for other class's dependencies (scriptable objects)

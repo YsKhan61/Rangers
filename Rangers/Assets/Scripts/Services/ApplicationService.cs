@@ -1,5 +1,11 @@
+using BTG.Actions.PrimaryAction;
+using BTG.Actions.UltimateAction;
+using BTG.AudioSystem;
 using BTG.ConnectionManagement;
+using BTG.Effects;
+using BTG.Enemy;
 using BTG.Entity;
+using BTG.Factory;
 using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.UnityServices;
@@ -37,57 +43,57 @@ namespace BTG.Services
         [SerializeField]
         private PopupManager _popupManager;
 
+        [Space(10)]
+
+
+        [Header("Factory Containers")]
+
+        [Space(5)]
+
         [SerializeField]
         private EntityFactoryContainerSO _entityFactoryContainer;
+
+        [SerializeField]
+        private PrimaryActionFactoryContainerSO _primaryActionFactoryContainer;
+
+        [SerializeField]
+        private UltimateActionFactoryContainerSO _ultimateActionFactoryContainer;
+
+        [SerializeField]
+        private EnemyTankUltimateStateFactoryContainerSO _enemyTankUltimateStateFactoryContainer;
+
+        [SerializeField]
+        private RagdollFactoryContainerSO _ragdollFactoryContainer;
+
+        [Space(10)]
+
+
+        [Header("Data Containers")]
+
+        [Space(5)]
 
         [SerializeField]
         private PlayerDataSO _playerData;
 
         [SerializeField]
+        private EnemyDataSO _enemyData;
+
+        [SerializeField]
         private PlayerStatsSO _playerStats;
+
+        [SerializeField]
+        private EntityDataContainerSO _entityDataContainer;
+
+        [SerializeField]
+        private WaveConfigSO _enemyWaveConfig;
+
+        [SerializeField]
+        private IntDataSO _enemyDeathCount;
+
 
         private LocalLobby _localLobby;
         private LobbyServiceFacade _lobbyServiceFacade;
-
         private IDisposable _subscriptionsDisposable;
-
-        private void Start()
-        {
-            _localLobby = Container.Resolve<LocalLobby>();
-            _lobbyServiceFacade = Container.Resolve<LobbyServiceFacade>();
-
-            ISubscriber<QuitApplicationMessage> quitApplicationMessageSubscriber =
-                Container.Resolve<ISubscriber<QuitApplicationMessage>>();
-
-            DisposableGroup subscribersDisposableGroup = new();
-            subscribersDisposableGroup.Add(quitApplicationMessageSubscriber.Subscribe(QuitGame));
-            _subscriptionsDisposable = subscribersDisposableGroup;
-
-            Application.targetFrameRate = 72;
-            Application.wantsToQuit += OnApplicationWantsToQuit;
-
-            DontDestroyOnLoad(gameObject);
-            DontDestroyOnLoad(_updateRunner.gameObject);
-
-            SceneManager.LoadScene(_sceneNameList.MainMenuScene);
-        }
-
-
-
-        protected override void OnDestroy()
-        {
-            if (_subscriptionsDisposable != null)
-            {
-                _subscriptionsDisposable.Dispose();
-            }
-
-            if (_lobbyServiceFacade != null)
-            {
-                _lobbyServiceFacade.EndTracking();
-            }
-
-            base.OnDestroy();
-        }
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -96,11 +102,22 @@ namespace BTG.Services
             builder.RegisterComponent(_updateRunner);
             builder.RegisterComponent(_connectionManager);
             builder.RegisterComponent(_networkManager);
-            builder.RegisterInstance(_sceneNameList);
+            builder.RegisterComponent(_sceneNameList);
             builder.RegisterComponent(_popupManager);
+
             builder.RegisterComponent(_entityFactoryContainer);
-            builder.RegisterInstance(_playerData);
-            builder.RegisterInstance(_playerStats);
+            builder.RegisterComponent(_primaryActionFactoryContainer);
+            builder.RegisterComponent(_ultimateActionFactoryContainer);
+            builder.RegisterComponent(_enemyTankUltimateStateFactoryContainer);
+            builder.RegisterComponent(_ragdollFactoryContainer);
+
+            builder.RegisterComponent(_playerData);
+            builder.RegisterComponent(_enemyData);
+            builder.RegisterComponent(_playerStats);
+            builder.RegisterComponent(_entityDataContainer);
+            builder.RegisterComponent(_enemyWaveConfig);
+            builder.RegisterComponent(_enemyDeathCount);
+
 
             // the following singletons represent the local representations of the lobby that we're in and the user that we are.
             // they can persist longer than the lifetime of the UI in MainMenu, where we setup the lobby that we create or join.
@@ -133,6 +150,60 @@ namespace BTG.Services
             builder.RegisterEntryPoint<LobbyServiceFacade>(Lifetime.Singleton).AsSelf();
 
             builder.Register<PlayerService>(Lifetime.Singleton);
+            builder.Register<EnemyService>(Lifetime.Singleton);
+            builder.Register<AudioPool>(Lifetime.Singleton);
+        }
+
+        private void Start()
+        {
+            _localLobby = Container.Resolve<LocalLobby>();
+            _lobbyServiceFacade = Container.Resolve<LobbyServiceFacade>();
+
+            _entityFactoryContainer.InjectIntoFactories(Container);
+            _primaryActionFactoryContainer.InjectIntoFactories(Container);
+            _ultimateActionFactoryContainer.InjectIntoFactories(Container);
+            _ragdollFactoryContainer.InjectIntoFactories(Container);
+
+            ISubscriber<QuitApplicationMessage> quitApplicationMessageSubscriber =
+                Container.Resolve<ISubscriber<QuitApplicationMessage>>();
+
+            DisposableGroup subscribersDisposableGroup = new();
+            subscribersDisposableGroup.Add(quitApplicationMessageSubscriber.Subscribe(QuitGame));
+            _subscriptionsDisposable = subscribersDisposableGroup;
+
+            Application.targetFrameRate = 72;
+            Application.wantsToQuit += OnApplicationWantsToQuit;
+
+            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(_updateRunner.gameObject);
+
+            SceneManager.LoadScene(_sceneNameList.MainMenuScene);
+        }
+
+
+        protected override void OnDestroy()
+        {
+            if (_subscriptionsDisposable != null)
+            {
+                _subscriptionsDisposable.Dispose();
+            }
+
+            if (_lobbyServiceFacade != null)
+            {
+                _lobbyServiceFacade.EndTracking();
+            }
+
+            base.OnDestroy();
+        }
+
+        
+
+        private void InjectIntoFactories(FactoryContainerSO<IFactoryItem> factoryContainer)
+        {
+            foreach (var factory in factoryContainer.Factories)
+            {
+                Container.Inject(factory);
+            }
         }
 
         private bool OnApplicationWantsToQuit()

@@ -7,8 +7,8 @@ namespace BTG.Gameplay.GameState
     {
         MainMenu,
         CharSelect,
-        Cosmos,
-        PostGame
+        SinglePlay,
+        Multiplay
     }
 
 
