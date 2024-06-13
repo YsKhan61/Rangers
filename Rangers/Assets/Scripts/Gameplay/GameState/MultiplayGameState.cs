@@ -16,7 +16,7 @@ using VContainer.Unity;
 namespace BTG.Gameplay.GameState
 {
     [RequireComponent(typeof(NetcodeHooks))]
-    public class ServerMultiplayState : GameStateBehaviour
+    public class MultiplayGameState : GameStateBehaviour
     {
         [SerializeField]
         [Tooltip("Make sure this is included in the NetworkManager's list of prefabs!")]

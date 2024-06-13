@@ -17,7 +17,7 @@ namespace BTG.Gameplay.GameState
     /// Server specialization of Character Select game state.
     /// </summary>
     [RequireComponent(typeof(NetcodeHooks), typeof(NetworkCharSelection))]
-    public class ServerCharSelectState : GameStateBehaviour
+    public class CharSelectGameState : GameStateBehaviour
     {
         [SerializeField]
         NetcodeHooks m_NetcodeHooks;

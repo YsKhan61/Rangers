@@ -258,6 +258,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be6083ff43087c4bb13c92f9271afb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
+  m_PVC: {fileID: 0}
 --- !u!850595691 &934916653
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -968,7 +973,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: BTG.ApplicationLifecycle.ApplicationController
+    TypeName: 
   autoRun: 1
   autoInjectGameObjects: []
   m_PlayerPrefab: {fileID: -2021939701825717784, guid: 0372b2a60ea76224e9ce7a1ef12bd915,
@@ -984,6 +989,7 @@ MonoBehaviour:
   - {fileID: 8884472417355042871}
   - {fileID: 8884472417355042870}
   - {fileID: 8884472417355042869}
+  m_PVCamera: {fileID: 1894154699}
 --- !u!1 &1894154696
 GameObject:
   m_ObjectHideFlags: 0

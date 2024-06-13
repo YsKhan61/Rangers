@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 
-namespace BTG.Gameplay.GameState
+namespace BTG.Gameplay.GameplayObjects
 {
     /// <summary>
     /// Common data and RPCs for the CharSelect state.

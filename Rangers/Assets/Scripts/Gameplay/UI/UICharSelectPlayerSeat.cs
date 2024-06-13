@@ -1,3 +1,4 @@
+using BTG.Gameplay.GameplayObjects;
 using BTG.Gameplay.GameState;
 using TMPro;
 using Unity.Netcode;

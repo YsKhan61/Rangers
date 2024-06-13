@@ -16,7 +16,7 @@ namespace BTG.Gameplay.GameState
     /// OnNetworkSpawn() won't ever run, because there is no network connection at the main menu screen.
     /// Fortunately we know you are a client, because all players are client when sitting at the main menu screen.
     /// </remarks>
-    public class ClientMainMenuState : GameStateBehaviour
+    public class MainMenuGameState : GameStateBehaviour
     {
         [SerializeField]
         private SignInUIMediator _signInUIMediator;

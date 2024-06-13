@@ -1,4 +1,5 @@
 using BTG.Entity;
+using BTG.Gameplay.GameState;
 using BTG.Gameplay.UI;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace BTG.Gameplay.GameState
+namespace BTG.Gameplay.GameplayObjects
 {
     /// <summary>
     /// Client specialization of the Character Select game state. Mainly controls the UI during character-select.

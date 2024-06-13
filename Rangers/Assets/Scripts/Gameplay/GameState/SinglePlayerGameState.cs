@@ -7,7 +7,7 @@ using VContainer.Unity;
 
 namespace BTG.Gameplay.GameState
 {
-    public class SinglePlayerState : GameStateBehaviour
+    public class SinglePlayerGameState : GameStateBehaviour
     {
         [SerializeField]
         private PlayerVirtualCamera m_PVC;
