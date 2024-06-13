@@ -159,11 +159,6 @@ namespace BTG.Services
             _localLobby = Container.Resolve<LocalLobby>();
             _lobbyServiceFacade = Container.Resolve<LobbyServiceFacade>();
 
-            _entityFactoryContainer.InjectIntoFactories(Container);
-            _primaryActionFactoryContainer.InjectIntoFactories(Container);
-            _ultimateActionFactoryContainer.InjectIntoFactories(Container);
-            _ragdollFactoryContainer.InjectIntoFactories(Container);
-
             ISubscriber<QuitApplicationMessage> quitApplicationMessageSubscriber =
                 Container.Resolve<ISubscriber<QuitApplicationMessage>>();
 
@@ -196,15 +191,6 @@ namespace BTG.Services
             base.OnDestroy();
         }
 
-        
-
-        private void InjectIntoFactories(FactoryContainerSO<IFactoryItem> factoryContainer)
-        {
-            foreach (var factory in factoryContainer.Factories)
-            {
-                Container.Inject(factory);
-            }
-        }
 
         private bool OnApplicationWantsToQuit()
         {
