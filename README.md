@@ -3,13 +3,19 @@ This is a fun project where we have tank rangers of various abilities who can fi
 
 # Rangers
 - Red ranger
-  - Ultimate Ability: Invisibility
 - Blue ranger
-  - Ultimate Ability: Air Strike
 - Yellow ranger
-  - Ultimate Ability: Self Shield
 - Green ranger
-  - Ultimate Ability: Auto Target
+
+# Primary Actions
+- Tesla Ball
+- Projectile
+
+# Ultimate Actions
+- AirStrike
+- Self Shield
+- Invisibility
+- Auto Target
 
 # Design Pattern used
 
@@ -21,12 +27,13 @@ This is a fun project where we have tank rangers of various abilities who can fi
     - Generic Event Channels - To facilitate observer pattern. [GenericEventChannelSO etc.]
     
 - Flyweight
-- Dependency Injection [Created own lightweight Dependency Injection Framework]
-- Model-view-controller
+- Dependency Injection using VContainer [ previously created own lightweight Dependency Injection Framework]
+- Model-view-controller (entities, player, enemy, actions)
 - Observer pattern (Event Channel, EventBus)
-- Generic Factory pattern
-- Dynamic Generic Object Pooling
-- Generic State Machine
+- Generic Factory pattern (EntityFactories, RagdollFactories, PrimaryActionFactories, UltimateActionFactories, EffectsFactories) 
+- Dynamic Generic Object Pooling (entities, effects, actions)
+- Generic State Machine (enemy state, game state)
+- Builder (to build entities, player, enemy etc)
 
 # Sceeenshots
 Tank Selection Panel
