@@ -10,13 +10,8 @@ namespace BTG.Tank
 
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
-        
-
-        private TankBrain m_Brain;
 
         public TankBrain.TankState State;
-
-        public float CurrentMoveSpeed => m_Brain.Rigidbody.velocity.magnitude;
 
         public int MaxHealth => m_TankData.MaxHealth;
         public float Acceleration => m_TankData.Acceleration;
@@ -38,11 +33,6 @@ namespace BTG.Tank
         public TankModel(TankDataSO m_TankData)
         {
             this.m_TankData = m_TankData;
-        }
-
-        public void SetBrain(TankBrain brain)
-        {
-            m_Brain = brain;
         }
 
         public void Reset()

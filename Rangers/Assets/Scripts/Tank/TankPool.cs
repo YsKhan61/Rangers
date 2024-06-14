@@ -49,7 +49,6 @@ namespace BTG.Tank
                 .Build();
 
             m_Resolver.Inject(brain);
-            model.SetBrain(brain);
             view.SetBrain(brain);
             brain.CreatePrimaryAction();
             brain.CreateUltimateAction();

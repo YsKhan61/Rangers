@@ -46,7 +46,7 @@ namespace BTG.Tank
         public IDamageableView Damageable { get; private set; }
 
         public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
-        public float CurrentMoveSpeed => m_Model.CurrentMoveSpeed;
+        public float CurrentMoveSpeed => Rigidbody.velocity.magnitude;
 
         [Inject]
         private PrimaryActionFactoryContainerSO m_PrimaryActionFactoryContainer;
@@ -249,7 +249,7 @@ namespace BTG.Tank
                 return;
 
             m_View.AudioView.UpdateEngineDrivingClipPitch(
-                    Mathf.Lerp(0, 1, Mathf.InverseLerp(0, m_Model.TankData.MaxSpeed, m_Model.CurrentMoveSpeed)));
+                    Mathf.Lerp(0, 1, Mathf.InverseLerp(0, m_Model.TankData.MaxSpeed, CurrentMoveSpeed)));
         }
 
         private void OnTankStateChangedToIdle() =>
