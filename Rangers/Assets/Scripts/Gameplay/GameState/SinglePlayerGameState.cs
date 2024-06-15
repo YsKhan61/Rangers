@@ -17,16 +17,11 @@ namespace BTG.Gameplay.GameState
 
         public override GameState ActiveState => GameState.SinglePlay;
 
-        protected override void Configure(IContainerBuilder builder)
-        {
-            base.Configure(builder);
-        }
-
         protected override void Start()
         {
             base.Start();
 
-            m_PlayerService = Container.Resolve<PlayerService>();
+            m_PlayerService = new PlayerService();
             m_EnemyService = Container.Resolve<EnemyService>();
 
             InitializePlayerService();

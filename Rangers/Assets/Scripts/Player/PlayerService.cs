@@ -10,12 +10,9 @@ using VContainer;
 
 namespace BTG.Player
 {
-    public class PlayerService
+    public class PlayerService : IPlayerService
     {
         private const int RESPAWN_DELAY = 2;
-
-        [Inject]
-        IObjectResolver m_ObjectResolver;
 
         [Inject]
         private EntityFactoryContainerSO m_EntityFactoryContainer;
@@ -78,10 +75,10 @@ namespace BTG.Player
         {
             m_Controller = new PlayerTankController.Builder()
                 .CreateModel(m_PlayerData)
-                .CreateView(m_PlayerData)
+                .CreateView(m_PlayerData.Prefab)
+                .WithPlayerService(this)
                 .Build();
 
-            m_ObjectResolver.Inject(m_Controller);
             PlayerInputs playerInput = new(m_Controller);
             playerInput.Initialize();
         }

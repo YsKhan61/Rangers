@@ -1,16 +1,12 @@
 using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
-using VContainer;
 
 
 namespace BTG.Player
 {
     public class PlayerTankController : IEntityController, IFixedUpdatable, IUpdatable
     {
-        [Inject]
-        private PlayerService m_PlayerService;
-
         private PlayerModel m_Model;
         private PlayerView m_View;
 
@@ -25,6 +21,7 @@ namespace BTG.Player
 
         // cached values
         private Transform m_Transform;
+        private IPlayerService m_PlayerService;
 
         private PlayerTankController() { }
 
@@ -33,6 +30,7 @@ namespace BTG.Player
             private PlayerModel model;
             private PlayerView view;
             private Transform transForm;
+            private IPlayerService m_PlayerService;
 
             public Builder WithModel(PlayerModel model)
             {
@@ -53,10 +51,16 @@ namespace BTG.Player
                 return this;
             }
 
-            public Builder CreateView(PlayerDataSO data)
+            public Builder CreateView(PlayerView prefab)
             {
-                view = Object.Instantiate(data.Prefab);
+                view = Object.Instantiate(prefab);
                 transForm = view.transform;
+                return this;
+            }
+
+            public Builder WithPlayerService(IPlayerService playerService)
+            {
+                m_PlayerService = playerService;
                 return this;
             }
 
@@ -66,6 +70,7 @@ namespace BTG.Player
                 controller.m_Model = model;
                 controller.m_View = view;
                 controller.m_Transform = transForm;
+                controller.m_PlayerService = m_PlayerService;
                 return controller;
             }
         }
