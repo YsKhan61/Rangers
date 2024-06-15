@@ -38,7 +38,7 @@ namespace BTG.Player
         }
         
 
-        public void SetTarget(Transform target) => m_PVC1.Follow = target;
+        public void SetFollowTarget(Transform target) => m_PVC1.Follow = target;
 
         private void OnPlayerCamShake(CameraShakeEvent data)
             => StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * data.ShakeAmount), data.ShakeDuration);
