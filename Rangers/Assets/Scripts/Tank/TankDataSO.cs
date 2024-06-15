@@ -10,7 +10,7 @@ namespace BTG.Tank
     {
         [SerializeField, Tooltip("The tag of the tank")]
         private TagSO m_Tag;
-        public TagSO Tag => m_Tag;
+        public override TagSO Tag => m_Tag;
 
         [SerializeField]
         private Sprite m_Icon;

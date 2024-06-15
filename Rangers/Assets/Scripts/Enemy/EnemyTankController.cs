@@ -75,7 +75,6 @@ namespace BTG.Enemy
             private EnemyView view;
             private NavMeshAgent agent;
             private EnemyTankStateMachine stateMachine;
-            private EnemyService service;
 
             public Builder WithEnemyData(EnemyDataSO data)
             {

@@ -897,6 +897,7 @@ GameObject:
   - component: {fileID: 1466694019}
   - component: {fileID: 1466694020}
   - component: {fileID: 1466694021}
+  - component: {fileID: 1466694022}
   m_Layer: 0
   m_Name: MultiplayState
   m_TagString: Untagged
@@ -970,6 +971,19 @@ MonoBehaviour:
   autoInjectGameObjects: []
   m_PlayerPrefab: {fileID: -2021939701825717784, guid: 0372b2a60ea76224e9ce7a1ef12bd915,
     type: 3}
+  m_NetworkPlayerService: {fileID: 1466694022}
+--- !u!114 &1466694022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466694017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3abbe8a0811e9f54187b075f3680042b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_PlayerSpawnPoints:
   - {fileID: 2227046499457286290}
   - {fileID: 4427660413586858074}

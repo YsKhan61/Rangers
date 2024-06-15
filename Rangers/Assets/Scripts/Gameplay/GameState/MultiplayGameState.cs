@@ -1,6 +1,5 @@
 ﻿using BTG.ConnectionManagement;
 using BTG.Gameplay.GameplayObjects;
-using BTG.Player;
 using BTG.Utilities;
 using System.Collections.Generic;
 using Unity.Multiplayer.Samples.BossRoom;
@@ -9,8 +8,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
-using VContainer;
-using VContainer.Unity;
 
 
 namespace BTG.Gameplay.GameState
@@ -23,13 +20,7 @@ namespace BTG.Gameplay.GameState
         private NetworkObject m_PlayerPrefab;
 
         [SerializeField]
-        [Tooltip("A collection of locations for spawning players")]
-        private Transform[] m_PlayerSpawnPoints;
-
-        [SerializeField]
-        private PlayerVirtualCamera m_PVCamera;
-
-        private List<Transform> m_PlayerSpawnPointsList = null;
+        private NetworkPlayerService m_NetworkPlayerService;
 
         public override GameState ActiveState { get { return GameState.Multiplay; } }
 
@@ -38,13 +29,7 @@ namespace BTG.Gameplay.GameState
         /// </summary>
         public bool InitialSpawnDone { get; private set; }
 
-        private PlayerService m_PlayerService;
         private NetcodeHooks m_NetcodeHooks;
-
-        protected override void Configure(IContainerBuilder builder)
-        {
-            builder.RegisterComponent(m_PVCamera);
-        }
 
         protected override void Awake()
         {
@@ -67,9 +52,6 @@ namespace BTG.Gameplay.GameState
             NetworkManager.Singleton.SceneManager.OnSynchronizeComplete += OnSynchronizeComplete;
 
             SessionManager<SessionPlayerData>.Instance.OnSessionStarted();
-
-            m_PlayerService = Container.Resolve<PlayerService>();
-            m_PlayerService.Initialize();
         }
 
         private void OnNetworkDespawn()
@@ -111,8 +93,10 @@ namespace BTG.Gameplay.GameState
                 InitialSpawnDone = true;
                 foreach (var kvp in NetworkManager.Singleton.ConnectedClients)
                 {
-                    SpawnPlayer(kvp.Key, false);
+                    SpawnNetworkPlayerViewForEachClients(kvp.Key, false);
                 }
+
+                m_NetworkPlayerService.CreatePlayer_ClientRpc();
             }
         }
 
@@ -125,25 +109,14 @@ namespace BTG.Gameplay.GameState
             }
         }
 
-        void SpawnPlayer(ulong clientId, bool lateJoin)
+        void SpawnNetworkPlayerViewForEachClients(ulong clientId, bool lateJoin)
         {
-            Transform spawnPoint;
-
-            if (m_PlayerSpawnPointsList == null || m_PlayerSpawnPointsList.Count == 0)
-            {
-                m_PlayerSpawnPointsList = new List<Transform>(m_PlayerSpawnPoints);
-            }
-
-            Debug.Assert(m_PlayerSpawnPointsList.Count > 0,
-                $"PlayerSpawnPoints array should have at least 1 spawn points.");
-
-            int index = UnityEngine.Random.Range(0, m_PlayerSpawnPointsList.Count);
-            spawnPoint = m_PlayerSpawnPointsList[index];
-            m_PlayerSpawnPointsList.RemoveAt(index);
+            // Transform spawnPoint = GetRandomSpawnPoint();
 
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
 
-            NetworkObject newPlayer = Instantiate(m_PlayerPrefab, spawnPoint.position, spawnPoint.rotation);        // Later this can be changed to implement physics wrapper.
+            // NetworkObject newPlayer = Instantiate(m_PlayerPrefab, spawnPoint.position, spawnPoint.rotation);
+            NetworkObject newPlayer = Instantiate(m_PlayerPrefab, Vector3.zero, Quaternion.identity);
 
             var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);
             Assert.IsTrue(persistentPlayerExists,

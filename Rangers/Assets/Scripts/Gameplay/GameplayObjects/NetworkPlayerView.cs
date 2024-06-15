@@ -19,7 +19,7 @@ namespace BTG.Gameplay.GameplayObjects
         public override void OnNetworkSpawn()
         {
             // Later we will use pool and factory pattern to spawn the graphics
-            SpawnGraphics();
+            // SpawnGraphics();
         }
 
         public override void OnDestroy()
@@ -35,4 +35,5 @@ namespace BTG.Gameplay.GameplayObjects
             m_Graphics.transform.localRotation = Quaternion.identity;
         }
     }
+
 }
