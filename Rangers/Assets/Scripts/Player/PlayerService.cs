@@ -76,7 +76,11 @@ namespace BTG.Player
 
         private void CreatePlayerControllerAndInput()
         {
-            m_Controller = new PlayerTankController(m_PlayerData);
+            m_Controller = new PlayerTankController.Builder()
+                .CreateModel(m_PlayerData)
+                .CreateView(m_PlayerData)
+                .Build();
+
             m_ObjectResolver.Inject(m_Controller);
             PlayerInputs playerInput = new(m_Controller);
             playerInput.Initialize();

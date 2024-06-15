@@ -26,11 +26,48 @@ namespace BTG.Player
         // cached values
         private Transform m_Transform;
 
-        public PlayerTankController(PlayerDataSO data)
+        private PlayerTankController() { }
+
+        public class Builder
         {
-            m_Model = new PlayerModel(data);
-            m_View = Object.Instantiate(data.Prefab);
-            m_Transform = m_View.transform;
+            private PlayerModel model;
+            private PlayerView view;
+            private Transform transForm;
+
+            public Builder WithModel(PlayerModel model)
+            {
+                this.model = model;
+                return this;
+            }
+
+            public Builder CreateModel(PlayerDataSO data)
+            {
+                model = new PlayerModel(data);
+                return this;
+            }
+
+            public Builder WithView(PlayerView view)
+            {
+                this.view = view;
+                transForm = view.transform;
+                return this;
+            }
+
+            public Builder CreateView(PlayerDataSO data)
+            {
+                view = Object.Instantiate(data.Prefab);
+                transForm = view.transform;
+                return this;
+            }
+
+            public PlayerTankController Build()
+            {
+                var controller = new PlayerTankController();
+                controller.m_Model = model;
+                controller.m_View = view;
+                controller.m_Transform = transForm;
+                return controller;
+            }
         }
 
         ~PlayerTankController()
