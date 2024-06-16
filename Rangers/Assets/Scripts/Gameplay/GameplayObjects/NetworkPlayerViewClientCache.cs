@@ -12,6 +12,7 @@ namespace BTG.Gameplay.GameplayObjects
     public class NetworkPlayerViewClientCache : MonoBehaviour
     {
         private static List<NetworkPlayerView> ms_ActivePlayers = new List<NetworkPlayerView>();
+        public static List<NetworkPlayerView> ActivePlayers => ms_ActivePlayers;
 
         private NetcodeHooks m_NetcodeHooks;
         private NetworkPlayerView m_NetworkPlayerView;
