@@ -281,7 +281,7 @@ namespace BTG.Player
         private void UnsubscribeFromEvents()
         {
             m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
-            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
+            m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
