@@ -1,4 +1,5 @@
 using BTG.Utilities;
+using System;
 using UnityEngine.InputSystem;
 
 
@@ -6,17 +7,16 @@ namespace BTG.Player
 {
     public class PlayerInputs : IUpdatable, IDestroyable
     {
-        private InputControls m_InputControls;
+        public event Action<float> OnMoveInput;
+        public event Action<float> OnRotateInput;
+        public event Action OnPrimaryActionInputStarted;
+        public event Action OnPrimaryActionInputCanceled;
+        public event Action OnUltimateInputPerformed;
 
+
+        private InputControls m_InputControls;
         private InputAction m_MoveInputAction;
         private InputAction m_RotateInputAction;
-
-        private PlayerTankController m_Controller;
-
-        public PlayerInputs(PlayerTankController controller)
-        {
-            m_Controller = controller;
-        }
 
         public void Initialize()
         {
@@ -28,9 +28,9 @@ namespace BTG.Player
             m_MoveInputAction = m_InputControls.Player.MoveAction;
             m_RotateInputAction = m_InputControls.Player.RotateAction;
 
-            m_InputControls.Player.Fire.started += OnFireInputStarted;
-            m_InputControls.Player.Fire.canceled += OnFireInputActionCanceled;
-            m_InputControls.Player.UltimateAction.performed += OnUltimateInputPerformed;
+            m_InputControls.Player.Fire.started += OnStartedPrimaryActionInput;
+            m_InputControls.Player.Fire.canceled += OnCanceledPrimaryActionInput;
+            m_InputControls.Player.UltimateAction.performed += OnPerformedUltimateInput;
 
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
@@ -39,15 +39,15 @@ namespace BTG.Player
 
         public void Update()
         {
-            m_Controller.SetMoveValue(m_MoveInputAction.ReadValue<float>());
-            m_Controller.SetRotateValue(m_RotateInputAction.ReadValue<float>());
+            OnMoveInput?.Invoke(m_MoveInputAction.ReadValue<float>());
+            OnRotateInput?.Invoke(m_RotateInputAction.ReadValue<float>());
         }
 
         public void Destroy()
         {
-            m_InputControls.Player.Fire.started -= OnFireInputStarted;
-            m_InputControls.Player.Fire.canceled -= OnFireInputActionCanceled;
-            m_InputControls.Player.UltimateAction.performed -= OnUltimateInputPerformed;
+            m_InputControls.Player.Fire.started -= OnStartedPrimaryActionInput;
+            m_InputControls.Player.Fire.canceled -= OnCanceledPrimaryActionInput;
+            m_InputControls.Player.UltimateAction.performed -= OnPerformedUltimateInput;
 
             m_InputControls.Player.Disable();
             m_InputControls.UI.Disable();
@@ -57,19 +57,19 @@ namespace BTG.Player
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
-        private void OnFireInputStarted(InputAction.CallbackContext context)
+        private void OnStartedPrimaryActionInput(InputAction.CallbackContext context)
         {
-            m_Controller.StartFire();
+            OnPrimaryActionInputStarted?.Invoke();
         }
 
-        private void OnFireInputActionCanceled(InputAction.CallbackContext context)
+        private void OnCanceledPrimaryActionInput(InputAction.CallbackContext context)
         {
-            m_Controller.StopFire();
+            OnPrimaryActionInputStarted?.Invoke();
         }
 
-        private void OnUltimateInputPerformed(InputAction.CallbackContext context)
+        private void OnPerformedUltimateInput(InputAction.CallbackContext context)
         {
-            m_Controller.TryExecuteUltimate();
+            OnUltimateInputPerformed?.Invoke();
         }
     }
 }

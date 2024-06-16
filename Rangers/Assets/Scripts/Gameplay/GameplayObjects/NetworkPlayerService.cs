@@ -1,6 +1,7 @@
 ﻿using BTG.Entity;
 using BTG.Player;
 using BTG.Utilities;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -26,9 +27,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public override void OnNetworkSpawn()
         {
-            CreatePlayerController();
-            CreatePlayerInput();
-            m_PVCamera.SetFollowTarget(m_Controller.Transform);
+            
         }
 
         /// <summary>
@@ -38,17 +37,24 @@ namespace BTG.Gameplay.GameplayObjects
         [ClientRpc]
         public void ConfigureNetworkPlayerView_ClientRpc()
         {
-            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys)
-            {
-                NetworkPlayerView networkPlayerView = NetworkPlayerViewClientCache.GetPlayerView(clientId);
+            List<NetworkPlayerView> ActivePlayers = NetworkPlayerViewClientCache.ActivePlayers;
 
-                if (networkPlayerView == null)
+            if (ActivePlayers == null)
+            {
+                Debug.LogError("ActivePlayers is null");
+                return;
+            }
+
+            foreach (NetworkPlayerView networkPlayerView in ActivePlayers)
+            {
+                if (networkPlayerView.IsOwner)
                 {
-                    Debug.LogError("Player not found in ClientCache. This should not happen.");
-                    return;
+                    CreatePlayerController();
+                    CreatePlayerInput();
+                    m_PVCamera.SetFollowTarget(m_Controller.Transform);
                 }
 
-                if (clientId == OwnerClientId)
+                if (networkPlayerView.IsServer)
                 {
                     m_Controller.SetPose(new Pose(networkPlayerView.transform.position, networkPlayerView.transform.rotation));
                     networkPlayerView.SetFollowTarget(m_Controller.Transform);
@@ -83,13 +89,8 @@ namespace BTG.Gameplay.GameplayObjects
                 .CreateModel(m_PlayerData)
                 .CreateView(m_PlayerData.Prefab)
                 .WithPlayerService(this)
+                .CreatePlayerInput()
                 .Build();
-        }
-
-        private void CreatePlayerInput()
-        {
-            PlayerInputs playerInput = new(m_Controller);
-            playerInput.Initialize();
         }
 
         private void SpawnEntity(TagSO tag)

@@ -35,7 +35,7 @@ namespace BTG.Player
         {
             m_CTS = new CancellationTokenSource();
 
-            CreatePlayerControllerAndInput();
+            CreatePlayerController();
             m_PlayerStats.ResetStats();
             m_PlayerStats.EntityTagSelected.OnValueChanged += OnPlayerTankIDSelected;
         }
@@ -71,16 +71,14 @@ namespace BTG.Player
                 m_CTS.Token);
         }
 
-        private void CreatePlayerControllerAndInput()
+        private void CreatePlayerController()
         {
             m_Controller = new PlayerTankController.Builder()
                 .CreateModel(m_PlayerData)
                 .CreateView(m_PlayerData.Prefab)
                 .WithPlayerService(this)
+                .CreatePlayerInput()
                 .Build();
-
-            PlayerInputs playerInput = new(m_Controller);
-            playerInput.Initialize();
         }
 
         private void OnPlayerTankIDSelected()

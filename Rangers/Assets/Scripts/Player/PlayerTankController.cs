@@ -9,7 +9,8 @@ namespace BTG.Player
     {
         private PlayerModel m_Model;
         private PlayerView m_View;
-
+        private PlayerInputs m_PlayerInputs;
+        private IPlayerService m_PlayerService;
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         public Rigidbody Rigidbody => m_View.Rigidbody;
@@ -21,7 +22,6 @@ namespace BTG.Player
 
         // cached values
         private Transform m_Transform;
-        private IPlayerService m_PlayerService;
 
         private PlayerTankController() { }
 
@@ -30,7 +30,8 @@ namespace BTG.Player
             private PlayerModel model;
             private PlayerView view;
             private Transform transForm;
-            private IPlayerService m_PlayerService;
+            private IPlayerService playerService;
+            private PlayerInputs playerInput;
 
             public Builder WithModel(PlayerModel model)
             {
@@ -60,7 +61,14 @@ namespace BTG.Player
 
             public Builder WithPlayerService(IPlayerService playerService)
             {
-                m_PlayerService = playerService;
+                this.playerService = playerService;
+                return this;
+            }
+
+            public Builder CreatePlayerInput()
+            {
+                playerInput = new PlayerInputs();
+                playerInput.Initialize();
                 return this;
             }
 
@@ -70,7 +78,9 @@ namespace BTG.Player
                 controller.m_Model = model;
                 controller.m_View = view;
                 controller.m_Transform = transForm;
-                controller.m_PlayerService = m_PlayerService;
+                controller.m_PlayerService = playerService;
+                controller.m_PlayerInputs = playerInput;
+                
                 return controller;
             }
         }
@@ -138,7 +148,7 @@ namespace BTG.Player
             m_EntityBrain = null;
         }
 
-        public void SetMoveValue(in float value)
+        public void SetMoveValue(float value)
         {
             if (!m_Model.IsAlive)
                 return;
@@ -146,7 +156,7 @@ namespace BTG.Player
             m_Model.MoveInputValue = value;
         }
 
-        public void SetRotateValue(in float value)
+        public void SetRotateValue(float value)
         {
             if (!m_Model.IsAlive)
                 return;
@@ -154,7 +164,7 @@ namespace BTG.Player
             m_Model.RotateInputValue = value;
         }
 
-        public void StartFire()
+        public void StartPrimaryAction()
         {
             if (!m_Model.IsAlive)
                 return;
@@ -162,7 +172,7 @@ namespace BTG.Player
             m_EntityBrain?.StartPrimaryAction();
         }
 
-        public void StopFire()
+        public void StopPrimaryAction()
         {
             if (!m_Model.IsAlive)
                 return;
@@ -260,6 +270,12 @@ namespace BTG.Player
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToFixedUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+
+            m_PlayerInputs.OnMoveInput += SetMoveValue;
+            m_PlayerInputs.OnRotateInput += SetRotateValue;
+            m_PlayerInputs.OnPrimaryActionInputStarted += StartPrimaryAction;
+            m_PlayerInputs.OnPrimaryActionInputCanceled += StopPrimaryAction;
+            m_PlayerInputs.OnUltimateInputPerformed += TryExecuteUltimate;
         }
 
         private void UnsubscribeFromEvents()
@@ -275,6 +291,12 @@ namespace BTG.Player
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+
+            m_PlayerInputs.OnMoveInput -= SetMoveValue;
+            m_PlayerInputs.OnRotateInput -= SetRotateValue;
+            m_PlayerInputs.OnPrimaryActionInputStarted -= StartPrimaryAction;
+            m_PlayerInputs.OnPrimaryActionInputCanceled -= StopPrimaryAction;
+            m_PlayerInputs.OnUltimateInputPerformed -= TryExecuteUltimate;
         }
     }
 }
