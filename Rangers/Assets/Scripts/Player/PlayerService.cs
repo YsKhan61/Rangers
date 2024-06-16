@@ -103,7 +103,7 @@ namespace BTG.Player
             m_Controller.Init();
             // Spawn at the origin
             m_Controller.SetPose(new Pose(Vector3.zero, Quaternion.identity));
-            m_PVCamera.SetTarget(m_Controller.CameraTarget);
+            m_PVCamera.SetFollowTarget(m_Controller.CameraTarget);
         }
 
         private bool TryGetEntity(out IEntityBrain entity)

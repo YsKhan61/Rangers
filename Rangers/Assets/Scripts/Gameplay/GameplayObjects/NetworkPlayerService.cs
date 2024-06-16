@@ -1,4 +1,5 @@
-﻿using BTG.Player;
+﻿using BTG.Entity;
+using BTG.Player;
 using BTG.Utilities;
 using System.Collections.Generic;
 using Unity.Netcode;
@@ -11,17 +12,20 @@ namespace BTG.Gameplay.GameplayObjects
     public class NetworkPlayerService : NetworkBehaviour, IPlayerService
     {
         [SerializeField]
-        [Tooltip("A collection of locations for spawning players")]
-        private Transform[] m_PlayerSpawnPoints;
-
-        [SerializeField]
         private PlayerVirtualCamera m_PVCamera;
+
+        [Inject]
+        private PlayerDataSO m_PlayerData;
+
+        [Inject]
+        private EntityFactoryContainerSO m_EntityFactoryContainer;
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
+
         private NetworkAvatarGuidState m_NetworkAvatarGuidState;
-        private List<Transform> m_PlayerSpawnPointsList = null;
+        private PlayerTankController m_Controller;
 
         private void Awake()
         {
@@ -30,53 +34,93 @@ namespace BTG.Gameplay.GameplayObjects
 
         public override void OnNetworkSpawn()
         {
-            // Create the player controller and input
-            // This will replace PlayerService of SinglePlayerGameState
+            CreatePlayerController();
+            CreatePlayerInput();
+            m_PVCamera.SetFollowTarget(m_Controller.Transform);
         }
 
         /// <summary>
-        /// This is called on the server when a new player is added to the game.
-        /// This consists of the PlayerController , PlayerInput, and PlayerVirtualCamera.
-        /// </summary>
-        /// <param name="tag"></param>
+        /// This is called to configure the NetworkPlayerView for all clients.
+        /// It will be called on each clients from the server.
+        /// /// </summary>
         [ClientRpc]
-        public void CreatePlayer_ClientRpc()
+        public void ConfigureNetworkPlayerView_ClientRpc()
         {
-           // Fetch all the NetworkPlayerView from ClientCache
-           // Check the Registered Entity Data of the NetworkAvatarGuidState
-           // If this is owner, then create player controller, input, and virtual camera
-           // For all clients (owner or not) Add the player view as parent of NetworkPlayerView
+            foreach (ulong clientId in NetworkManager.Singleton.ConnectedClients.Keys)
+            {
+                NetworkPlayerView networkPlayerView = NetworkPlayerViewClientCache.GetPlayerView(clientId);
+
+                if (networkPlayerView == null)
+                {
+                    Debug.LogError("Player not found in ClientCache. This should not happen.");
+                    return;
+                }
+
+                if (clientId == OwnerClientId)
+                {
+                    networkPlayerView.transform.SetParent(m_Controller.Transform);
+                    SpawnEntity();
+                    SetRandomSpawnPoint_ServerRpc();
+                }
+                else
+                {
+                    networkPlayerView.SpawnGraphics();
+                }
+            }
 
             Debug.Log("CreatePlayer_ClientRpc" + OwnerClientId);    
         }
 
         public void OnEntityInitialized(Sprite icon)
         {
-            
+            m_PlayerStats.PlayerIcon.Value = icon;
         }
 
         public void OnPlayerDeath()
         {
-            
+            m_PlayerStats.DeathCount.Value++;
+
+            // Respawn
         }
 
-        private Transform GetRandomSpawnPoint()
+        private void CreatePlayerController()
         {
-            Transform spawnPoint;
-
-            if (m_PlayerSpawnPointsList == null || m_PlayerSpawnPointsList.Count == 0)
-            {
-                m_PlayerSpawnPointsList = new List<Transform>(m_PlayerSpawnPoints);
-            }
-
-            Debug.Assert(m_PlayerSpawnPointsList.Count > 0,
-                $"PlayerSpawnPoints array should have at least 1 spawn points.");
-
-            int index = UnityEngine.Random.Range(0, m_PlayerSpawnPointsList.Count);
-            spawnPoint = m_PlayerSpawnPointsList[index];
-            m_PlayerSpawnPointsList.RemoveAt(index);
-
-            return spawnPoint;
+            m_Controller = new PlayerTankController.Builder()
+                .CreateModel(m_PlayerData)
+                .CreateView(m_PlayerData.Prefab)
+                .WithPlayerService(this)
+                .Build();
         }
+
+        private void CreatePlayerInput()
+        {
+            PlayerInputs playerInput = new(m_Controller);
+            playerInput.Initialize();
+        }
+
+        private void SpawnEntity()
+        {
+            bool entityFound = TryGetEntity(out IEntityBrain entity);
+            if (!entityFound)
+                return;
+
+            m_Controller.SetEntityBrain(entity);
+            m_Controller.Init();
+            m_PVCamera.SetFollowTarget(m_Controller.CameraTarget);
+        }
+
+        private bool TryGetEntity(out IEntityBrain entity)
+        {
+            entity = m_EntityFactoryContainer.GetFactory(m_PlayerStats.EntityTagSelected.Value).GetItem();
+            return entity != null;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void SetRandomSpawnPoint_ServerRpc()
+        {
+            m_Controller.SetPose(new Pose(GetRandomSpawnPoint().position, Quaternion.identity));
+        }
+
+        
     }
 }

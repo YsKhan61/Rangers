@@ -22,6 +22,10 @@ namespace BTG.Gameplay.GameState
         [SerializeField]
         private NetworkPlayerService m_NetworkPlayerService;
 
+        [SerializeField]
+        [Tooltip("A collection of locations for spawning players")]
+        private Transform[] m_PlayerSpawnPoints;
+
         public override GameState ActiveState { get { return GameState.Multiplay; } }
 
         /// <summary>
@@ -30,6 +34,8 @@ namespace BTG.Gameplay.GameState
         public bool InitialSpawnDone { get; private set; }
 
         private NetcodeHooks m_NetcodeHooks;
+        private List<Transform> m_PlayerSpawnPointsList = null;
+
 
         protected override void Awake()
         {
@@ -96,7 +102,7 @@ namespace BTG.Gameplay.GameState
                     SpawnNetworkPlayerViewForEachClients(kvp.Key, false);
                 }
 
-                m_NetworkPlayerService.CreatePlayer_ClientRpc();
+                m_NetworkPlayerService.ConfigureNetworkPlayerView_ClientRpc();
             }
         }
 
@@ -111,12 +117,10 @@ namespace BTG.Gameplay.GameState
 
         void SpawnNetworkPlayerViewForEachClients(ulong clientId, bool lateJoin)
         {
-            // Transform spawnPoint = GetRandomSpawnPoint();
-
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
 
-            // NetworkObject newPlayer = Instantiate(m_PlayerPrefab, spawnPoint.position, spawnPoint.rotation);
-            NetworkObject newPlayer = Instantiate(m_PlayerPrefab, Vector3.zero, Quaternion.identity);
+            Transform spawnPoint = GetRandomSpawnPoint();
+            NetworkObject newPlayer = Instantiate(m_PlayerPrefab, spawnPoint.position, spawnPoint.rotation);
 
             var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);
             Assert.IsTrue(persistentPlayerExists,
@@ -150,6 +154,29 @@ namespace BTG.Gameplay.GameState
 
             // spawn players characters with destroyWithScene = true
             newPlayer.SpawnWithOwnership(clientId, true);
+        }
+
+        /// <summary>
+        /// This need to be called on the server to set separate position for each client.
+        /// </summary>
+        /// <returns></returns>
+        private Transform GetRandomSpawnPoint()
+        {
+            Transform spawnPoint;
+
+            if (m_PlayerSpawnPointsList == null || m_PlayerSpawnPointsList.Count == 0)
+            {
+                m_PlayerSpawnPointsList = new List<Transform>(m_PlayerSpawnPoints);
+            }
+
+            Debug.Assert(m_PlayerSpawnPointsList.Count > 0,
+                $"PlayerSpawnPoints array should have at least 1 spawn points.");
+
+            int index = UnityEngine.Random.Range(0, m_PlayerSpawnPointsList.Count);
+            spawnPoint = m_PlayerSpawnPointsList[index];
+            m_PlayerSpawnPointsList.RemoveAt(index);
+
+            return spawnPoint;
         }
     }
 }

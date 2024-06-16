@@ -968,7 +968,8 @@ MonoBehaviour:
   parentReference:
     TypeName: BTG.Services.ApplicationService
   autoRun: 1
-  autoInjectGameObjects: []
+  autoInjectGameObjects:
+  - {fileID: 1466694017}
   m_PlayerPrefab: {fileID: -2021939701825717784, guid: 0372b2a60ea76224e9ce7a1ef12bd915,
     type: 3}
   m_NetworkPlayerService: {fileID: 1466694022}
