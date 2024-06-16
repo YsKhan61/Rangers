@@ -1,4 +1,6 @@
-﻿using Unity.Netcode;
+﻿using BTG.Player;
+using BTG.Utilities;
+using Unity.Netcode;
 using UnityEngine;
 
 
@@ -10,17 +12,20 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkAvatarGuidState m_NetworkAvatarGuidState;
 
         private GameObject m_Graphics;
-
         private Pose m_SpawnPose;
+        private PlayerTankController m_Controller;
+        private Transform m_Target;
+
+        public TagSO Tag => m_NetworkAvatarGuidState.RegisteredEntityData.Tag;
 
         private void Awake()
         {
             m_NetworkAvatarGuidState = GetComponent<NetworkAvatarGuidState>();
         }
 
-        public override void OnNetworkSpawn()
+        private void Update()
         {
-            m_SpawnPose = new Pose(transform.position, transform.rotation);
+            FollowTarget();
         }
 
         public override void OnDestroy()
@@ -29,11 +34,22 @@ namespace BTG.Gameplay.GameplayObjects
             Destroy(m_Graphics);
         }
 
+        public void SetFollowTarget(Transform target) => m_Target = target;
+
         public void SpawnGraphics()
         {
             m_Graphics = Instantiate(m_NetworkAvatarGuidState.RegisteredEntityData.Graphics, transform);
             m_Graphics.transform.localPosition = Vector3.zero;
             m_Graphics.transform.localRotation = Quaternion.identity;
+        }
+
+        private void FollowTarget()
+        {
+            if (m_Target == null)
+                return;
+
+            m_Target.GetPositionAndRotation(out Vector3 pos, out Quaternion rot);
+            transform.SetPose(new Pose(pos, rot));
         }
     }
 

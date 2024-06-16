@@ -17,8 +17,6 @@ namespace BTG.Factory
         [SerializeField, Tooltip("The factories to create the items")]
         List<FactorySO<T>> m_Factories;
 
-        public List<FactorySO<T>> Factories => m_Factories;
-
         [Inject]
         public void InjectIntoFactories(IObjectResolver resolver)
         {
@@ -27,23 +25,6 @@ namespace BTG.Factory
                 resolver.Inject(factory);
             }
         }
-
-        /*/// <summary>
-        /// Get the item from the factory based on the item tag
-        /// </summary>
-        public T GetItem(TagSO tag)
-        {
-            foreach (var factory in m_Factories)
-            {
-                if (factory.Tag == tag)
-                {
-                    return factory.GetItem();
-                }
-            }
-
-            Debug.LogError("No factory found for the tag: " + tag.name);
-            return default;
-        }*/
 
         public FactorySO<T> GetFactory(TagSO tag)
         {

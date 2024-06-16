@@ -1,7 +1,6 @@
 ﻿using BTG.Entity;
 using BTG.Player;
 using BTG.Utilities;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -23,14 +22,7 @@ namespace BTG.Gameplay.GameplayObjects
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
-
-        private NetworkAvatarGuidState m_NetworkAvatarGuidState;
         private PlayerTankController m_Controller;
-
-        private void Awake()
-        {
-            m_NetworkAvatarGuidState = GetComponent<NetworkAvatarGuidState>();
-        }
 
         public override void OnNetworkSpawn()
         {
@@ -58,9 +50,11 @@ namespace BTG.Gameplay.GameplayObjects
 
                 if (clientId == OwnerClientId)
                 {
-                    networkPlayerView.transform.SetParent(m_Controller.Transform);
-                    SpawnEntity();
-                    SetRandomSpawnPoint_ServerRpc();
+                    m_Controller.SetPose(new Pose(networkPlayerView.transform.position, networkPlayerView.transform.rotation));
+                    networkPlayerView.SetFollowTarget(m_Controller.Transform);
+                    TagSO entityTagSelected = networkPlayerView.Tag;
+                    m_PlayerStats.EntityTagSelected.Value = entityTagSelected;
+                    SpawnEntity(entityTagSelected);
                 }
                 else
                 {
@@ -98,9 +92,9 @@ namespace BTG.Gameplay.GameplayObjects
             playerInput.Initialize();
         }
 
-        private void SpawnEntity()
+        private void SpawnEntity(TagSO tag)
         {
-            bool entityFound = TryGetEntity(out IEntityBrain entity);
+            bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
             if (!entityFound)
                 return;
 
@@ -109,18 +103,10 @@ namespace BTG.Gameplay.GameplayObjects
             m_PVCamera.SetFollowTarget(m_Controller.CameraTarget);
         }
 
-        private bool TryGetEntity(out IEntityBrain entity)
+        private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
         {
-            entity = m_EntityFactoryContainer.GetFactory(m_PlayerStats.EntityTagSelected.Value).GetItem();
+            entity = m_EntityFactoryContainer.GetFactory(tag).GetItem();
             return entity != null;
         }
-
-        [ServerRpc(RequireOwnership = false)]
-        public void SetRandomSpawnPoint_ServerRpc()
-        {
-            m_Controller.SetPose(new Pose(GetRandomSpawnPoint().position, Quaternion.identity));
-        }
-
-        
     }
 }

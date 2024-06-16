@@ -973,6 +973,17 @@ MonoBehaviour:
   m_PlayerPrefab: {fileID: -2021939701825717784, guid: 0372b2a60ea76224e9ce7a1ef12bd915,
     type: 3}
   m_NetworkPlayerService: {fileID: 1466694022}
+  m_PlayerSpawnPoints:
+  - {fileID: 2227046499457286290}
+  - {fileID: 4427660413586858074}
+  - {fileID: 6261467593599084234}
+  - {fileID: 8341822120741598287}
+  - {fileID: 6115620285641327273}
+  - {fileID: 726033732407920698}
+  - {fileID: 4626738670310796772}
+  - {fileID: 5057937873870822355}
+  - {fileID: 9088350452537977551}
+  - {fileID: 3867861275001948784}
 --- !u!114 &1466694022
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -985,17 +996,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3abbe8a0811e9f54187b075f3680042b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_PlayerSpawnPoints:
-  - {fileID: 2227046499457286290}
-  - {fileID: 4427660413586858074}
-  - {fileID: 6261467593599084234}
-  - {fileID: 8341822120741598287}
-  - {fileID: 6115620285641327273}
-  - {fileID: 726033732407920698}
-  - {fileID: 4626738670310796772}
-  - {fileID: 5057937873870822355}
-  - {fileID: 9088350452537977551}
-  - {fileID: 3867861275001948784}
   m_PVCamera: {fileID: 1894154699}
 --- !u!1 &1894154696
 GameObject:
