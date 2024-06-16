@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using VContainer;
 
@@ -16,7 +15,7 @@ namespace BTG.Gameplay.UI
     /// <summary>
     /// Handles the display of in-game messages in a message feed.
     /// </summary>
-    public class UIMessageFeed : MonoBehaviour
+    public class LobbyChatSystem : NetworkBehaviour
     {
         const string IS_OPEN = "IsOpen";
 
@@ -38,38 +37,42 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         Button m_SendButton;
 
-        [SerializeField, FormerlySerializedAs("m_NetworkChatting")]
-        ServerChatSystem m_ServerChatSystem;
-
         [SerializeField]
         PersistentPlayersRuntimeCollectionSO m_PersistentPlayersRuntimeCollection;
 
         [SerializeField]
         Animator m_Animator;
 
-        FixedPlayerName m_OwnerClientName;
-
-        DisposableGroup m_Subscriptions;
-
-        Coroutine m_HideRoutine;
-
-        PopupManager m_PopupManager;
-
-        private void Start()
-        {
-            HideMessageWindow();
-        }
-
         [Inject]
         void InjectDependencies(
+            IPublisher<NetworkChatMessage> networkChatMessagePublisher,
             ISubscriber<ConnectionEventMessage> connectionEventSubscriber,
             ISubscriber<NetworkChatMessage> networkClientChatSubscriber,
             PopupManager popupManager)
         {
+            m_networkChatMessagePublisher = networkChatMessagePublisher;
             m_PopupManager = popupManager;
             m_Subscriptions = new DisposableGroup();
             m_Subscriptions.Add(connectionEventSubscriber.Subscribe(OnConnectionEvent));
             m_Subscriptions.Add(networkClientChatSubscriber.Subscribe(OnChatMessageReceived));
+        }
+
+        FixedPlayerName m_OwnerClientName;
+        DisposableGroup m_Subscriptions;
+        Coroutine m_HideRoutine;
+        PopupManager m_PopupManager;
+        IPublisher<NetworkChatMessage> m_networkChatMessagePublisher;
+
+
+        public override void OnNetworkSpawn()
+        {
+            DontDestroyOnLoad(gameObject);
+            HideMessageWindow();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            m_Subscriptions?.Dispose();
         }
 
         /// <summary>
@@ -88,11 +91,17 @@ namespace BTG.Gameplay.UI
                 m_PersistentPlayersRuntimeCollection.TryGetPlayerName(NetworkManager.Singleton.LocalClientId, out m_OwnerClientName);
             }
 
-            m_ServerChatSystem.SendChatMessageServerRpc(new NetworkChatMessage
+            SendChatMessageServerRpc(new NetworkChatMessage
             {
                 Name = m_OwnerClientName,
                 Message = m_ChatInputField.text
             });
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SendChatMessageServerRpc(NetworkChatMessage message)
+        {
+            m_networkChatMessagePublisher.Publish(message);
         }
 
         /// <summary>
@@ -182,11 +191,6 @@ namespace BTG.Gameplay.UI
             var messageSlot = go.GetComponentInChildren<UIMessageSlot>();
             m_MessageSlots.Add(messageSlot);
             return messageSlot;
-        }
-
-        void OnDestroy()
-        {
-            m_Subscriptions?.Dispose();
         }
     }
 }

@@ -1,6 +1,6 @@
 using BTG.Entity;
-using BTG.Gameplay.GameState;
 using BTG.Gameplay.UI;
+using BTG.Utilities;
 using System;
 using System.Collections.Generic;
 using TMPro;

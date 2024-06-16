@@ -145,8 +145,8 @@ MonoBehaviour:
   m_OnSelect:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4991301569573118420}
-        m_TargetAssemblyTypeName: BTG.Gameplay.UI.UIMessageFeed, BTG.Gameplay
+      - m_Target: {fileID: 3024106891126858730}
+        m_TargetAssemblyTypeName: BTG.Gameplay.UI.LobbyChatSystem, BTG.Gameplay
         m_MethodName: ResetHideRoutine
         m_Mode: 1
         m_Arguments:
@@ -169,8 +169,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4991301569573118420}
-        m_TargetAssemblyTypeName: BTG.Gameplay.UI.UIMessageFeed, BTG.Gameplay
+      - m_Target: {fileID: 3024106891126858730}
+        m_TargetAssemblyTypeName: BTG.Gameplay.UI.LobbyChatSystem, BTG.Gameplay
         m_MethodName: ResetHideRoutine
         m_Mode: 1
         m_Arguments:
@@ -553,8 +553,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4991301569573118420}
-        m_TargetAssemblyTypeName: Cosmos.Gameplay.UI.UIMessageFeed, Cosmos.Gameplay
+      - m_Target: {fileID: 3024106891126858730}
+        m_TargetAssemblyTypeName: BTG.Gameplay.UI.LobbyChatSystem, BTG.Gameplay
         m_MethodName: ShowMessageWindow
         m_Mode: 1
         m_Arguments:
@@ -804,7 +804,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7179051400166361121}
-  - component: {fileID: 4991301569573118420}
   m_Layer: 5
   m_Name: Message Window New
   m_TagString: Untagged
@@ -833,29 +832,6 @@ RectTransform:
   m_AnchoredPosition: {x: 50, y: 0}
   m_SizeDelta: {x: 1000, y: 1000}
   m_Pivot: {x: 0, y: 0.5}
---- !u!114 &4991301569573118420
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4599640886151227063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c030672ab56f84d8be71b8816783c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MessageSlots: []
-  m_MessageSlotPrefab: {fileID: 8329139238938935850, guid: f9f7f8663e4f7b54ea960bef5b702b5a,
-    type: 3}
-  m_VerticalLayoutGroup: {fileID: 6230096586373587577}
-  m_ChatButton: {fileID: 1136898811399748999}
-  m_ChatInputField: {fileID: 3129667461257319776}
-  m_SendButton: {fileID: 5570437177863020517}
-  m_ServerChatSystem: {fileID: 3622866467670639421}
-  m_PersistentPlayersRuntimeCollection: {fileID: 11400000, guid: 59ee1b408a9f68242ae58939a969bc7e,
-    type: 2}
-  m_Animator: {fileID: 5742606843465443252}
 --- !u!1 &4759824719298698692
 GameObject:
   m_ObjectHideFlags: 0
@@ -1125,8 +1101,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1358389462966000939}
-  - component: {fileID: 6819369891916203380}
-  - component: {fileID: 3622866467670639421}
+  - component: {fileID: 4284834494462997633}
+  - component: {fileID: 3024106891126858730}
   m_Layer: 0
   m_Name: ChatSystem
   m_TagString: Untagged
@@ -1150,7 +1126,7 @@ Transform:
   - {fileID: 7643409983158737334}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6819369891916203380
+--- !u!114 &4284834494462997633
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1162,8 +1138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1743691042
-  InScenePlacedSourceGlobalObjectIdHash: 915170774
+  GlobalObjectIdHash: 1635861023
+  InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
@@ -1171,7 +1147,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &3622866467670639421
+--- !u!114 &3024106891126858730
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1180,9 +1156,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 6618264321816063364}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9c92dd1043146640a68e5684558a83e, type: 3}
+  m_Script: {fileID: 11500000, guid: d0c030672ab56f84d8be71b8816783c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_MessageSlots: []
+  m_MessageSlotPrefab: {fileID: 8329139238938935850, guid: f9f7f8663e4f7b54ea960bef5b702b5a,
+    type: 3}
+  m_VerticalLayoutGroup: {fileID: 6230096586373587577}
+  m_ChatButton: {fileID: 1136898811399748999}
+  m_ChatInputField: {fileID: 3129667461257319776}
+  m_SendButton: {fileID: 5570437177863020517}
+  m_PersistentPlayersRuntimeCollection: {fileID: 11400000, guid: 59ee1b408a9f68242ae58939a969bc7e,
+    type: 2}
+  m_Animator: {fileID: 5742606843465443252}
 --- !u!1 &6845543862786241366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1218,7 +1204,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 175191.36}
+  m_AnchoredPosition: {x: 0, y: 220727.33}
   m_SizeDelta: {x: 0, y: 2000}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &3062700124339618700
@@ -1644,22 +1630,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4991301569573118420}
-        m_TargetAssemblyTypeName: Cosmos.Gameplay.UI.UIMessageFeed, Cosmos.Gameplay
+      - m_Target: {fileID: 3024106891126858730}
+        m_TargetAssemblyTypeName: BTG.Gameplay.UI.LobbyChatSystem, BTG.Gameplay
         m_MethodName: SendMessage
         m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3129667461257319776}
-        m_TargetAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1788,8 +1762,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4991301569573118420}
-        m_TargetAssemblyTypeName: Cosmos.Gameplay.UI.UIMessageFeed, Cosmos.Gameplay
+      - m_Target: {fileID: 3024106891126858730}
+        m_TargetAssemblyTypeName: BTG.Gameplay.UI.LobbyChatSystem, BTG.Gameplay
         m_MethodName: HideMessageWindow
         m_Mode: 1
         m_Arguments:

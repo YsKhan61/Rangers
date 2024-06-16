@@ -2160,17 +2160,57 @@ PrefabInstance:
     - target: {fileID: 1999929320550910981, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 204574.56
+      value: 221535.12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284834494462997633, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1635861023
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284834494462997633, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: InScenePlacedSourceGlobalObjectIdHash
+      value: 345062616
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1278191319308520016}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: set_text
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TMPro.TMP_InputField, Unity.TextMeshPro
+      objectReference: {fileID: 0}
+    - target: {fileID: 5570437177863020517, guid: 85936fff3789d6e4d9d1f00859705c3b,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6618264321816063364, guid: 85936fff3789d6e4d9d1f00859705c3b,
         type: 3}
       propertyPath: m_Name
       value: ChatSystem - NO
-      objectReference: {fileID: 0}
-    - target: {fileID: 6819369891916203380, guid: 85936fff3789d6e4d9d1f00859705c3b,
-        type: 3}
-      propertyPath: GlobalObjectIdHash
-      value: 1743691042
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2183,6 +2223,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1278191319308520014}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1278191319308520016 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3129667461257319776, guid: 85936fff3789d6e4d9d1f00859705c3b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1278191319308520014}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1281637906685132737
 MonoBehaviour:
   m_ObjectHideFlags: 0
