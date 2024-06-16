@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5320558907336863217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6868742590276274487}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6868742590276274487
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5320558907336863217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
+  m_LocalPosition: {x: 0, y: 8.63, z: -5.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 752535536612365539}
+  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
 --- !u!1001 &9015914202279481450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12,7 +43,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_CameraTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6868742590276274487}
     - target: {fileID: 17056773906127175, guid: 3bae44273630bc94fb6b126d49c2ec17,
         type: 3}
       propertyPath: m_DamageCollider
@@ -187,6 +218,16 @@ PrefabInstance:
     - {fileID: 7370263451650841840, guid: 3bae44273630bc94fb6b126d49c2ec17, type: 3}
     - {fileID: 7753026112593863338, guid: 3bae44273630bc94fb6b126d49c2ec17, type: 3}
     - {fileID: 1532483733680906918, guid: 3bae44273630bc94fb6b126d49c2ec17, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 8606235021615285385, guid: 3bae44273630bc94fb6b126d49c2ec17,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6868742590276274487}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3bae44273630bc94fb6b126d49c2ec17, type: 3}
+--- !u!4 &752535536612365539 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8606235021615285385, guid: 3bae44273630bc94fb6b126d49c2ec17,
+    type: 3}
+  m_PrefabInstance: {fileID: 9015914202279481450}
+  m_PrefabAsset: {fileID: 0}

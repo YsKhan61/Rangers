@@ -23,12 +23,7 @@ namespace BTG.Gameplay.GameplayObjects
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
-        private PlayerTankController m_Controller;
-
-        public override void OnNetworkSpawn()
-        {
-            
-        }
+        private NetworkPlayerView m_OwnerNetworkPlayerView;
 
         /// <summary>
         /// This is called to configure the NetworkPlayerView for all clients.
@@ -49,26 +44,31 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 if (networkPlayerView.IsOwner)
                 {
-                    CreatePlayerController();
-                    CreatePlayerInput();
-                    m_PVCamera.SetFollowTarget(m_Controller.Transform);
+                    m_OwnerNetworkPlayerView = networkPlayerView;
+                    PlayerInputs playerInputs = new PlayerInputs();
+                    playerInputs.Initialize();
+                    networkPlayerView.SetPlayerInputs(playerInputs);
+                    networkPlayerView.Init();// this need to be camera target
                 }
 
                 if (networkPlayerView.IsServer)
                 {
-                    m_Controller.SetPose(new Pose(networkPlayerView.transform.position, networkPlayerView.transform.rotation));
-                    networkPlayerView.SetFollowTarget(m_Controller.Transform);
-                    TagSO entityTagSelected = networkPlayerView.Tag;
-                    m_PlayerStats.EntityTagSelected.Value = entityTagSelected;
-                    SpawnEntity(entityTagSelected);
+                    networkPlayerView.SetPlayerModel(new PlayerModel(m_PlayerData));
+                    networkPlayerView.SetPlayerService(this);
+                    CreateEntityForNetworkPlayerView(networkPlayerView);
                 }
                 else
                 {
                     networkPlayerView.SpawnGraphics();
                 }
-            }
 
-            Debug.Log("CreatePlayer_ClientRpc" + OwnerClientId);    
+
+                // Set Camera Target for owners
+                if (networkPlayerView.IsOwner)
+                {
+                    m_PVCamera.SetFollowTarget(networkPlayerView.CameraTarget);
+                }
+            }
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -83,25 +83,16 @@ namespace BTG.Gameplay.GameplayObjects
             // Respawn
         }
 
-        private void CreatePlayerController()
+        private void CreateEntityForNetworkPlayerView(NetworkPlayerView networkPlayerView)
         {
-            m_Controller = new PlayerTankController.Builder()
-                .CreateModel(m_PlayerData)
-                .CreateView(m_PlayerData.Prefab)
-                .WithPlayerService(this)
-                .CreatePlayerInput()
-                .Build();
-        }
+            TagSO tag = networkPlayerView.Tag;
+            m_PlayerStats.EntityTagSelected.Value = tag;            // Pre set the entity tag to the selected entity tag for later use. later players can change entities by changing the tag
 
-        private void SpawnEntity(TagSO tag)
-        {
             bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
             if (!entityFound)
                 return;
 
-            m_Controller.SetEntityBrain(entity);
-            m_Controller.Init();
-            m_PVCamera.SetFollowTarget(m_Controller.CameraTarget);
+            networkPlayerView.SetEntityBrain(entity);
         }
 
         private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
