@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEngine;
 
 /*
@@ -8,45 +9,91 @@ using UnityEngine;
         - Persistent -> when we need to make sure that the object is not destroyed during the session.
 */
 
-public class Singleton<T> : MonoBehaviour where T : Component
+namespace BTG.Utilities
 {
-    public static T Instance { get; private set; }
-
-    public virtual void Awake()
+    public class Singleton<T> : MonoBehaviour where T : Component
     {
-        if (Instance == null)
-        {
-            Instance = this as T;
+        public static T Instance { get; private set; }
 
-            print("Instantiate Singleton : " + Instance);
-        }
-        else
+        public virtual void Awake()
         {
-            print("Destroy Singleton: " + gameObject.name);
+            if (Instance == null)
+            {
+                Instance = this as T;
 
-            Destroy(gameObject);
+                print("Instantiate Singleton : " + Instance);
+            }
+            else
+            {
+                print("Destroy Singleton: " + gameObject.name);
+
+                Destroy(gameObject);
+            }
         }
     }
-}
 
-public class SingletonPersistent<T> : MonoBehaviour where T : Component
-{
-    public static T Instance { get; private set; }
-
-    public virtual void Awake()
+    public class SingletonPersistent<T> : MonoBehaviour where T : Component
     {
-        if (Instance == null)
-        {
-            Instance = this as T;
-            DontDestroyOnLoad(this);
+        public static T Instance { get; private set; }
 
-            print("Instantiate SingletonPersistent : " + Instance);
+        public virtual void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this as T;
+                DontDestroyOnLoad(this);
+
+                print("Instantiate SingletonPersistent : " + Instance);
+            }
+            else
+            {
+                print("Destroy SingletonPersistent: " + gameObject.name);
+
+                Destroy(gameObject);
+            }
         }
-        else
-        {
-            print("Destroy SingletonPersistent: " + gameObject.name);
+    }
 
-            Destroy(gameObject);
+    public class SingletonNetwork<T> : NetworkBehaviour where T : Component
+    {
+        public static T Instance { get; private set; }
+
+        public virtual void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this as T;
+
+                print("Instantiate SingletonNetwork: " + Instance);
+            }
+            else
+            {
+                print("Destroy SingletonNetwork: " + Instance);
+
+                Destroy(gameObject);
+            }
+        }
+    }
+
+    public class SingletonNetworkPersistent<T> : NetworkBehaviour where T : Component
+    {
+        public static T Instance { get; private set; }
+
+        public virtual void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this as T;
+                DontDestroyOnLoad(this);
+
+                print("Instantiate SingletonNetworkPersistent: " + Instance);
+            }
+            else
+            {
+                print("Destroy SingletonNetworkPersistent: " + Instance);
+
+                Destroy(gameObject);
+            }
         }
     }
 }
