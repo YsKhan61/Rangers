@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using System;
 using UnityEngine;
 
@@ -14,9 +15,9 @@ namespace BTG.Entity
 
 
         /// <summary>
-        /// Try to get the TankData by the Guid.
+        /// Try to get the EntityData by the Guid.
         /// </summary>
-        public bool TryGetTankData(Guid guid, out EntityDataSO entityData)
+        public bool TryGetEntityData(Guid guid, out EntityDataSO entityData)
         {
             entityData = System.Array.Find(m_EntityDataList, tankData => tankData.Guid == guid);
 
@@ -25,8 +26,8 @@ namespace BTG.Entity
 
 
         /// <summary>
-        /// Get a random TankData from the l
-        public EntityDataSO GetRandomTankData()
+        /// Get a random EntityData from the list
+        public EntityDataSO GetRandomEntityData()
         {
             if (m_EntityDataList == null || m_EntityDataList.Length == 0)
             {
@@ -38,11 +39,20 @@ namespace BTG.Entity
 
 
         /// <summary>
-        /// Get the TankData by the seat index of the character select screen.
+        /// Get the EntityData by the SeatIndex.
         /// </summary>
-        public EntityDataSO GetTankDataBySeatIndex(int seatIndex)
+        public EntityDataSO GetEntityDataBySeatIndex(int seatIndex)
         {
             return Array.Find(m_EntityDataList, tankData => tankData.CharSelectSeatIndex == seatIndex);
+        }
+
+
+        /// <summary>
+        /// Get the EntityData by the Tag.
+        /// </summary>
+        public EntityDataSO GetEntityData(TagSO tag)
+        {
+            return Array.Find(m_EntityDataList, tankData => tankData.Tag == tag);
         }
     }
 }
