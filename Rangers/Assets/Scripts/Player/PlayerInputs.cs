@@ -64,7 +64,7 @@ namespace BTG.Player
 
         private void OnCanceledPrimaryActionInput(InputAction.CallbackContext context)
         {
-            OnPrimaryActionInputStarted?.Invoke();
+            OnPrimaryActionInputCanceled?.Invoke();
         }
 
         private void OnPerformedUltimateInput(InputAction.CallbackContext context)
