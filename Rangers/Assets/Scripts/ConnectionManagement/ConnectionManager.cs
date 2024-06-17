@@ -76,6 +76,7 @@ namespace BTG.ConnectionManagement
         internal readonly HostingState _hostingState = new();
 
         private ConnectionState _currentState;
+        internal ConnectionState CurrentState => _currentState;
 
         public int MaxConnectedPlayers = 4;
 

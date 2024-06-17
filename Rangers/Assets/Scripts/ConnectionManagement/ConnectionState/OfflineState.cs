@@ -26,10 +26,7 @@ namespace BTG.ConnectionManagement
         {
             _lobbyServiceFacade.EndTracking();
             _connectionManager.NetworkManager.Shutdown();
-            if (SceneManager.GetActiveScene().name != _sceneNameList.MainMenuScene)
-            {
-                SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.MainMenuScene, useNetworkSceneManager: false);
-            }
+            OnUserRequestedShutdown();
         }
 
         public override void Exit() { }
@@ -66,6 +63,19 @@ namespace BTG.ConnectionManagement
 
             _connectionManager._clientReconnectingState.Configure(connectionMethodIP);
             _connectionManager.ChangeState(_connectionManager._clientConnectingState.Configure(connectionMethodIP));
+        }
+
+        public override void OnUserRequestedShutdown()
+        {
+            if (_connectionManager.CurrentState != _connectionManager._offlineState)
+            {
+                _connectionManager.ChangeState(_connectionManager._offlineState);
+            }
+
+            if (SceneManager.GetActiveScene().name != _sceneNameList.MainMenuScene)
+            {
+                SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.MainMenuScene, useNetworkSceneManager: false);
+            }
         }
     }
 }

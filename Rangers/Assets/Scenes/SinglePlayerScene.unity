@@ -352,7 +352,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017372673}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3449,7 +3449,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 5651293308823060954, guid: 31e40c38da5f5154d872e6638e2a6274,
+    - targetCorrespondingSourceObject: {fileID: 7540306962545326740, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1017372674}
@@ -3463,7 +3463,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &5282029357601126308 stripped
 RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5651293308823060954, guid: 31e40c38da5f5154d872e6638e2a6274,
+  m_CorrespondingSourceObject: {fileID: 7540306962545326740, guid: 31e40c38da5f5154d872e6638e2a6274,
     type: 3}
   m_PrefabInstance: {fileID: 5282029357601126306}
   m_PrefabAsset: {fileID: 0}

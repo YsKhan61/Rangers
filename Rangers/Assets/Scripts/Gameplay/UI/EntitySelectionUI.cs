@@ -21,18 +21,21 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         private InputActionReference m_InputActionReference;
 
+        [SerializeField]
+        private bool m_ShowAtStart = true;
+
         private void OnEnable()
         {
-            EventService.Instance.OnShowHeroSelectionUI.AddListener(ShowPanel);
+            EventService.Instance.OnShowHeroSelectionUI.AddListener(OnHeroSelectionEventInvoked);
             m_InputActionReference.action.performed += OnToggleVisibilityInputPerformed;
             m_InputActionReference.action.Enable();
         }
 
-        private void Start() => ShowPanel();
+        private void Start() => TogglePanel(m_ShowAtStart);
 
         private void OnDisable()
         {
-            EventService.Instance.OnShowHeroSelectionUI.RemoveListener(ShowPanel);
+            EventService.Instance.OnShowHeroSelectionUI.RemoveListener(OnHeroSelectionEventInvoked);
             m_InputActionReference.action.performed -= OnToggleVisibilityInputPerformed;
             m_InputActionReference.action.Disable();
         }
@@ -46,19 +49,19 @@ namespace BTG.Gameplay.UI
         public void EntityTagSelectAndHide(TagSO tag)
         {
             m_EntityTagSelected.Value = tag;
-            HidePanel();
+            TogglePanel(false);
         }
 
-        private void ShowPanel() => m_Panel.SetActive(true);
+        private void OnHeroSelectionEventInvoked() => TogglePanel(true);
 
-        private void HidePanel() => m_Panel.SetActive(false);
+        private void TogglePanel(bool show = false) => m_Panel.SetActive(show);
 
         private void OnToggleVisibilityInputPerformed(InputAction.CallbackContext context)
         {
             if (m_Panel.activeSelf)
-                HidePanel();
+                TogglePanel(false);
             else
-                ShowPanel();
+                TogglePanel(true);
         }
     }
 }

@@ -25,6 +25,9 @@ namespace BTG.Gameplay.UI
         private ConnectionManager _connectionManager;
 
         [Inject]
+        private SceneNameListSO _sceneNameListSO;
+
+        [Inject]
         private IPublisher<QuitApplicationMessage> _quitApplicationMessagePublisher;
 
         private void Awake()
@@ -44,7 +47,14 @@ namespace BTG.Gameplay.UI
             switch (_quitMode)
             {
                 case QuitMode.ReturnToMainMenu:
-                    _connectionManager?.RequestShutdown();
+                    if (_connectionManager)
+                    {
+                        _connectionManager.RequestShutdown();
+                    }
+                    else
+                    {
+                        Debug.LogError("ConnectionManager not found!");
+                    }
                     break;
                 case QuitMode.QuitApplication:
                     _quitApplicationMessagePublisher.Publish(new QuitApplicationMessage());
