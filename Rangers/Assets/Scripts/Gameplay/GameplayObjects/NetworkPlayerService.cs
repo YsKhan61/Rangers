@@ -33,9 +33,6 @@ namespace BTG.Gameplay.GameplayObjects
         public void ConfigureNetworkPlayer_ClientRpc(ulong clientId)
         {
             NetworkPlayer networkPlayer = NetworkPlayerViewClientCache.GetPlayerView(clientId);
-
-            List<NetworkPlayer> ActivePlayers = NetworkPlayerViewClientCache.ActivePlayers;
-
             if (networkPlayer == null)
             {
                 Debug.LogError("Network player is null. This should not happen!");
