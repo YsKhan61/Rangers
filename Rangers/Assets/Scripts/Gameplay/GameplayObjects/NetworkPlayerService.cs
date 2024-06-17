@@ -23,7 +23,7 @@ namespace BTG.Gameplay.GameplayObjects
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
-        private NetworkPlayerView m_OwnerNetworkPlayerView;
+        private NetworkPlayer m_OwnerNetworkPlayerView;
 
         /// <summary>
         /// This is called to configure the NetworkPlayerView for all clients.
@@ -32,7 +32,7 @@ namespace BTG.Gameplay.GameplayObjects
         [ClientRpc]
         public void ConfigureNetworkPlayerView_ClientRpc()
         {
-            List<NetworkPlayerView> ActivePlayers = NetworkPlayerViewClientCache.ActivePlayers;
+            List<NetworkPlayer> ActivePlayers = NetworkPlayerViewClientCache.ActivePlayers;
 
             if (ActivePlayers == null)
             {
@@ -40,7 +40,7 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
 
-            foreach (NetworkPlayerView networkPlayerView in ActivePlayers)
+            foreach (NetworkPlayer networkPlayerView in ActivePlayers)
             {
                 if (networkPlayerView.IsOwner)
                 {
@@ -83,7 +83,7 @@ namespace BTG.Gameplay.GameplayObjects
             // Respawn
         }
 
-        private void CreateEntityForNetworkPlayerView(NetworkPlayerView networkPlayerView)
+        private void CreateEntityForNetworkPlayerView(NetworkPlayer networkPlayerView)
         {
             TagSO tag = networkPlayerView.Tag;
             m_PlayerStats.EntityTagSelected.Value = tag;            // Pre set the entity tag to the selected entity tag for later use. later players can change entities by changing the tag

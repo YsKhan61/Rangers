@@ -13,7 +13,7 @@ namespace BTG.Gameplay.GameplayObjects
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(NetworkAvatarGuidState))]
-    public class NetworkPlayerView : NetworkBehaviour, IEntityController
+    public class NetworkPlayer : NetworkBehaviour, IEntityController
     {
         private Rigidbody m_Rigidbody;
         private NetworkAvatarGuidState m_NetworkAvatarGuidState;
@@ -73,18 +73,7 @@ namespace BTG.Gameplay.GameplayObjects
             MoveWithForce();
         }
 
-        /*private void Update()
-        {
-            if (!IsServer)
-                return;
-
-            if (!m_Model.IsAlive)
-                return;
-
-            CalculateInputSpeed();
-        }*/
-
-        public override void OnDestroy()
+        public override void OnNetworkDespawn()
         {
             base.OnDestroy();
 

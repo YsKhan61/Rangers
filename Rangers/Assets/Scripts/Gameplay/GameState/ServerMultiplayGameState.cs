@@ -13,7 +13,7 @@ using UnityEngine.SceneManagement;
 namespace BTG.Gameplay.GameState
 {
     [RequireComponent(typeof(NetcodeHooks))]
-    public class MultiplayGameState : GameStateBehaviour
+    public class ServerMultiplayGameState : GameStateBehaviour
     {
         [SerializeField]
         [Tooltip("Make sure this is included in the NetworkManager's list of prefabs!")]
@@ -80,16 +80,17 @@ namespace BTG.Gameplay.GameState
 
         void OnSynchronizeComplete(ulong clientId)
         {
-            /*if (InitialSpawnDone && !ServerCharactersCachedInServerMachine.GetServerCharacter(clientId))
+            if (InitialSpawnDone && !NetworkPlayerViewClientCache.GetPlayerView(clientId))
             {
                 //somebody joined after the initial spawn. This is a Late Join scenario. This player may have issues
                 //(either because multiple people are late-joining at once, or because some dynamic entities are
                 //getting spawned while joining. But that's not something we can fully address by changes in
-                //ServerBossRoomState.
-                SpawnPlayer(clientId, true);
-            }*/
+                //ServerMultiplayGameState.
+                SpawnNetworkPlayerForEachClients(clientId, true);
 
-            Debug.Log("Late joiner: " + clientId + " has completed synchronizing.");
+                Debug.Log("Now need to reconfig the network player view");
+                // After spawning network player we need to inform NetworkPlayerService to reconfig the network player view
+            }
         }
 
         void OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
@@ -99,7 +100,7 @@ namespace BTG.Gameplay.GameState
                 InitialSpawnDone = true;
                 foreach (var kvp in NetworkManager.Singleton.ConnectedClients)
                 {
-                    SpawnNetworkPlayerViewForEachClients(kvp.Key, false);
+                    SpawnNetworkPlayerForEachClients(kvp.Key, false);
                 }
 
                 m_NetworkPlayerService.ConfigureNetworkPlayerView_ClientRpc();
@@ -115,7 +116,7 @@ namespace BTG.Gameplay.GameState
             }
         }
 
-        void SpawnNetworkPlayerViewForEachClients(ulong clientId, bool lateJoin)
+        void SpawnNetworkPlayerForEachClients(ulong clientId, bool lateJoin)
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
 

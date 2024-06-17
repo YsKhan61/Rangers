@@ -8,20 +8,20 @@ using UnityEngine;
 namespace BTG.Gameplay.GameplayObjects
 {
     [RequireComponent(typeof(NetcodeHooks))]
-    [RequireComponent(typeof(NetworkPlayerView))]
+    [RequireComponent(typeof(NetworkPlayer))]
     public class NetworkPlayerViewClientCache : MonoBehaviour
     {
-        private static List<NetworkPlayerView> ms_ActivePlayers = new List<NetworkPlayerView>();
-        public static List<NetworkPlayerView> ActivePlayers => ms_ActivePlayers;
+        private static List<NetworkPlayer> ms_ActivePlayers = new List<NetworkPlayer>();
+        public static List<NetworkPlayer> ActivePlayers => ms_ActivePlayers;
 
         private NetcodeHooks m_NetcodeHooks;
-        private NetworkPlayerView m_NetworkPlayerView;
+        private NetworkPlayer m_Owner;  // This is the owner of this client instance
 
 
         private void Awake()
         {
             m_NetcodeHooks = GetComponent<NetcodeHooks>();
-            m_NetworkPlayerView = GetComponent<NetworkPlayerView>();
+            m_Owner = GetComponent<NetworkPlayer>();
         }
 
         private void OnEnable()
@@ -34,11 +34,13 @@ namespace BTG.Gameplay.GameplayObjects
         {
             m_NetcodeHooks.OnNetworkSpawnHook -= OnNetworkSpawn;
             m_NetcodeHooks.OnNetworkDespawnHook -= OnNetworkDespawn;
+
+            ms_ActivePlayers.Remove(m_Owner);
         }
 
         private void OnNetworkSpawn()
         {
-            ms_ActivePlayers.Add(m_NetworkPlayerView);
+            ms_ActivePlayers.Add(m_Owner);
 
             LogCaching();
         }
@@ -47,7 +49,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (m_NetcodeHooks.IsServer)
             {
-                Transform movementTransform = m_NetworkPlayerView.transform;
+                Transform movementTransform = m_Owner.transform;
                 SessionPlayerData? sessionPlayerData = SessionManager<SessionPlayerData>.Instance.GetPlayerData(m_NetcodeHooks.OwnerClientId);
                 if (sessionPlayerData.HasValue)
                 {
@@ -60,13 +62,13 @@ namespace BTG.Gameplay.GameplayObjects
             }
             else
             {
-                ms_ActivePlayers.Remove(m_NetworkPlayerView);
+                ms_ActivePlayers.Remove(m_Owner);
             }
         }
 
-        public static NetworkPlayerView GetPlayerView(ulong ownerClientId)
+        public static NetworkPlayer GetPlayerView(ulong ownerClientId)
         {
-            foreach (NetworkPlayerView playerView in ms_ActivePlayers)
+            foreach (NetworkPlayer playerView in ms_ActivePlayers)
             {
                 if (playerView.OwnerClientId == ownerClientId)
                 {
