@@ -1,6 +1,7 @@
 using BTG.ConnectionManagement;
 using BTG.Gameplay.GameplayObjects;
 using BTG.Utilities;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -73,6 +74,7 @@ namespace BTG.Gameplay.UI
         public override void OnNetworkDespawn()
         {
             m_Subscriptions?.Dispose();
+            Destroy(gameObject);
         }
 
         /// <summary>
