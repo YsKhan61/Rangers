@@ -40,33 +40,33 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
 
-            foreach (NetworkPlayer networkPlayerView in ActivePlayers)
+            foreach (NetworkPlayer networkPlayer in ActivePlayers)
             {
-                if (networkPlayerView.IsOwner)
+                if (networkPlayer.IsOwner)
                 {
-                    m_OwnerNetworkPlayerView = networkPlayerView;
+                    m_OwnerNetworkPlayerView = networkPlayer;
                     PlayerInputs playerInputs = new PlayerInputs();
                     playerInputs.Initialize();
-                    networkPlayerView.SetPlayerInputs(playerInputs);
-                    networkPlayerView.Init();// this need to be camera target
+                    networkPlayer.SetPlayerInputs(playerInputs);
+                    networkPlayer.Init();// this need to be camera target
                 }
 
-                if (networkPlayerView.IsServer)
+                if (networkPlayer.IsServer)
                 {
-                    networkPlayerView.SetPlayerModel(new PlayerModel(m_PlayerData));
-                    networkPlayerView.SetPlayerService(this);
-                    CreateEntityForNetworkPlayerView(networkPlayerView);
+                    networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
+                    networkPlayer.SetPlayerService(this);
+                    CreateEntityForNetworkPlayerView(networkPlayer);
                 }
                 else
                 {
-                    networkPlayerView.SpawnGraphics();
+                    networkPlayer.SpawnGraphics();
                 }
 
 
                 // Set Camera Target for owners
-                if (networkPlayerView.IsOwner)
+                if (networkPlayer.IsOwner)
                 {
-                    m_PVCamera.SetFollowTarget(networkPlayerView.CameraTarget);
+                    m_PVCamera.SetFollowTarget(networkPlayer.CameraTarget);
                 }
             }
         }

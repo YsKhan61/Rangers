@@ -81,7 +81,9 @@ namespace BTG.Gameplay.GameplayObjects
                 UnsubscribeFromInputEvents();
             
             if (IsServer)
-                UnsubscribeFromEntityEvents();
+            {
+                DeInit();
+            }
 
             if (m_GraphicsView != null)
                 Destroy(m_GraphicsView);
@@ -119,10 +121,10 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
 
-            m_EntityBrain.Init();
-
             CacheEntityDatas();
             ConfigureEntityWithHealthController();
+
+            m_EntityBrain.Init();
         }
 
         public void Init()
