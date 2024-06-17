@@ -103,7 +103,7 @@ namespace BTG.Gameplay.GameState
                     SpawnNetworkPlayerForEachClients(kvp.Key, false);
                 }
 
-                m_NetworkPlayerService.ConfigureNetworkPlayerView_ClientRpc();
+                // m_NetworkPlayerService.ConfigureNetworkPlayerView_ClientRpc();
             }
         }
 
@@ -120,8 +120,7 @@ namespace BTG.Gameplay.GameState
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
 
-            Transform spawnPoint = GetRandomSpawnPoint();
-            NetworkObject newPlayer = Instantiate(m_PlayerPrefab, spawnPoint.position, spawnPoint.rotation);
+            NetworkObject newPlayer = Instantiate(m_PlayerPrefab);
 
             var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);
             Assert.IsTrue(persistentPlayerExists,
@@ -143,6 +142,11 @@ namespace BTG.Gameplay.GameState
                     newPlayer.transform.SetPositionAndRotation(sessionPlayerData.Value.PlayerPosition, sessionPlayerData.Value.PlayerRotation);
                 }
             }
+            else // else spawn the player at a random spawn point
+            {
+                Transform spawnPoint = GetRandomSpawnPoint();
+                newPlayer.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
+            }
 
             networkAvatarGuidState.n_EntityNetworkGuid.Value =
                 persistentPlayer.NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
@@ -155,6 +159,8 @@ namespace BTG.Gameplay.GameState
 
             // spawn players characters with destroyWithScene = true
             newPlayer.SpawnWithOwnership(clientId, true);
+
+            m_NetworkPlayerService.ConfigureNetworkPlayer_ClientRpc(clientId);
         }
 
         /// <summary>

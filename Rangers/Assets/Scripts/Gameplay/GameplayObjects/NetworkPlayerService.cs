@@ -30,44 +30,43 @@ namespace BTG.Gameplay.GameplayObjects
         /// It will be called on each clients from the server.
         /// /// </summary>
         [ClientRpc]
-        public void ConfigureNetworkPlayerView_ClientRpc()
+        public void ConfigureNetworkPlayer_ClientRpc(ulong clientId)
         {
+            NetworkPlayer networkPlayer = NetworkPlayerViewClientCache.GetPlayerView(clientId);
+
             List<NetworkPlayer> ActivePlayers = NetworkPlayerViewClientCache.ActivePlayers;
 
-            if (ActivePlayers == null)
+            if (networkPlayer == null)
             {
-                Debug.LogError("ActivePlayers is null");
+                Debug.LogError("Network player is null. This should not happen!");
                 return;
             }
 
-            foreach (NetworkPlayer networkPlayer in ActivePlayers)
+            if (networkPlayer.IsOwner)
             {
-                if (networkPlayer.IsOwner)
-                {
-                    m_OwnerNetworkPlayerView = networkPlayer;
-                    PlayerInputs playerInputs = new PlayerInputs();
-                    playerInputs.Initialize();
-                    networkPlayer.SetPlayerInputs(playerInputs);
-                    networkPlayer.Init();// this need to be camera target
-                }
+                m_OwnerNetworkPlayerView = networkPlayer;
+                PlayerInputs playerInputs = new PlayerInputs();
+                playerInputs.Initialize();
+                networkPlayer.SetPlayerInputs(playerInputs);
+                networkPlayer.Init();// this need to be camera target
+            }
 
-                if (networkPlayer.IsServer)
-                {
-                    networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
-                    networkPlayer.SetPlayerService(this);
-                    CreateEntityForNetworkPlayerView(networkPlayer);
-                }
-                else
-                {
-                    networkPlayer.SpawnGraphics();
-                }
+            if (networkPlayer.IsServer)
+            {
+                networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
+                networkPlayer.SetPlayerService(this);
+                CreateEntityForNetworkPlayerView(networkPlayer);
+            }
+            else
+            {
+                networkPlayer.SpawnGraphics();
+            }
 
 
-                // Set Camera Target for owners
-                if (networkPlayer.IsOwner)
-                {
-                    m_PVCamera.SetFollowTarget(networkPlayer.CameraTarget);
-                }
+            // Set Camera Target for owners
+            if (networkPlayer.IsOwner)
+            {
+                m_PVCamera.SetFollowTarget(networkPlayer.CameraTarget);
             }
         }
 
