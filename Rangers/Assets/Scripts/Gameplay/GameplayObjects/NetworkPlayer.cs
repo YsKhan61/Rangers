@@ -2,8 +2,10 @@
 using BTG.Player;
 using BTG.Tank;
 using BTG.Utilities;
+using System;
 using Unity.Netcode;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Gameplay.GameplayObjects
@@ -12,11 +14,12 @@ namespace BTG.Gameplay.GameplayObjects
     /// This is a fused script of SinglePlayer's PlayerTankController and PlayerView
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    [RequireComponent(typeof(NetworkAvatarGuidState))]
     public class NetworkPlayer : NetworkBehaviour, IEntityController
     {
+        [Inject]
+        private EntityFactoryContainerSO m_EntityFactoryContainer;
+
         private Rigidbody m_Rigidbody;
-        private NetworkAvatarGuidState m_NetworkAvatarGuidState;
         private Pose m_SpawnPose;
         private PlayerModel m_Model;
         private IPlayerService m_PlayerService;
@@ -24,10 +27,11 @@ namespace BTG.Gameplay.GameplayObjects
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
-
-        public TagSO Tag => m_NetworkAvatarGuidState.RegisteredEntityData.Tag;
+        private PersistentPlayer m_PersistentPlayer;
 
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
+
+        public PlayerVirtualCamera PVC_Camera { get; set; }
 
         public Transform CameraTarget
         {
@@ -56,8 +60,18 @@ namespace BTG.Gameplay.GameplayObjects
         private void Awake()
         {
             m_Rigidbody = GetComponent<Rigidbody>();
-            m_NetworkAvatarGuidState = GetComponent<NetworkAvatarGuidState>();
             m_EntityHealthController = GetComponent<EntityHealthController>();
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            m_PersistentPlayer = PersistentPlayerClientCache.GetPlayer(OwnerClientId);
+            if (m_PersistentPlayer == null)
+            {
+                Debug.LogError("Persistent player must need to be spawned before NetworkPlayer!");
+                return;
+            }
+            m_PersistentPlayer.NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
         }
 
         private void FixedUpdate()
@@ -77,6 +91,8 @@ namespace BTG.Gameplay.GameplayObjects
         {
             base.OnDestroy();
 
+            m_PersistentPlayer.NetworkEntityGuidState.OnEntityDataRegistered -= ConfigureEntity;
+
             if (IsOwner)
                 UnsubscribeFromInputEvents();
             
@@ -84,9 +100,10 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 DeInit();
             }
-
-            if (m_GraphicsView != null)
-                Destroy(m_GraphicsView);
+            else
+            {
+                DespawnGraphics();
+            }
         }
 
         public void SetPlayerModel(PlayerModel model) => m_Model = model;
@@ -100,8 +117,12 @@ namespace BTG.Gameplay.GameplayObjects
         /// <summary>
         /// Set the entity brain for the controller.
         /// </summary>
-        public void SetEntityBrain(IEntityBrain entity)
+        public void SetEntityBrain()
         {
+            bool entityFound = TryGetEntityFromFactory(m_PersistentPlayer.NetworkEntityGuidState.RegisteredEntityData.Tag, out IEntityBrain entity);
+            if (!entityFound)
+                return;
+
             m_EntityBrain = entity as IEntityTankBrain;
             if (m_EntityBrain == null)
             {
@@ -134,9 +155,16 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void SpawnGraphics()
         {
-            m_GraphicsView = Instantiate(m_NetworkAvatarGuidState.RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
+            m_GraphicsView = Instantiate(m_PersistentPlayer.NetworkEntityGuidState.RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
             m_GraphicsView.transform.localPosition = Vector3.zero;
             m_GraphicsView.transform.localRotation = Quaternion.identity;
+        }
+
+        public void DespawnGraphics()
+        {
+            if (m_GraphicsView == null)
+                return;
+            Destroy(m_GraphicsView.gameObject);
         }
 
         public void OnEntityDied()
@@ -152,13 +180,40 @@ namespace BTG.Gameplay.GameplayObjects
         /// </summary>
         public void DeInit()
         {
+            mn_IsAlive.Value = false;
+            DeInitEntity();
+        }
+
+        public void DeInitEntity()
+        {
             // If the entity brain is null, then the entity is already deinitialized.
             if (m_EntityBrain == null) return;
-
-            mn_IsAlive.Value = false;
             m_EntityBrain.DeInit();
             UnsubscribeFromEntityEvents();
             m_EntityBrain = null;
+        }
+
+        public void ConfigureEntity()
+        {
+            Debug.Log($"OwnerClientId {OwnerClientId} Configuring entity for player.");
+
+            if (IsServer)
+            {
+                DeInitEntity();
+                SetEntityBrain();
+            }
+            else
+            {
+                DespawnGraphics();
+                SpawnGraphics();
+            }
+
+
+            // Set Camera Target for owners
+            if (IsOwner)
+            {
+                PVC_Camera.SetFollowTarget(CameraTarget);
+            }
         }
 
         private void CacheEntityDatas()
@@ -169,6 +224,12 @@ namespace BTG.Gameplay.GameplayObjects
 
             m_Rigidbody.centerOfMass = Vector3.zero;
             m_Rigidbody.maxLinearVelocity = m_EntityBrain.Model.MaxSpeed;
+        }
+
+        private bool TryGetEntityFromFactory(TagSO tag, out IEntityBrain entity)
+        {
+            entity = m_EntityFactoryContainer.GetFactory(tag).GetItem();
+            return entity != null;
         }
 
         private void ConfigureEntityWithHealthController()
@@ -208,9 +269,6 @@ namespace BTG.Gameplay.GameplayObjects
             m_Model.DeltaRotation = Quaternion.Euler(0, m_Model.RotateAngle, 0);
             m_Rigidbody.MoveRotation(m_Rigidbody.rotation * m_Model.DeltaRotation);
         }
-
-        /*private void CalculateInputSpeed()
-            => m_Model.Acceleration = m_Model.EntityAcceleration * m_Model.MoveInputValue;*/
 
         private void SetMoveValue(float value)
         {
@@ -256,6 +314,11 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void SubscribeToInputEvents()
         {
+            if (m_PlayerInputs == null)
+            {
+                Debug.LogError("Player inputs is null!");
+                return;
+            }
             m_PlayerInputs.OnMoveInput += SetMoveValue;
             m_PlayerInputs.OnRotateInput += SetRotateValue;
             m_PlayerInputs.OnPrimaryActionInputStarted += StartPrimaryAction;
@@ -265,6 +328,11 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void UnsubscribeFromInputEvents()
         {
+            if (m_PlayerInputs == null)
+            {
+                Debug.Log("Player inputs is null!");
+                return;
+            }
             m_PlayerInputs.OnMoveInput -= SetMoveValue;
             m_PlayerInputs.OnRotateInput -= SetRotateValue;
             m_PlayerInputs.OnPrimaryActionInputStarted -= StartPrimaryAction;
@@ -274,6 +342,11 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void UnsubscribeFromEntityEvents()
         {
+            if (m_EntityBrain == null)
+            {
+                Debug.Log("Entity Brain is null!");
+                return;
+            }
             m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
@@ -281,6 +354,11 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
 
+            if (m_EntityHealthController == null)
+            {
+                Debug.Log("Entity Health Controller is null!");
+                return;
+            }
             m_EntityHealthController.OnHealthUpdated -= OnEntityHealthUpdated;
         }
     }

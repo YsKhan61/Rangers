@@ -249,7 +249,7 @@ namespace BTG.Gameplay.GameplayObjects
                     // change character preview when selecting a new seat
                     if (isNewSeat)
                     {
-                        EntityDataSO entityData = m_NetworkCharSelection.EntityDataContainer.GetTankDataBySeatIndex(seatIdx);
+                        EntityDataSO entityData = m_NetworkCharSelection.EntityDataContainer.GetEntityDataBySeatIndex(seatIdx);
                         var selectedCharacterGraphics = GetCharacterGraphics(entityData);
 
                         if (m_CurrentCharacterGraphics)

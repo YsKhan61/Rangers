@@ -8,6 +8,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
+using VContainer;
 
 
 namespace BTG.Gameplay.GameState
@@ -35,6 +36,9 @@ namespace BTG.Gameplay.GameState
 
         private NetcodeHooks m_NetcodeHooks;
         private List<Transform> m_PlayerSpawnPointsList = null;
+
+        [Inject]
+        private IObjectResolver m_ObjectResolver;
 
 
         protected override void Awake()
@@ -80,7 +84,7 @@ namespace BTG.Gameplay.GameState
 
         void OnSynchronizeComplete(ulong clientId)
         {
-            if (InitialSpawnDone && !NetworkPlayerViewClientCache.GetPlayerView(clientId))
+            if (InitialSpawnDone && !NetworkPlayerClientCache.GetPlayer(clientId))
             {
                 //somebody joined after the initial spawn. This is a Late Join scenario. This player may have issues
                 //(either because multiple people are late-joining at once, or because some dynamic entities are
@@ -102,8 +106,6 @@ namespace BTG.Gameplay.GameState
                 {
                     SpawnNetworkPlayerForEachClients(kvp.Key, false);
                 }
-
-                // m_NetworkPlayerService.ConfigureNetworkPlayerView_ClientRpc();
             }
         }
 
@@ -126,13 +128,6 @@ namespace BTG.Gameplay.GameState
             Assert.IsTrue(persistentPlayerExists,
                 $"Matching persistent PersistentPlayer for client {clientId} not found!");
 
-            // pass character type from persistent player to avatar
-            var networkAvatarGuidStateExists =
-                newPlayer.TryGetComponent(out NetworkAvatarGuidState networkAvatarGuidState);                       // NetworkAvatarGuidState
-
-            Assert.IsTrue(networkAvatarGuidStateExists,
-                $"NetworkCharacterGuidState not found on player avatar!");
-
             // if reconnecting, set the player's position and rotation to its previous state
             if (lateJoin)
             {
@@ -148,17 +143,13 @@ namespace BTG.Gameplay.GameState
                 newPlayer.transform.SetPositionAndRotation(spawnPoint.position, spawnPoint.rotation);
             }
 
-            networkAvatarGuidState.n_EntityNetworkGuid.Value =
-                persistentPlayer.NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
+            newPlayer.SpawnWithOwnership(clientId, true);
 
             // pass name from persistent player to avatar
             if (newPlayer.TryGetComponent(out NetworkNameState networkNameState))                                   // NetworkNameState
             {
                 networkNameState.Name.Value = persistentPlayer.NetworkNameState.Name.Value;
             }
-
-            // spawn players characters with destroyWithScene = true
-            newPlayer.SpawnWithOwnership(clientId, true);
 
             m_NetworkPlayerService.ConfigureNetworkPlayer_ClientRpc(clientId);
         }

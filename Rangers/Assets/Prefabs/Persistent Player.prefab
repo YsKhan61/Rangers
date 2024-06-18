@@ -10,9 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 2861839802077093751}
   - component: {fileID: 7477361840555017904}
+  - component: {fileID: 3189052997822004338}
   - component: {fileID: 6651494133264054891}
   - component: {fileID: 6926787529240961807}
+  - component: {fileID: 7467953108124847864}
   - component: {fileID: 5164789542629291493}
+  - component: {fileID: 7226969010700443237}
   m_Layer: 0
   m_Name: Persistent Player
   m_TagString: Untagged
@@ -56,6 +59,18 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &3189052997822004338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7367604985981153820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6aedfcf74b3f4f248897af16490caa9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6651494133264054891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,8 +85,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _persistentPlayerRuntimeCollection: {fileID: 11400000, guid: 59ee1b408a9f68242ae58939a969bc7e,
     type: 2}
-  _networkNameState: {fileID: 6926787529240961807}
-  m_NetworkAvatarGuidState: {fileID: 5164789542629291493}
 --- !u!114 &6926787529240961807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +97,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 489f5f34e77ee83488b151b6c3f7a394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7467953108124847864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7367604985981153820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ae7dbe194dea8e49968eefc138d6b44, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
+    type: 2}
 --- !u!114 &5164789542629291493
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,8 +120,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7367604985981153820}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44bdd27e2d1cdf34695da663967103c9, type: 3}
+  m_Script: {fileID: 11500000, guid: ce0518ff3831b1a42b6fa5a45cc093ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
     type: 2}
+  ConnectionManager: {fileID: 0}
+--- !u!114 &7226969010700443237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7367604985981153820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffbd8df7bdd32ea4ea2238b6c39a7ef8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

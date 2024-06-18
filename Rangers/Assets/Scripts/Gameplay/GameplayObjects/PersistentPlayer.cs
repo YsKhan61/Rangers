@@ -18,20 +18,26 @@ namespace BTG.Gameplay.GameplayObjects
     /// migrating this player object between scene loads.
     /// </remarks>
     [RequireComponent(typeof(NetworkObject))]
+    [RequireComponent(typeof(NetworkNameState))]
+    [RequireComponent(typeof(NetworkEntityGuidState))]
     public class PersistentPlayer : NetworkBehaviour
     {
         [SerializeField]
         private PersistentPlayersRuntimeCollectionSO _persistentPlayerRuntimeCollection;
 
-        [SerializeField]
         private NetworkNameState _networkNameState;
 
-        [SerializeField]
-        NetworkAvatarGuidState m_NetworkAvatarGuidState;
+        NetworkEntityGuidState _NetworkAvatarGuidState;
 
         public NetworkNameState NetworkNameState => _networkNameState;
 
-        public NetworkAvatarGuidState NetworkAvatarGuidState => m_NetworkAvatarGuidState;
+        public NetworkEntityGuidState NetworkEntityGuidState => _NetworkAvatarGuidState;
+
+        private void Awake()
+        {
+            _networkNameState = GetComponent<NetworkNameState>();
+            _NetworkAvatarGuidState = GetComponent<NetworkEntityGuidState>();
+        }
 
         public override void OnNetworkSpawn()
         {
@@ -51,12 +57,12 @@ namespace BTG.Gameplay.GameplayObjects
                     _networkNameState.Name.Value = playerData.PlayerName;
                     if (playerData.HasCharacterSpawned)
                     {
-                        m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value = playerData.AvatarNetworkGuid;
+                        _NetworkAvatarGuidState.n_NetworkEntityGuid.Value = playerData.AvatarNetworkGuid;
                     }
                     else
                     {
-                        m_NetworkAvatarGuidState.SetRandomEntity();
-                        playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
+                        _NetworkAvatarGuidState.SetRandomEntity();
+                        playerData.AvatarNetworkGuid = _NetworkAvatarGuidState.n_NetworkEntityGuid.Value;
                         SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                     }
                 }
@@ -84,7 +90,7 @@ namespace BTG.Gameplay.GameplayObjects
                 {
                     var playerData = sessionPlayerData.Value;
                     playerData.PlayerName = _networkNameState.Name.Value;
-                    playerData.AvatarNetworkGuid = m_NetworkAvatarGuidState.n_EntityNetworkGuid.Value;
+                    playerData.AvatarNetworkGuid = _NetworkAvatarGuidState.n_NetworkEntityGuid.Value;
                     SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                 }
             }

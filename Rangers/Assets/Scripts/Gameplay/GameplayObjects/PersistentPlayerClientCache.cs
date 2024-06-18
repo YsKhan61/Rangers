@@ -7,21 +7,25 @@ using UnityEngine;
 
 namespace BTG.Gameplay.GameplayObjects
 {
+    /// <summary>
+    /// Temporary cache for all active players in the game.
+    /// Later use PersistentPlayerRuntimeCollectionSO to store all active players in the game.
+    /// </summary>
     [RequireComponent(typeof(NetcodeHooks))]
-    [RequireComponent(typeof(NetworkPlayer))]
-    public class NetworkPlayerViewClientCache : MonoBehaviour
+    [RequireComponent(typeof(PersistentPlayer))]
+    public class PersistentPlayerClientCache : MonoBehaviour
     {
-        private static List<NetworkPlayer> ms_ActivePlayers = new List<NetworkPlayer>();
-        public static List<NetworkPlayer> ActivePlayers => ms_ActivePlayers;
+        private static List<PersistentPlayer> ms_ActivePlayers = new List<PersistentPlayer>();
+        public static List<PersistentPlayer> ActivePlayers => ms_ActivePlayers;
 
         private NetcodeHooks m_NetcodeHooks;
-        private NetworkPlayer m_Owner;  // This is the owner of this client instance
+        private PersistentPlayer m_Owner;  // This is the owner of this client instance
 
 
         private void Awake()
         {
             m_NetcodeHooks = GetComponent<NetcodeHooks>();
-            m_Owner = GetComponent<NetworkPlayer>();
+            m_Owner = GetComponent<PersistentPlayer>();
         }
 
         private void OnEnable()
@@ -66,9 +70,9 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
-        public static NetworkPlayer GetPlayerView(ulong ownerClientId)
+        public static PersistentPlayer GetPlayer(ulong ownerClientId)
         {
-            foreach (NetworkPlayer playerView in ms_ActivePlayers)
+            foreach (PersistentPlayer playerView in ms_ActivePlayers)
             {
                 if (playerView.OwnerClientId == ownerClientId)
                 {
@@ -83,11 +87,11 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (m_NetcodeHooks.IsServer)
             {
-                Debug.Log("Server cached player with client id " + m_NetcodeHooks.OwnerClientId);
+                Debug.Log("Server cached persistent player with client id " + m_NetcodeHooks.OwnerClientId);
             }
             else
             {
-                Debug.Log("Client cached player with client id " + m_NetcodeHooks.OwnerClientId);
+                Debug.Log("Client cached persistent player with client id " + m_NetcodeHooks.OwnerClientId);
             }
         }
     }

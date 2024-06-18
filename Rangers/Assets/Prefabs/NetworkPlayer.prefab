@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: 392186904043036380}
   - component: {fileID: 2430051567881296130}
   - component: {fileID: 3996968325675060795}
-  - component: {fileID: 6574843482933245408}
   - component: {fileID: 7853231255999643395}
   m_Layer: 6
   m_Name: NetworkPlayer
@@ -133,11 +132,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3062781867384982620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44bdd27e2d1cdf34695da663967103c9, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ccbe766c78f7dd4eaa1fa6e683b23cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
-    type: 2}
 --- !u!114 &3996968325675060795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,18 +166,6 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &6574843482933245408
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3062781867384982620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ccbe766c78f7dd4eaa1fa6e683b23cd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7853231255999643395
 MonoBehaviour:
   m_ObjectHideFlags: 0

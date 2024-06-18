@@ -1,7 +1,6 @@
 ﻿using BTG.Entity;
 using BTG.Player;
 using BTG.Utilities;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -18,12 +17,33 @@ namespace BTG.Gameplay.GameplayObjects
         private PlayerDataSO m_PlayerData;
 
         [Inject]
-        private EntityFactoryContainerSO m_EntityFactoryContainer;
+        private IObjectResolver m_ObjectResolver;
+
+        [Inject]
+        private EntityDataContainerSO m_EntityDataContainer;
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
 
-        private NetworkPlayer m_OwnerNetworkPlayerView;
+        private NetworkPlayer m_OwnerNetworkPlayer;
+
+        public override void OnNetworkSpawn()
+        {
+            m_PlayerStats.EntityTagSelected.OnValueChanged += OnEntityTagSelectedChanged;
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            m_PlayerStats.EntityTagSelected.OnValueChanged -= OnEntityTagSelectedChanged;
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void OnEntityTagSelectionChanged_ServerRpc(ulong playerOwnerClientId, NetworkGuid selectedEntityGuid)
+        {
+            Debug.Log($"PlayerOwnerClient {playerOwnerClientId} Calling OnEntityTagSelectionChanged_ServerRpc!");
+            var persistentPlayer = PersistentPlayerClientCache.GetPlayer(playerOwnerClientId);
+            persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value = selectedEntityGuid;
+        }
 
         /// <summary>
         /// This is called to configure the NetworkPlayerView for all clients.
@@ -32,16 +52,19 @@ namespace BTG.Gameplay.GameplayObjects
         [ClientRpc]
         public void ConfigureNetworkPlayer_ClientRpc(ulong clientId)
         {
-            NetworkPlayer networkPlayer = NetworkPlayerViewClientCache.GetPlayerView(clientId);
+            NetworkPlayer networkPlayer = NetworkPlayerClientCache.GetPlayer(clientId);
             if (networkPlayer == null)
             {
                 Debug.LogError("Network player is null. This should not happen!");
                 return;
             }
 
+            m_ObjectResolver.Inject(networkPlayer);
+
             if (networkPlayer.IsOwner)
             {
-                m_OwnerNetworkPlayerView = networkPlayer;
+                m_OwnerNetworkPlayer = networkPlayer;
+                m_OwnerNetworkPlayer.PVC_Camera = m_PVCamera;
                 PlayerInputs playerInputs = new PlayerInputs();
                 playerInputs.Initialize();
                 networkPlayer.SetPlayerInputs(playerInputs);
@@ -52,19 +75,9 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
                 networkPlayer.SetPlayerService(this);
-                CreateEntityForNetworkPlayerView(networkPlayer);
-            }
-            else
-            {
-                networkPlayer.SpawnGraphics();
             }
 
-
-            // Set Camera Target for owners
-            if (networkPlayer.IsOwner)
-            {
-                m_PVCamera.SetFollowTarget(networkPlayer.CameraTarget);
-            }
+            networkPlayer.ConfigureEntity();
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -79,22 +92,10 @@ namespace BTG.Gameplay.GameplayObjects
             // Respawn
         }
 
-        private void CreateEntityForNetworkPlayerView(NetworkPlayer networkPlayerView)
+        private void OnEntityTagSelectedChanged()
         {
-            TagSO tag = networkPlayerView.Tag;
-            m_PlayerStats.EntityTagSelected.Value = tag;            // Pre set the entity tag to the selected entity tag for later use. later players can change entities by changing the tag
-
-            bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
-            if (!entityFound)
-                return;
-
-            networkPlayerView.SetEntityBrain(entity);
-        }
-
-        private bool TryGetEntity(TagSO tag, out IEntityBrain entity)
-        {
-            entity = m_EntityFactoryContainer.GetFactory(tag).GetItem();
-            return entity != null;
+            EntityDataSO entityData = m_EntityDataContainer.GetEntityData(m_PlayerStats.EntityTagSelected.Value);
+            OnEntityTagSelectionChanged_ServerRpc(m_OwnerNetworkPlayer.OwnerClientId, entityData.Guid.ToNetworkGuid());
         }
     }
 }

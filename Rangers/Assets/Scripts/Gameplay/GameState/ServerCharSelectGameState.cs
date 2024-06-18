@@ -225,9 +225,9 @@ namespace BTG.Gameplay.GameState
                     // pass avatar GUID to PersistentPlayer
                     // it'd be great to simplify this with something like a NetworkScriptableObjects :(
 
-                    EntityDataSO entityData = networkCharSelection.EntityDataContainer.GetTankDataBySeatIndex(playerInfo.SeatIdx);
+                    EntityDataSO entityData = networkCharSelection.EntityDataContainer.GetEntityDataBySeatIndex(playerInfo.SeatIdx);
 
-                    persistentPlayer.NetworkAvatarGuidState.n_EntityNetworkGuid.Value =
+                    persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value =
                         entityData.Guid.ToNetworkGuid();
                 }
             }
