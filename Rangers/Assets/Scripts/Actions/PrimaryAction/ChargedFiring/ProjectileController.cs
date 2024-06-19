@@ -23,7 +23,7 @@ namespace BTG.Actions.PrimaryAction
             m_Cts = new CancellationTokenSource();
             m_Data = projectileData;
             m_Pool = pool;
-            m_View = Object.Instantiate(projectileData.ViewPrefab, m_Pool.ProjectileContainer);
+            m_View = Object.Instantiate(projectileData.ViewPrefab, m_Pool.Container);
             m_View.Config(this);
         }
 

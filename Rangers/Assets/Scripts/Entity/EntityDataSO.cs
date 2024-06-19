@@ -13,5 +13,6 @@ namespace BTG.Entity
         public virtual Sprite Icon { get; }
         public virtual int CharSelectSeatIndex { get; }
         public virtual GameObject Graphics { get; }
+        public virtual int MaxHealth { get; }
     }
 }

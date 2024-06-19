@@ -108,7 +108,7 @@ namespace BTG.Tank
         /// </summary>
         public void Init()
         {
-           m_Model.State = TankState.Idle;
+            m_Model.State = TankState.Idle;
 
             OnTankStateChangedToIdle();
             ToggleActorVisibility(true);
@@ -184,7 +184,7 @@ namespace BTG.Tank
             OnEntityInitialized = null;
             OnEntityVisibilityToggled = null;
 
-            SetParentOfView(m_Pool.TankContainer, Vector3.zero, Quaternion.identity);
+            SetParentOfView(m_Pool.Container, Vector3.zero, Quaternion.identity);
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);

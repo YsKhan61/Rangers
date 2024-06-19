@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace BTG.Utilities
@@ -6,22 +7,42 @@ namespace BTG.Utilities
     /// <summary>
     /// This is a Generic Object Pool Class with basic functionality, which can be inherited to implement object pools for any type of objects.
     /// </summary>
-    /// <typeparam object Type to be pooled = "T"></typeparam>
     public abstract class GenericObjectPool<T> where T : class
     {
         /// <summary>
         /// List of pooled items
         /// </summary>
-        private List<PooledItem<T>> pooledItems = new List<PooledItem<T>>();
+        private List<PooledItem<T>> m_PooledItems = new List<PooledItem<T>>();
+
+        private Transform m_Container;
+        /// <summary>
+        /// The game object, under which all the pooled items will be parented when not in use
+        /// </summary>
+        public Transform Container
+        {
+            get
+            {
+                if (m_Container == null)
+                {
+                    CreateContainerAndClearPool();
+                }
+                return m_Container;
+            }
+        }
 
         /// <summary>
         /// Get an item from the pool
         /// </summary>
         protected T GetItem()
         {
-            if (pooledItems.Count > 0)
+            if (Container == null)      
             {
-                PooledItem<T> item = pooledItems.Find(item => !item.isUsed);
+                CreateContainerAndClearPool();
+            }
+
+            if (m_PooledItems.Count > 0)
+            {
+                PooledItem<T> item = m_PooledItems.Find(item => !item.isUsed);
                 if (item != null)
                 {
                     item.isUsed = true;
@@ -39,8 +60,16 @@ namespace BTG.Utilities
             PooledItem<T> newItem = new PooledItem<T>();
             newItem.Item = CreateItem();
             newItem.isUsed = true;
-            pooledItems.Add(newItem);
+            m_PooledItems.Add(newItem);
             return newItem.Item;
+        }
+
+        private void CreateContainerAndClearPool()
+        {
+            // means the Container is destroyed by scene change or it was never created
+            // so create a new container and clear the pooled items as some game object of pooled items might be destroyed
+            m_Container = new GameObject("Container of " + typeof(T).Name).transform;
+            m_PooledItems.Clear();
         }
 
         /// <summary>
@@ -54,7 +83,7 @@ namespace BTG.Utilities
         /// <param name="item"></param>
         protected void ReturnItem(T item)
         {
-            PooledItem<T> pooledItem = pooledItems.Find(i => i.Item.Equals(item));
+            PooledItem<T> pooledItem = m_PooledItems.Find(i => i.Item.Equals(item));
             pooledItem.isUsed = false;
         }
 

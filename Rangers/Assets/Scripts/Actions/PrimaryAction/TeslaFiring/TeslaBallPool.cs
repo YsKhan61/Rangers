@@ -7,8 +7,6 @@ namespace BTG.Actions.PrimaryAction
     public class  TeslaBallPool : GenericObjectPool<TeslaBallView>
     {
         private TeslaFiringDataSO m_Data;
-        private Transform m_Container;
-        public Transform Container => m_Container;
 
         [Inject]
         private IObjectResolver m_Resolver;
@@ -16,7 +14,6 @@ namespace BTG.Actions.PrimaryAction
         public TeslaBallPool(TeslaFiringDataSO data)
         {
             m_Data = data;
-            m_Container = new GameObject("TeslaBallContainer").transform;
         }
 
         public TeslaBallView GetTeslaBall() => GetItem();
@@ -24,7 +21,7 @@ namespace BTG.Actions.PrimaryAction
         public void ReturnTeslaBall(TeslaBallView teslaBall) => ReturnItem(teslaBall);
         protected override TeslaBallView CreateItem()
         {
-            TeslaBallView view = Object.Instantiate(m_Data.TeslaBallViewPrefab, m_Container);
+            TeslaBallView view = Object.Instantiate(m_Data.TeslaBallViewPrefab, Container);
             view.SetPool(this);
             m_Resolver.Inject(view);
             return view;

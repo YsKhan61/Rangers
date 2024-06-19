@@ -30,7 +30,7 @@ namespace BTG.Tank
 
         [SerializeField]
         private int m_MaxHealth;
-        public int MaxHealth => m_MaxHealth;
+        public override int MaxHealth => m_MaxHealth;
 
         [SerializeField] 
         private float m_Acceleration;

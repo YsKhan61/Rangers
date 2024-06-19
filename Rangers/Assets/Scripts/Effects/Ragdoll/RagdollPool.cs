@@ -6,12 +6,10 @@ namespace BTG.Effects
     public class RagdollPool : GenericObjectPool<RagdollView>
     {
         private RagdollDataSO m_Data;
-        private Transform m_Container;
 
         public RagdollPool(RagdollDataSO data)
         {
-            this.m_Data = data;
-            m_Container = new GameObject("RagdollContainer of " + m_Data.name).transform;
+            m_Data = data;
         }
 
         public RagdollView GetRagdoll() => GetItem();
@@ -20,7 +18,7 @@ namespace BTG.Effects
 
         protected override RagdollView CreateItem()
         {
-            RagdollView view = Object.Instantiate(m_Data.RagdollPrefab, m_Container);
+            RagdollView view = Object.Instantiate(m_Data.RagdollPrefab, Container);
             view.Initialize();
             view.SetPool(this);
             return view;

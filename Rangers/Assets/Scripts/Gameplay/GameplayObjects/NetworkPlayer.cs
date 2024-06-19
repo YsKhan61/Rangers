@@ -25,11 +25,11 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkPlayerService m_PlayerService;
         private TankView m_GraphicsView;
         private IEntityTankBrain m_EntityBrain;
-        private IEntityHealthController m_EntityHealthController;
+        private EntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
         private PersistentPlayer m_PersistentPlayer;
         private NetworkEntityGuidState m_NetworkEntityGuidState;
-        private EntityDataSO m_RegisteredEntityData => m_NetworkEntityGuidState.RegisteredEntityData; // This changes at runtime
+        public EntityDataSO RegisteredEntityData => m_NetworkEntityGuidState.RegisteredEntityData; // This changes at runtime
 
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
 
@@ -56,6 +56,7 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkVariable<float> mn_MoveValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<float> mn_RotateValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<bool> mn_IsAlive = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
+        private NetworkVariable<int> mn_Health = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
 
         private void Awake()
         {
@@ -73,6 +74,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
             m_NetworkEntityGuidState = m_PersistentPlayer.NetworkEntityGuidState;
             m_NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
+            mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
         }
 
         private void FixedUpdate()
@@ -95,11 +97,16 @@ namespace BTG.Gameplay.GameplayObjects
             m_NetworkEntityGuidState.OnEntityDataRegistered -= ConfigureEntity;
 
             if (IsOwner)
+            {
                 UnsubscribeFromInputEvents();
+                mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
+            }
+                
             
             if (IsServer)
             {
                 DeInit();
+                // m_PersistentPlayer.OnPlayerTransitionFromGameplayToCharSelectState();
             }
             else
             {
@@ -122,7 +129,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void SpawnGraphics()
         {
-            m_GraphicsView = Instantiate(m_RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
+            m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
             m_GraphicsView.transform.localPosition = Vector3.zero;
             m_GraphicsView.transform.localRotation = Quaternion.identity;
         }
@@ -167,7 +174,7 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsServer)
             {
                 DeInitEntity();
-                SetEntityBrain();
+                InitEntity();
             }
             else
             {
@@ -180,16 +187,16 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsOwner)
             {
                 m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
-                m_PlayerService.PlayerStats.PlayerIcon.Value = m_RegisteredEntityData.Icon;
+                m_PlayerService.PlayerStats.PlayerIcon.Value = RegisteredEntityData.Icon;
             }
         }
 
         /// <summary>
-        /// Set the entity brain for the controller.
+        /// Set the entity
         /// </summary>
-        private void SetEntityBrain()
+        private void InitEntity()
         {
-            bool entityFound = TryGetEntityFromFactory(m_RegisteredEntityData.Tag, out IEntityBrain entity);
+            bool entityFound = TryGetEntityFromFactory(RegisteredEntityData.Tag, out IEntityBrain entity);
             if (!entityFound)
                 return;
 
@@ -237,7 +244,7 @@ namespace BTG.Gameplay.GameplayObjects
         private void ConfigureEntityWithHealthController()
         {
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
-            m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
+            m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
             m_EntityHealthController.SetController(this);
             m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
             m_EntityHealthController.IsEnabled = true;
@@ -252,8 +259,14 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityHealthController.SetMaxHealth();
         }
 
+        /// <summary>
+        /// Later try to remove the max health from here and get it from the entity data
+        /// </summary>
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
             => m_Model.PlayerData.OnPlayerHealthUpdated.RaiseEvent(currentHealth, maxHealth);
+
+        private void OnPlayerHealthUpdateInNetwork(int prevHealth, int newHealth)
+            => m_Model.PlayerData.OnPlayerHealthUpdated.RaiseEvent(newHealth, RegisteredEntityData.MaxHealth);
 
         private void MoveWithForce()
         {

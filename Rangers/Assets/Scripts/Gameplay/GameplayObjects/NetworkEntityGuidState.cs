@@ -15,7 +15,7 @@ namespace BTG.Gameplay.GameplayObjects
         public event Action OnEntityDataRegistered;
 
         [HideInInspector]
-        public NetworkVariable<NetworkGuid> n_NetworkEntityGuid = new NetworkVariable<NetworkGuid>();
+        public NetworkVariable<NetworkGuid> n_NetworkEntityGuid = new NetworkVariable<NetworkGuid>(default);
 
         [SerializeField]
         EntityDataContainerSO m_EntityDataContainer;
@@ -28,7 +28,8 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 if (m_EntityData == null)
                 {
-                    RegisterEntity(n_NetworkEntityGuid.Value.ToGuid());
+                    Debug.LogError("Entity Data not registered yet!");
+                    return null;
                 }
                 
                 return m_EntityData;
@@ -59,7 +60,8 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (guid.Equals(Guid.Empty))
             {
-                Debug.LogError("Guid is empty!");
+                Debug.Log("Guid is empty! Clearing Entity Data!");
+                m_EntityData = null;
                 // not a valid Guid
                 return;
             }

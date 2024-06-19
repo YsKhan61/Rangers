@@ -1,5 +1,6 @@
 using BTG.ConnectionManagement;
 using BTG.Utilities;
+using System;
 using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Netcode;
 using UnityEngine;
@@ -26,17 +27,15 @@ namespace BTG.Gameplay.GameplayObjects
         private PersistentPlayersRuntimeCollectionSO _persistentPlayerRuntimeCollection;
 
         private NetworkNameState _networkNameState;
-
-        NetworkEntityGuidState _NetworkAvatarGuidState;
-
         public NetworkNameState NetworkNameState => _networkNameState;
 
-        public NetworkEntityGuidState NetworkEntityGuidState => _NetworkAvatarGuidState;
+        private NetworkEntityGuidState _networkEntityGuidState;
+        public NetworkEntityGuidState NetworkEntityGuidState => _networkEntityGuidState;
 
         private void Awake()
         {
             _networkNameState = GetComponent<NetworkNameState>();
-            _NetworkAvatarGuidState = GetComponent<NetworkEntityGuidState>();
+            _networkEntityGuidState = GetComponent<NetworkEntityGuidState>();
         }
 
         public override void OnNetworkSpawn()
@@ -57,12 +56,12 @@ namespace BTG.Gameplay.GameplayObjects
                     _networkNameState.Name.Value = playerData.PlayerName;
                     if (playerData.HasCharacterSpawned)
                     {
-                        _NetworkAvatarGuidState.n_NetworkEntityGuid.Value = playerData.AvatarNetworkGuid;
+                        _networkEntityGuidState.n_NetworkEntityGuid.Value = playerData.AvatarNetworkGuid;
                     }
                     else
                     {
-                        _NetworkAvatarGuidState.SetRandomEntity();
-                        playerData.AvatarNetworkGuid = _NetworkAvatarGuidState.n_NetworkEntityGuid.Value;
+                        _networkEntityGuidState.SetRandomEntity();
+                        playerData.AvatarNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
                         SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                     }
                 }
@@ -78,7 +77,13 @@ namespace BTG.Gameplay.GameplayObjects
         public override void OnNetworkDespawn()
         {
             RemovePersistentPlayer();
+            _networkEntityGuidState.n_NetworkEntityGuid.Value = Guid.Empty.ToNetworkGuid();
         }
+
+        /*public void OnPlayerTransitionFromGameplayToCharSelectState()
+        {
+            _networkEntityGuidState.n_NetworkEntityGuid.Value = Guid.Empty.ToNetworkGuid();
+        }*/
 
         private void RemovePersistentPlayer()
         {
@@ -90,7 +95,7 @@ namespace BTG.Gameplay.GameplayObjects
                 {
                     var playerData = sessionPlayerData.Value;
                     playerData.PlayerName = _networkNameState.Name.Value;
-                    playerData.AvatarNetworkGuid = _NetworkAvatarGuidState.n_NetworkEntityGuid.Value;
+                    playerData.AvatarNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
                     SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                 }
             }

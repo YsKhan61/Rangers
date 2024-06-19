@@ -1,4 +1,5 @@
 ﻿using BTG.ConnectionManagement;
+using BTG.Entity;
 using BTG.Gameplay.GameplayObjects;
 using BTG.Utilities;
 using System.Collections.Generic;
