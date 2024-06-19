@@ -1,6 +1,5 @@
 using BTG.ConnectionManagement;
 using BTG.Utilities;
-using System;
 using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Netcode;
 using UnityEngine;
@@ -77,13 +76,7 @@ namespace BTG.Gameplay.GameplayObjects
         public override void OnNetworkDespawn()
         {
             RemovePersistentPlayer();
-            _networkEntityGuidState.n_NetworkEntityGuid.Value = Guid.Empty.ToNetworkGuid();
         }
-
-        /*public void OnPlayerTransitionFromGameplayToCharSelectState()
-        {
-            _networkEntityGuidState.n_NetworkEntityGuid.Value = Guid.Empty.ToNetworkGuid();
-        }*/
 
         private void RemovePersistentPlayer()
         {
