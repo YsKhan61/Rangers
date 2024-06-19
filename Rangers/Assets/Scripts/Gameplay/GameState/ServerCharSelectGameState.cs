@@ -307,7 +307,10 @@ namespace BTG.Gameplay.GameState
 
         IEnumerator WaitToEndLobby()
         {
-            yield return new WaitForSeconds(3);
+            /// Once a client chooses a seat, server need little time to register the network entity data from network guid in NetworkEntityGuidState.
+            /// This involves a delay to update the network variable of NetworkEntityGuidState and then register the entity data.
+            /// Once it's done, then we can save the lobby seat selection and start the game.
+            yield return new WaitForSeconds(10); 
             SceneLoaderWrapper.Instance.LoadScene(_sceneNameList.MultiplayerScene, useNetworkSceneManager: true);
         }
     }
