@@ -14,7 +14,7 @@ namespace BTG.Tank
 
         [SerializeField]
         private Sprite m_Icon;
-        public Sprite Icon => m_Icon;
+        public override Sprite Icon => m_Icon;
 
         [SerializeField]
         private int m_CharSelectSeatIndex;

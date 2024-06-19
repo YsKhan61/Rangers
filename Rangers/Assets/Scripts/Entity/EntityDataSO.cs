@@ -10,9 +10,8 @@ namespace BTG.Entity
     public abstract class EntityDataSO : GuidSO
     {
         public virtual TagSO Tag { get; }
-
+        public virtual Sprite Icon { get; }
         public virtual int CharSelectSeatIndex { get; }
-    
         public virtual GameObject Graphics { get; }
     }
 }

@@ -12,6 +12,7 @@ namespace BTG.Gameplay.GameplayObjects
     {
         [SerializeField]
         private PlayerVirtualCamera m_PVCamera;
+        public PlayerVirtualCamera PVCamera => m_PVCamera;
 
         [Inject]
         private PlayerDataSO m_PlayerData;
@@ -24,6 +25,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
+        public PlayerStatsSO PlayerStats => m_PlayerStats;
 
         private NetworkPlayer m_OwnerNetworkPlayer;
 
@@ -64,17 +66,16 @@ namespace BTG.Gameplay.GameplayObjects
             if (networkPlayer.IsOwner)
             {
                 m_OwnerNetworkPlayer = networkPlayer;
-                m_OwnerNetworkPlayer.PVC_Camera = m_PVCamera;
                 PlayerInputs playerInputs = new PlayerInputs();
                 playerInputs.Initialize();
                 networkPlayer.SetPlayerInputs(playerInputs);
-                networkPlayer.Init();// this need to be camera target
+                networkPlayer.SetPlayerService(this);
+                networkPlayer.Init();
             }
 
             if (networkPlayer.IsServer)
             {
                 networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
-                networkPlayer.SetPlayerService(this);
             }
 
             networkPlayer.ConfigureEntity();

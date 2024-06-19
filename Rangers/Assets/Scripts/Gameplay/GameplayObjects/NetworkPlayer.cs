@@ -22,16 +22,16 @@ namespace BTG.Gameplay.GameplayObjects
         private Rigidbody m_Rigidbody;
         private Pose m_SpawnPose;
         private PlayerModel m_Model;
-        private IPlayerService m_PlayerService;
+        private NetworkPlayerService m_PlayerService;
         private TankView m_GraphicsView;
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
         private PersistentPlayer m_PersistentPlayer;
+        private NetworkEntityGuidState m_NetworkEntityGuidState;
+        private EntityDataSO m_RegisteredEntityData => m_NetworkEntityGuidState.RegisteredEntityData; // This changes at runtime
 
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
-
-        public PlayerVirtualCamera PVC_Camera { get; set; }
 
         public Transform CameraTarget
         {
@@ -71,7 +71,8 @@ namespace BTG.Gameplay.GameplayObjects
                 Debug.LogError("Persistent player must need to be spawned before NetworkPlayer!");
                 return;
             }
-            m_PersistentPlayer.NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
+            m_NetworkEntityGuidState = m_PersistentPlayer.NetworkEntityGuidState;
+            m_NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
         }
 
         private void FixedUpdate()
@@ -91,7 +92,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             base.OnDestroy();
 
-            m_PersistentPlayer.NetworkEntityGuidState.OnEntityDataRegistered -= ConfigureEntity;
+            m_NetworkEntityGuidState.OnEntityDataRegistered -= ConfigureEntity;
 
             if (IsOwner)
                 UnsubscribeFromInputEvents();
@@ -107,55 +108,21 @@ namespace BTG.Gameplay.GameplayObjects
         }
 
         public void SetPlayerModel(PlayerModel model) => m_Model = model;
-        public void SetPlayerService(IPlayerService service) => m_PlayerService = service;
+        public void SetPlayerService(NetworkPlayerService service) => m_PlayerService = service;
         public void SetPlayerInputs(PlayerInputs inputs)
         {
             m_PlayerInputs = inputs;
             SubscribeToInputEvents();
         }
 
-        /// <summary>
-        /// Set the entity brain for the controller.
-        /// </summary>
-        public void SetEntityBrain()
-        {
-            bool entityFound = TryGetEntityFromFactory(m_PersistentPlayer.NetworkEntityGuidState.RegisteredEntityData.Tag, out IEntityBrain entity);
-            if (!entityFound)
-                return;
-
-            m_EntityBrain = entity as IEntityTankBrain;
-            if (m_EntityBrain == null)
-            {
-                Debug.LogError("PlayerTankController: Entity brain is not of type IEntityTankBrain");
-                return;
-            }
-
-            m_EntityBrain.Model.IsPlayer = true;
-            m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetRigidbody(m_Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController);
-            m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
-
-            m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
-
-            CacheEntityDatas();
-            ConfigureEntityWithHealthController();
-
-            m_EntityBrain.Init();
-        }
-
         public void Init()
         {
-            mn_IsAlive.Value = true;
+            mn_IsAlive.Value = true;    // for now this gets the input from the owner.
         }
 
         public void SpawnGraphics()
         {
-            m_GraphicsView = Instantiate(m_PersistentPlayer.NetworkEntityGuidState.RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
+            m_GraphicsView = Instantiate(m_RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
             m_GraphicsView.transform.localPosition = Vector3.zero;
             m_GraphicsView.transform.localRotation = Quaternion.identity;
         }
@@ -212,8 +179,43 @@ namespace BTG.Gameplay.GameplayObjects
             // Set Camera Target for owners
             if (IsOwner)
             {
-                PVC_Camera.SetFollowTarget(CameraTarget);
+                m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
+                m_PlayerService.PlayerStats.PlayerIcon.Value = m_RegisteredEntityData.Icon;
             }
+        }
+
+        /// <summary>
+        /// Set the entity brain for the controller.
+        /// </summary>
+        private void SetEntityBrain()
+        {
+            bool entityFound = TryGetEntityFromFactory(m_RegisteredEntityData.Tag, out IEntityBrain entity);
+            if (!entityFound)
+                return;
+
+            m_EntityBrain = entity as IEntityTankBrain;
+            if (m_EntityBrain == null)
+            {
+                Debug.LogError("PlayerTankController: Entity brain is not of type IEntityTankBrain");
+                return;
+            }
+
+            m_EntityBrain.Model.IsPlayer = true;
+            m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
+            m_EntityBrain.SetRigidbody(m_Rigidbody);
+            m_EntityBrain.SetDamageable(m_EntityHealthController);
+            m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
+
+            // m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+
+            CacheEntityDatas();
+            ConfigureEntityWithHealthController();
+
+            m_EntityBrain.Init();
         }
 
         private void CacheEntityDatas()
@@ -347,7 +349,7 @@ namespace BTG.Gameplay.GameplayObjects
                 Debug.Log("Entity Brain is null!");
                 return;
             }
-            m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
+            // m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
