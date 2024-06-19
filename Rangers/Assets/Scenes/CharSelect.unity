@@ -875,6 +875,7 @@ MonoBehaviour:
     Color: {r: 0, g: 1, b: 0.2536037, a: 1}
   m_ReadyButtonText: {fileID: 1642935491043047159}
   m_ReadyButtonImage: {fileID: 2693224107675342762}
+  m_ReadyButton: {fileID: 1148466631284097641}
   m_UIElementsForNoSeatChosen:
   - {fileID: 3956962558490053998}
   m_UIElementsForSeatChosen:

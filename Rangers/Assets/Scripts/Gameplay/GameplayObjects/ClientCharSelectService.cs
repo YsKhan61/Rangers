@@ -2,6 +2,7 @@ using BTG.Entity;
 using BTG.Gameplay.UI;
 using BTG.Utilities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Multiplayer.Samples.Utilities;
@@ -46,6 +47,9 @@ namespace BTG.Gameplay.GameplayObjects
         [SerializeField]
         [Tooltip("The Ready Button's image component")]
         Image m_ReadyButtonImage;
+
+        [SerializeField]
+        Button m_ReadyButton;
 
         [Header("UI Elements for different lobby modes")]
         [SerializeField]
@@ -139,9 +143,23 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (m_NetworkCharSelection.IsSpawned)
             {
+                m_ReadyButton.interactable = false;     // to prevent multiple clicks
+                StartCoroutine(InvokeAfterDelay());
                 // request to lock in or unlock if already locked in
-                m_NetworkCharSelection.ChangeSeatServerRpc(NetworkManager.Singleton.LocalClientId, m_LastSeatSelected, !m_HasLocalPlayerLockedIn);
+                
             }
+        }
+
+        /// <summary>
+        /// Once a client chooses a seat, server need little time to register the network entity data from network guid in NetworkEntityGuidState.
+        /// This involves a delay to update the network variable of NetworkEntityGuidState and then register the entity data.
+        /// Once it's done, then we can save the lobby seat selection and start the game.
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator InvokeAfterDelay()
+        {
+            yield return new WaitForSeconds(3f);        // Hopefully this is enough time for the server to update the network variable of NetworkEntityGuidState.
+            m_NetworkCharSelection.ChangeSeatServerRpc(NetworkManager.Singleton.LocalClientId, m_LastSeatSelected, !m_HasLocalPlayerLockedIn);
         }
 
         void OnNetworkSpawn()
