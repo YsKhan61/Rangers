@@ -1,6 +1,6 @@
-﻿using BTG.Utilities;
-using System;
+﻿using System;
 using UnityEngine;
+
 
 namespace BTG.Entity
 {
