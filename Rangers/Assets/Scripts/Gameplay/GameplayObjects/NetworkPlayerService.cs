@@ -1,6 +1,7 @@
 ﻿using BTG.Entity;
 using BTG.Player;
 using BTG.Utilities;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -63,22 +64,22 @@ namespace BTG.Gameplay.GameplayObjects
 
             m_ObjectResolver.Inject(networkPlayer);
 
-            if (networkPlayer.IsOwner)
+            if (networkPlayer.IsOwner)      // Clients in their own machine
             {
                 m_OwnerNetworkPlayer = networkPlayer;
                 PlayerInputs playerInputs = new PlayerInputs();
                 playerInputs.Initialize();
                 networkPlayer.SetPlayerInputs(playerInputs);
                 networkPlayer.SetPlayerService(this);
+                networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
                 networkPlayer.Init();
             }
-
-            if (networkPlayer.IsServer)
+            if (networkPlayer.IsServer && !networkPlayer.IsOwner)       // Clients in host machine except host
             {
                 networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
             }
 
-            networkPlayer.ConfigureEntity();
+            ConfigureEntityWithDelay(networkPlayer);
         }
 
         public void OnEntityInitialized(Sprite icon)
@@ -97,6 +98,16 @@ namespace BTG.Gameplay.GameplayObjects
         {
             EntityDataSO entityData = m_EntityDataContainer.GetEntityData(m_PlayerStats.EntityTagSelected.Value);
             OnEntityTagSelectionChanged_ServerRpc(m_OwnerNetworkPlayer.OwnerClientId, entityData.Guid.ToNetworkGuid());
+        }
+
+        /// Once a client chooses a seat, server need little time to register the network entity data from network guid in NetworkEntityGuidState.
+        /// This involves a delay to update the network variable of NetworkEntityGuidState and then register the entity data.
+        /// Once it's done, then we can save the lobby seat selection and start the game.
+        /// Also, this time will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
+        private async void ConfigureEntityWithDelay(NetworkPlayer networkPlayer)
+        {
+            await Task.Delay(1000);
+            networkPlayer.ConfigureEntity();
         }
     }
 }
