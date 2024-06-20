@@ -55,7 +55,7 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkVariable<float> mn_MoveValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<float> mn_RotateValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<bool> mn_IsAlive = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
-        private NetworkVariable<int> mn_Health = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
+        private NetworkVariable<int> mn_Health = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
 
         private void Awake()
         {
@@ -73,7 +73,10 @@ namespace BTG.Gameplay.GameplayObjects
             }
             m_NetworkEntityGuidState = m_PersistentPlayer.NetworkEntityGuidState;
             m_NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
-            mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
+            if (IsOwner)
+            {
+                mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
+            }
         }
 
         private void FixedUpdate()
@@ -100,12 +103,10 @@ namespace BTG.Gameplay.GameplayObjects
                 UnsubscribeFromInputEvents();
                 mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
             }
-                
             
             if (IsServer)
             {
                 DeInit();
-                // m_PersistentPlayer.OnPlayerTransitionFromGameplayToCharSelectState();
             }
             else
             {
@@ -119,51 +120,6 @@ namespace BTG.Gameplay.GameplayObjects
         {
             m_PlayerInputs = inputs;
             SubscribeToInputEvents();
-        }
-
-        public void Init()
-        {
-            mn_IsAlive.Value = true;    // for now this gets the input from the owner.
-        }
-
-        public void SpawnGraphics()
-        {
-            m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
-            m_GraphicsView.transform.localPosition = Vector3.zero;
-            m_GraphicsView.transform.localRotation = Quaternion.identity;
-        }
-
-        public void DespawnGraphics()
-        {
-            if (m_GraphicsView == null)
-                return;
-            Destroy(m_GraphicsView.gameObject);
-        }
-
-        public void OnEntityDied()
-        {
-            m_EntityBrain.OnDead();
-
-            DeInit();
-            m_PlayerService.OnPlayerDeath();
-        }
-
-        /// <summary>
-        /// Deinitialize the controller and it's entity brain.
-        /// </summary>
-        public void DeInit()
-        {
-            mn_IsAlive.Value = false;
-            DeInitEntity();
-        }
-
-        public void DeInitEntity()
-        {
-            // If the entity brain is null, then the entity is already deinitialized.
-            if (m_EntityBrain == null) return;
-            m_EntityBrain.DeInit();
-            UnsubscribeFromEntityEvents();
-            m_EntityBrain = null;
         }
 
         public void ConfigureEntity()
@@ -224,6 +180,51 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.Init();
         }
 
+        public void Init()
+        {
+            mn_IsAlive.Value = true;    // for now this gets the input from the owner.
+        }
+
+        public void SpawnGraphics()
+        {
+            m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
+            m_GraphicsView.transform.localPosition = Vector3.zero;
+            m_GraphicsView.transform.localRotation = Quaternion.identity;
+        }
+
+        public void DespawnGraphics()
+        {
+            if (m_GraphicsView == null)
+                return;
+            Destroy(m_GraphicsView.gameObject);
+        }
+
+        public void OnEntityDied()
+        {
+            m_EntityBrain.OnDead();
+
+            DeInit();
+            m_PlayerService.OnPlayerDeath();
+        }
+
+        /// <summary>
+        /// Deinitialize the controller and it's entity brain.
+        /// </summary>
+        public void DeInit()
+        {
+            mn_IsAlive.Value = false;
+            DeInitEntity();
+        }
+
+        public void DeInitEntity()
+        {
+            // If the entity brain is null, then the entity is already deinitialized.
+            if (m_EntityBrain == null) return;
+            m_EntityBrain.DeInit();
+            UnsubscribeFromEntityEvents();
+            m_EntityBrain = null;
+        }
+
         private void CacheEntityDatas()
         {
             m_Model.EntityMaxSpeed = m_EntityBrain.Model.MaxSpeed;
@@ -262,7 +263,10 @@ namespace BTG.Gameplay.GameplayObjects
         /// Later try to remove the max health from here and get it from the entity data
         /// </summary>
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
-            => m_Model.PlayerData.OnPlayerHealthUpdated.RaiseEvent(currentHealth, maxHealth);
+        {
+            if (IsServer)
+                mn_Health.Value = currentHealth;
+        }
 
         private void OnPlayerHealthUpdateInNetwork(int prevHealth, int newHealth)
             => m_Model.PlayerData.OnPlayerHealthUpdated.RaiseEvent(newHealth, RegisteredEntityData.MaxHealth);
