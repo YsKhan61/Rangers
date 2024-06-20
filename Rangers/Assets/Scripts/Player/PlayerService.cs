@@ -10,7 +10,7 @@ using VContainer;
 
 namespace BTG.Player
 {
-    public class PlayerService : IPlayerService
+    public class PlayerService
     {
         private const int RESPAWN_DELAY = 2;
 

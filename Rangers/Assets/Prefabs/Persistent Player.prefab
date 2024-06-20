@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6651494133264054891}
   - component: {fileID: 6926787529240961807}
   - component: {fileID: 7467953108124847864}
-  - component: {fileID: 5164789542629291493}
   - component: {fileID: 7226969010700443237}
   m_Layer: 0
   m_Name: Persistent Player
@@ -111,21 +110,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
     type: 2}
---- !u!114 &5164789542629291493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7367604985981153820}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce0518ff3831b1a42b6fa5a45cc093ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
-    type: 2}
-  ConnectionManager: {fileID: 0}
 --- !u!114 &7226969010700443237
 MonoBehaviour:
   m_ObjectHideFlags: 0

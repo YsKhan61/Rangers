@@ -24,7 +24,7 @@ namespace BTG.Gameplay.GameState
 
         public override GameState ActiveState => GameState.CharSelect;
 
-        public NetworkCharSelection networkCharSelection { get; private set; }
+        public NetworkCharSelection m_NetworkCharSelection { get; private set; }
 
         Coroutine m_WaitToEndLobbyCoroutine;
 
@@ -37,8 +37,8 @@ namespace BTG.Gameplay.GameState
         protected override void Awake()
         {
             base.Awake();
-            networkCharSelection = GetComponent<NetworkCharSelection>();
-            networkCharSelection.ConnectionManager = m_ConnectionManager;
+            m_NetworkCharSelection = GetComponent<NetworkCharSelection>();
+            m_NetworkCharSelection.ConnectionManager = m_ConnectionManager;
 
             m_NetcodeHooks.OnNetworkSpawnHook += OnNetworkSpawn;
             m_NetcodeHooks.OnNetworkDespawnHook += OnNetworkDespawn;
@@ -64,7 +64,7 @@ namespace BTG.Gameplay.GameState
             else
             {
                 NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectCallback;
-                networkCharSelection.OnClientChangedSeat += OnClientChangedSeat;
+                m_NetworkCharSelection.OnClientChangedSeat += OnClientChangedSeat;
 
                 NetworkManager.Singleton.SceneManager.OnSceneEvent += OnSceneEvent;
             }
@@ -77,25 +77,25 @@ namespace BTG.Gameplay.GameState
                 NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnectCallback;
                 NetworkManager.Singleton.SceneManager.OnSceneEvent -= OnSceneEvent;
             }
-            if (networkCharSelection)
+            if (m_NetworkCharSelection)
             {
-                networkCharSelection.OnClientChangedSeat -= OnClientChangedSeat;
+                m_NetworkCharSelection.OnClientChangedSeat -= OnClientChangedSeat;
             }
         }
 
         private void OnClientDisconnectCallback(ulong clientId)
         {
             // clear this client's PlayerNumber and any associated visuals (so other players know they're gone).
-            for (int i = 0; i < networkCharSelection.LobbyPlayers.Count; ++i)
+            for (int i = 0; i < m_NetworkCharSelection.LobbyPlayers.Count; ++i)
             {
-                if (networkCharSelection.LobbyPlayers[i].ClientId == clientId)
+                if (m_NetworkCharSelection.LobbyPlayers[i].ClientId == clientId)
                 {
-                    networkCharSelection.LobbyPlayers.RemoveAt(i);
+                    m_NetworkCharSelection.LobbyPlayers.RemoveAt(i);
                     break;
                 }
             }
 
-            if (!networkCharSelection.IsLobbyClosed.Value)
+            if (!m_NetworkCharSelection.IsLobbyClosed.Value)
             {
                 // If the lobby is not already closing, close if the remaining players are all ready
                 CloseLobbyIfReady();
@@ -110,7 +110,7 @@ namespace BTG.Gameplay.GameState
                 throw new Exception($"OnClientChangedSeat: client ID {clientId} is not a lobby player and cannot change seats! Shouldn't be here!");
             }
 
-            if (networkCharSelection.IsLobbyClosed.Value)
+            if (m_NetworkCharSelection.IsLobbyClosed.Value)
             {
                 // The user tried to change their class after everything was locked in... too late! Discard this choice
                 return;
@@ -124,16 +124,16 @@ namespace BTG.Gameplay.GameState
             else
             {
                 // see if someone has already locked-in that seat! If so, too late... discard this choice
-                foreach (NetworkCharSelection.LobbyPlayerState playerInfo in networkCharSelection.LobbyPlayers)
+                foreach (NetworkCharSelection.LobbyPlayerState playerInfo in m_NetworkCharSelection.LobbyPlayers)
                 {
                     if (playerInfo.ClientId != clientId && playerInfo.SeatIdx == newSeatIdx && playerInfo.SeatState == NetworkCharSelection.SeatState.LockedIn)
                     {
                         // somebody already locked this choice in. Stop!
                         // Instead of granting lock request, change this player to Inactive state.
-                        networkCharSelection.LobbyPlayers[idx] = new NetworkCharSelection.LobbyPlayerState(
+                        m_NetworkCharSelection.LobbyPlayers[idx] = new NetworkCharSelection.LobbyPlayerState(
                             clientId,
-                            networkCharSelection.LobbyPlayers[idx].PlayerName,
-                            networkCharSelection.LobbyPlayers[idx].PlayerNumber,
+                            m_NetworkCharSelection.LobbyPlayers[idx].PlayerName,
+                            m_NetworkCharSelection.LobbyPlayers[idx].PlayerNumber,
                             NetworkCharSelection.SeatState.Inactive);
 
                         // then early out
@@ -142,10 +142,10 @@ namespace BTG.Gameplay.GameState
                 }
             }
 
-            networkCharSelection.LobbyPlayers[idx] = new NetworkCharSelection.LobbyPlayerState(
+            m_NetworkCharSelection.LobbyPlayers[idx] = new NetworkCharSelection.LobbyPlayerState(
                 clientId,
-                networkCharSelection.LobbyPlayers[idx].PlayerName,
-                networkCharSelection.LobbyPlayers[idx].PlayerNumber,
+                m_NetworkCharSelection.LobbyPlayers[idx].PlayerName,
+                m_NetworkCharSelection.LobbyPlayers[idx].PlayerNumber,
                 lockedIn ? NetworkCharSelection.SeatState.LockedIn : NetworkCharSelection.SeatState.Active,
                 newSeatIdx,
                 Time.time);
@@ -154,15 +154,15 @@ namespace BTG.Gameplay.GameState
             {
                 // to help the clients visually keep track of who's in what seat, we'll "kick out" any other players
                 // who were also in that seat. (Those players didn't click "Ready!" fast enough, somebody else took their seat!)
-                for (int i = 0; i < networkCharSelection.LobbyPlayers.Count; ++i)
+                for (int i = 0; i < m_NetworkCharSelection.LobbyPlayers.Count; ++i)
                 {
-                    if (networkCharSelection.LobbyPlayers[i].SeatIdx == newSeatIdx && i != idx)
+                    if (m_NetworkCharSelection.LobbyPlayers[i].SeatIdx == newSeatIdx && i != idx)
                     {
                         // change this player to Inactive state.
-                        networkCharSelection.LobbyPlayers[i] = new NetworkCharSelection.LobbyPlayerState(
-                            networkCharSelection.LobbyPlayers[i].ClientId,
-                            networkCharSelection.LobbyPlayers[i].PlayerName,
-                            networkCharSelection.LobbyPlayers[i].PlayerNumber,
+                        m_NetworkCharSelection.LobbyPlayers[i] = new NetworkCharSelection.LobbyPlayerState(
+                            m_NetworkCharSelection.LobbyPlayers[i].ClientId,
+                            m_NetworkCharSelection.LobbyPlayers[i].PlayerName,
+                            m_NetworkCharSelection.LobbyPlayers[i].PlayerNumber,
                             NetworkCharSelection.SeatState.Inactive);
                     }
                 }
@@ -184,9 +184,9 @@ namespace BTG.Gameplay.GameState
         /// </summary>
         private int FindLobbyPlayerIdx(ulong clientId)
         {
-            for (int i = 0; i < networkCharSelection.LobbyPlayers.Count; ++i)
+            for (int i = 0; i < m_NetworkCharSelection.LobbyPlayers.Count; ++i)
             {
-                if (networkCharSelection.LobbyPlayers[i].ClientId == clientId)
+                if (m_NetworkCharSelection.LobbyPlayers[i].ClientId == clientId)
                     return i;
             }
             return -1;
@@ -198,14 +198,14 @@ namespace BTG.Gameplay.GameState
         /// </summary>
         private void CloseLobbyIfReady()
         {
-            foreach (NetworkCharSelection.LobbyPlayerState playerInfo in networkCharSelection.LobbyPlayers)
+            foreach (NetworkCharSelection.LobbyPlayerState playerInfo in m_NetworkCharSelection.LobbyPlayers)
             {
                 if (playerInfo.SeatState != NetworkCharSelection.SeatState.LockedIn)
                     return; // nope, at least one player isn't locked in yet!
             }
 
             // everybody's ready at the same time! Lock it down!
-            networkCharSelection.IsLobbyClosed.Value = true;
+            m_NetworkCharSelection.IsLobbyClosed.Value = true;
 
             // remember our choices so the next scene can use the info
             SaveLobbyResults();
@@ -216,7 +216,7 @@ namespace BTG.Gameplay.GameState
 
         void SaveLobbyResults()
         {
-            foreach (NetworkCharSelection.LobbyPlayerState playerInfo in networkCharSelection.LobbyPlayers)
+            foreach (NetworkCharSelection.LobbyPlayerState playerInfo in m_NetworkCharSelection.LobbyPlayers)
             {
                 var playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(playerInfo.ClientId);
 
@@ -225,7 +225,7 @@ namespace BTG.Gameplay.GameState
                     // pass avatar GUID to PersistentPlayer
                     // it'd be great to simplify this with something like a NetworkScriptableObjects :(
 
-                    EntityDataSO entityData = networkCharSelection.EntityDataContainer.GetEntityDataBySeatIndex(playerInfo.SeatIdx);
+                    EntityDataSO entityData = m_NetworkCharSelection.EntityDataContainer.GetEntityDataBySeatIndex(playerInfo.SeatIdx);
 
                     persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value =
                         entityData.Guid.ToNetworkGuid();
@@ -236,7 +236,7 @@ namespace BTG.Gameplay.GameState
         private void SeatNewPlayer(ulong clientId)
         {
             // If lobby is closing and waiting to start the game, cancel to allow that new player to select a character
-            if (networkCharSelection.IsLobbyClosed.Value)
+            if (m_NetworkCharSelection.IsLobbyClosed.Value)
             {
                 CancelCloseLobby();
             }
@@ -256,7 +256,7 @@ namespace BTG.Gameplay.GameState
                     throw new Exception($"we shouldn't be here, connection approval should have refused this connection already for client ID {clientId} and player num {playerData.PlayerNumber}");
                 }
 
-                networkCharSelection.LobbyPlayers.Add(new NetworkCharSelection.LobbyPlayerState(
+                m_NetworkCharSelection.LobbyPlayers.Add(new NetworkCharSelection.LobbyPlayerState(
                     clientId,
                     playerData.PlayerName,
                     playerData.PlayerNumber,
@@ -274,13 +274,13 @@ namespace BTG.Gameplay.GameState
             {
                 StopCoroutine(m_WaitToEndLobbyCoroutine);
             }
-            networkCharSelection.IsLobbyClosed.Value = false;
+            m_NetworkCharSelection.IsLobbyClosed.Value = false;
         }
 
         private bool IsPlayerNumberAvailable(int playerNumber)
         {
             bool found = false;
-            foreach (NetworkCharSelection.LobbyPlayerState playerState in networkCharSelection.LobbyPlayers)
+            foreach (NetworkCharSelection.LobbyPlayerState playerState in m_NetworkCharSelection.LobbyPlayers)
             {
                 if (playerState.PlayerNumber == playerNumber)
                 {

@@ -10,7 +10,7 @@ namespace BTG.Player
         private PlayerModel m_Model;
         private PlayerView m_View;
         private PlayerInputs m_PlayerInputs;
-        private IPlayerService m_PlayerService;
+        private PlayerService m_PlayerService;
         private IEntityTankBrain m_EntityBrain;
         private IEntityHealthController m_EntityHealthController;
         public Rigidbody Rigidbody => m_View.Rigidbody;
@@ -30,7 +30,7 @@ namespace BTG.Player
             private PlayerModel model;
             private PlayerView view;
             private Transform transForm;
-            private IPlayerService playerService;
+            private PlayerService playerService;
             private PlayerInputs playerInput;
 
             public Builder WithModel(PlayerModel model)
@@ -59,7 +59,7 @@ namespace BTG.Player
                 return this;
             }
 
-            public Builder WithPlayerService(IPlayerService playerService)
+            public Builder WithPlayerService(PlayerService playerService)
             {
                 this.playerService = playerService;
                 return this;

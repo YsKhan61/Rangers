@@ -9,7 +9,7 @@ using VContainer;
 
 namespace BTG.Gameplay.GameplayObjects
 {
-    public class NetworkPlayerService : NetworkBehaviour, IPlayerService
+    public class NetworkPlayerService : NetworkBehaviour
     {
         [SerializeField]
         private PlayerVirtualCamera m_PVCamera;
@@ -100,10 +100,7 @@ namespace BTG.Gameplay.GameplayObjects
             OnEntityTagSelectionChanged_ServerRpc(m_OwnerNetworkPlayer.OwnerClientId, entityData.Guid.ToNetworkGuid());
         }
 
-        /// Once a client chooses a seat, server need little time to register the network entity data from network guid in NetworkEntityGuidState.
-        /// This involves a delay to update the network variable of NetworkEntityGuidState and then register the entity data.
-        /// Once it's done, then we can save the lobby seat selection and start the game.
-        /// Also, this time will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
+        /// This time will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
         private async void ConfigureEntityWithDelay(NetworkPlayer networkPlayer)
         {
             await Task.Delay(1000);
