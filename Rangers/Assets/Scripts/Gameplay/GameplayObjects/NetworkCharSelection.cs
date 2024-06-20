@@ -4,6 +4,7 @@ using BTG.Utilities;
 using System;
 using Unity.Netcode;
 using UnityEngine;
+using VContainer;
 
 
 namespace BTG.Gameplay.GameplayObjects
@@ -72,7 +73,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         private NetworkList<LobbyPlayerState> _lobbyPlayers;
 
-        [SerializeField]
+        [Inject]
         EntityDataContainerSO m_EntityDataContainer;
         public EntityDataContainerSO EntityDataContainer => m_EntityDataContainer;
 

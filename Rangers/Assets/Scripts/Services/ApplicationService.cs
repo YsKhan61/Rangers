@@ -5,7 +5,6 @@ using BTG.ConnectionManagement;
 using BTG.Effects;
 using BTG.Enemy;
 using BTG.Entity;
-using BTG.Factory;
 using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.UnityServices;
@@ -85,6 +84,9 @@ namespace BTG.Services
         private EntityDataContainerSO _entityDataContainer;
 
         [SerializeField]
+        private UltimateActionDataContainerSO _ultimateActionDataContainer;
+
+        [SerializeField]
         private WaveConfigSO _enemyWaveConfig;
 
         [SerializeField]
@@ -115,6 +117,7 @@ namespace BTG.Services
             builder.RegisterComponent(_enemyData);
             builder.RegisterComponent(_playerStats);
             builder.RegisterComponent(_entityDataContainer);
+            builder.RegisterComponent(_ultimateActionDataContainer);
             builder.RegisterComponent(_enemyWaveConfig);
             builder.RegisterComponent(_enemyDeathCount);
 

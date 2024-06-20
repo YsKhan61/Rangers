@@ -1,4 +1,5 @@
-﻿using BTG.Entity;
+﻿using BTG.Actions.UltimateAction;
+using BTG.Entity;
 using BTG.Player;
 using BTG.Tank;
 using BTG.Utilities;
@@ -17,6 +18,9 @@ namespace BTG.Gameplay.GameplayObjects
     {
         [Inject]
         private EntityFactoryContainerSO m_EntityFactoryContainer;
+
+        [Inject]
+        private UltimateActionDataContainerSO m_UltimateActionDataContainer;
 
         private Rigidbody m_Rigidbody;
         private Pose m_SpawnPose;
@@ -169,7 +173,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 
             // m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += InformUltimateAssigned; // m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
@@ -223,6 +227,21 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.DeInit();
             UnsubscribeFromEntityEvents();
             m_EntityBrain = null;
+        }
+
+        private void InformUltimateAssigned(TagSO tag)
+        {
+            InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
+        }
+
+        [ClientRpc]
+        private void InformUltimateAssigned_ClientRpc(NetworkGuid ultimateTagNetworkGuid)
+        {
+            if (IsOwner)
+            {
+                TagSO tag = m_UltimateActionDataContainer.GetUltimateActionTagByGuid(ultimateTagNetworkGuid.ToGuid());
+                m_Model.PlayerData.OnUltimateAssigned.RaiseEvent(tag);
+            }
         }
 
         private void CacheEntityDatas()

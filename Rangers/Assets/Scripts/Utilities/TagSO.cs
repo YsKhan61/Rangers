@@ -3,7 +3,7 @@ using UnityEngine;
 namespace BTG.Utilities
 {
     [CreateAssetMenu(fileName = "TagSO", menuName = "ScriptableObjects/TagSO", order = 0)]
-    public class TagSO : ScriptableObject
+    public class TagSO : GuidSO
     {
     }
 }

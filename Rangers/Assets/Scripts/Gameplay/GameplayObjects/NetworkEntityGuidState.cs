@@ -14,11 +14,11 @@ namespace BTG.Gameplay.GameplayObjects
     {
         public event Action OnEntityDataRegistered;
 
-        [HideInInspector]
-        public NetworkVariable<NetworkGuid> n_NetworkEntityGuid = new NetworkVariable<NetworkGuid>(default);
+        // public NetworkVariable<NetworkGuid> n_NetworkEntityGuid { get; set; } = new NetworkVariable<NetworkGuid>(default);
 
         [SerializeField]
         EntityDataContainerSO m_EntityDataContainer;
+        public EntityDataContainerSO EntityDataContainer => m_EntityDataContainer;
 
         EntityDataSO m_EntityData;
 
@@ -36,7 +36,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
-        public override void OnNetworkSpawn()
+        /*public override void OnNetworkSpawn()
         {
             n_NetworkEntityGuid.OnValueChanged += OnEntityGuidChanged;
         }
@@ -44,16 +44,22 @@ namespace BTG.Gameplay.GameplayObjects
         public override void OnNetworkDespawn()
         {
             n_NetworkEntityGuid.OnValueChanged -= OnEntityGuidChanged;
-        }
+            if (IsOwner)
+            {
+                n_NetworkEntityGuid.Value = default;
+            }
+        }*/
 
         public void SetRandomEntity()
         {
-            n_NetworkEntityGuid.Value = m_EntityDataContainer.GetRandomEntityData().Guid.ToNetworkGuid();
+            // n_NetworkEntityGuid.Value = m_EntityDataContainer.GetRandomData().Guid.ToNetworkGuid();
+            RegisterEntity(m_EntityDataContainer.GetRandomData().Guid);
         }
 
-        private void OnEntityGuidChanged(NetworkGuid previousValue, NetworkGuid newValue)
+        [ClientRpc]
+        public void RegisterEntityData_ClientRpc(NetworkGuid networkGuid)
         {
-            RegisterEntity(newValue.ToGuid());
+            RegisterEntity(networkGuid.ToGuid());
         }
 
         private void RegisterEntity(Guid guid)
@@ -67,7 +73,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             // based on the Guid received, Avatar is fetched from AvatarRegistry
-            if (!m_EntityDataContainer.TryGetEntityData(guid, out EntityDataSO entityData))
+            if (!m_EntityDataContainer.TryGetData(guid, out EntityDataSO entityData))
             {
                 Debug.LogError("Entity not found!");
                 return;

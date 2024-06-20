@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4bc4797be9b18f40a6b493974421857, type: 3}
   m_Name: EntityDataContainer
   m_EditorClassIdentifier: 
-  m_EntityDataList:
-  - {fileID: 11400000, guid: 52cc7f1259b548645a22381c95480256, type: 2}
-  - {fileID: 11400000, guid: 0677f758e72acb045bf21101182b6f3d, type: 2}
-  - {fileID: 11400000, guid: fa5c13bacbef7c0488a015a26e7a6c5c, type: 2}
+  m_DataList:
   - {fileID: 11400000, guid: 0ca898b414ba0674ba6cc146c15d806f, type: 2}
+  - {fileID: 11400000, guid: fa5c13bacbef7c0488a015a26e7a6c5c, type: 2}
+  - {fileID: 11400000, guid: 0677f758e72acb045bf21101182b6f3d, type: 2}
+  - {fileID: 11400000, guid: 52cc7f1259b548645a22381c95480256, type: 2}

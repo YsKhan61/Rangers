@@ -20,7 +20,7 @@ namespace BTG.ConnectionManagement
 
         // Instead of using a NetworkGuid (two ulongs), we could just use an int or even a byte-sized index into an array of possible avatars
         // defined in our game data source.
-        public NetworkGuid AvatarNetworkGuid;
+        public NetworkGuid EntityNetworkGuid;
         public bool HasCharacterSpawned;
 
         public SessionPlayerData(ulong clientID, string name, NetworkGuid avatarNetworkGuid, bool isConnected = false, bool hasCharacterSpawned = false)
@@ -30,7 +30,7 @@ namespace BTG.ConnectionManagement
             PlayerNumber = -1;
             PlayerPosition = Vector3.zero;
             PlayerRotation = Quaternion.identity;
-            AvatarNetworkGuid = avatarNetworkGuid;
+            EntityNetworkGuid = avatarNetworkGuid;
             IsConnected = isConnected;
             HasCharacterSpawned = hasCharacterSpawned;
         }

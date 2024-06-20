@@ -842,8 +842,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce0518ff3831b1a42b6fa5a45cc093ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_EntityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
-    type: 2}
   ConnectionManager: {fileID: 0}
 --- !u!114 &1503484133
 MonoBehaviour:
@@ -901,6 +899,7 @@ MonoBehaviour:
     TypeName: BTG.Services.ApplicationService
   autoRun: 1
   autoInjectGameObjects:
+  - {fileID: 1503484128}
   - {fileID: 72791172752845974}
   - {fileID: 1462700311}
   - {fileID: 1278191319308520015}

@@ -10,7 +10,7 @@ namespace BTG.Actions.UltimateAction
     /// Any ultimate action data scriptable object should inherit from this class
     /// Every ultimate action data scriptable object should have a unique tag.
     /// </summary>
-    public abstract class UltimateActionDataSO : ScriptableObject
+    public abstract class UltimateActionDataSO : GuidSO
     {
         [SerializeField] 
         [Tooltip("Tag of the ultimate action. Every ultimate action data scriptable object should have a unique tag")] 

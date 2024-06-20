@@ -227,8 +227,9 @@ namespace BTG.Gameplay.GameState
 
                     EntityDataSO entityData = m_NetworkCharSelection.EntityDataContainer.GetEntityDataBySeatIndex(playerInfo.SeatIdx);
 
-                    persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value =
-                        entityData.Guid.ToNetworkGuid();
+                    /*persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value =
+                        entityData.Guid.ToNetworkGuid();*/
+                    persistentPlayer.NetworkEntityGuidState.RegisterEntityData_ClientRpc(entityData.Guid.ToNetworkGuid());
                 }
             }
         }

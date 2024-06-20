@@ -51,7 +51,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void OnNetworkDespawn()
         {
-            if (m_NetcodeHooks.IsServer)
+            /*if (m_NetcodeHooks.IsServer)
             {
                 Transform movementTransform = m_Owner.transform;
                 SessionPlayerData? sessionPlayerData = SessionManager<SessionPlayerData>.Instance.GetPlayerData(m_NetcodeHooks.OwnerClientId);
@@ -67,7 +67,9 @@ namespace BTG.Gameplay.GameplayObjects
             else
             {
                 ms_ActivePlayers.Remove(m_Owner);
-            }
+            }*/
+
+            ms_ActivePlayers.Remove(m_Owner);
         }
 
         public static PersistentPlayer GetPlayer(ulong ownerClientId)

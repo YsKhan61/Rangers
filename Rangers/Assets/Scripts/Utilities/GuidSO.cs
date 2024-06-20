@@ -18,7 +18,7 @@ namespace BTG.Utilities
 
         void OnValidate()
         {
-            if (m_Guid.Length == 0)
+            if (m_Guid == null || m_Guid.Length == 0)
             {
                 m_Guid = Guid.NewGuid().ToByteArray();
             }

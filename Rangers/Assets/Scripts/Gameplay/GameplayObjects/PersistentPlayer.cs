@@ -1,4 +1,5 @@
 using BTG.ConnectionManagement;
+using BTG.Entity;
 using BTG.Utilities;
 using Unity.Multiplayer.Samples.BossRoom;
 using Unity.Netcode;
@@ -55,12 +56,19 @@ namespace BTG.Gameplay.GameplayObjects
                     _networkNameState.Name.Value = playerData.PlayerName;
                     if (playerData.HasCharacterSpawned)
                     {
-                        _networkEntityGuidState.n_NetworkEntityGuid.Value = playerData.AvatarNetworkGuid;
+                        // _networkEntityGuidState.n_NetworkEntityGuid.Value = playerData.EntityNetworkGuid;
+                        _networkEntityGuidState.RegisterEntityData_ClientRpc(playerData.EntityNetworkGuid);
                     }
                     else
                     {
-                        _networkEntityGuidState.SetRandomEntity();
-                        playerData.AvatarNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
+                        // _networkEntityGuidState.SetRandomEntity();
+                        // playerData.EntityNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
+
+                        EntityDataSO entityData = _networkEntityGuidState.EntityDataContainer.GetRandomData();
+                        NetworkGuid networkGuid = entityData.Guid.ToNetworkGuid();
+                        _networkEntityGuidState.RegisterEntityData_ClientRpc(networkGuid);
+                        playerData.EntityNetworkGuid = networkGuid;
+
                         SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                     }
                 }
@@ -88,7 +96,8 @@ namespace BTG.Gameplay.GameplayObjects
                 {
                     var playerData = sessionPlayerData.Value;
                     playerData.PlayerName = _networkNameState.Name.Value;
-                    playerData.AvatarNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
+                    // playerData.EntityNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
+                    playerData.EntityNetworkGuid = _networkEntityGuidState.RegisteredEntityData.Guid.ToNetworkGuid();
                     SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                 }
             }

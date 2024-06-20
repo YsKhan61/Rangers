@@ -45,7 +45,8 @@ namespace BTG.Gameplay.GameplayObjects
         {
             Debug.Log($"PlayerOwnerClient {playerOwnerClientId} Calling OnEntityTagSelectionChanged_ServerRpc!");
             var persistentPlayer = PersistentPlayerClientCache.GetPlayer(playerOwnerClientId);
-            persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value = selectedEntityGuid;
+            // persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value = selectedEntityGuid;
+            persistentPlayer.NetworkEntityGuidState.RegisterEntityData_ClientRpc(selectedEntityGuid);
         }
 
         /// <summary>
@@ -80,11 +81,6 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             ConfigureEntityWithDelay(networkPlayer);
-        }
-
-        public void OnEntityInitialized(Sprite icon)
-        {
-            m_PlayerStats.PlayerIcon.Value = icon;
         }
 
         public void OnPlayerDeath()
