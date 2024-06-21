@@ -1,4 +1,5 @@
-﻿using BTG.Entity;
+﻿using BTG.Actions.UltimateAction;
+using BTG.Entity;
 using BTG.Player;
 using BTG.Utilities;
 using System.Threading.Tasks;
@@ -23,6 +24,9 @@ namespace BTG.Gameplay.GameplayObjects
 
         [Inject]
         private EntityDataContainerSO m_EntityDataContainer;
+
+        [Inject]
+        private UltimateActionDataContainerSO m_UltimateActionDataContainer;
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;
@@ -96,7 +100,7 @@ namespace BTG.Gameplay.GameplayObjects
             OnEntityTagSelectionChanged_ServerRpc(m_OwnerNetworkPlayer.OwnerClientId, entityData.Guid.ToNetworkGuid());
         }
 
-        /// This time will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
+        /// This time delay will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
         private async void ConfigureEntityWithDelay(NetworkPlayer networkPlayer)
         {
             await Task.Delay(1000);

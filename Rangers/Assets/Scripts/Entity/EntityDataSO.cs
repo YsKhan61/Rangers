@@ -9,7 +9,11 @@ namespace BTG.Entity
     /// </summary>
     public abstract class EntityDataSO : GuidSO
     {
-        public virtual TagSO Tag { get; }
+        [SerializeField, Tooltip("The tag of the tank")]
+        private TagSO m_Tag;
+        public TagSO Tag => m_Tag;
+
+        // public virtual TagSO Tag { get; }
         public virtual Sprite Icon { get; }
         public virtual int CharSelectSeatIndex { get; }
         public virtual GameObject Graphics { get; }

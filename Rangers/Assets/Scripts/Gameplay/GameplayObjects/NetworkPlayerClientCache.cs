@@ -45,8 +45,7 @@ namespace BTG.Gameplay.GameplayObjects
         private void OnNetworkSpawn()
         {
             ms_ActivePlayers.Add(m_Owner);
-
-            LogCaching();
+            // LogCaching();
         }
 
         private void OnNetworkDespawn()

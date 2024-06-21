@@ -48,9 +48,6 @@ namespace BTG.Gameplay.GameplayObjects
         [Tooltip("The Ready Button's image component")]
         Image m_ReadyButtonImage;
 
-        [SerializeField]
-        Button m_ReadyButton;
-
         [Header("UI Elements for different lobby modes")]
         [SerializeField]
         [Tooltip("UI elements to turn on when the player hasn't chosen their seat yet. Turned off otherwise!")]
@@ -93,9 +90,6 @@ namespace BTG.Gameplay.GameplayObjects
         }
 
         Dictionary<LobbyMode, List<GameObject>> m_LobbyUIElementsByMode;
-
-        /*[Inject]
-        ConnectionManager m_ConnectionManager;*/
 
         public override void Awake()
         {
@@ -143,9 +137,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (m_NetworkCharSelection.IsSpawned)
             {
-                m_ReadyButton.interactable = false;     // to prevent multiple clicks
                 m_NetworkCharSelection.ChangeSeatServerRpc(NetworkManager.Singleton.LocalClientId, m_LastSeatSelected, !m_HasLocalPlayerLockedIn);
-
             }
         }
 

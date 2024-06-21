@@ -794,6 +794,7 @@ MonoBehaviour:
   _playerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
   _enemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
   _playerStats: {fileID: 11400000, guid: a52a69fc6fc21534b9bd23fc31d16ac4, type: 2}
+  _tagContainer: {fileID: 11400000, guid: 8ba09dd3d7c0c274e877343bceaed367, type: 2}
   _entityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
     type: 2}
   _ultimateActionDataContainer: {fileID: 11400000, guid: 58ee7c96c78400c4891477f191208291,

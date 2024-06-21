@@ -8,9 +8,9 @@ namespace BTG.Tank
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
     public class TankDataSO : EntityDataSO
     {
-        [SerializeField, Tooltip("The tag of the tank")]
+        /*[SerializeField, Tooltip("The tag of the tank")]
         private TagSO m_Tag;
-        public override TagSO Tag => m_Tag;
+        public override TagSO Tag => m_Tag;*/
 
         [SerializeField]
         private Sprite m_Icon;

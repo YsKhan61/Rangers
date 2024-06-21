@@ -24,6 +24,14 @@ namespace BTG.Utilities
 
             return m_DataList[UnityEngine.Random.Range(0, m_DataList.Length)];
         }
+
+        public void LogGuid()
+        {
+            foreach (var data in m_DataList)
+            {
+                Debug.Log($"{data.name} Guid: {data.Guid}");
+            }
+        }
     }
 }
 

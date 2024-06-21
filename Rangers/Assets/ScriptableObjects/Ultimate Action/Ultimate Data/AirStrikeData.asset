@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65322fb48778ea3489f19cc858bbb35e, type: 3}
-  m_Name: AirStrike
+  m_Name: AirStrikeData
   m_EditorClassIdentifier: 
   m_Tag: {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d, type: 2}
   m_ChargeRate: 10

@@ -142,7 +142,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
 
-            // Set Camera Target for owners
+            // Set specific events for owners
             if (IsOwner)
             {
                 m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
@@ -231,15 +231,19 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void InformUltimateAssigned(TagSO tag)
         {
-            InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
+            NetworkGuid ng = tag.Guid.ToNetworkGuid();
+            // Debug.Log($"Informing ultimate assigned to player {OwnerClientId} with tag {tag.name}, guid {tag.Guid}, network guid {ng}");
+            InformUltimateAssigned_ClientRpc(ng);
         }
 
         [ClientRpc]
-        private void InformUltimateAssigned_ClientRpc(NetworkGuid ultimateTagNetworkGuid)
+        private void InformUltimateAssigned_ClientRpc(NetworkGuid ngTag)
         {
             if (IsOwner)
             {
-                TagSO tag = m_UltimateActionDataContainer.GetUltimateActionTagByGuid(ultimateTagNetworkGuid.ToGuid());
+                // Debug.Log($"Informing Owner Client ultimate assigned to player {OwnerClientId}, guid {ngTag.ToGuid()}, network guid {ngTag}");
+                TagSO tag = m_UltimateActionDataContainer.GetUltimateActionTagByGuid(ngTag.ToGuid());
+                // Debug.Log($"Ultimate tag {tag.name}");
                 m_Model.PlayerData.OnUltimateAssigned.RaiseEvent(tag);
             }
         }

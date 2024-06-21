@@ -81,6 +81,9 @@ namespace BTG.Services
         private PlayerStatsSO _playerStats;
 
         [SerializeField]
+        private TagContainerSO _tagContainer;
+
+        [SerializeField]
         private EntityDataContainerSO _entityDataContainer;
 
         [SerializeField]
@@ -117,6 +120,7 @@ namespace BTG.Services
             builder.RegisterComponent(_enemyData);
             builder.RegisterComponent(_playerStats);
             builder.RegisterComponent(_entityDataContainer);
+            builder.RegisterComponent(_tagContainer);
             builder.RegisterComponent(_ultimateActionDataContainer);
             builder.RegisterComponent(_enemyWaveConfig);
             builder.RegisterComponent(_enemyDeathCount);
@@ -236,6 +240,13 @@ namespace BTG.Services
 #else
             Application.Quit();
 #endif
+        }
+
+        private void Logs()
+        {
+            Container.Resolve<EntityDataContainerSO>().LogGuid();
+            Container.Resolve<TagContainerSO>().LogGuid();
+            Container.Resolve<UltimateActionDataContainerSO>().LogGuid();
         }
     }
 }
