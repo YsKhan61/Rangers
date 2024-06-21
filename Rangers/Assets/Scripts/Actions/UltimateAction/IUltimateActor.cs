@@ -37,7 +37,12 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// Try to execute the ultimate action.
         /// </summary>
-        public void TryExecuteUltimate();
+        public bool TryExecuteUltimate();
+
+        /// <summary>
+        /// Only spawn the graphics
+        /// </summary>
+        public void SpawnUltimateGraphics();
 
         /// <summary>
         /// Whether to show or hide the tank.

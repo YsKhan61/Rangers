@@ -68,6 +68,11 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
+        public override void SpawnGraphics()
+        {
+            Debug.Log("Airstrike spawn graphics");
+        }
+
         protected override void Restart()
         {
             m_View.StopParticleSystem();

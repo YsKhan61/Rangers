@@ -16,10 +16,14 @@ namespace BTG.Entity
         /// </summary>
         public void Init();
 
+        public void InitNonServer();
+
         /// <summary>
         /// De-initialize the brain.
         /// </summary>
         public void DeInit();
+
+        public void DeInitNonServer();
 
         /// <summary>
         /// It is called when the entity is dead.

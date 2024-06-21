@@ -88,6 +88,7 @@ namespace BTG.Actions.UltimateAction
         }
 
         public abstract bool TryExecute();
+        public abstract void SpawnGraphics();
 
         public virtual void Destroy()
         {

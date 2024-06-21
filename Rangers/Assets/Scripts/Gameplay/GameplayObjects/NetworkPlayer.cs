@@ -26,7 +26,7 @@ namespace BTG.Gameplay.GameplayObjects
         private Pose m_SpawnPose;
         private PlayerModel m_Model;
         private NetworkPlayerService m_PlayerService;
-        private TankView m_GraphicsView;
+        // private TankView m_GraphicsView;
         private IEntityTankBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
@@ -45,14 +45,16 @@ namespace BTG.Gameplay.GameplayObjects
                     Debug.Log("CameraTarget is not available for non-owners");
                 }
 
-                if (IsServer)
+                return m_EntityBrain.CameraTarget;
+
+                /*if (IsServer)
                 {
                     return m_EntityBrain.CameraTarget;
                 }
                 else
                 {
                     return m_GraphicsView.CameraTarget;
-                }
+                }*/
             }
         }
 
@@ -114,7 +116,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
             else
             {
-                DespawnGraphics();
+                DeInitNonServerEntity();
             }
         }
 
@@ -137,14 +139,15 @@ namespace BTG.Gameplay.GameplayObjects
             }
             else
             {
-                DespawnGraphics();
-                SpawnGraphics();
+                DeInitNonServerEntity();
+                InitNonServerEntity();
             }
 
 
             // Set specific events for owners
             if (IsOwner)
             {
+                // Camera target can only be set after the entity is initialized as the entity view contains the camera target
                 m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
             }
         }
@@ -154,11 +157,7 @@ namespace BTG.Gameplay.GameplayObjects
         /// </summary>
         private void InitEntity()
         {
-            bool entityFound = TryGetEntityFromFactory(RegisteredEntityData.Tag, out IEntityBrain entity);
-            if (!entityFound)
-                return;
-
-            m_EntityBrain = entity as IEntityTankBrain;
+            m_EntityBrain = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag).GetItem() as IEntityTankBrain;
             if (m_EntityBrain == null)
             {
                 Debug.LogError("PlayerTankController: Entity brain is not of type IEntityTankBrain");
@@ -188,18 +187,35 @@ namespace BTG.Gameplay.GameplayObjects
             mn_IsAlive.Value = true;    // for now this gets the input from the owner.
         }
 
-        public void SpawnGraphics()
+        public void InitNonServerEntity()
         {
-            m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
+            // Later use factory to spawn the graphics
+            /*m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
             m_GraphicsView.transform.localPosition = Vector3.zero;
-            m_GraphicsView.transform.localRotation = Quaternion.identity;
+            m_GraphicsView.transform.localRotation = Quaternion.identity;*/
+
+            EntityFactorySO factory = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag) as EntityFactorySO;
+            if (factory == null)
+            {
+                Debug.LogError("Entity factory is not of type EntityFactorySO");
+                return;
+            }
+            m_EntityBrain = factory.GetNonServerItem() as IEntityTankBrain;
+
+            m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
         }
 
-        public void DespawnGraphics()
+        public void DeInitNonServerEntity()
         {
-            if (m_GraphicsView == null)
+            /*if (m_GraphicsView == null)
                 return;
-            Destroy(m_GraphicsView.gameObject);
+            Destroy(m_GraphicsView.gameObject);*/
+
+            if (m_EntityBrain == null)
+                return;
+
+            m_EntityBrain.DeInitNonServer();
+            m_EntityBrain = null;
         }
 
         public void OnEntityDied()
@@ -310,12 +326,6 @@ namespace BTG.Gameplay.GameplayObjects
             m_Rigidbody.maxLinearVelocity = m_EntityBrain.Model.MaxSpeed;
         }
 
-        private bool TryGetEntityFromFactory(TagSO tag, out IEntityBrain entity)
-        {
-            entity = m_EntityFactoryContainer.GetFactory(tag).GetItem();
-            return entity != null;
-        }
-
         private void ConfigureEntityWithHealthController()
         {
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
@@ -399,10 +409,29 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void TryExecuteUltimate()
         {
-            if (!mn_IsAlive.Value)
+            if (!IsOwner || !mn_IsAlive.Value)
                 return;
 
-            m_EntityBrain?.TryExecuteUltimate();
+            TryExecuteUltimate_ServerRpc();
+        }
+
+        [ServerRpc]
+        private void TryExecuteUltimate_ServerRpc()
+        {
+            bool success = m_EntityBrain.TryExecuteUltimate();
+            if (success)
+            {
+                TryExecuteUltimate_ClientRpc();
+            }
+        }
+
+        [ClientRpc]
+        private void TryExecuteUltimate_ClientRpc()
+        {
+            // NOTE - m_EntityBrain is not set on the client side(non server), it's server only
+            // hence we need to find how to create EntityBrain for all clients but without views
+            if (IsServer) return;   // Server already spawned it's graphics
+            m_EntityBrain?.SpawnUltimateGraphics();
         }
 
         private void SubscribeToInputEvents()

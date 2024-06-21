@@ -38,6 +38,26 @@ namespace BTG.Tank
             m_Resolver.Inject(brain);
             return brain;
         }
+
+        /// <summary>
+        /// This method is used to create the tank for the client side
+        /// NOTE - Later we can use a pool for this
+        /// </summary>
+        /// <returns></returns>
+        public override IEntityBrain GetNonServerItem()
+        {
+            TankModel model = new TankModel(m_Data);
+            TankView view = Instantiate(m_Data.Graphics).GetComponent<TankView>();
+
+            TankBrain brain = new TankBrain.Builder()
+                .WithTankModel(model)
+                .WithTankView(view)
+                .Build();
+
+            m_Resolver.Inject(brain);
+            brain.CreateUltimateAction();
+            return brain;
+        }
     }
 }
 

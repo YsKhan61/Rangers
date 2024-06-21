@@ -38,6 +38,11 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
+        public override void SpawnGraphics()
+        {
+            Debug.Log("AutoTarget SpawnGraphics");
+        }
+
         public override void Destroy()
         {
             OnFullyCharged = null;

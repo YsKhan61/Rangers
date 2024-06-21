@@ -11,6 +11,8 @@ namespace BTG.Entity
     public abstract class EntityFactorySO : FactorySO<IEntityBrain>
     {
         public abstract override IEntityBrain GetItem();
+
+        public abstract IEntityBrain GetNonServerItem();
     }
 }
 

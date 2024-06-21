@@ -44,6 +44,11 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
+        public override void SpawnGraphics()
+        {
+            Debug.Log("SelfShield SpawnGraphics");
+        }
+
         public override void Destroy()
         {
             OnFullyCharged = null;

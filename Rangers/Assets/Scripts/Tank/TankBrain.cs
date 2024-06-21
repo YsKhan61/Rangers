@@ -126,6 +126,8 @@ namespace BTG.Tank
             _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
+        public void InitNonServer() { }
+
         public void CreatePrimaryAction(TagSO primaryTag = null)
         {
             if (primaryTag == null)
@@ -192,6 +194,10 @@ namespace BTG.Tank
             m_Pool.ReturnTank(this);
         }
         
+        public void DeInitNonServer() 
+        { 
+            Object.Destroy(m_View.gameObject);
+        }
 
         public void ToggleActorVisibility(bool value)
         {
@@ -210,7 +216,8 @@ namespace BTG.Tank
 
         public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
-        public void TryExecuteUltimate() => UltimateAction.TryExecute();
+        public bool TryExecuteUltimate() => UltimateAction.TryExecute();
+        public void SpawnUltimateGraphics() => UltimateAction.SpawnGraphics();
 
         public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetFactory(m_Model.TankData.Tag).GetItem().ExecuteRagdollEffect(this);
 
