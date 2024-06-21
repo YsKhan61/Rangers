@@ -14,8 +14,6 @@ namespace BTG.Gameplay.GameplayObjects
     {
         public event Action OnEntityDataRegistered;
 
-        // public NetworkVariable<NetworkGuid> n_NetworkEntityGuid { get; set; } = new NetworkVariable<NetworkGuid>(default);
-
         [SerializeField]
         EntityDataContainerSO m_EntityDataContainer;
         public EntityDataContainerSO EntityDataContainer => m_EntityDataContainer;
@@ -36,23 +34,8 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
-        /*public override void OnNetworkSpawn()
-        {
-            n_NetworkEntityGuid.OnValueChanged += OnEntityGuidChanged;
-        }
-
-        public override void OnNetworkDespawn()
-        {
-            n_NetworkEntityGuid.OnValueChanged -= OnEntityGuidChanged;
-            if (IsOwner)
-            {
-                n_NetworkEntityGuid.Value = default;
-            }
-        }*/
-
         public void SetRandomEntity()
         {
-            // n_NetworkEntityGuid.Value = m_EntityDataContainer.GetRandomData().Guid.ToNetworkGuid();
             RegisterEntity(m_EntityDataContainer.GetRandomData().Guid);
         }
 

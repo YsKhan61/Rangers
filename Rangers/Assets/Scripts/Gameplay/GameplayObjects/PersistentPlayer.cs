@@ -61,9 +61,6 @@ namespace BTG.Gameplay.GameplayObjects
                     }
                     else
                     {
-                        // _networkEntityGuidState.SetRandomEntity();
-                        // playerData.EntityNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
-
                         EntityDataSO entityData = _networkEntityGuidState.EntityDataContainer.GetRandomData();
                         NetworkGuid networkGuid = entityData.Guid.ToNetworkGuid();
                         _networkEntityGuidState.RegisterEntityData_ClientRpc(networkGuid);
@@ -96,7 +93,6 @@ namespace BTG.Gameplay.GameplayObjects
                 {
                     var playerData = sessionPlayerData.Value;
                     playerData.PlayerName = _networkNameState.Name.Value;
-                    // playerData.EntityNetworkGuid = _networkEntityGuidState.n_NetworkEntityGuid.Value;
                     playerData.EntityNetworkGuid = _networkEntityGuidState.RegisteredEntityData.Guid.ToNetworkGuid();
                     SessionManager<SessionPlayerData>.Instance.SetPlayerData(OwnerClientId, playerData);
                 }

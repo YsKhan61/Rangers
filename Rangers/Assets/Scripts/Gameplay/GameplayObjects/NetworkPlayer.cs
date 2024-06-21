@@ -146,7 +146,6 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsOwner)
             {
                 m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
-                m_PlayerService.PlayerStats.PlayerIcon.Value = RegisteredEntityData.Icon;
             }
         }
 
@@ -172,11 +171,11 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.SetDamageable(m_EntityHealthController);
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 
-            // m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+            m_EntityBrain.OnEntityInitialized += InformOnEntityInitialized; // m_PlayerService.OnEntityInitialized;
             m_EntityBrain.UltimateAction.OnUltimateActionAssigned += InformUltimateAssigned; // m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated; // m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged; // m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted; // m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
 
             CacheEntityDatas();
             ConfigureEntityWithHealthController();
@@ -229,11 +228,39 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain = null;
         }
 
+        private void InformOnEntityInitialized(Sprite icon)
+        {
+            InformOnEntityInitialized_ClientRpc(RegisteredEntityData.Guid.ToNetworkGuid());
+        }
+
         private void InformUltimateAssigned(TagSO tag)
         {
-            NetworkGuid ng = tag.Guid.ToNetworkGuid();
-            // Debug.Log($"Informing ultimate assigned to player {OwnerClientId} with tag {tag.name}, guid {tag.Guid}, network guid {ng}");
-            InformUltimateAssigned_ClientRpc(ng);
+            InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
+        }
+
+        private void InformUltimateChargeUpdated(int chargeAmount)
+        {
+            InformUltimateChargeUpdated_ClientRpc(chargeAmount);
+        }
+
+        private void InformUltimateFullyCharged()
+        {
+            InformUltimateFullyCharged_ClientRpc();
+        }
+
+        private void InformUltimateActionExecuted()
+        {
+            InformUltimateActionExecuted_ClientRpc();
+        }
+
+        [ClientRpc]
+        private void InformOnEntityInitialized_ClientRpc(NetworkGuid ng)
+        {
+            if (IsOwner)
+            {
+                m_NetworkEntityGuidState.EntityDataContainer.TryGetData(ng.ToGuid(), out EntityDataSO entityData);
+                m_PlayerService.PlayerStats.PlayerIcon.Value = entityData.Icon;
+            }
         }
 
         [ClientRpc]
@@ -241,10 +268,35 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (IsOwner)
             {
-                // Debug.Log($"Informing Owner Client ultimate assigned to player {OwnerClientId}, guid {ngTag.ToGuid()}, network guid {ngTag}");
                 TagSO tag = m_UltimateActionDataContainer.GetUltimateActionTagByGuid(ngTag.ToGuid());
-                // Debug.Log($"Ultimate tag {tag.name}");
                 m_Model.PlayerData.OnUltimateAssigned.RaiseEvent(tag);
+            }
+        }
+
+        [ClientRpc]
+        private void InformUltimateChargeUpdated_ClientRpc(int chargeAmount)
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent(chargeAmount);
+            }
+        }
+
+        [ClientRpc]
+        private void InformUltimateFullyCharged_ClientRpc()
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent();
+            }
+        }
+
+        [ClientRpc]
+        private void InformUltimateActionExecuted_ClientRpc()
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnUltimateExecuted.RaiseEvent();
             }
         }
 
@@ -388,12 +440,13 @@ namespace BTG.Gameplay.GameplayObjects
                 Debug.Log("Entity Brain is null!");
                 return;
             }
-            // m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
+            
+            m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized; // m_PlayerService.OnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= InformUltimateAssigned; // m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated; // m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged; // m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted; // m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
 
             if (m_EntityHealthController == null)
             {

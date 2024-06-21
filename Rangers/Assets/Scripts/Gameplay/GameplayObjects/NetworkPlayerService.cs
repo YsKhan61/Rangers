@@ -49,7 +49,6 @@ namespace BTG.Gameplay.GameplayObjects
         {
             Debug.Log($"PlayerOwnerClient {playerOwnerClientId} Calling OnEntityTagSelectionChanged_ServerRpc!");
             var persistentPlayer = PersistentPlayerClientCache.GetPlayer(playerOwnerClientId);
-            // persistentPlayer.NetworkEntityGuidState.n_NetworkEntityGuid.Value = selectedEntityGuid;
             persistentPlayer.NetworkEntityGuidState.RegisterEntityData_ClientRpc(selectedEntityGuid);
         }
 
