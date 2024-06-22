@@ -47,7 +47,7 @@ namespace BTG.Tank
         public override IEntityBrain GetNonServerItem()
         {
             TankModel model = new TankModel(m_Data);
-            TankView view = Instantiate(m_Data.Graphics).GetComponent<TankView>();
+            TankView view = Instantiate(m_Data.TankViewPrefab);
 
             TankBrain brain = new TankBrain.Builder()
                 .WithTankModel(model)

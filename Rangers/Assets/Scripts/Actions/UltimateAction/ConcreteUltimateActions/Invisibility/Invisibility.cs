@@ -38,11 +38,8 @@ namespace BTG.Actions.UltimateAction
             }
 
             ChangeState(State.Executing);
-
-            SpawnView(Actor.Transform);
-            m_View.PlayDisappearPS();
-            m_View.PlayDisappearAudio();
-            Actor.ToggleActorVisibility(false);
+            InitVisual();
+            
             RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
@@ -50,7 +47,14 @@ namespace BTG.Actions.UltimateAction
 
         public override void NonServerExecute()
         {
-            Debug.Log("Invisibility SpawnGraphics");
+            cts = new();
+            InitVisual();
+            _ = HelperMethods.InvokeAfterAsync(m_InvisibilityData.Duration,
+                () =>
+                {
+                    DeInitVisual1();
+                },
+                cts.Token);
         }
 
         public override void Destroy()
@@ -81,9 +85,7 @@ namespace BTG.Actions.UltimateAction
 
         private void ResetAfterDelay()
         {
-            Object.Destroy(m_View.gameObject);
-            m_View = null;
-            Actor.ToggleActorVisibility(true);
+            DeInitVisual2();
             if (Actor.IsPlayer)
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
 
@@ -92,6 +94,29 @@ namespace BTG.Actions.UltimateAction
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
+        }
+
+        private void InitVisual()
+        {
+            SpawnView(Actor.Transform);
+            m_View.PlayDisappearPS();
+            m_View.PlayDisappearAudio();
+            Actor.ToggleActorVisibility(false);
+        }
+
+        private void DeInitVisual1()
+        {
+            m_View.PlayAppearPS();
+            m_View.PlayAppearAudio();
+
+            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => DeInitVisual2(), cts.Token);
+        }
+
+        private void DeInitVisual2()
+        {
+            Object.Destroy(m_View.gameObject);
+            m_View = null;
+            Actor.ToggleActorVisibility(true);
         }
     }
 }
