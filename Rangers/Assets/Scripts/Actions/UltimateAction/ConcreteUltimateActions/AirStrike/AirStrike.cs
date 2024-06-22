@@ -70,6 +70,10 @@ namespace BTG.Actions.UltimateAction
         {
             cts = new();
             InitVisual();
+
+            if (Actor.IsPlayer)
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
+
             _ = HelperMethods.InvokeAfterAsync(m_AirStrikeData.Duration, 
                 () =>
                 {

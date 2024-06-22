@@ -86,11 +86,7 @@ namespace BTG.Actions.UltimateAction
         private void ResetAfterDelay()
         {
             DeInitVisual2();
-            if (Actor.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
-
             RaiseUltimateActionExecutedEvent();
-
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
@@ -117,6 +113,9 @@ namespace BTG.Actions.UltimateAction
             Object.Destroy(m_View.gameObject);
             m_View = null;
             Actor.ToggleActorVisibility(true);
+
+            if (Actor.IsPlayer)
+                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
         }
     }
 }
