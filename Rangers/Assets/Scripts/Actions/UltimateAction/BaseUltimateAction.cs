@@ -20,19 +20,19 @@ namespace BTG.Actions.UltimateAction
         public event System.Action<int> OnChargeUpdated;
         public event System.Action OnUltimateActionExecuted;        
 
-        public TagSO Tag => m_UltimateActionData.Tag;
+        public TagSO Tag => ultimateActionData.Tag;
         public State CurrentState { get; protected set; }
 
         public IUltimateActor Actor { get; protected set; }
 
-        protected UltimateActionDataSO m_UltimateActionData;
-        protected CancellationTokenSource m_CTS;
+        protected UltimateActionDataSO ultimateActionData;
+        protected CancellationTokenSource cts;
 
         private float m_ChargedAmount;
 
         public virtual void Enable()
         {
-            m_CTS = new();
+            cts = new();
 
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
@@ -44,7 +44,7 @@ namespace BTG.Actions.UltimateAction
 
         public virtual void Disable()
         {
-            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(cts);
 
             Charge(-FULL_CHARGE);
 
@@ -88,11 +88,11 @@ namespace BTG.Actions.UltimateAction
         }
 
         public abstract bool TryExecute();
-        public abstract void SpawnGraphics();
+        public abstract void NonServerExecute();
 
         public virtual void Destroy()
         {
-            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(cts);
             
             OnUltimateActionAssigned = null;
             OnChargeUpdated = null;
@@ -107,7 +107,7 @@ namespace BTG.Actions.UltimateAction
             => OnUltimateActionExecuted?.Invoke();
 
         protected void RestartAfterDuration(int duration)
-            => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), m_CTS.Token);
+            => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), cts.Token);
 
 
         protected abstract void Restart();
@@ -128,8 +128,8 @@ namespace BTG.Actions.UltimateAction
             {
                 while (CurrentState == State.Charging)
                 {
-                    await Task.Delay(1000, m_CTS.Token);
-                    Charge(m_UltimateActionData.ChargeRate);
+                    await Task.Delay(1000, cts.Token);
+                    Charge(ultimateActionData.ChargeRate);
                     // Debug.Log("Charging : " + m_ChargedAmount + " : " + Actor.Transform.gameObject.name);
                 }
             }

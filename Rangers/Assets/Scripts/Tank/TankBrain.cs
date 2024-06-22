@@ -217,7 +217,7 @@ namespace BTG.Tank
         public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public bool TryExecuteUltimate() => UltimateAction.TryExecute();
-        public void SpawnUltimateGraphics() => UltimateAction.SpawnGraphics();
+        public void SpawnUltimateGraphics() => UltimateAction.NonServerExecute();
 
         public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetFactory(m_Model.TankData.Tag).GetItem().ExecuteRagdollEffect(this);
 

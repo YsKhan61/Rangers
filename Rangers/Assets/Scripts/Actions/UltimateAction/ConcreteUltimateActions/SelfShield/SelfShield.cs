@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
@@ -8,13 +9,13 @@ namespace BTG.Actions.UltimateAction
     {
         public override event System.Action OnFullyCharged;
 
-        private SelfShieldDataSO m_SelfShieldData => m_UltimateActionData as SelfShieldDataSO;
+        private SelfShieldDataSO m_SelfShieldData => ultimateActionData as SelfShieldDataSO;
 
         private SelfShieldView m_View;
 
         public SelfShield(SelfShieldDataSO selfShieldData)
         {
-            m_UltimateActionData = selfShieldData;
+            ultimateActionData = selfShieldData;
         }
 
         public override void Disable()
@@ -34,19 +35,23 @@ namespace BTG.Actions.UltimateAction
                 return false;
             }
 
-            SpawnView(Actor.Transform);
-            m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
-            m_View.SetParticleSystem(m_SelfShieldData.Duration);
-            m_View.PlayParticleSystem();
-            m_View.PlayAudio();
+            ChangeState(State.Executing);
+            InitVisual();
             RestartAfterDuration(m_SelfShieldData.Duration);
 
             return true;
         }
 
-        public override void SpawnGraphics()
+        public override void NonServerExecute()
         {
-            Debug.Log("SelfShield SpawnGraphics");
+            cts = new();
+            InitVisual();
+            _ = HelperMethods.InvokeAfterAsync(m_SelfShieldData.Duration,
+                () => 
+                {
+                    DeInitVisual();
+                }, 
+                cts.Token);
         }
 
         public override void Destroy()
@@ -57,12 +62,8 @@ namespace BTG.Actions.UltimateAction
 
         protected override void Restart()
         {
-            m_View.StopParticleSystem();
-            Object.Destroy(m_View.gameObject);
-            m_View = null;
-
+            DeInitVisual();
             RaiseUltimateActionExecutedEvent();
-
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
@@ -73,11 +74,20 @@ namespace BTG.Actions.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        private void SpawnView(Transform parent)
+        private void InitVisual()
         {
-            m_View = Object.Instantiate(m_SelfShieldData.SelfShieldViewPrefab, parent);
-            m_View.transform.localPosition = Vector3.zero;
-            m_View.transform.localRotation = Quaternion.identity;
+            m_View = Object.Instantiate(m_SelfShieldData.SelfShieldViewPrefab, Actor.Transform);
+            m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
+            m_View.SetParticleSystem(m_SelfShieldData.Duration);
+            m_View.PlayParticleSystem();
+            m_View.PlayAudio();
+        }
+
+        private void DeInitVisual()
+        {
+            m_View.StopParticleSystem();
+            Object.Destroy(m_View.gameObject);
+            m_View = null;
         }
     }
 }

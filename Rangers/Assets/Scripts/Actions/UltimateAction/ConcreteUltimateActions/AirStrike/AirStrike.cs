@@ -12,7 +12,7 @@ namespace BTG.Actions.UltimateAction
     {
         public override event System.Action OnFullyCharged;
 
-        private AirStrikeDataSO m_AirStrikeData => m_UltimateActionData as AirStrikeDataSO;
+        private AirStrikeDataSO m_AirStrikeData => ultimateActionData as AirStrikeDataSO;
 
         private AirStrikeView m_View;
 
@@ -22,7 +22,7 @@ namespace BTG.Actions.UltimateAction
         // Create constructor
         public AirStrike(AirStrikeDataSO airStrikeData)
         {
-            m_UltimateActionData = airStrikeData;
+            ultimateActionData = airStrikeData;
         }
 
         public override void Enable()
@@ -57,34 +57,25 @@ namespace BTG.Actions.UltimateAction
             }
 
             ChangeState(State.Executing);
-
-            SpawnView(Actor.Transform);
-            m_View.PlayParticleSystem();
-            m_View.PlayAudio();
+            InitVisual();
             RestartAfterDuration(m_AirStrikeData.Duration);
+
             if (Actor.IsPlayer)
                 EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
 
             return true;
         }
 
-        public override void SpawnGraphics()
+        public override void NonServerExecute()
         {
-            Debug.Log("Airstrike spawn graphics");
-        }
-
-        protected override void Restart()
-        {
-            m_View.StopParticleSystem();
-            m_View.StopAudio();
-            Object.Destroy(m_View.gameObject);
-            m_View = null;
-
-            RaiseUltimateActionExecutedEvent();
-
-            ChangeState(State.Charging);
-            Charge(-FULL_CHARGE);               // Reset charge
-            AutoCharge();
+            cts = new();
+            InitVisual();
+            _ = HelperMethods.InvokeAfterAsync(m_AirStrikeData.Duration, 
+                () =>
+                {
+                    DeInitVisual();
+                }, 
+                cts.Token);
         }
 
         public override void Destroy()
@@ -93,18 +84,35 @@ namespace BTG.Actions.UltimateAction
             base.Destroy();
         }
 
+        protected override void Restart()
+        {
+            DeInitVisual();
+            RaiseUltimateActionExecutedEvent();
+
+            ChangeState(State.Charging);
+            Charge(-FULL_CHARGE);               // Reset charge
+            AutoCharge();
+        }
+
         protected override void RaiseFullyChargedEvent()
         {
             OnFullyCharged?.Invoke();
         }
 
-        private void SpawnView(Transform parent)
+        private void InitVisual()
         {
-            m_View = Object.Instantiate(m_AirStrikeData.AirStrikeViewPrefab, parent);
-            m_View.transform.localPosition = Vector3.zero;
-            m_View.transform.localRotation = Quaternion.identity;
+            m_View = Object.Instantiate(m_AirStrikeData.AirStrikeViewPrefab, Actor.Transform);
+            m_View.PlayParticleSystem();
+            m_View.PlayAudio();
         }
 
+        private void DeInitVisual()
+        {
+            m_View.StopParticleSystem();
+            m_View.StopAudio();
+            Object.Destroy(m_View.gameObject);
+            m_View = null;
+        }
 
         private void UpdateExecution()
         {

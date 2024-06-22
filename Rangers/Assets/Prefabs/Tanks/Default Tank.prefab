@@ -118,8 +118,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.5762839, y: 1.7587739, z: 1.9220543}
-  m_Center: {x: 0.009604692, y: 0.9844851, z: -0.028814077}
+  m_Size: {x: 1.5762839, y: 1.9183683, z: 1.9220543}
+  m_Center: {x: 0.009604692, y: 0.9046879, z: -0.028814077}
 --- !u!1 &2571957331697108734
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +178,6 @@ MonoBehaviour:
   m_TankUI: {fileID: 1870917013688007187}
   m_TankAudio: {fileID: 5165964390985742851}
   m_DamageCollider: {fileID: 5353289944543359656}
-  m_DamageableView: {fileID: 0}
 --- !u!114 &1870917013688007187
 MonoBehaviour:
   m_ObjectHideFlags: 0

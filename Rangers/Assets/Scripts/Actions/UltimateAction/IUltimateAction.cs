@@ -85,6 +85,6 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// Only spawn the graphics
         /// </summary>
-        public void SpawnGraphics();
+        public void NonServerExecute();
     }
 }

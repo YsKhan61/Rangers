@@ -164,7 +164,11 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
 
-            m_EntityBrain.Model.IsPlayer = true;
+            if (IsOwner)
+            {
+                m_EntityBrain.Model.IsPlayer = true;
+            }
+                
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(m_Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController);
@@ -201,6 +205,11 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
             m_EntityBrain = factory.GetNonServerItem() as IEntityTankBrain;
+
+            if (IsOwner)
+            {
+               m_EntityBrain.Model.IsPlayer = true;
+            }
 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
         }

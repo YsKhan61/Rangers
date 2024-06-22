@@ -11,13 +11,13 @@ namespace BTG.Actions.UltimateAction
     {
         public override event System.Action OnFullyCharged;
 
-        private InvisibilityDataSO m_InvisibilityData => m_UltimateActionData as InvisibilityDataSO;
+        private InvisibilityDataSO m_InvisibilityData => ultimateActionData as InvisibilityDataSO;
 
         private InvisibilityView m_View;
 
         public Invisibility(InvisibilityDataSO invisibilityData)
         {
-            m_UltimateActionData = invisibilityData;
+            ultimateActionData = invisibilityData;
         }
 
         public override void Disable()
@@ -48,7 +48,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        public override void SpawnGraphics()
+        public override void NonServerExecute()
         {
             Debug.Log("Invisibility SpawnGraphics");
         }
@@ -64,7 +64,7 @@ namespace BTG.Actions.UltimateAction
             m_View.PlayAppearPS();
             m_View.PlayAppearAudio();
 
-            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => ResetAfterDelay(), m_CTS.Token);
+            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => ResetAfterDelay(), cts.Token);
         }
 
         protected override void RaiseFullyChargedEvent()

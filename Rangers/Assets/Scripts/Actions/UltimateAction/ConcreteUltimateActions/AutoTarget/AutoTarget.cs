@@ -13,11 +13,11 @@ namespace BTG.Actions.UltimateAction
     {
         public override event System.Action OnFullyCharged;
 
-        private AutoTargetDataSO m_AutoTargetData => m_UltimateActionData as AutoTargetDataSO;
+        private AutoTargetDataSO m_AutoTargetData => ultimateActionData as AutoTargetDataSO;
 
         public AutoTarget(AutoTargetDataSO autoTargetData)
         {
-            m_UltimateActionData = autoTargetData;
+            ultimateActionData = autoTargetData;
         }
 
         public override bool TryExecute()
@@ -38,7 +38,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        public override void SpawnGraphics()
+        public override void NonServerExecute()
         {
             Debug.Log("AutoTarget SpawnGraphics");
         }
@@ -116,7 +116,7 @@ namespace BTG.Actions.UltimateAction
                         EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
                     // Do audio and visual effects here
                     // Do camera shake here
-                    await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, m_CTS.Token);
+                    await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, cts.Token);
                 }
 
                 // after all tanks are targeted, reset the ultimate
