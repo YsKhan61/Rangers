@@ -46,15 +46,6 @@ namespace BTG.Gameplay.GameplayObjects
                 }
 
                 return m_EntityBrain.CameraTarget;
-
-                /*if (IsServer)
-                {
-                    return m_EntityBrain.CameraTarget;
-                }
-                else
-                {
-                    return m_GraphicsView.CameraTarget;
-                }*/
             }
         }
 
@@ -134,8 +125,8 @@ namespace BTG.Gameplay.GameplayObjects
 
             if (IsServer)
             {
-                DeInitEntity();
-                InitEntity();
+                DeInitServerEntity();
+                InitServerEntity();
             }
             else
             {
@@ -155,7 +146,7 @@ namespace BTG.Gameplay.GameplayObjects
         /// <summary>
         /// Set the entity
         /// </summary>
-        private void InitEntity()
+        private void InitServerEntity()
         {
             m_EntityBrain = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag).GetItem() as IEntityTankBrain;
             if (m_EntityBrain == null)
@@ -171,17 +162,20 @@ namespace BTG.Gameplay.GameplayObjects
                 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(m_Rigidbody);
-            m_EntityBrain.SetDamageable(m_EntityHealthController);
-            m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 
-            m_EntityBrain.OnEntityInitialized += InformOnEntityInitialized; // m_PlayerService.OnEntityInitialized;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += InformUltimateAssigned; // m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated; // m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged; // m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted; // m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+            // Here we set the opposition layer mask to the player's layer as 
+            // the clients will have to fight against each other.
+            m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
+
+            m_EntityBrain.OnEntityInitialized += InformOnEntityInitialized;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += InformUltimateAssigned;
+            m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated;
+            m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted;
 
             CacheEntityDatas();
             ConfigureEntityWithHealthController();
+            m_EntityBrain.SetDamageable(m_EntityHealthController);
 
             m_EntityBrain.Init();
         }
@@ -193,11 +187,6 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void InitNonServerEntity()
         {
-            // Later use factory to spawn the graphics
-            /*m_GraphicsView = Instantiate(RegisteredEntityData.Graphics, transform).GetComponent<TankView>();
-            m_GraphicsView.transform.localPosition = Vector3.zero;
-            m_GraphicsView.transform.localRotation = Quaternion.identity;*/
-
             EntityFactorySO factory = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag) as EntityFactorySO;
             if (factory == null)
             {
@@ -212,17 +201,28 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
+            
+            m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
+            m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
+            // m_EntityHealthController.SetController(this);
+            m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
+            m_EntityHealthController.IsEnabled = true;
+
+            /// This one needs to be set after the health controller is initialized
+            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
+            /// The m_EntityBrain has already been initialized, so we need to set the visibility of the health controller
+            m_EntityHealthController.SetVisible(true);
+
+            // m_EntityHealthController.SetMaxHealth();
+            m_EntityBrain.SetDamageable(m_EntityHealthController);
         }
 
         public void DeInitNonServerEntity()
         {
-            /*if (m_GraphicsView == null)
-                return;
-            Destroy(m_GraphicsView.gameObject);*/
-
             if (m_EntityBrain == null)
                 return;
 
+            m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
             m_EntityBrain.DeInitNonServer();
             m_EntityBrain = null;
         }
@@ -241,10 +241,10 @@ namespace BTG.Gameplay.GameplayObjects
         public void DeInit()
         {
             mn_IsAlive.Value = false;
-            DeInitEntity();
+            DeInitServerEntity();
         }
 
-        public void DeInitEntity()
+        public void DeInitServerEntity()
         {
             // If the entity brain is null, then the entity is already deinitialized.
             if (m_EntityBrain == null) return;
@@ -479,12 +479,12 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
             
-            m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized; // m_PlayerService.OnEntityInitialized;
+            m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= InformUltimateAssigned; // m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated; // m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged; // m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted; // m_Model.PlayerData.OnUltimateExecuted.RaiseEvent;
+            m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= InformUltimateAssigned;
+            m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated;
+            m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;
+            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted;
 
             if (m_EntityHealthController == null)
             {

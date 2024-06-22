@@ -67,6 +67,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             m_ObjectResolver.Inject(networkPlayer);
+            networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
 
             if (networkPlayer.IsOwner)      // Clients in their own machine
             {
@@ -75,12 +76,7 @@ namespace BTG.Gameplay.GameplayObjects
                 playerInputs.Initialize();
                 networkPlayer.SetPlayerInputs(playerInputs);
                 networkPlayer.SetPlayerService(this);
-                networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
                 networkPlayer.Init();
-            }
-            if (networkPlayer.IsServer && !networkPlayer.IsOwner)       // Clients in host machine except host
-            {
-                networkPlayer.SetPlayerModel(new PlayerModel(m_PlayerData));
             }
 
             ConfigureEntityWithDelay(networkPlayer);

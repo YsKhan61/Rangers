@@ -1,10 +1,12 @@
 using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
+using Object = UnityEngine.Object;
 
 
 namespace BTG.Actions.UltimateAction
@@ -12,6 +14,8 @@ namespace BTG.Actions.UltimateAction
     public class AutoTarget : BaseUltimateAction
     {
         public override event System.Action OnFullyCharged;
+
+        private event Action<bool> OnFireSequenceComplete;
 
         private AutoTargetDataSO m_AutoTargetData => ultimateActionData as AutoTargetDataSO;
 
@@ -33,14 +37,21 @@ namespace BTG.Actions.UltimateAction
 
             ChangeState(State.Executing);
 
-            _ = FireSequenceAsync(damageables);
+            OnFireSequenceComplete += Restart;
+            _ =FireSequenceAsync(damageables);
 
             return true;
         }
 
         public override void NonServerExecute()
         {
-            Debug.Log("AutoTarget SpawnGraphics");
+            if (!ScanForNearbyColliders(out Collider[] results))
+                return;
+
+            FilterDamageables(results, out List<IDamageableView> damageables);
+            if (damageables.Count == 0) return;
+
+            _ = FireSequenceAsync(damageables);
         }
 
         public override void Destroy()
@@ -49,9 +60,18 @@ namespace BTG.Actions.UltimateAction
             base.Destroy();
         }
 
-        protected override void Restart()
+        /// <summary>
+        /// This restart is different from the BaseUltimateAction restart, as it contains 
+        /// a parameter to determine if the action was successful or not.
+        /// We are not calling RestartAfterDuration of BaseUltimateAction as
+        /// we dont have any duration to wait for.
+        /// </summary>
+        private void Restart(bool success)
         {
-            RaiseUltimateActionExecutedEvent();
+            OnFireSequenceComplete -= Restart;
+            
+            if (success)
+                RaiseUltimateActionExecutedEvent();
 
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
@@ -111,7 +131,6 @@ namespace BTG.Actions.UltimateAction
                 {
                     SpawnConfigureLaunchProjectile(damageable.Transform);
 
-                    // Actor.ShakePlayerCamera(1f, 1f);
                     if (Actor.IsPlayer)
                         EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
                     // Do audio and visual effects here
@@ -119,12 +138,11 @@ namespace BTG.Actions.UltimateAction
                     await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, cts.Token);
                 }
 
-                // after all tanks are targeted, reset the ultimate
-                Restart();
+                OnFireSequenceComplete?.Invoke(true);
             }
             catch (TaskCanceledException)
             {
-                // Do nothing
+                OnFireSequenceComplete?.Invoke(false);
             }
         }
 

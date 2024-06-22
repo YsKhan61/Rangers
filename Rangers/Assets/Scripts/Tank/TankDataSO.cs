@@ -8,10 +8,6 @@ namespace BTG.Tank
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
     public class TankDataSO : EntityDataSO
     {
-        /*[SerializeField, Tooltip("The tag of the tank")]
-        private TagSO m_Tag;
-        public override TagSO Tag => m_Tag;*/
-
         [SerializeField]
         private Sprite m_Icon;
         public override Sprite Icon => m_Icon;
@@ -23,10 +19,7 @@ namespace BTG.Tank
         [SerializeField] 
         private TankView m_TankViewPrefab;
         public TankView TankViewPrefab => m_TankViewPrefab;
-
-        [SerializeField]
-        private GameObject m_Graphics;
-        public override GameObject Graphics => m_Graphics;
+        public override GameObject Graphics => m_TankViewPrefab.gameObject;
 
         [SerializeField]
         private int m_MaxHealth;

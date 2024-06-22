@@ -110,7 +110,7 @@ namespace BTG.Actions.UltimateAction
             => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), cts.Token);
 
 
-        protected abstract void Restart();
+        protected virtual void Restart() { }
 
         private async Task RaiseActionAssignedEventAndStartAutoChargeAsync()
         {
