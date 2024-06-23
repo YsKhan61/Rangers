@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace BTG.Player
 {
-    public class PlayerTankController : IEntityController, IFixedUpdatable, IUpdatable
+    public class PlayerController : IEntityController, IFixedUpdatable, IUpdatable
     {
         private PlayerModel m_Model;
         private PlayerView m_View;
         private PlayerInputs m_PlayerInputs;
         private PlayerService m_PlayerService;
-        private IEntityTankBrain m_EntityBrain;
-        private IEntityHealthController m_EntityHealthController;
+        private IEntityTankBrain m_EntityBrain;     // Later we can change this to IEntityBrain if we want to support other types of entities
+        private EntityHealthController m_EntityHealthController;
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_Transform;
 
@@ -23,7 +23,7 @@ namespace BTG.Player
         // cached values
         private Transform m_Transform;
 
-        private PlayerTankController() { }
+        private PlayerController() { }
 
         public class Builder
         {
@@ -72,9 +72,9 @@ namespace BTG.Player
                 return this;
             }
 
-            public PlayerTankController Build()
+            public PlayerController Build()
             {
-                var controller = new PlayerTankController();
+                var controller = new PlayerController();
                 controller.m_Model = model;
                 controller.m_View = view;
                 controller.m_Transform = transForm;
@@ -85,7 +85,7 @@ namespace BTG.Player
             }
         }
 
-        ~PlayerTankController()
+        ~PlayerController()
         {
             UnsubscribeFromEvents();
         }
@@ -228,7 +228,7 @@ namespace BTG.Player
         private void InitializeHealthAndDamage()
         {
             m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
-            m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
+            m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
             m_EntityHealthController.SetController(this);
             m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
             m_EntityHealthController.IsEnabled = true;

@@ -24,7 +24,7 @@ namespace BTG.Player
         private PlayerStatsSO m_PlayerStats;
 
         private PlayerVirtualCamera m_PVCamera;
-        private PlayerTankController m_Controller;
+        private PlayerController m_Controller;
         private CancellationTokenSource m_CTS;
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace BTG.Player
 
         private void CreatePlayerController()
         {
-            m_Controller = new PlayerTankController.Builder()
+            m_Controller = new PlayerController.Builder()
                 .CreateModel(m_PlayerData)
                 .CreateView(m_PlayerData.Prefab)
                 .WithPlayerService(this)

@@ -174,8 +174,10 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted;
 
             CacheEntityDatas();
+
             ConfigureEntityWithHealthController();
-            m_EntityBrain.SetDamageable(m_EntityHealthController);
+            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
+            m_EntityHealthController.SetMaxHealth();
 
             m_EntityBrain.Init();
         }
@@ -201,10 +203,13 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
-            
-            m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
+            m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
+
+            ConfigureEntityWithHealthController();
+
+            /*m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
             m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
-            // m_EntityHealthController.SetController(this);
+            m_EntityHealthController.SetController(this);
             m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
             m_EntityHealthController.IsEnabled = true;
 
@@ -214,7 +219,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityHealthController.SetVisible(true);
 
             // m_EntityHealthController.SetMaxHealth();
-            m_EntityBrain.SetDamageable(m_EntityHealthController);
+            m_EntityBrain.SetDamageable(m_EntityHealthController);*/
         }
 
         public void DeInitNonServerEntity()
@@ -342,15 +347,12 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityHealthController.SetController(this);
             m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
             m_EntityHealthController.IsEnabled = true;
+            m_EntityBrain.SetDamageable(m_EntityHealthController);
 
             /// This one needs to be set after the health controller is initialized
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             /// The m_EntityBrain has already been initialized, so we need to set the visibility of the health controller
             m_EntityHealthController.SetVisible(true);
-
-            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
-
-            m_EntityHealthController.SetMaxHealth();
         }
 
         /// <summary>
