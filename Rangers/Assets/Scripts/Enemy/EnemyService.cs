@@ -87,7 +87,7 @@ namespace BTG.Enemy
             bool entityFound = TryGetEntity(tag, out IEntityBrain entity);
             if (!entityFound) return;
 
-            bool controllerFound = GetEnemyController(out EnemyTankController controller);
+            bool controllerFound = GetEnemyController(out EnemyController controller);
             if (!controllerFound) return;
             
 
@@ -103,7 +103,7 @@ namespace BTG.Enemy
             return entity != null;
         }
 
-        private bool GetEnemyController(out EnemyTankController controller)
+        private bool GetEnemyController(out EnemyController controller)
         {
             controller = m_EnemyPool.GetEnemy();
             if (controller == null)

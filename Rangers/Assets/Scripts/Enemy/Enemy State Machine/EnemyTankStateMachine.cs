@@ -67,7 +67,7 @@ namespace BTG.Enemy
         [Inject]
         private EnemyTankUltimateStateFactoryContainerSO m_UltimateStateFactoryContainer;
 
-        private EnemyTankController m_Controller;
+        private EnemyController m_Controller;
 
         /// <summary>
         /// Create the states of the state machine according to the entity
@@ -82,7 +82,7 @@ namespace BTG.Enemy
             AddState(EnemyTankState.Dead, new EnemyTankDeadState(this));
         }
 
-        public void SetController(EnemyTankController controller) => m_Controller = controller;
+        public void SetController(EnemyController controller) => m_Controller = controller;
 
         /// <summary>
         /// Initialize the state machine after all the states are created

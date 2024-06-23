@@ -13,7 +13,7 @@ namespace BTG.Enemy
         private Rigidbody m_Rigidbody;
         public Rigidbody Rigidbody => m_Rigidbody;
 
-        private EnemyTankController m_Controller;
+        private EnemyController m_Controller;
 
         private void Awake()
         {
@@ -39,7 +39,7 @@ namespace BTG.Enemy
             }
         }
 
-        public void SetController(EnemyTankController controller)
+        public void SetController(EnemyController controller)
             => m_Controller = controller;
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Player;
-using BTG.Tank;
 using BTG.Utilities;
 using Unity.Netcode;
 using UnityEngine;
@@ -26,7 +25,6 @@ namespace BTG.Gameplay.GameplayObjects
         private Pose m_SpawnPose;
         private PlayerModel m_Model;
         private NetworkPlayerService m_PlayerService;
-        // private TankView m_GraphicsView;
         private IEntityTankBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
@@ -206,20 +204,6 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
 
             ConfigureEntityWithHealthController();
-
-            /*m_EntityBrain.DamageCollider.gameObject.layer = m_Model.PlayerData.SelfLayer;
-            m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
-            m_EntityHealthController.SetController(this);
-            m_EntityHealthController.SetOwner(m_EntityBrain.Transform, true);
-            m_EntityHealthController.IsEnabled = true;
-
-            /// This one needs to be set after the health controller is initialized
-            m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
-            /// The m_EntityBrain has already been initialized, so we need to set the visibility of the health controller
-            m_EntityHealthController.SetVisible(true);
-
-            // m_EntityHealthController.SetMaxHealth();
-            m_EntityBrain.SetDamageable(m_EntityHealthController);*/
         }
 
         public void DeInitNonServerEntity()

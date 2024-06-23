@@ -10,7 +10,7 @@ namespace BTG.Enemy
     /// <summary>
     /// A Controller for the enemy tank
     /// </summary>
-    public class EnemyTankController : IEntityController
+    public class EnemyController : IEntityController
     {
         private EnemyDataSO m_Data;
         /// <summary>
@@ -64,7 +64,7 @@ namespace BTG.Enemy
 
         private EnemyPool m_Pool;
         private IEntityTankBrain m_EntityBrain;
-        private IEntityHealthController m_EntityHealthController;
+        private EntityHealthController m_EntityHealthController;
         private EnemyView m_View;
         private EnemyTankStateMachine m_StateMachine;
 
@@ -106,9 +106,9 @@ namespace BTG.Enemy
                 return this;
             }
 
-            public EnemyTankController Build()
+            public EnemyController Build()
             {
-                return new EnemyTankController
+                return new EnemyController
                 {
                     m_Data = data,
                     m_Pool = pool,
@@ -119,9 +119,9 @@ namespace BTG.Enemy
             }
         }
 
-        private EnemyTankController() { }
+        private EnemyController() { }
 
-        ~EnemyTankController()
+        ~EnemyController()
         {
             UnsubscribeFromEvents();
             m_EntityBrain = null;
@@ -247,7 +247,7 @@ namespace BTG.Enemy
         private void InitializeHealthAndDamage()
         {
             m_EntityBrain.DamageCollider.gameObject.layer = m_Data.SelfLayer;
-            m_EntityHealthController = m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>() as IEntityHealthController;
+            m_EntityHealthController = (EntityHealthController)m_EntityBrain.DamageCollider.gameObject.GetOrAddComponent<EntityHealthController>();
             m_EntityHealthController.SetController(this);
             m_EntityHealthController.SetOwner(m_EntityBrain.Transform, false);
             m_EntityHealthController.IsEnabled = true;

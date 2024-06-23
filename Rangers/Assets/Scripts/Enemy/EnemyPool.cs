@@ -5,7 +5,7 @@ using VContainer;
 
 namespace BTG.Enemy
 { 
-    public class EnemyPool : GenericObjectPool<EnemyTankController>
+    public class EnemyPool : GenericObjectPool<EnemyController>
     {
         [Inject]
         private EnemyDataSO m_Data;
@@ -13,17 +13,17 @@ namespace BTG.Enemy
         [Inject]
         private IObjectResolver m_Resolver;
 
-        public EnemyTankController GetEnemy() => GetItem();
+        public EnemyController GetEnemy() => GetItem();
 
-        public void ReturnEnemy(EnemyTankController enemy) => ReturnItem(enemy);
+        public void ReturnEnemy(EnemyController enemy) => ReturnItem(enemy);
 
-        protected override EnemyTankController CreateItem()
+        protected override EnemyController CreateItem()
         {
             EnemyView view = Object.Instantiate(m_Data.EnemyPrefab, Container);
             NavMeshAgent agent = (NavMeshAgent)view.gameObject.GetOrAddComponent<NavMeshAgent>();
             EnemyTankStateMachine stateMachine = new EnemyTankStateMachine();
 
-            EnemyTankController controller = new EnemyTankController.Builder()
+            EnemyController controller = new EnemyController.Builder()
                 .WithEnemyData(m_Data)
                 .WithEnemyPool(this)
                 .WithEnemyView(view)
