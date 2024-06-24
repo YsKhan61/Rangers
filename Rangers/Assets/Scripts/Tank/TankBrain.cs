@@ -55,7 +55,7 @@ namespace BTG.Tank
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
 
         [Inject]
-        private RagdollFactoryContainerSO m_RagdollFactoryContainer;
+        private EffectFactoryContainerSO m_EffectFactoryContainer;
 
         [Inject]
         private AudioPool m_AudioPool;
@@ -240,7 +240,18 @@ namespace BTG.Tank
         public bool TryExecuteUltimate() => UltimateAction.TryExecute();
         public void SpawnUltimateGraphics() => UltimateAction.NonServerExecute();
 
-        public void ExecuteRagdollEffect() => m_RagdollFactoryContainer.GetFactory(m_Model.TankData.Tag).GetItem().ExecuteRagdollEffect(this);
+
+        /// <summary>
+        /// This will be invoked by a ragdolleffect event
+        /// </summary>
+        public void ExecuteRagdollEffect()
+        {        
+            EffectFactorySO factory = m_EffectFactoryContainer.GetFactory(m_Model.TankData.Tag) as EffectFactorySO;
+            RagdollView effect = factory.GetItem() as RagdollView;
+            effect.SetOwner(this);
+            effect.transform.SetPositionAndRotation(Transform.position, Transform.rotation);
+            effect.Play();
+        }
 
         public void OnDead()
         {
@@ -287,10 +298,10 @@ namespace BTG.Tank
             m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
 
         private PrimaryActionFactorySO GetPrimaryActionFactory(TagSO tag) =>
-            m_PrimaryActionFactoryContainer.GetPrimaryActionFactory(tag);
+            m_PrimaryActionFactoryContainer.GetFactory(tag) as PrimaryActionFactorySO;
 
-        private UltimateActionFactorySO GetUltimateActionFactory(TagSO tag) => 
-            m_UltimateActionFactoryContainer.GetUltimateActionFactory(tag);
+        private UltimateActionFactorySO GetUltimateActionFactory(TagSO tag) =>
+            m_UltimateActionFactoryContainer.GetFactory(tag) as UltimateActionFactorySO;
 
 
 #if UNITY_EDITOR

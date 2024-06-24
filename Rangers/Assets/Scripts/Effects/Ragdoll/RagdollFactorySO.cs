@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BTG.Effects
 {
     [CreateAssetMenu(fileName = "Ragdoll Factory", menuName = "ScriptableObjects/Factory/Effects Factory/RagdollFactorySO")]
-    public class RagdollFactorySO : FactorySO<RagdollView>
+    public class RagdollFactorySO : FactorySO<EffectView>
     {
         [SerializeField]
         private RagdollDataSO m_Data;
@@ -13,6 +13,6 @@ namespace BTG.Effects
         private RagdollPool m_Pool;
         private RagdollPool Pool => m_Pool ??= new RagdollPool(m_Data);
 
-        public override RagdollView GetItem() => Pool.GetRagdoll();
+        public override EffectView GetItem() => Pool.GetRagdoll();
     }
 }

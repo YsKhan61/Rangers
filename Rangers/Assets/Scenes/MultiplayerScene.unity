@@ -520,7 +520,7 @@ GameObject:
   - component: {fileID: 1304999366}
   - component: {fileID: 1304999367}
   m_Layer: 0
-  m_Name: Audio
+  m_Name: Background Audio
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -846,6 +846,7 @@ GameObject:
   - component: {fileID: 1466694020}
   - component: {fileID: 1466694021}
   - component: {fileID: 1466694022}
+  - component: {fileID: 1466694023}
   m_Layer: 0
   m_Name: MultiplayState
   m_TagString: Untagged
@@ -946,6 +947,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PVCamera: {fileID: 1894154699}
+--- !u!114 &1466694023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466694017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 171c8cfda93ef584fad8b02f4716a268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  effectFactories:
+  - {fileID: 11400000, guid: 5ce55542ba5b37846af9316784d46224, type: 2}
+  - {fileID: 11400000, guid: 3c4245d9ab90ad84eb8984e3710cbc50, type: 2}
+  - {fileID: 11400000, guid: 0a5329ac05142b44aa46d4b1c1607ede, type: 2}
+  - {fileID: 11400000, guid: ed50ab9e4f453dc4bb791fd2347971df, type: 2}
+  - {fileID: 11400000, guid: a122ae6897d8ce04b980f15cde11da74, type: 2}
+  - {fileID: 11400000, guid: ba47f56c150137543af4a66e80fd7292, type: 2}
+  - {fileID: 11400000, guid: 39542d0d49b6a8945ae2a23c35842c13, type: 2}
 --- !u!1 &1894154696
 GameObject:
   m_ObjectHideFlags: 0

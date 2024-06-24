@@ -38,7 +38,7 @@ namespace BTG.Actions.UltimateAction
             ChangeState(State.Executing);
 
             OnFireSequenceComplete += Restart;
-            _ =FireProjectileInSequenceAsync(damageables);
+            _ = FireProjectileInSequenceAsync(damageables);
 
             return true;
         }
@@ -58,7 +58,7 @@ namespace BTG.Actions.UltimateAction
         private void Restart(bool success)
         {
             OnFireSequenceComplete -= Restart;
-            
+
             if (success)
                 RaiseUltimateActionExecutedEvent();
 
@@ -69,7 +69,11 @@ namespace BTG.Actions.UltimateAction
 
         public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(autoTargetData.Damage);
 
-        public void CreateExplosion(Vector3 position) => autoTargetData.ExplosionFactory.CreateExplosion(position);
+        /// <summary>
+        /// Server side explosion creation event invoked by the projectile on collision.
+        /// </summary>
+        public void CreateExplosion(Vector3 position) => EventBus<EffectEvent>.Invoke(new EffectEvent { EffectTag = autoTargetData.ExplosionTag});
+            // autoTargetData.ExplosionFactory.CreateExplosion(position);
 
         protected override void RaiseFullyChargedEvent()
         {

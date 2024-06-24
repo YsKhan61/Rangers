@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BTG.Effects
 {
 
-    public class ExplosionView : MonoBehaviour, IExplosionView
+    public class ExplosionView : EffectView
     {
         private ParticleSystem m_ParticleSystem;
         private AudioSource m_AudioSource;
@@ -26,7 +26,7 @@ namespace BTG.Effects
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
-        public void Play()
+        public override void Play()
         {
             m_ParticleSystem.Play();
             m_AudioSource.Play();

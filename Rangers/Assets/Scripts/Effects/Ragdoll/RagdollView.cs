@@ -11,7 +11,7 @@ namespace BTG.Effects
     /// It can be created using the factory as it implements the IFactoryItem interface
     /// It has a reference to the pool to return itself after the effect is done
     /// </summary>
-    public class RagdollView : MonoBehaviour, IFactoryItem
+    public class RagdollView : EffectView
     {
         private RagdollPool m_Pool;
         private IRagdollOwner m_Owner;      // maybe needed for resetting early during revive
@@ -29,14 +29,30 @@ namespace BTG.Effects
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
+        public void SetOwner(IRagdollOwner owner) => m_Owner = owner;
+
         /// <summary>
+        /// Execute the ragdoll effect
+        /// </summary>
+        public override void Play()
+        {
+            ToggleRigidbodyKinematics(false);
+            Show();
+
+            _ = HelperMethods.InvokeAfterAsync(DESTROY_DELAY, () =>
+            {
+                ResetView();
+            }, m_Cts.Token);
+        }
+
+        /*/// <summary>
         /// Execute the ragdoll effect with the owner
         /// </summary>
         public void ExecuteRagdollEffect(IRagdollOwner owner)
         {
             SetOwner(owner);
             Execute(new Pose(owner.Transform.position, owner.Transform.rotation));
-        }
+        }*/
 
         /// <summary>
         /// This method is called when the ragdoll is created
@@ -50,29 +66,7 @@ namespace BTG.Effects
             ToggleRigidbodyKinematics(true);
         }
 
-        /// <summary>
-        /// Set the pool of the ragdoll
-        /// </summary>
         internal void SetPool(RagdollPool pool) => m_Pool = pool;
-
-        internal void SetOwner(IRagdollOwner owner) => m_Owner = owner;
-
-        /// <summary>
-        /// Execute the ragdoll effect
-        /// </summary>
-        internal void Execute(in Pose pose)
-        {
-            transform.position = pose.position;
-            transform.rotation = pose.rotation;
-
-            ToggleRigidbodyKinematics(false);
-            Show();
-
-            _ = HelperMethods.InvokeAfterAsync(DESTROY_DELAY, () =>
-            {
-                ResetView();
-            }, m_Cts.Token);
-        }
 
         private void Show() => gameObject.SetActive(true);
 

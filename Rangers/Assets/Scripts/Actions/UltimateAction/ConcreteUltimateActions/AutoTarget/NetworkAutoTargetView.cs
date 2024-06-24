@@ -43,7 +43,6 @@ namespace BTG.Actions.UltimateAction
 
             m_IsLaunched = true;
         }
-
         private void Update()
         {
             UpdateProjectilePosition();
@@ -82,8 +81,6 @@ namespace BTG.Actions.UltimateAction
             m_IsLaunched = false;
             Destroy(gameObject);
         }
-
-
 
         private void UpdateProjectilePosition()
         {

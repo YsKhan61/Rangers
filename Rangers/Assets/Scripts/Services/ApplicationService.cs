@@ -62,7 +62,7 @@ namespace BTG.Services
         private EnemyTankUltimateStateFactoryContainerSO _enemyTankUltimateStateFactoryContainer;
 
         [SerializeField]
-        private RagdollFactoryContainerSO _ragdollFactoryContainer;
+        private EffectFactoryContainerSO _effectFactoryContainer;
 
         [Space(10)]
 
@@ -114,7 +114,7 @@ namespace BTG.Services
             builder.RegisterComponent(_primaryActionFactoryContainer);
             builder.RegisterComponent(_ultimateActionFactoryContainer);
             builder.RegisterComponent(_enemyTankUltimateStateFactoryContainer);
-            builder.RegisterComponent(_ragdollFactoryContainer);
+            builder.RegisterComponent(_effectFactoryContainer);
 
             builder.RegisterComponent(_playerData);
             builder.RegisterComponent(_enemyData);

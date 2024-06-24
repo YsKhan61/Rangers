@@ -26,6 +26,7 @@ namespace BTG.Actions.UltimateAction
         {
             NetworkAutoTargetView projectile = Object.Instantiate(autoTargetData.NetworkAutoTargetView, Actor.FirePoint.position, Actor.FirePoint.rotation);
             projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
+            
             projectile.GetComponent<NetworkObject>().Spawn(true);
             projectile.Launch();
         }

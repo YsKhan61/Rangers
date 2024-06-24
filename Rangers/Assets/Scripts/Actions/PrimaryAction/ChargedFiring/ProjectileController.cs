@@ -1,4 +1,5 @@
 using BTG.AudioSystem;
+using BTG.Effects;
 using BTG.Utilities;
 using System.Threading;
 using UnityEngine;
@@ -60,7 +61,12 @@ namespace BTG.Actions.PrimaryAction
             ResetProjectile();
         }
 
-        private void DoExplosionEffect() => m_Data.ExplosionFactory.CreateExplosion(Transform.position);
+        private void DoExplosionEffect()
+        {
+            EffectView effect = m_Data.ExplosionFactory.GetItem();
+            effect.transform.position = Transform.position;
+            effect.Play();
+        } 
 
         private void DoExplosionAudio()
         {

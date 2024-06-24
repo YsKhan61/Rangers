@@ -1,4 +1,4 @@
-using BTG.Effects;
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -36,7 +36,11 @@ namespace BTG.Actions.UltimateAction
         public int Damage => m_Damage;
 
         [SerializeField]
+        private TagSO m_ExplosionTag;
+        public TagSO ExplosionTag => m_ExplosionTag;
+
+        /*[SerializeField]
         ExplosionFactorySO m_ExplosionFactory;
-        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;
+        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;*/
     }
 }

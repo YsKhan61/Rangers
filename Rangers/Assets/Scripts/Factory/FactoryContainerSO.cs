@@ -1,4 +1,5 @@
 ﻿using BTG.Utilities;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using VContainer;
@@ -20,6 +21,12 @@ namespace BTG.Factory
         [Inject]
         public void InjectIntoFactories(IObjectResolver resolver)
         {
+            if (m_Factories == null)
+            {
+                Debug.Log("The factories are not set in the factory container: " + name);
+                return;
+            }
+
             foreach (var factory in m_Factories)
             {
                 resolver.Inject(factory);
@@ -37,6 +44,23 @@ namespace BTG.Factory
             }
 
             Debug.LogError("No factory found for the tag: " + tag.name);
+            return default;
+        }
+
+        /// <summary>
+        /// For this method to work, the factory must have a Tag property with a Guid
+        /// </summary>
+        public FactorySO<T> GetFactory(Guid guid)
+        {
+            foreach (var factory in m_Factories)
+            {
+                if (factory.Tag.Guid == guid)
+                {
+                    return factory;
+                }
+            }
+
+            Debug.LogError("No factory found for the guid: " + guid);
             return default;
         }
     }

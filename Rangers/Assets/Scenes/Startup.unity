@@ -789,7 +789,7 @@ MonoBehaviour:
     type: 2}
   _enemyTankUltimateStateFactoryContainer: {fileID: 11400000, guid: 21e113653b82e8e478246e6601f42893,
     type: 2}
-  _ragdollFactoryContainer: {fileID: 11400000, guid: 50e48e470f85de2459a4f5eb2fbdb69b,
+  _effectFactoryContainer: {fileID: 11400000, guid: 53ea482283a10274e8cb6ab9ea4d004c,
     type: 2}
   _playerData: {fileID: 11400000, guid: 6629c4d1132dbb24781f7c1ebdf8bb69, type: 2}
   _enemyData: {fileID: 11400000, guid: 80ec1e5ae6d13e2438f87dcbbf8f95dd, type: 2}
