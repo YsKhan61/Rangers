@@ -62,6 +62,8 @@ namespace BTG.Tank
 
         private TankPool m_Pool;
 
+        private TankBrain() { }
+
         public class Builder
         {
             private TankModel tankModel;
@@ -97,8 +99,6 @@ namespace BTG.Tank
             }
         }
 
-        private TankBrain() { }
-
 
         /// <summary>
         /// Initialize the tank brain.
@@ -126,17 +126,20 @@ namespace BTG.Tank
             _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
         }
 
-        public void InitNonServer() { }
-
         public void CreatePrimaryAction(TagSO primaryTag = null)
         {
             if (primaryTag == null)
-                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetFactory(m_Model.TankData.PrimaryTag).GetItem();
+                m_PrimaryAction = GetPrimaryActionFactory(m_Model.TankData.PrimaryTag).GetItem();
             else
-                m_PrimaryAction = m_PrimaryActionFactoryContainer.GetFactory(primaryTag).GetItem();
+                m_PrimaryAction = GetPrimaryActionFactory(primaryTag).GetItem();
+
+            if (m_PrimaryAction == null)
+                Debug.LogError("Primary action is null");
 
             m_PrimaryAction.SetActor(this);
         }
+
+        
 
         /// <summary>
         /// Create the ultimate action for the tank.
@@ -146,12 +149,30 @@ namespace BTG.Tank
         public void CreateUltimateAction(TagSO ultimateTag = null)
         {
             if (ultimateTag == null)
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetFactory(m_Model.TankData.UltimateTag).GetItem();
+                m_UltimateAction = GetUltimateActionFactory(m_Model.TankData.UltimateTag).GetItem();
             else
-                m_UltimateAction = m_UltimateActionFactoryContainer.GetFactory(ultimateTag).GetItem();
+                m_UltimateAction = GetUltimateActionFactory(ultimateTag).GetItem();
+
+            if (m_UltimateAction == null)
+                Debug.LogError("Ultimate action is null");
 
             m_UltimateAction.SetActor(this);
         }
+
+        public void CreateNetworkUltimateAction(TagSO ultimateTag = null)
+        { 
+            if (ultimateTag == null)
+                m_UltimateAction = GetUltimateActionFactory(m_Model.TankData.UltimateTag).GetNetworkItem();
+            else
+                m_UltimateAction = GetUltimateActionFactory(ultimateTag).GetNetworkItem();
+        
+            if (m_UltimateAction == null)
+                Debug.LogError("Ultimate action is null");
+
+            m_UltimateAction.SetActor(this);
+        }
+
+        
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
 
@@ -173,7 +194,6 @@ namespace BTG.Tank
         public void DeInit()
         {
             m_Model.State = TankState.Deactive;
-            ToggleActorVisibility(false);
 
             Rigidbody.Sleep();
 
@@ -186,17 +206,19 @@ namespace BTG.Tank
             OnEntityInitialized = null;
             OnEntityVisibilityToggled = null;
 
-            SetParentOfView(m_Pool.Container, Vector3.zero, Quaternion.identity);
-
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
 
-            m_Pool.ReturnTank(this);
+            m_Pool.ReturnTank(m_View);
         }
         
         public void DeInitNonServer() 
-        { 
-            Object.Destroy(m_View.gameObject);
+        {
+            m_Model.Reset();
+            m_Pool.ReturnTank(m_View);
+
+            OnEntityInitialized = null;
+            OnEntityVisibilityToggled = null;
         }
 
         public void ToggleActorVisibility(bool value)
@@ -264,6 +286,12 @@ namespace BTG.Tank
 
         private void OnTankStateChangedToDriving() =>
             m_View.AudioView.PlayEngineDrivingClip(m_Model.TankData.EngineDrivingClip);
+
+        private PrimaryActionFactorySO GetPrimaryActionFactory(TagSO tag) =>
+            m_PrimaryActionFactoryContainer.GetPrimaryActionFactory(tag);
+
+        private UltimateActionFactorySO GetUltimateActionFactory(TagSO tag) => 
+            m_UltimateActionFactoryContainer.GetUltimateActionFactory(tag);
 
 
 #if UNITY_EDITOR

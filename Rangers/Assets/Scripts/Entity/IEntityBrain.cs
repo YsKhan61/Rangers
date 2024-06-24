@@ -16,8 +16,6 @@ namespace BTG.Entity
         /// </summary>
         public void Init();
 
-        public void InitNonServer();
-
         /// <summary>
         /// De-initialize the brain.
         /// </summary>

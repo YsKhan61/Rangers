@@ -12,6 +12,8 @@ namespace BTG.Entity
     {
         public abstract override IEntityBrain GetItem();
 
+        public abstract IEntityBrain GetServerItem();
+
         public abstract IEntityBrain GetNonServerItem();
     }
 }

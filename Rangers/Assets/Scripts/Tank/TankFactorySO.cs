@@ -25,7 +25,7 @@ namespace BTG.Tank
             {
                 if (m_Pool == null)
                 {
-                    m_Pool = new(m_Data);
+                    m_Pool = new(m_Data.TankViewPrefab);
                     m_Resolver.Inject(m_Pool);
                 }
                 return m_Pool;
@@ -33,9 +33,42 @@ namespace BTG.Tank
         }
 
         public override IEntityBrain GetItem()
-        {
+        {/*
             TankBrain brain = Pool.GetTank();
             m_Resolver.Inject(brain);
+            return brain;*/
+
+            TankModel model = new TankModel(m_Data);
+            TankView view = Pool.GetTankView();
+
+            TankBrain brain = new TankBrain.Builder()
+                .WithTankModel(model)
+                .WithTankPool(Pool)
+                .WithTankView(view)
+                .Build();
+
+            m_Resolver.Inject(brain);
+            view.SetBrain(brain);
+            brain.CreatePrimaryAction();
+            brain.CreateUltimateAction();
+            return brain;
+        }
+
+        public override IEntityBrain GetServerItem()
+        {
+            TankModel model = new TankModel(m_Data);
+            TankView view = Pool.GetTankView();
+
+            TankBrain brain = new TankBrain.Builder()
+                .WithTankModel(model)
+                .WithTankPool(Pool)
+                .WithTankView(view)
+                .Build();
+
+            m_Resolver.Inject(brain);
+            view.SetBrain(brain);
+            brain.CreatePrimaryAction();
+            brain.CreateNetworkUltimateAction();
             return brain;
         }
 
@@ -47,14 +80,17 @@ namespace BTG.Tank
         public override IEntityBrain GetNonServerItem()
         {
             TankModel model = new TankModel(m_Data);
-            TankView view = Instantiate(m_Data.TankViewPrefab);
+            TankView view = Pool.GetTankView();
 
             TankBrain brain = new TankBrain.Builder()
                 .WithTankModel(model)
+                .WithTankPool(Pool)
                 .WithTankView(view)
                 .Build();
 
             m_Resolver.Inject(brain);
+
+            // create primary action
             brain.CreateUltimateAction();
             return brain;
         }

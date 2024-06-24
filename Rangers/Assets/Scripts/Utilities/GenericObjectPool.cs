@@ -83,6 +83,12 @@ namespace BTG.Utilities
         /// <param name="item"></param>
         protected void ReturnItem(T item)
         {
+            if (item == null)
+            {
+                Debug.Assert(false, "Trying to return a null item to the pool");
+                return;
+            }
+
             PooledItem<T> pooledItem = m_PooledItems.Find(i => i.Item.Equals(item));
             pooledItem.isUsed = false;
         }

@@ -146,12 +146,13 @@ namespace BTG.Gameplay.GameplayObjects
         /// </summary>
         private void InitServerEntity()
         {
-            m_EntityBrain = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag).GetItem() as IEntityTankBrain;
-            if (m_EntityBrain == null)
+            EntityFactorySO factory = m_EntityFactoryContainer.GetEntityFactory(RegisteredEntityData.Tag);
+            if (factory == null)
             {
-                Debug.LogError("PlayerTankController: Entity brain is not of type IEntityTankBrain");
+                Debug.LogError("Entity factory is not of type EntityFactorySO");
                 return;
             }
+            m_EntityBrain = factory.GetServerItem() as IEntityTankBrain;
 
             if (IsOwner)
             {
@@ -187,7 +188,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void InitNonServerEntity()
         {
-            EntityFactorySO factory = m_EntityFactoryContainer.GetFactory(RegisteredEntityData.Tag) as EntityFactorySO;
+            EntityFactorySO factory = m_EntityFactoryContainer.GetEntityFactory(RegisteredEntityData.Tag);
             if (factory == null)
             {
                 Debug.LogError("Entity factory is not of type EntityFactorySO");
@@ -373,7 +374,6 @@ namespace BTG.Gameplay.GameplayObjects
             if (!mn_IsAlive.Value)
                 return;
 
-            // m_Model.MoveInputValue = value;
             mn_MoveValue.Value = value;
         }
 
@@ -414,10 +414,10 @@ namespace BTG.Gameplay.GameplayObjects
         private void TryExecuteUltimate_ServerRpc()
         {
             bool success = m_EntityBrain.TryExecuteUltimate();
-            if (success)
+            /*if (success)
             {
                 TryExecuteUltimate_ClientRpc();
-            }
+            }*/
         }
 
         [ClientRpc]

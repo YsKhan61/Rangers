@@ -1,10 +1,10 @@
-using BTG.Utilities;
+﻿using BTG.Utilities;
+using Unity.Netcode;
 using UnityEngine;
-
 
 namespace BTG.Actions.UltimateAction
 {
-    public class AutoTargetView : MonoBehaviour, IFiringView
+    public class NetworkAutoTargetView : NetworkBehaviour, IFiringView
     {
         public Transform Owner { get; private set; }
 
@@ -15,6 +15,14 @@ namespace BTG.Actions.UltimateAction
 
         private bool m_IsLaunched = false;
         private Quaternion m_FinalRotation;
+
+        public override void OnNetworkSpawn()
+        {
+            if (!IsServer)
+            {
+                enabled = false;
+            }
+        }
 
         public void Configure(AutoTarget controller, Transform target, float speed, Transform owner)
         {
@@ -55,7 +63,7 @@ namespace BTG.Actions.UltimateAction
             {
                 m_Controller.OnHitDamageable(damageable);
             }
-            
+
             m_Controller.CreateExplosion(transform.position);
 
             m_IsLaunched = false;
@@ -85,8 +93,8 @@ namespace BTG.Actions.UltimateAction
             }
 
             m_FinalRotation = Quaternion.FromToRotation(
-                transform.forward, 
-                (m_Target.position.SetYOffset(0.5f) - transform.position).normalized) * 
+                transform.forward,
+                (m_Target.position.SetYOffset(0.5f) - transform.position).normalized) *
                 transform.rotation;
 
             transform.rotation = Quaternion.Slerp(transform.rotation, m_FinalRotation, m_Speed * Time.deltaTime);

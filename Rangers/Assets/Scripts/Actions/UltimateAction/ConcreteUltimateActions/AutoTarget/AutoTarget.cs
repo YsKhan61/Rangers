@@ -17,7 +17,7 @@ namespace BTG.Actions.UltimateAction
 
         private event Action<bool> OnFireSequenceComplete;
 
-        private AutoTargetDataSO m_AutoTargetData => ultimateActionData as AutoTargetDataSO;
+        protected AutoTargetDataSO autoTargetData => ultimateActionData as AutoTargetDataSO;
 
         public AutoTarget(AutoTargetDataSO autoTargetData)
         {
@@ -38,20 +38,9 @@ namespace BTG.Actions.UltimateAction
             ChangeState(State.Executing);
 
             OnFireSequenceComplete += Restart;
-            _ =FireSequenceAsync(damageables);
+            _ =FireProjectileInSequenceAsync(damageables);
 
             return true;
-        }
-
-        public override void NonServerExecute()
-        {
-            if (!ScanForNearbyColliders(out Collider[] results))
-                return;
-
-            FilterDamageables(results, out List<IDamageableView> damageables);
-            if (damageables.Count == 0) return;
-
-            _ = FireSequenceAsync(damageables);
         }
 
         public override void Destroy()
@@ -78,21 +67,21 @@ namespace BTG.Actions.UltimateAction
             AutoCharge();
         }
 
-        public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(m_AutoTargetData.Damage);
+        public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(autoTargetData.Damage);
 
-        public void CreateExplosion(Vector3 position) => m_AutoTargetData.ExplosionFactory.CreateExplosion(position);
+        public void CreateExplosion(Vector3 position) => autoTargetData.ExplosionFactory.CreateExplosion(position);
 
         protected override void RaiseFullyChargedEvent()
         {
             OnFullyCharged?.Invoke();
         }
 
-        private bool ScanForNearbyColliders(out Collider[] results)
+        protected bool ScanForNearbyColliders(out Collider[] results)
         {
             results = new Collider[10];
             int count = Physics.OverlapSphereNonAlloc(
-                (Actor.Transform.position + Actor.Transform.forward * m_AutoTargetData.CenterOffset),
-                m_AutoTargetData.ImpactRadius,
+                (Actor.Transform.position + Actor.Transform.forward * autoTargetData.CenterOffset),
+                autoTargetData.ImpactRadius,
                 results,
                 Actor.OppositionLayerMask,
                 QueryTriggerInteraction.Ignore);
@@ -103,7 +92,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        private void FilterDamageables(Collider[] results, out List<IDamageableView> damageables)
+        protected void FilterDamageables(Collider[] results, out List<IDamageableView> damageables)
         {
             damageables = new List<IDamageableView>();
 
@@ -123,7 +112,7 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private async Task FireSequenceAsync(List<IDamageableView> damageables)
+        protected async Task FireProjectileInSequenceAsync(List<IDamageableView> damageables)
         {
             try
             {
@@ -135,7 +124,7 @@ namespace BTG.Actions.UltimateAction
                         EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
                     // Do audio and visual effects here
                     // Do camera shake here
-                    await Task.Delay((1 / m_AutoTargetData.FireRate) * 1000, cts.Token);
+                    await Task.Delay((1 / autoTargetData.FireRate) * 1000, cts.Token);
                 }
 
                 OnFireSequenceComplete?.Invoke(true);
@@ -146,10 +135,10 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private void SpawnConfigureLaunchProjectile(Transform targetTransform)
+        protected virtual void SpawnConfigureLaunchProjectile(Transform targetTransform)
         {
-            AutoTargetView projectile = Object.Instantiate(m_AutoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
-            projectile.Configure(this, targetTransform, m_AutoTargetData.ProjectileSpeed, Actor.Transform);
+            AutoTargetView projectile = Object.Instantiate(autoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
+            projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
             projectile.Launch();
         }
     }

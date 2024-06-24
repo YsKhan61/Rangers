@@ -19,9 +19,13 @@ namespace BTG.Actions.UltimateAction
         private int m_FireRate;
         public int FireRate => m_FireRate;
 
-        [SerializeField, Tooltip("This will be the actual projectile")]
+        [SerializeField, Tooltip("This will be the visual")]
         private AutoTargetView m_AutoTargetViewPrefab;
         public AutoTargetView AutoTargetViewPrefab => m_AutoTargetViewPrefab;
+
+        [SerializeField, Tooltip("This will be the actual network visual")]
+        private NetworkAutoTargetView m_NetworkAutoTargetView;
+        public NetworkAutoTargetView NetworkAutoTargetView => m_NetworkAutoTargetView;
 
         [SerializeField]
         private int m_ProjectileSpeed;

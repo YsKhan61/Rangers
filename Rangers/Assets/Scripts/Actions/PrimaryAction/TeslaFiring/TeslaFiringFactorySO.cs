@@ -6,7 +6,7 @@ namespace BTG.Actions.PrimaryAction
 {
 
     [CreateAssetMenu(fileName = "Tesla Firing Factory", menuName = "ScriptableObjects/Factory/PrimaryActionFactory/TeslaFiringFactorySO")]
-    public class TeslaFiringFactorySO : FactorySO<IPrimaryAction>
+    public class TeslaFiringFactorySO : PrimaryActionFactorySO
     {
         [Inject]
         private IObjectResolver m_Resolver;
@@ -33,6 +33,11 @@ namespace BTG.Actions.PrimaryAction
             TeslaFiring tf = new (m_Data, Pool);
             m_Resolver.Inject(tf);
             return tf;
+        }
+
+        public override IPrimaryAction GetNetworkItem()
+        {
+            return GetItem();
         }
     }
 }

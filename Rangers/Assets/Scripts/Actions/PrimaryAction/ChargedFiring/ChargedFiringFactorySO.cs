@@ -5,7 +5,7 @@ using VContainer;
 namespace BTG.Actions.PrimaryAction
 {
     [CreateAssetMenu(fileName = "Charged Firing Factory", menuName = "ScriptableObjects/Factory/PrimaryActionFactory/ChargedFiringFactorySO")]
-    public class ChargedFiringFactorySO : FactorySO<IPrimaryAction>
+    public class ChargedFiringFactorySO : PrimaryActionFactorySO
     {
         [Inject]
         private IObjectResolver m_Resolver;
@@ -32,6 +32,11 @@ namespace BTG.Actions.PrimaryAction
             ChargedFiring cf = new (m_Data, Pool);
             m_Resolver.Inject(cf);
             return cf;
+        }
+
+        public override IPrimaryAction GetNetworkItem()
+        {
+            return GetItem();
         }
     }
 }
