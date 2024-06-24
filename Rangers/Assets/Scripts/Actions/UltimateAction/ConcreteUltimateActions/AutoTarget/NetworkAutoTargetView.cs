@@ -50,35 +50,43 @@ namespace BTG.Actions.UltimateAction
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (collision.collider.TryGetComponent(out IFiringView firingView))
+            CheckHitForFiringVieww(collision.collider);
+            CheckHitForDamageableView(collision.collider);
+            m_Controller.CreateExplosion(transform.position);
+            Despawn();
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            CheckHitForDamageableView(other);
+            m_Controller.CreateExplosion(transform.position);
+            Despawn();
+        }
+
+        private void CheckHitForFiringVieww(Collider collider)
+        {
+            if (collider.TryGetComponent(out IFiringView firingView))
             {
                 if (firingView.Owner == Owner)
                 {
                     return;
                 }
             }
-
-            if (collision.collider.TryGetComponent(out IDamageableView damageable))
-            {
-                m_Controller.OnHitDamageable(damageable);
-            }
-
-            m_Controller.CreateExplosion(transform.position);
-
-            m_IsLaunched = false;
-            Destroy(gameObject);
         }
 
-        private void OnTriggerEnter(Collider other)
+        private void CheckHitForDamageableView(Collider collider)
         {
-            if (other.TryGetComponent(out IDamageableView damageable))
+            if (collider.TryGetComponent(out IDamageableView damageableView))
             {
-                m_Controller.OnHitDamageable(damageable);
+                m_Controller.OnHitDamageable(damageableView);
             }
+        }
 
-            m_Controller.CreateExplosion(transform.position);
-
+        private void Despawn()
+        {
+            // later we will use object pooling
             m_IsLaunched = false;
+            GetComponent<NetworkObject>().Despawn();
             Destroy(gameObject);
         }
 

@@ -246,7 +246,7 @@ namespace BTG.Tank
         /// </summary>
         public void ExecuteRagdollEffect()
         {        
-            EffectFactorySO factory = m_EffectFactoryContainer.GetFactory(m_Model.TankData.Tag) as EffectFactorySO;
+            RagdollFactorySO factory = m_EffectFactoryContainer.GetFactory(m_Model.TankData.Tag) as RagdollFactorySO;
             RagdollView effect = factory.GetItem() as RagdollView;
             effect.SetOwner(this);
             effect.transform.SetPositionAndRotation(Transform.position, Transform.rotation);

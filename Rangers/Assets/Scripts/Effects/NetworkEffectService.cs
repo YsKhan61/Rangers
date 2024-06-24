@@ -13,20 +13,20 @@ namespace BTG.Effects
     {
         public struct NetworkEffectEvent : INetworkSerializable
         {
-            public NetworkGuid EffectTagGuid;
+            public NetworkGuid TagNetworkGuid;
             public Vector3 EffectPosition;
 
             // Serialize the data
             public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
             {
-                serializer.SerializeValue(ref EffectTagGuid);
+                serializer.SerializeValue(ref TagNetworkGuid);
                 serializer.SerializeValue(ref EffectPosition);
             }
 
             // Additional constructor for easier creation
             public NetworkEffectEvent(TagSO effectTag, Vector3 effectPosition)
             {
-                EffectTagGuid = effectTag.Guid.ToNetworkGuid();
+                TagNetworkGuid = effectTag.Guid.ToNetworkGuid();
                 EffectPosition = effectPosition;
             }
         }
@@ -55,8 +55,8 @@ namespace BTG.Effects
         [ClientRpc]
         private void InvokeEffect_ClientRpc(NetworkEffectEvent data)
         {
-            Guid guid = data.EffectTagGuid.ToGuid();
-            EffectFactorySO factory = m_EffectFactoryContainer.GetFactory(guid) as EffectFactorySO;
+            Guid guid = data.TagNetworkGuid.ToGuid();
+            ExplosionFactorySO factory = m_EffectFactoryContainer.GetFactory(guid) as ExplosionFactorySO;
             if (factory == null)
             {
                 Debug.LogError($"No factory found for effect tag {guid}");

@@ -72,8 +72,8 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// Server side explosion creation event invoked by the projectile on collision.
         /// </summary>
-        public void CreateExplosion(Vector3 position) => EventBus<EffectEvent>.Invoke(new EffectEvent { EffectTag = autoTargetData.ExplosionTag});
-            // autoTargetData.ExplosionFactory.CreateExplosion(position);
+        public void CreateExplosion(Vector3 position) => 
+            EventBus<EffectEvent>.Invoke(new EffectEvent { EffectTag = autoTargetData.ExplosionTag, EffectPosition = position});
 
         protected override void RaiseFullyChargedEvent()
         {

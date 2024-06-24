@@ -13,9 +13,18 @@ namespace BTG.Effects
             m_Data = data;
         }
 
-        public ExplosionView GetExplosionEffect() => GetItem();
+        public ExplosionView GetExplosionEffect()
+        {
+            ExplosionView view = GetItem();
+            view.gameObject.SetActive(true);
+            return view;
+        }
 
-        public void ReturnExplosionEffect(ExplosionView explosion) => ReturnItem(explosion);
+        public void ReturnExplosionEffect(ExplosionView explosion)
+        {
+            explosion.gameObject.SetActive(false);
+            ReturnItem(explosion);
+        }
         protected override ExplosionView CreateItem()
         {
             ExplosionView view = new GameObject(m_Data.name).AddComponent<ExplosionView>();

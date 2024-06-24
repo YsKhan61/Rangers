@@ -25,4 +25,4 @@ MonoBehaviour:
     type: 3}
   m_ProjectileSpeed: 7
   m_Damage: 50
-  m_ExplosionFactory: {fileID: 11400000, guid: 5ce55542ba5b37846af9316784d46224, type: 2}
+  m_ExplosionTag: {fileID: 11400000, guid: ff449acedbb99664dae572a6d2a39ccd, type: 2}
