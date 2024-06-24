@@ -60,7 +60,12 @@ namespace BTG.Tank
         /// <summary>
         /// Get a tank from the pool
         /// </summary>
-        public TankView GetTankView() => GetItem();
+        public TankView GetTankView()
+        {
+            TankView tank = GetItem();
+            tank.gameObject.SetActive(true);
+            return tank;
+        }
 
         /// <summary>
         /// Returns the tank to the pool
