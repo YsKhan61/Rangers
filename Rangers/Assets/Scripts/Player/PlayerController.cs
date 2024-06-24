@@ -11,7 +11,7 @@ namespace BTG.Player
         private PlayerView m_View;
         private PlayerInputs m_PlayerInputs;
         private PlayerService m_PlayerService;
-        private IEntityTankBrain m_EntityBrain;     // Later we can change this to IEntityBrain if we want to support other types of entities
+        private IEntityBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         public Rigidbody Rigidbody => m_View.Rigidbody;
         public Transform Transform => m_Transform;
@@ -100,7 +100,7 @@ namespace BTG.Player
         /// </summary>
         public void SetEntityBrain(IEntityBrain entity)
         {
-            m_EntityBrain = entity as IEntityTankBrain;
+            m_EntityBrain = entity;
             if (m_EntityBrain == null)
             {
                 Debug.LogError("PlayerTankController: Entity brain is not of type IEntityTankBrain");

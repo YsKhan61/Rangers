@@ -63,7 +63,7 @@ namespace BTG.Enemy
         private EnemyService m_Service;
 
         private EnemyPool m_Pool;
-        private IEntityTankBrain m_EntityBrain;
+        private IEntityBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         private EnemyView m_View;
         private EnemyTankStateMachine m_StateMachine;
@@ -140,7 +140,7 @@ namespace BTG.Enemy
         /// </summary>
         public void SetEntityBrain(IEntityBrain entity)
         {
-            m_EntityBrain = entity as IEntityTankBrain;
+            m_EntityBrain = entity;
             if (m_EntityBrain == null)
             {
                 Debug.LogError("EnemyTankController: SetEntityBrain: EntityBrain is not of type IEntityTankBrain");

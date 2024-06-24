@@ -5,7 +5,7 @@ namespace BTG.Entity
     /// <summary>
     /// An interface for the tank model
     /// </summary>
-    public interface IEntityTankModel
+    public interface IEntityModel
     {
         /// <summary>
         /// Is the model a player

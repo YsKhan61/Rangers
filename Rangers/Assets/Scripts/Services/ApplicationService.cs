@@ -156,7 +156,6 @@ namespace BTG.Services
             // LobbyServiceFacade is registered as entrypoint because it wants a callback after container is built to do it's initialization
             builder.RegisterEntryPoint<LobbyServiceFacade>(Lifetime.Singleton).AsSelf();
 
-            builder.Register<EnemyService>(Lifetime.Singleton);
             builder.Register<AudioPool>(Lifetime.Singleton);
         }
 

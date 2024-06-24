@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Tank
 {
-    public class TankModel : IEntityTankModel
+    public class TankModel : IEntityModel
     {
         public bool IsPlayer { get; set; }
 

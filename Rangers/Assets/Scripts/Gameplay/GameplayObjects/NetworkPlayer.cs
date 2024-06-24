@@ -25,7 +25,7 @@ namespace BTG.Gameplay.GameplayObjects
         private Pose m_SpawnPose;
         private PlayerModel m_Model;
         private NetworkPlayerService m_PlayerService;
-        private IEntityTankBrain m_EntityBrain;
+        private IEntityBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         private PlayerInputs m_PlayerInputs;
         private PersistentPlayer m_PersistentPlayer;
@@ -152,7 +152,7 @@ namespace BTG.Gameplay.GameplayObjects
                 Debug.LogError("Entity factory is not of type EntityFactorySO");
                 return;
             }
-            m_EntityBrain = factory.GetServerItem() as IEntityTankBrain;
+            m_EntityBrain = factory.GetServerItem();
 
             if (IsOwner)
             {
@@ -194,7 +194,7 @@ namespace BTG.Gameplay.GameplayObjects
                 Debug.LogError("Entity factory is not of type EntityFactorySO");
                 return;
             }
-            m_EntityBrain = factory.GetNonServerItem() as IEntityTankBrain;
+            m_EntityBrain = factory.GetNonServerItem();
 
             if (IsOwner)
             {

@@ -7,7 +7,6 @@ using BTG.Utilities;
 using System;
 using UnityEngine;
 using VContainer;
-using Object = UnityEngine.Object;
 
 
 namespace BTG.Tank
@@ -16,7 +15,7 @@ namespace BTG.Tank
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
     /// PrimaryAction, UltimateAction.
     /// </summary>
-    public class TankBrain : IEntityTankBrain
+    public class TankBrain : IEntityBrain
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;
@@ -31,7 +30,7 @@ namespace BTG.Tank
         public TagSO Tag => m_Model.TankData.Tag;
 
         private TankModel m_Model;
-        IEntityTankModel IEntityTankBrain.Model => m_Model;
+        public IEntityModel Model => m_Model;
         private TankView m_View;
         private IPrimaryAction m_PrimaryAction;
         public IPrimaryAction PrimaryAction => m_PrimaryAction;

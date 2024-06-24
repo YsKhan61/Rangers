@@ -12,7 +12,6 @@ namespace BTG.Gameplay.GameState
         private PlayerVirtualCamera m_PVC;
 
         PlayerService m_PlayerService;
-
         EnemyService m_EnemyService;
 
         public override GameState ActiveState => GameState.SinglePlay;
@@ -21,6 +20,7 @@ namespace BTG.Gameplay.GameState
         {
             base.Configure(builder);
             builder.Register<PlayerService>(Lifetime.Singleton);
+            builder.Register<EnemyService>(Lifetime.Singleton);
         }
 
         protected override void Start()
