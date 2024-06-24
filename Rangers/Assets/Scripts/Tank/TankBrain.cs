@@ -171,7 +171,6 @@ namespace BTG.Tank
 
             m_UltimateAction.SetActor(this);
         }
-
         
 
         public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
