@@ -13,6 +13,16 @@ namespace BTG.Entity
         public bool IsPlayer { get; set; }
 
         /// <summary>
+        /// Is the model a network player
+        /// </summary>
+        public bool IsNetworkPlayer { get; set; }
+
+        /// <summary>
+        /// The network object id of the actor, if it is a network player
+        /// </summary>
+        public ulong NetworkObjectId { get; set; }
+
+        /// <summary>
         /// Get the maximum health of the tank
         /// </summary>
         public int MaxHealth { get; }

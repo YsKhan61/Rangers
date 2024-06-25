@@ -47,7 +47,7 @@ namespace BTG.Gameplay.GameplayObjects
         [ServerRpc(RequireOwnership = false)]
         public void OnEntityTagSelectionChanged_ServerRpc(ulong playerOwnerClientId, NetworkGuid selectedEntityGuid)
         {
-            Debug.Log($"PlayerOwnerClient {playerOwnerClientId} Calling OnEntityTagSelectionChanged_ServerRpc!");
+            // Debug.Log($"PlayerOwnerClient {playerOwnerClientId} Calling OnEntityTagSelectionChanged_ServerRpc!");
             var persistentPlayer = PersistentPlayerClientCache.GetPlayer(playerOwnerClientId);
             persistentPlayer.NetworkEntityGuidState.RegisterEntityData_ClientRpc(selectedEntityGuid);
         }

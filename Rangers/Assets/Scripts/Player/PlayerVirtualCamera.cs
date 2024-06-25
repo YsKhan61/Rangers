@@ -9,7 +9,7 @@ namespace BTG.Player
 {
     public class PlayerVirtualCamera : MonoBehaviour
     {
-        EventBinding<CameraShakeEvent> m_CameraShakeEventBinding;
+        EventBinding<CameraShakeEventData> m_CameraShakeEventBinding;
 
         [SerializeField] CinemachineVirtualCamera m_PVC1;
 
@@ -28,19 +28,19 @@ namespace BTG.Player
 
         private void OnEnable()
         {
-            m_CameraShakeEventBinding = new EventBinding<CameraShakeEvent>(OnPlayerCamShake);
-            EventBus<CameraShakeEvent>.Register(m_CameraShakeEventBinding);
+            m_CameraShakeEventBinding = new EventBinding<CameraShakeEventData>(OnPlayerCamShake);
+            EventBus<CameraShakeEventData>.Register(m_CameraShakeEventBinding);
         }
 
         private void OnDisable()
         {
-            EventBus<CameraShakeEvent>.Unregister(m_CameraShakeEventBinding);
+            EventBus<CameraShakeEventData>.Unregister(m_CameraShakeEventBinding);
         }
         
 
         public void SetFollowTarget(Transform target) => m_PVC1.Follow = target;
 
-        private void OnPlayerCamShake(CameraShakeEvent data)
+        private void OnPlayerCamShake(CameraShakeEventData data)
             => StartShake(Mathf.Max(m_MinShakeIntensity, m_MaxShakeIntensity * data.ShakeAmount), data.ShakeDuration);
 
         void StartShake(float intensity, float duration)

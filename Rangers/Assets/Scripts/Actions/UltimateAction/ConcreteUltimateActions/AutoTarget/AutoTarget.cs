@@ -70,17 +70,23 @@ namespace BTG.Actions.UltimateAction
         public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(autoTargetData.Damage);
 
         /// <summary>
-        /// Server side explosion creation event invoked by the projectile on collision.
+        /// In case of Singleplayer - Explosion creation event invoked by the projectile on collision.
         /// </summary>
-        public void CreateExplosion(Vector3 position) => 
-            EventBus<EffectEvent>.Invoke(new EffectEvent { EffectTag = autoTargetData.ExplosionTag, EffectPosition = position});
+        public virtual void CreateExplosion(Vector3 position)
+        {
+            EventBus<EffectEventData>.Invoke(new EffectEventData
+            {
+                EffectTag = autoTargetData.ExplosionTag,
+                EffectPosition = position
+            });
+        }
 
         protected override void RaiseFullyChargedEvent()
         {
             OnFullyCharged?.Invoke();
         }
 
-        protected bool ScanForNearbyColliders(out Collider[] results)
+        private bool ScanForNearbyColliders(out Collider[] results)
         {
             results = new Collider[10];
             int count = Physics.OverlapSphereNonAlloc(
@@ -96,7 +102,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        protected void FilterDamageables(Collider[] results, out List<IDamageableView> damageables)
+        private void FilterDamageables(Collider[] results, out List<IDamageableView> damageables)
         {
             damageables = new List<IDamageableView>();
 
@@ -116,7 +122,7 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        protected async Task FireProjectileInSequenceAsync(List<IDamageableView> damageables)
+        private async Task FireProjectileInSequenceAsync(List<IDamageableView> damageables)
         {
             try
             {
@@ -125,9 +131,8 @@ namespace BTG.Actions.UltimateAction
                     SpawnConfigureLaunchProjectile(damageable.Transform);
 
                     if (Actor.IsPlayer)
-                        EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
-                    // Do audio and visual effects here
-                    // Do camera shake here
+                        Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = 1f, ShakeDuration = 1f });
+
                     await Task.Delay((1 / autoTargetData.FireRate) * 1000, cts.Token);
                 }
 

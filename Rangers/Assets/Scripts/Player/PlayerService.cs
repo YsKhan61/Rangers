@@ -83,7 +83,7 @@ namespace BTG.Player
 
         private void OnPlayerTankIDSelected()
         {
-            EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 0f, ShakeDuration = 0f });
+            EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = 0f, ShakeDuration = 0f });
 
             /// If there is a player entity already, deinit it.
             m_Controller.DeInit();

@@ -81,10 +81,5 @@ namespace BTG.Actions.UltimateAction
         /// </summary>
         /// <returns>true if success, false otherwise</returns>
         public bool TryExecute();
-
-        /// <summary>
-        /// Only spawn the graphics
-        /// </summary>
-        public void NonServerExecute();
     }
 }

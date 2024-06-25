@@ -45,7 +45,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        public override void NonServerExecute()
+        /*public override void NonServerExecute()
         {
             cts = new();
             InitVisual();
@@ -55,7 +55,7 @@ namespace BTG.Actions.UltimateAction
                     DeInitVisual1();
                 },
                 cts.Token);
-        }
+        }*/
 
         public override void Destroy()
         {
@@ -115,7 +115,7 @@ namespace BTG.Actions.UltimateAction
             Actor.ToggleActorVisibility(true);
 
             if (Actor.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = 1f });
+                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = 1f, ShakeDuration = 1f });
         }
     }
 }

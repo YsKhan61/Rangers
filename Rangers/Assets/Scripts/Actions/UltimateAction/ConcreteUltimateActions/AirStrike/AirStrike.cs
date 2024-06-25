@@ -14,8 +14,6 @@ namespace BTG.Actions.UltimateAction
 
         private AirStrikeDataSO m_AirStrikeData => ultimateActionData as AirStrikeDataSO;
 
-        private AirStrikeView m_View;
-
         private Collider[] m_OverlappingColliders = new Collider[10];
         private readonly List<IDamageableView> m_Damageables = new();
 
@@ -35,11 +33,6 @@ namespace BTG.Actions.UltimateAction
         {
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromFixedUpdate(this);
 
-            if (m_View != null)
-            {
-                Object.Destroy(m_View.gameObject);
-            }
-
             base.Disable();
         }
 
@@ -57,29 +50,11 @@ namespace BTG.Actions.UltimateAction
             }
 
             ChangeState(State.Executing);
-            InitVisual();
+            InvokeEffectEvent();
             RestartAfterDuration(m_AirStrikeData.Duration);
-
-            if (Actor.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
-
+            InvokeCameraShakeEvent();
+            
             return true;
-        }
-
-        public override void NonServerExecute()
-        {
-            cts = new();
-            InitVisual();
-
-            if (Actor.IsPlayer)
-                EventBus<CameraShakeEvent>.Invoke(new CameraShakeEvent { ShakeAmount = 1f, ShakeDuration = m_AirStrikeData.Duration });
-
-            _ = HelperMethods.InvokeAfterAsync(m_AirStrikeData.Duration, 
-                () =>
-                {
-                    DeInitVisual();
-                }, 
-                cts.Token);
         }
 
         public override void Destroy()
@@ -90,7 +65,6 @@ namespace BTG.Actions.UltimateAction
 
         protected override void Restart()
         {
-            DeInitVisual();
             RaiseUltimateActionExecutedEvent();
 
             ChangeState(State.Charging);
@@ -101,21 +75,6 @@ namespace BTG.Actions.UltimateAction
         protected override void RaiseFullyChargedEvent()
         {
             OnFullyCharged?.Invoke();
-        }
-
-        private void InitVisual()
-        {
-            m_View = Object.Instantiate(m_AirStrikeData.AirStrikeViewPrefab, Actor.Transform);
-            m_View.PlayParticleSystem();
-            m_View.PlayAudio();
-        }
-
-        private void DeInitVisual()
-        {
-            m_View.StopParticleSystem();
-            m_View.StopAudio();
-            Object.Destroy(m_View.gameObject);
-            m_View = null;
         }
 
         private void UpdateExecution()
@@ -178,6 +137,42 @@ namespace BTG.Actions.UltimateAction
                 }
 
                 damageable.Damage(m_AirStrikeData.Damage);
+            }
+        }
+
+        private void InvokeEffectEvent()
+        {
+            if (Actor.IsNetworkPlayer)
+            {
+                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData 
+                { 
+                    OwnerClientOnly = false,
+                    FollowNetworkObject = true,
+                    FollowNetowrkObjectId = Actor.NetworkObjectId,
+                    EffectTagNetworkGuid = m_AirStrikeData.Tag.Guid.ToNetworkGuid(),
+                    Duration = m_AirStrikeData.Duration
+                });
+            }
+            else
+            {
+                EventBus<EffectEventData>.Invoke(new EffectEventData 
+                { 
+                    EffectTag = m_AirStrikeData.Tag, 
+                    EffectPosition = Actor.Transform.position, 
+                    Duration = m_AirStrikeData.Duration 
+                });
+            }
+        }
+
+        private void InvokeCameraShakeEvent()
+        {
+            if (Actor.IsPlayer)
+            {
+                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData
+                {
+                    ShakeAmount = 1f,
+                    ShakeDuration = m_AirStrikeData.Duration
+                });
             }
         }
     }

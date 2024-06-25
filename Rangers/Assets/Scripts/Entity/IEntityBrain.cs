@@ -1,6 +1,7 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
 using BTG.Effects;
+using BTG.Events;
 using BTG.Factory;
 using BTG.Utilities;
 using System;
@@ -17,6 +18,7 @@ namespace BTG.Entity
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;
+        public event Action<CameraShakeEventData> OnPlayerCameraShake;
 
         /// <summary>
         /// Get the model data of the tank.

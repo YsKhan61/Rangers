@@ -3,6 +3,7 @@ using BTG.Actions.UltimateAction;
 using BTG.AudioSystem;
 using BTG.Effects;
 using BTG.Entity;
+using BTG.Events;
 using BTG.Utilities;
 using System;
 using UnityEngine;
@@ -19,6 +20,7 @@ namespace BTG.Tank
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;
+        public event Action<CameraShakeEventData> OnPlayerCameraShake;
 
         public enum TankState
         {
@@ -44,7 +46,9 @@ namespace BTG.Tank
         public Collider DamageCollider => m_View.DamageCollider;
         public IDamageableView Damageable { get; private set; }
 
-        public bool IsPlayer { get => m_Model.IsPlayer; set => m_Model.IsPlayer = value; }
+        public bool IsPlayer => m_Model.IsPlayer;
+        public bool IsNetworkPlayer => m_Model.IsNetworkPlayer;
+        public ulong NetworkObjectId => m_Model.NetworkObjectId;
         public float CurrentMoveSpeed => Rigidbody.velocity.magnitude;
 
         [Inject]
@@ -237,8 +241,6 @@ namespace BTG.Tank
         public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public bool TryExecuteUltimate() => UltimateAction.TryExecute();
-        public void SpawnUltimateGraphics() => UltimateAction.NonServerExecute();
-
 
         /// <summary>
         /// This will be invoked by a ragdolleffect event
@@ -258,8 +260,10 @@ namespace BTG.Tank
             ExecuteDeadAudio();
         }
 
-        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
+        public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData) => OnPlayerCameraShake?.Invoke(camShakeData);
 
+        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
+        
         private void UpdateState()
         {
             switch (m_Model.State)

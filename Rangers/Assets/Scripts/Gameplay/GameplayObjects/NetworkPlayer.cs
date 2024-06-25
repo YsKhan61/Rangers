@@ -1,7 +1,10 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
+using BTG.Events;
 using BTG.Player;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
+using System;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -154,11 +157,10 @@ namespace BTG.Gameplay.GameplayObjects
             }
             m_EntityBrain = factory.GetServerItem();
 
-            if (IsOwner)
-            {
-                m_EntityBrain.Model.IsPlayer = true;
-            }
-                
+            m_EntityBrain.Model.IsPlayer = true;
+            m_EntityBrain.Model.IsNetworkPlayer = true;
+            m_EntityBrain.Model.NetworkObjectId = NetworkObjectId;
+
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.SetRigidbody(m_Rigidbody);
 
@@ -171,6 +173,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted;
+            m_EntityBrain.OnPlayerCameraShake += OnPlayerCameraShake;
 
             CacheEntityDatas();
 
@@ -198,7 +201,8 @@ namespace BTG.Gameplay.GameplayObjects
 
             if (IsOwner)
             {
-               m_EntityBrain.Model.IsPlayer = true;
+                m_EntityBrain.Model.IsPlayer = true;
+                m_EntityBrain.Model.IsNetworkPlayer = true;
             }
 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
@@ -414,19 +418,6 @@ namespace BTG.Gameplay.GameplayObjects
         private void TryExecuteUltimate_ServerRpc()
         {
             bool success = m_EntityBrain.TryExecuteUltimate();
-            /*if (success)
-            {
-                TryExecuteUltimate_ClientRpc();
-            }*/
-        }
-
-        [ClientRpc]
-        private void TryExecuteUltimate_ClientRpc()
-        {
-            // NOTE - m_EntityBrain is not set on the client side(non server), it's server only
-            // hence we need to find how to create EntityBrain for all clients but without views
-            if (IsServer) return;   // Server already spawned it's graphics
-            m_EntityBrain?.SpawnUltimateGraphics();
         }
 
         private void SubscribeToInputEvents()
@@ -471,6 +462,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted;
+            m_EntityBrain.OnPlayerCameraShake -= OnPlayerCameraShake;
 
             if (m_EntityHealthController == null)
             {
@@ -478,6 +470,36 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
             m_EntityHealthController.OnHealthUpdated -= OnEntityHealthUpdated;
+        }
+
+        private void OnPlayerCameraShake(CameraShakeEventData data)
+        {
+            OnPlayerCamShake_ClientRpc(new NetworkCamShakeEventData(data.ShakeAmount, data.ShakeDuration));
+        }
+
+        [ClientRpc]
+        private void OnPlayerCamShake_ClientRpc(NetworkCamShakeEventData data)
+        {
+            if (!IsOwner) return;
+            EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = data.ShakeAmount, ShakeDuration = data.ShakeDuration });
+        }
+
+        internal struct NetworkCamShakeEventData : INetworkSerializable
+        {
+            internal float ShakeAmount;
+            internal float ShakeDuration;
+
+            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
+            {
+                serializer.SerializeValue(ref ShakeAmount);
+                serializer.SerializeValue(ref ShakeDuration);
+            }
+
+            internal NetworkCamShakeEventData(float shakeAmount, float shakeDuration)
+            {
+                ShakeAmount = shakeAmount;
+                ShakeDuration = shakeDuration;
+            }
         }
     }
 

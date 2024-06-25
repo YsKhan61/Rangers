@@ -9,62 +9,68 @@ using VContainer;
 
 namespace BTG.Effects
 {
+    /// <summary>
+    /// This service is responsible for handling all the effects in the multiplayer scene.
+    /// </summary>
     public class NetworkEffectService : NetworkBehaviour
     {
-        public struct NetworkEffectEvent : INetworkSerializable
-        {
-            public NetworkGuid TagNetworkGuid;
-            public Vector3 EffectPosition;
-
-            // Serialize the data
-            public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter
-            {
-                serializer.SerializeValue(ref TagNetworkGuid);
-                serializer.SerializeValue(ref EffectPosition);
-            }
-
-            // Additional constructor for easier creation
-            public NetworkEffectEvent(TagSO effectTag, Vector3 effectPosition)
-            {
-                TagNetworkGuid = effectTag.Guid.ToNetworkGuid();
-                EffectPosition = effectPosition;
-            }
-        }
-
-        private EventBinding<EffectEvent> m_EffectEventBinding;
+        private EventBinding<NetworkEffectEventData> m_EffectEventBinding;
 
         [Inject]
         private EffectFactoryContainerSO m_EffectFactoryContainer;
 
         public override void OnNetworkSpawn()
         {
-            m_EffectEventBinding = new EventBinding<EffectEvent>(OnEffectEvent);
-            EventBus<EffectEvent>.Register(m_EffectEventBinding);
+            m_EffectEventBinding = new EventBinding<NetworkEffectEventData>(OnEffectEvent);
+            EventBus<NetworkEffectEventData>.Register(m_EffectEventBinding);
         }
 
         public override void OnNetworkDespawn()
         {
-            EventBus<EffectEvent>.Unregister(m_EffectEventBinding);
+            EventBus<NetworkEffectEventData>.Unregister(m_EffectEventBinding);
         }
 
-        private void OnEffectEvent(EffectEvent effectEvent)
+        private void OnEffectEvent(NetworkEffectEventData data)
         {
-            InvokeEffect_ClientRpc(new NetworkEffectEvent(effectEvent.EffectTag, effectEvent.EffectPosition));
+            ClientRpcParams clientRpcParams = default;
+
+            if (data.OwnerClientOnly)
+            {
+                clientRpcParams = new ClientRpcParams
+                {
+                    Send = new ClientRpcSendParams
+                    {
+                        TargetClientIds = new ulong[] { data.OwnerClientId }
+                    }
+                };
+            }
+
+            InvokeEffect_ClientRpc(data, clientRpcParams);
         }
 
         [ClientRpc]
-        private void InvokeEffect_ClientRpc(NetworkEffectEvent data)
+        private void InvokeEffect_ClientRpc(NetworkEffectEventData data, ClientRpcParams clientRpcParams = default)
         {
-            Guid guid = data.TagNetworkGuid.ToGuid();
+            Guid guid = data.EffectTagNetworkGuid.ToGuid();
             ExplosionFactorySO factory = m_EffectFactoryContainer.GetFactory(guid) as ExplosionFactorySO;
             if (factory == null)
             {
-                Debug.LogError($"No factory found for effect tag {guid}");
+                Debug.LogError($"No factory found for effect guid {guid}");
                 return;
             }
 
             EffectView effect = factory.GetItem();
-            effect.transform.SetPositionAndRotation(data.EffectPosition, Quaternion.identity);
+            
+            if (data.FollowNetworkObject)
+            {
+                NetworkObject objectToFollow = NetworkManager.Singleton.SpawnManager.SpawnedObjects[data.FollowNetowrkObjectId];
+                effect.transform.SetParent(objectToFollow.transform, Vector3.zero, Quaternion.identity);
+            }
+            else
+            {
+                effect.transform.SetPositionAndRotation(data.EffectPosition, Quaternion.identity);
+            }
+
             effect.Play();
         }
     }

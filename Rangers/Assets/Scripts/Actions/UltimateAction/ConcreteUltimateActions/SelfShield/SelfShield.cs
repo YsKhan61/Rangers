@@ -42,7 +42,7 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        public override void NonServerExecute()
+        /*public override void NonServerExecute()
         {
             cts = new();
             InitVisual();
@@ -52,7 +52,7 @@ namespace BTG.Actions.UltimateAction
                     DeInitVisual();
                 }, 
                 cts.Token);
-        }
+        }*/
 
         public override void Destroy()
         {

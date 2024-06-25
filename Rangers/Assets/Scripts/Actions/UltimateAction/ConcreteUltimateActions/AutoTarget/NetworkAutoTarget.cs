@@ -1,7 +1,9 @@
-﻿using BTG.Utilities;
-using System.Collections.Generic;
+﻿using BTG.Events;
+using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using Unity.Netcode;
 using UnityEngine;
+
 
 namespace BTG.Actions.UltimateAction
 {
@@ -11,15 +13,19 @@ namespace BTG.Actions.UltimateAction
         {
         }
 
-        public override void NonServerExecute()
+        /// <summary>
+        /// In case of Multiplayer - Server side explosion creation event invoked by the projectile on collision.
+        /// </summary>
+        /// <param name="position"></param>
+        public override void CreateExplosion(Vector3 position)
         {
-            if (!ScanForNearbyColliders(out Collider[] results))
-                return;
-
-            FilterDamageables(results, out List<IDamageableView> damageables);
-            if (damageables.Count == 0) return;
-
-            _ = FireProjectileInSequenceAsync(damageables);
+            EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+            {
+                OwnerClientOnly = false,
+                FollowNetworkObject = false,
+                EffectTagNetworkGuid = autoTargetData.ExplosionTag.Guid.ToNetworkGuid(),
+                EffectPosition = position,
+            });
         }
 
         protected override void SpawnConfigureLaunchProjectile(Transform targetTransform)

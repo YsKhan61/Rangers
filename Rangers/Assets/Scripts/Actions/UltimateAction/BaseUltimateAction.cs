@@ -88,7 +88,6 @@ namespace BTG.Actions.UltimateAction
         }
 
         public abstract bool TryExecute();
-        public virtual void NonServerExecute() { }
 
         public virtual void Destroy()
         {

@@ -959,14 +959,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 171c8cfda93ef584fad8b02f4716a268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  effectFactories:
-  - {fileID: 11400000, guid: 5ce55542ba5b37846af9316784d46224, type: 2}
-  - {fileID: 11400000, guid: 3c4245d9ab90ad84eb8984e3710cbc50, type: 2}
-  - {fileID: 11400000, guid: 0a5329ac05142b44aa46d4b1c1607ede, type: 2}
-  - {fileID: 11400000, guid: ed50ab9e4f453dc4bb791fd2347971df, type: 2}
-  - {fileID: 11400000, guid: a122ae6897d8ce04b980f15cde11da74, type: 2}
-  - {fileID: 11400000, guid: ba47f56c150137543af4a66e80fd7292, type: 2}
-  - {fileID: 11400000, guid: 39542d0d49b6a8945ae2a23c35842c13, type: 2}
 --- !u!1 &1894154696
 GameObject:
   m_ObjectHideFlags: 0

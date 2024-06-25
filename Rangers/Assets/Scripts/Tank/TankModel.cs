@@ -7,6 +7,8 @@ namespace BTG.Tank
     public class TankModel : IEntityModel
     {
         public bool IsPlayer { get; set; }
+        public bool IsNetworkPlayer { get; set; }
+        public ulong NetworkObjectId { get; set; }
 
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;

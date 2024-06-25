@@ -2,7 +2,7 @@
 
 namespace BTG.Events
 {
-    public struct CameraShakeEvent : IEvent 
+    public struct CameraShakeEventData : IEvent 
     {
         public float ShakeAmount;
         public float ShakeDuration;

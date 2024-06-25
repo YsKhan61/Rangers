@@ -224,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 836039773}
   - component: {fileID: 836039774}
+  - component: {fileID: 836039775}
   m_Layer: 0
   m_Name: SinglePlayerState
   m_TagString: Untagged
@@ -264,6 +265,18 @@ MonoBehaviour:
   autoInjectGameObjects:
   - {fileID: 5282029357601126307}
   m_PVC: {fileID: 1894154699}
+--- !u!114 &836039775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836039772}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd1212213226acb49b2fc2f36d596870, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!850595691 &934916653
 LightingSettings:
   m_ObjectHideFlags: 0

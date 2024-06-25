@@ -1,3 +1,4 @@
+using BTG.Events;
 using BTG.Utilities;
 using UnityEngine;
 
@@ -13,6 +14,16 @@ namespace BTG.Actions.PrimaryAction
         /// Is the actor a player
         /// </summary>
         public bool IsPlayer { get; }
+
+        /// <summary>
+        /// Is the actor a network player?
+        /// </summary>
+        public bool IsNetworkPlayer { get; }
+
+        /// <summary>
+        /// The network object id of the actor, if it is a network player
+        /// </summary>
+        public ulong NetworkObjectId { get; }
 
         /// <summary>
         /// The fire point of the actor
@@ -43,5 +54,7 @@ namespace BTG.Actions.PrimaryAction
         /// Automatically start the primary action and stop it after certain time
         /// </summary>
         public void AutoStartStopPrimaryAction(int stopTime);
+
+        public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData);
     }
 }

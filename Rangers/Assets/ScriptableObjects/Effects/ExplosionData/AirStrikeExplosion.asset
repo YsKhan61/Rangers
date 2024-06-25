@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73919861c5325694fb3b5edf9bd8d748, type: 3}
+  m_Name: AirStrikeExplosion
+  m_EditorClassIdentifier: 
+  m_ParticleSystemPrefab: {fileID: 385819786943490535, guid: ddb5bc271bd94b240b4d9659647025dc,
+    type: 3}
+  m_AudioClip: {fileID: 8300000, guid: 5cfde1a5bae2113489ec93407f5bc501, type: 3}
