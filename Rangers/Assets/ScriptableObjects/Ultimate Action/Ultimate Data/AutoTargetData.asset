@@ -21,7 +21,7 @@ MonoBehaviour:
   m_FireRate: 2
   m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
     type: 3}
-  m_NetworkAutoTargetView: {fileID: 8975705443438542426, guid: 069d449019275ab48b0dd8503c477bbd,
+  m_NetworkAutoTargetView: {fileID: 1293401678989881611, guid: 069d449019275ab48b0dd8503c477bbd,
     type: 3}
   m_ProjectileSpeed: 7
   m_Damage: 50

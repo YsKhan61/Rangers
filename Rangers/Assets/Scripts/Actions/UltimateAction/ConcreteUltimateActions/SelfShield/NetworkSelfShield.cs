@@ -14,27 +14,9 @@ namespace BTG.Actions.UltimateAction
 
         protected override void InitVisual()
         {
-            m_View = Object.Instantiate(selfShieldData.SelfShieldViewPrefab, Actor.Transform);
+            m_View = Object.Instantiate(selfShieldData.NetworkSelfShieldViewPrefab, Actor.Transform);
             m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
-
-            GameObject go = m_View.gameObject.CreateNetworkObject();
-            go.CreateNetworkTransform(new NetworkTransformSettings 
-            { 
-                SyncPositionX = true,
-                SyncPositionY = true,
-                SyncPositionZ = true,
-
-                SyncRotAngleX = false,
-                SyncRotAngleY = false,
-                SyncRotAngleZ = false,
-
-                SyncScaleX = false, 
-                SyncScaleY = false, 
-                SyncScaleZ = false 
-            });
-            
             m_View.GetComponent<NetworkObject>().Spawn(true);
-
 
             EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
             {

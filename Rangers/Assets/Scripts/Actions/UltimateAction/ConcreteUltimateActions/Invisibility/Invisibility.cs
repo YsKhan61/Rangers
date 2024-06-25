@@ -12,8 +12,6 @@ namespace BTG.Actions.UltimateAction
 
         private InvisibilityDataSO m_InvisibilityData => ultimateActionData as InvisibilityDataSO;
 
-        // private InvisibilityView m_View;
-
         public Invisibility(InvisibilityDataSO invisibilityData)
         {
             ultimateActionData = invisibilityData;
@@ -21,11 +19,6 @@ namespace BTG.Actions.UltimateAction
 
         public override void Disable()
         {
-            /*if (m_View != null)
-            {
-                Object.Destroy(m_View.gameObject);
-            }*/
-
             base.Disable();
         }
 
@@ -54,8 +47,6 @@ namespace BTG.Actions.UltimateAction
         protected override void Restart()
         {
             InvokeEffectEvent(m_InvisibilityData.VisibleEffectTag);
-            /*m_View.PlayAppearPS();
-            m_View.PlayAppearAudio();*/
 
             _ = HelperMethods.InvokeAfterAsync((int)m_InvisibilityData.VisibleDelay, () =>
             {
@@ -73,47 +64,15 @@ namespace BTG.Actions.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        /*private void SpawnView(Transform parent)
-        {
-            m_View = Object.Instantiate(m_InvisibilityData.InvisibilityViewPrefab, parent);
-            m_View.transform.localPosition = Vector3.zero;
-            m_View.transform.localRotation = Quaternion.identity;
-        }
-
-        private void DoAfterDelay()
-        {
-            ReadyToShowVisual();
-            RaiseUltimateActionExecutedEvent();
-            ChangeState(State.Charging);
-            Charge(-FULL_CHARGE);
-            AutoCharge();
-        }
-
-        private void DeInitVisual1()
-        {
-            m_View.PlayAppearPS();
-            m_View.PlayAppearAudio();
-
-            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => DeInitVisual2(), cts.Token);
-        }*/
-
         private void ReadyToHideVisual()
         {
-            /*SpawnView(Actor.Transform);
-            m_View.PlayDisappearPS();
-            m_View.PlayDisappearAudio();*/
             InvokeEffectEvent(m_InvisibilityData.InvisibleEffectTag);
             Actor.ToggleActorVisibility(false);
         }
 
         private void ReadyToShowVisual()
         {
-            /*Object.Destroy(m_View.gameObject);
-            m_View = null;*/
             Actor.ToggleActorVisibility(true);
-
-            /*if (Actor.IsPlayer)
-                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = 1f, ShakeDuration = 1f });*/
             InvokeCameraShakeEvent();
         }
 

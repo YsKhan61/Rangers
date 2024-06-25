@@ -1,5 +1,4 @@
 using BTG.Utilities;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -80,8 +79,7 @@ namespace BTG.Actions.UltimateAction
         {
             // later we will use object pooling
             m_IsLaunched = false;
-            GetComponent<NetworkObject>().Despawn();
-            Destroy(gameObject);
+            GetComponent<NetworkObject>().Despawn(true);
         }
 
         private void UpdateProjectilePosition()

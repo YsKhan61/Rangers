@@ -19,3 +19,5 @@ MonoBehaviour:
   m_Duration: 5
   m_SelfShieldViewPrefab: {fileID: 2539088691107818332, guid: 3de1f36b33bb1374ea4a508d2c0ca424,
     type: 3}
+  m_NetworkSelfShieldViewPrefab: {fileID: 2539088691107818332, guid: 55cb55c13d15c2c4a9e4a5fad8182a50,
+    type: 3}

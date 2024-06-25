@@ -16,6 +16,7 @@ namespace BTG.Effects
 
         internal void Initialize(ParticleSystem particleSystem, AudioSource source, ExplosionEffectPool pool)
         {
+            gameObject.name = particleSystem.gameObject.name;
             m_ParticleSystem = particleSystem;
             m_AudioSource = source;
             m_Pool = pool;
@@ -44,6 +45,8 @@ namespace BTG.Effects
             m_ParticleSystem.Stop();
             m_AudioSource.Stop();
             m_Pool.ReturnExplosionEffect(this);
+
+            Debug.Log("Explosion stopped and returned to pool." + gameObject.name);
         }
     }
 

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3623668692300594288}
   - component: {fileID: -5155852480655891117}
   - component: {fileID: 2189891092094542728}
-  - component: {fileID: 8975705443438542426}
+  - component: {fileID: 1293401678989881611}
   m_Layer: 0
   m_Name: NetworkAutoTargetView
   m_TagString: Untagged
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &8975705443438542426
+--- !u!114 &1293401678989881611
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8760085692915796729}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0433a7c6cdedf1e4ea6161333fc02b22, type: 3}
+  m_Script: {fileID: 11500000, guid: cdbf3901b01da4247bc26532677f6776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &4765092242249159966

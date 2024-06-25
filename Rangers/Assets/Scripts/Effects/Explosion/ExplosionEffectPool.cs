@@ -23,6 +23,7 @@ namespace BTG.Effects
         public void ReturnExplosionEffect(ExplosionView explosion)
         {
             explosion.gameObject.SetActive(false);
+            explosion.transform.SetParent(Container, Vector3.zero, Quaternion.identity);
             ReturnItem(explosion);
         }
         protected override ExplosionView CreateItem()

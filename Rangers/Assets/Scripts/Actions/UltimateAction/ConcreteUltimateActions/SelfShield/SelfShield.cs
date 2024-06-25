@@ -43,18 +43,6 @@ namespace BTG.Actions.UltimateAction
             return true;
         }
 
-        /*public override void NonServerExecute()
-        {
-            cts = new();
-            InitVisual();
-            _ = HelperMethods.InvokeAfterAsync(m_SelfShieldData.Duration,
-                () => 
-                {
-                    DeInitVisual();
-                }, 
-                cts.Token);
-        }*/
-
         public override void Destroy()
         {
             OnFullyCharged = null;
@@ -79,10 +67,6 @@ namespace BTG.Actions.UltimateAction
         {
             m_View = Object.Instantiate(selfShieldData.SelfShieldViewPrefab, Actor.Transform);
             m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
-            
-            /*m_View.SetParticleSystem(selfShieldData.Duration);
-            m_View.PlayParticleSystem();
-            m_View.PlayAudio();*/
 
             EventBus<EffectEventData>.Invoke(new EffectEventData
             {
@@ -94,7 +78,6 @@ namespace BTG.Actions.UltimateAction
 
         protected virtual void DeInitVisual()
         {
-            // m_View.StopParticleSystem();
             Object.Destroy(m_View.gameObject);
             m_View = null;
         }
