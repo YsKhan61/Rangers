@@ -16,7 +16,6 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// In case of Multiplayer - Server side explosion creation event invoked by the projectile on collision.
         /// </summary>
-        /// <param name="position"></param>
         public override void CreateExplosion(Vector3 position)
         {
             EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData

@@ -12,8 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 948960abcc4dd77488c6400f53dc2b96, type: 3}
   m_Name: InvisibilityData
   m_EditorClassIdentifier: 
+  m_InstanceName: InvisibilityData
+  m_Guid: cbb01abaeb7b54c3bbb85e8751aa0e84
   m_Tag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c, type: 2}
   m_ChargeRate: 10
   m_Duration: 5
   m_InvisibilityViewPrefab: {fileID: 6390171717747272922, guid: 782109b464729f94e8df3bfe179effc1,
     type: 3}
+  m_InvisibleEffectTag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c,
+    type: 2}
+  m_VisibleEffectTag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c, type: 2}
+  m_VisibleDelay: 1

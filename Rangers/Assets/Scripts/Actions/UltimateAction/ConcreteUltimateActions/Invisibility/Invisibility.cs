@@ -1,7 +1,6 @@
 using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
-using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
 
@@ -13,7 +12,7 @@ namespace BTG.Actions.UltimateAction
 
         private InvisibilityDataSO m_InvisibilityData => ultimateActionData as InvisibilityDataSO;
 
-        private InvisibilityView m_View;
+        // private InvisibilityView m_View;
 
         public Invisibility(InvisibilityDataSO invisibilityData)
         {
@@ -22,10 +21,10 @@ namespace BTG.Actions.UltimateAction
 
         public override void Disable()
         {
-            if (m_View != null)
+            /*if (m_View != null)
             {
                 Object.Destroy(m_View.gameObject);
-            }
+            }*/
 
             base.Disable();
         }
@@ -38,24 +37,13 @@ namespace BTG.Actions.UltimateAction
             }
 
             ChangeState(State.Executing);
-            InitVisual();
-            
+
+            ReadyToHideVisual();
+
             RestartAfterDuration(m_InvisibilityData.Duration);
 
             return true;
         }
-
-        /*public override void NonServerExecute()
-        {
-            cts = new();
-            InitVisual();
-            _ = HelperMethods.InvokeAfterAsync(m_InvisibilityData.Duration,
-                () =>
-                {
-                    DeInitVisual1();
-                },
-                cts.Token);
-        }*/
 
         public override void Destroy()
         {
@@ -65,10 +53,19 @@ namespace BTG.Actions.UltimateAction
 
         protected override void Restart()
         {
-            m_View.PlayAppearPS();
-            m_View.PlayAppearAudio();
+            InvokeEffectEvent(m_InvisibilityData.VisibleEffectTag);
+            /*m_View.PlayAppearPS();
+            m_View.PlayAppearAudio();*/
 
-            _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => ResetAfterDelay(), cts.Token);
+            _ = HelperMethods.InvokeAfterAsync((int)m_InvisibilityData.VisibleDelay, () =>
+            {
+                ReadyToShowVisual();
+                RaiseUltimateActionExecutedEvent();
+                ChangeState(State.Charging);
+                Charge(-FULL_CHARGE);
+                AutoCharge();
+            }, 
+            cts.Token);
         }
 
         protected override void RaiseFullyChargedEvent()
@@ -76,28 +73,20 @@ namespace BTG.Actions.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        private void SpawnView(Transform parent)
+        /*private void SpawnView(Transform parent)
         {
             m_View = Object.Instantiate(m_InvisibilityData.InvisibilityViewPrefab, parent);
             m_View.transform.localPosition = Vector3.zero;
             m_View.transform.localRotation = Quaternion.identity;
         }
 
-        private void ResetAfterDelay()
+        private void DoAfterDelay()
         {
-            DeInitVisual2();
+            ReadyToShowVisual();
             RaiseUltimateActionExecutedEvent();
             ChangeState(State.Charging);
             Charge(-FULL_CHARGE);
             AutoCharge();
-        }
-
-        private void InitVisual()
-        {
-            SpawnView(Actor.Transform);
-            m_View.PlayDisappearPS();
-            m_View.PlayDisappearAudio();
-            Actor.ToggleActorVisibility(false);
         }
 
         private void DeInitVisual1()
@@ -106,16 +95,60 @@ namespace BTG.Actions.UltimateAction
             m_View.PlayAppearAudio();
 
             _ = HelperMethods.InvokeAfterAsync((int)m_View.AppearPSDuration, () => DeInitVisual2(), cts.Token);
+        }*/
+
+        private void ReadyToHideVisual()
+        {
+            /*SpawnView(Actor.Transform);
+            m_View.PlayDisappearPS();
+            m_View.PlayDisappearAudio();*/
+            InvokeEffectEvent(m_InvisibilityData.InvisibleEffectTag);
+            Actor.ToggleActorVisibility(false);
         }
 
-        private void DeInitVisual2()
+        private void ReadyToShowVisual()
         {
-            Object.Destroy(m_View.gameObject);
-            m_View = null;
+            /*Object.Destroy(m_View.gameObject);
+            m_View = null;*/
             Actor.ToggleActorVisibility(true);
 
+            /*if (Actor.IsPlayer)
+                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = 1f, ShakeDuration = 1f });*/
+            InvokeCameraShakeEvent();
+        }
+
+        private void InvokeEffectEvent(TagSO effectTag)
+        {
+            if (Actor.IsNetworkPlayer)
+            {
+                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+                {
+                    OwnerClientOnly = false,
+                    FollowNetworkObject = true,
+                    FollowNetowrkObjectId = Actor.NetworkObjectId,
+                    EffectTagNetworkGuid = effectTag.Guid.ToNetworkGuid(),
+                });
+            }
+            else
+            {
+                EventBus<EffectEventData>.Invoke(new EffectEventData
+                {
+                    EffectTag = effectTag,
+                    FollowTarget = Actor.Transform,
+                });
+            }
+        }
+
+        private void InvokeCameraShakeEvent()
+        {
             if (Actor.IsPlayer)
-                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = 1f, ShakeDuration = 1f });
+            {
+                Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData
+                {
+                    ShakeAmount = 1f,
+                    ShakeDuration = 1f
+                });
+            }
         }
     }
 }

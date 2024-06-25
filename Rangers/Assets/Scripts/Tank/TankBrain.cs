@@ -114,7 +114,6 @@ namespace BTG.Tank
             m_Model.State = TankState.Idle;
 
             OnTankStateChangedToIdle();
-            ToggleActorVisibility(true);
 
             Rigidbody.WakeUp();
             Rigidbody.velocity = Vector3.zero;

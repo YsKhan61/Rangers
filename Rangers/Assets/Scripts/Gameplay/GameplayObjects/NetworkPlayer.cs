@@ -174,6 +174,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted;
             m_EntityBrain.OnPlayerCameraShake += OnPlayerCameraShake;
+            m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
 
             CacheEntityDatas();
 
@@ -206,7 +207,7 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
+            // m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
 
             ConfigureEntityWithHealthController();
         }
@@ -252,26 +253,6 @@ namespace BTG.Gameplay.GameplayObjects
             InformOnEntityInitialized_ClientRpc(RegisteredEntityData.Guid.ToNetworkGuid());
         }
 
-        private void InformUltimateAssigned(TagSO tag)
-        {
-            InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
-        }
-
-        private void InformUltimateChargeUpdated(int chargeAmount)
-        {
-            InformUltimateChargeUpdated_ClientRpc(chargeAmount);
-        }
-
-        private void InformUltimateFullyCharged()
-        {
-            InformUltimateFullyCharged_ClientRpc();
-        }
-
-        private void InformUltimateActionExecuted()
-        {
-            InformUltimateActionExecuted_ClientRpc();
-        }
-
         [ClientRpc]
         private void InformOnEntityInitialized_ClientRpc(NetworkGuid ng)
         {
@@ -280,6 +261,11 @@ namespace BTG.Gameplay.GameplayObjects
                 m_NetworkEntityGuidState.EntityDataContainer.TryGetData(ng.ToGuid(), out EntityDataSO entityData);
                 m_PlayerService.PlayerStats.PlayerIcon.Value = entityData.Icon;
             }
+        }
+
+        private void InformUltimateAssigned(TagSO tag)
+        {
+            InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
         }
 
         [ClientRpc]
@@ -292,6 +278,11 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
+        private void InformUltimateChargeUpdated(int chargeAmount)
+        {
+            InformUltimateChargeUpdated_ClientRpc(chargeAmount);
+        }
+
         [ClientRpc]
         private void InformUltimateChargeUpdated_ClientRpc(int chargeAmount)
         {
@@ -301,6 +292,11 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
+        private void InformUltimateFullyCharged()
+        {
+            InformUltimateFullyCharged_ClientRpc();
+        }
+
         [ClientRpc]
         private void InformUltimateFullyCharged_ClientRpc()
         {
@@ -308,6 +304,11 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent();
             }
+        }
+
+        private void InformUltimateActionExecuted()
+        {
+            InformUltimateActionExecuted_ClientRpc();
         }
 
         [ClientRpc]
@@ -463,6 +464,7 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;
             m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted;
             m_EntityBrain.OnPlayerCameraShake -= OnPlayerCameraShake;
+            m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;
 
             if (m_EntityHealthController == null)
             {
@@ -474,6 +476,8 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void OnPlayerCameraShake(CameraShakeEventData data)
         {
+            if (!IsServer) return;
+
             OnPlayerCamShake_ClientRpc(new NetworkCamShakeEventData(data.ShakeAmount, data.ShakeDuration));
         }
 
@@ -482,6 +486,19 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (!IsOwner) return;
             EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = data.ShakeAmount, ShakeDuration = data.ShakeDuration });
+        }
+
+        private void OnEntityVisibilityToggled(bool show)
+        {
+            if (!IsServer) return;
+            OnEntityVisibilityToggled_ClientRpc(show);
+        }
+
+        [ClientRpc]
+        private void OnEntityVisibilityToggled_ClientRpc(bool show)
+        {
+            if (IsServer) return; // no need to do anything on the server as we already did it in EntityBrain after invoking event.
+            m_EntityBrain.ToggleActorVisibility(show);
         }
 
         internal struct NetworkCamShakeEventData : INetworkSerializable
