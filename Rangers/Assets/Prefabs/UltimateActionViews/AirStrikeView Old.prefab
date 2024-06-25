@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8090411631913802834}
   - component: {fileID: 673353474653047532}
   m_Layer: 0
-  m_Name: AirStrikeView
+  m_Name: AirStrikeView Old
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

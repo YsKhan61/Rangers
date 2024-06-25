@@ -6,11 +6,11 @@ namespace BTG.Actions.UltimateAction
 {
     public class SelfShieldView : MonoBehaviour, IDamageableView
     {
-        [SerializeField]
+        /*[SerializeField]
         private ParticleSystem[] m_ParticleSystems;
 
         [SerializeField]
-        private AudioSource m_AudioSource;
+        private AudioSource m_AudioSource;*/
 
         public Transform Transform => transform;
 
@@ -35,7 +35,7 @@ namespace BTG.Actions.UltimateAction
             // Do nothing for now.
         }
 
-        public void SetParticleSystem(float duration)
+        /*public void SetParticleSystem(float duration)
         {
             if (IsParticlesNull())
             {
@@ -77,9 +77,9 @@ namespace BTG.Actions.UltimateAction
         public void PlayAudio()
         {
             m_AudioSource.Play();
-        }
+        }*/
 
-        private void SetParticleSystemDuration(ParticleSystem particleSystem, float duration)
+        /*private void SetParticleSystemDuration(ParticleSystem particleSystem, float duration)
         {
             ParticleSystem.MainModule mainModule = particleSystem.main;
             mainModule.duration = duration;
@@ -95,6 +95,7 @@ namespace BTG.Actions.UltimateAction
             }
             
             return false;
-        }
+        }*/
     }
+
 }

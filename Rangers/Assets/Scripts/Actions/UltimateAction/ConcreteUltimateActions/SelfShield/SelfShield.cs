@@ -1,4 +1,5 @@
-using BTG.Utilities;
+using BTG.Events;
+using BTG.Utilities.EventBus;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
 
@@ -9,9 +10,9 @@ namespace BTG.Actions.UltimateAction
     {
         public override event System.Action OnFullyCharged;
 
-        private SelfShieldDataSO m_SelfShieldData => ultimateActionData as SelfShieldDataSO;
+        protected SelfShieldDataSO selfShieldData => ultimateActionData as SelfShieldDataSO;
 
-        private SelfShieldView m_View;
+        protected SelfShieldView m_View;
 
         public SelfShield(SelfShieldDataSO selfShieldData)
         {
@@ -37,7 +38,7 @@ namespace BTG.Actions.UltimateAction
 
             ChangeState(State.Executing);
             InitVisual();
-            RestartAfterDuration(m_SelfShieldData.Duration);
+            RestartAfterDuration(selfShieldData.Duration);
 
             return true;
         }
@@ -74,18 +75,26 @@ namespace BTG.Actions.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        private void InitVisual()
+        protected virtual void InitVisual()
         {
-            m_View = Object.Instantiate(m_SelfShieldData.SelfShieldViewPrefab, Actor.Transform);
+            m_View = Object.Instantiate(selfShieldData.SelfShieldViewPrefab, Actor.Transform);
             m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
-            m_View.SetParticleSystem(m_SelfShieldData.Duration);
+            
+            /*m_View.SetParticleSystem(selfShieldData.Duration);
             m_View.PlayParticleSystem();
-            m_View.PlayAudio();
+            m_View.PlayAudio();*/
+
+            EventBus<EffectEventData>.Invoke(new EffectEventData
+            {
+                FollowTarget = Actor.Transform,
+                EffectTag = selfShieldData.Tag,
+                Duration = selfShieldData.Duration
+            });
         }
 
-        private void DeInitVisual()
+        protected virtual void DeInitVisual()
         {
-            m_View.StopParticleSystem();
+            // m_View.StopParticleSystem();
             Object.Destroy(m_View.gameObject);
             m_View = null;
         }

@@ -2,6 +2,7 @@
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using Unity.Netcode;
+using Unity.Netcode.Components;
 using UnityEngine;
 
 
@@ -29,9 +30,25 @@ namespace BTG.Actions.UltimateAction
 
         protected override void SpawnConfigureLaunchProjectile(Transform targetTransform)
         {
-            NetworkAutoTargetView projectile = Object.Instantiate(autoTargetData.NetworkAutoTargetView, Actor.FirePoint.position, Actor.FirePoint.rotation);
-            projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
+            AutoTargetView projectile = Object.Instantiate(autoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
             
+            GameObject go = projectile.gameObject.CreateNetworkObject();
+            go.CreateNetworkTransform(new NetworkTransformSettings 
+            {
+                SyncPositionX = true,
+                SyncPositionY = true,
+                SyncPositionZ = true,
+
+                SyncRotAngleX = false,
+                SyncRotAngleY = false,
+                SyncRotAngleZ = false,
+
+                SyncScaleX = false, 
+                SyncScaleY = false, 
+                SyncScaleZ = false 
+            });
+
+            projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
             projectile.GetComponent<NetworkObject>().Spawn(true);
             projectile.Launch();
         }

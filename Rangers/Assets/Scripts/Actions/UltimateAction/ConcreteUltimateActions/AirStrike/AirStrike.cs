@@ -17,7 +17,6 @@ namespace BTG.Actions.UltimateAction
         private Collider[] m_OverlappingColliders = new Collider[10];
         private readonly List<IDamageableView> m_Damageables = new();
 
-        // Create constructor
         public AirStrike(AirStrikeDataSO airStrikeData)
         {
             ultimateActionData = airStrikeData;

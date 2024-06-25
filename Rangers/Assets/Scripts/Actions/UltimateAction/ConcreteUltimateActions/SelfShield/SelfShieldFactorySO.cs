@@ -1,4 +1,3 @@
-using BTG.Factory;
 using UnityEngine;
 
 
@@ -12,7 +11,7 @@ namespace BTG.Actions.UltimateAction
 
         public override IUltimateAction GetItem() => new SelfShield(m_SelfShieldData);
 
-        public override IUltimateAction GetNetworkItem() { return GetItem(); }
+        public override IUltimateAction GetNetworkItem() => new NetworkSelfShield(m_SelfShieldData);
     }
 }
 
