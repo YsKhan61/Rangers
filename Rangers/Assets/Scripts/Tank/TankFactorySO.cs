@@ -33,11 +33,7 @@ namespace BTG.Tank
         }
 
         public override IEntityBrain GetItem()
-        {/*
-            TankBrain brain = Pool.GetTank();
-            m_Resolver.Inject(brain);
-            return brain;*/
-
+        {
             TankModel model = new TankModel(m_Data);
             TankView view = Pool.GetTankView();
 
@@ -67,7 +63,7 @@ namespace BTG.Tank
 
             m_Resolver.Inject(brain);
             view.SetBrain(brain);
-            brain.CreatePrimaryAction();
+            brain.CreateNetworkPrimaryAction();
             brain.CreateNetworkUltimateAction();
             return brain;
         }
@@ -91,7 +87,7 @@ namespace BTG.Tank
             m_Resolver.Inject(brain);
 
             // create primary action
-            brain.CreateUltimateAction();
+            // brain.CreateUltimateAction();
             return brain;
         }
     }

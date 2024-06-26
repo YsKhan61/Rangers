@@ -13,9 +13,13 @@ namespace BTG.Actions.PrimaryAction
         TagSO m_Tag;
         public TagSO Tag => m_Tag;
 
-        [SerializeField]
+        [SerializeField, Tooltip("This prefab is used in single player")]
         TeslaBallView m_TeslaBallViewPrefab;
         public TeslaBallView TeslaBallViewPrefab => m_TeslaBallViewPrefab;
+
+        [SerializeField, Tooltip("This prefab is used in multiplayer")]
+        TeslaBallView m_NetworkTeslaBallViewPrefab;
+        public TeslaBallView NetworkTeslaBallViewPrefab => m_NetworkTeslaBallViewPrefab;
 
         [SerializeField]
         int m_ChargeTime;
@@ -51,11 +55,11 @@ namespace BTG.Actions.PrimaryAction
         public AudioClip ShotFiredClip => m_ShotFiredClip;
 
         [SerializeField, Tooltip("The charging sound clip")]
-        private AudioClip m_ChargingClip;
+        AudioClip m_ChargingClip;
         public AudioClip ChargingClip => m_ChargingClip;
 
         [SerializeField, Tooltip("The sound clip when bullet hits or other action views hit")]
-        private AudioClip m_ActionImpactclip;
+        AudioClip m_ActionImpactclip;
         public AudioClip ActionImpactClip => m_ActionImpactclip;
 
         [SerializeField]

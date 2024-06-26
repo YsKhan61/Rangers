@@ -1,5 +1,4 @@
-﻿using BTG.Factory;
-using UnityEngine;
+﻿using UnityEngine;
 using VContainer;
 
 namespace BTG.Actions.PrimaryAction
@@ -28,6 +27,20 @@ namespace BTG.Actions.PrimaryAction
             }
         }
 
+        NetworkTeslaBallPool m_NetworkPool;
+        NetworkTeslaBallPool NetworkPool
+        {
+            get
+            {
+                if (m_NetworkPool == null)
+                {
+                    m_NetworkPool = new NetworkTeslaBallPool(m_Data);
+                    m_Resolver.Inject(m_NetworkPool);
+                }
+                return m_NetworkPool;
+            }
+        }
+
         public override IPrimaryAction GetItem()
         {
             TeslaFiring tf = new (m_Data, Pool);
@@ -37,7 +50,9 @@ namespace BTG.Actions.PrimaryAction
 
         public override IPrimaryAction GetNetworkItem()
         {
-            return GetItem();
+            TeslaFiring tf = new (m_Data, NetworkPool);
+            m_Resolver.Inject(tf);
+            return tf;
         }
     }
 }

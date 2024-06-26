@@ -77,6 +77,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_IsCharging = true;
             PlayChargingClip();
+
             SpawnBall();
         }
 

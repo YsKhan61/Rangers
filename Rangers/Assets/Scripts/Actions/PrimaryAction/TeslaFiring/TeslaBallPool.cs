@@ -4,21 +4,22 @@ using VContainer;
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class  TeslaBallPool : GenericObjectPool<TeslaBallView>
+    public class  TeslaBallPool : MonoBehaviourObjectPool<TeslaBallView>
     {
-        private TeslaFiringDataSO m_Data;
+        protected TeslaFiringDataSO m_Data;
 
         [Inject]
-        private IObjectResolver m_Resolver;
+        protected IObjectResolver m_Resolver;
 
         public TeslaBallPool(TeslaFiringDataSO data)
         {
             m_Data = data;
         }
 
-        public TeslaBallView GetTeslaBall() => GetItem();
+        public virtual TeslaBallView GetTeslaBall() => GetItem();
 
-        public void ReturnTeslaBall(TeslaBallView teslaBall) => ReturnItem(teslaBall);
+        public virtual void ReturnTeslaBall(TeslaBallView teslaBall) => ReturnItem(teslaBall);
+
         protected override TeslaBallView CreateItem()
         {
             TeslaBallView view = Object.Instantiate(m_Data.TeslaBallViewPrefab, Container);

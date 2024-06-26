@@ -33,7 +33,7 @@ namespace BTG.Utilities
         /// <summary>
         /// Get an item from the pool
         /// </summary>
-        protected T GetItem()
+        protected virtual T GetItem()
         {
             if (Container == null)      
             {
@@ -81,7 +81,7 @@ namespace BTG.Utilities
         /// Return an item to the pool
         /// </summary>
         /// <param name="item"></param>
-        protected void ReturnItem(T item)
+        protected virtual void ReturnItem(T item)
         {
             if (item == null)
             {

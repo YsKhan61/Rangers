@@ -141,6 +141,19 @@ namespace BTG.Tank
             m_PrimaryAction.SetActor(this);
         }
 
+        public void CreateNetworkPrimaryAction(TagSO primaryTag = null)
+        {
+            if (primaryTag == null)
+                m_PrimaryAction = GetPrimaryActionFactory(m_Model.TankData.PrimaryTag).GetNetworkItem();
+            else
+                m_PrimaryAction = GetPrimaryActionFactory(primaryTag).GetNetworkItem();
+
+            if (m_PrimaryAction == null)
+                Debug.LogError("Primary action is null");
+
+            m_PrimaryAction.SetActor(this);
+        }
+
         
 
         /// <summary>

@@ -393,18 +393,30 @@ namespace BTG.Gameplay.GameplayObjects
 
         private void StartPrimaryAction()
         {
-            if (!mn_IsAlive.Value)
+            if (!IsOwner || !mn_IsAlive.Value)
                 return;
 
+            StartPrimaryAction_ServerRpc();
+        }
+
+        [ServerRpc]
+        private void StartPrimaryAction_ServerRpc()
+        {
             m_EntityBrain?.StartPrimaryAction();
         }
 
         private void StopPrimaryAction()
         {
-            if (!mn_IsAlive.Value)
+            if (!IsOwner || !mn_IsAlive.Value)
                 return;
 
-            m_EntityBrain?.StopPrimaryAction();
+            StopPrimaryAction_ServerRpc();
+        }
+
+        [ServerRpc]
+        private void StopPrimaryAction_ServerRpc()
+        {
+            m_EntityBrain?.StartPrimaryAction();
         }
 
         private void TryExecuteUltimate()
@@ -418,7 +430,7 @@ namespace BTG.Gameplay.GameplayObjects
         [ServerRpc]
         private void TryExecuteUltimate_ServerRpc()
         {
-            bool success = m_EntityBrain.TryExecuteUltimate();
+            m_EntityBrain.TryExecuteUltimate();
         }
 
         private void SubscribeToInputEvents()
