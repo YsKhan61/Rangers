@@ -14,32 +14,11 @@ namespace BTG.Actions.PrimaryAction
         TeslaFiringDataSO m_Data;
 
         TeslaBallPool m_Pool;
-        TeslaBallPool Pool
-        {
-            get
-            {
-                if (m_Pool == null)
-                {
-                    m_Pool = new TeslaBallPool(m_Data);
-                    m_Resolver.Inject(m_Pool);
-                }
-                return m_Pool;
-            }
-        }
+        TeslaBallPool Pool => m_Pool ??= InitializePool();
 
-        NetworkTeslaBallPool m_NetworkPool;
-        NetworkTeslaBallPool NetworkPool
-        {
-            get
-            {
-                if (m_NetworkPool == null)
-                {
-                    m_NetworkPool = new NetworkTeslaBallPool(m_Data);
-                    m_Resolver.Inject(m_NetworkPool);
-                }
-                return m_NetworkPool;
-            }
-        }
+        TeslaBallPool m_NetworkPool;
+        TeslaBallPool NetworkPool => m_NetworkPool ??= InitializeNetworkPool();
+        
 
         public override IPrimaryAction GetItem()
         {
@@ -53,6 +32,20 @@ namespace BTG.Actions.PrimaryAction
             TeslaFiring tf = new (m_Data, NetworkPool);
             m_Resolver.Inject(tf);
             return tf;
+        }
+
+        TeslaBallPool InitializePool()
+        {
+            var pool = new TeslaBallPool(m_Data.TeslaBallViewPrefab);
+            m_Resolver.Inject(pool);
+            return pool;
+        }
+
+        TeslaBallPool InitializeNetworkPool()
+        {
+            var pool = new TeslaBallPool(m_Data.NetworkTeslaBallViewPrefab);
+            m_Resolver.Inject(pool);
+            return pool;
         }
     }
 }
