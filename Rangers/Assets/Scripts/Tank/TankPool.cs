@@ -8,7 +8,7 @@ namespace BTG.Tank
     /// A pool for the TankBrain
     /// </summary>
 
-    public class TankPool : GenericObjectPool<TankView>
+    public class TankPool : MonoBehaviourObjectPool<TankView>
     {
         private TankView m_Prefab;
 
@@ -17,22 +17,12 @@ namespace BTG.Tank
         /// <summary>
         /// Get a tank from the pool
         /// </summary>
-        public TankView GetTankView()
-        {
-            TankView tank = GetItem();
-            tank.gameObject.SetActive(true);
-            return tank;
-        }
+        public TankView GetTankView() => GetItem();
 
         /// <summary>
         /// Returns the tank to the pool
         /// </summary>
-        public void ReturnTank(TankView tank)
-        {
-            ReturnItem(tank);
-            tank.gameObject.SetActive(false);
-            tank.transform.SetParent(Container);
-        }
+        public void ReturnTank(TankView tank) => ReturnItem(tank);
 
         protected override TankView CreateItem()
         {

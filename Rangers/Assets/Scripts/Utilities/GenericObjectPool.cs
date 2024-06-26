@@ -12,34 +12,13 @@ namespace BTG.Utilities
         /// <summary>
         /// List of pooled items
         /// </summary>
-        private List<PooledItem<T>> m_PooledItems = new List<PooledItem<T>>();
-
-        private Transform m_Container;
-        /// <summary>
-        /// The game object, under which all the pooled items will be parented when not in use
-        /// </summary>
-        public Transform Container
-        {
-            get
-            {
-                if (m_Container == null)
-                {
-                    CreateContainerAndClearPool();
-                }
-                return m_Container;
-            }
-        }
+        protected internal List<PooledItem<T>> m_PooledItems = new List<PooledItem<T>>();
 
         /// <summary>
         /// Get an item from the pool
         /// </summary>
         protected virtual T GetItem()
         {
-            if (Container == null)      
-            {
-                CreateContainerAndClearPool();
-            }
-
             if (m_PooledItems.Count > 0)
             {
                 PooledItem<T> item = m_PooledItems.Find(item => !item.isUsed);
@@ -62,14 +41,6 @@ namespace BTG.Utilities
             newItem.isUsed = true;
             m_PooledItems.Add(newItem);
             return newItem.Item;
-        }
-
-        private void CreateContainerAndClearPool()
-        {
-            // means the Container is destroyed by scene change or it was never created
-            // so create a new container and clear the pooled items as some game object of pooled items might be destroyed
-            m_Container = new GameObject("Container of " + typeof(T).Name).transform;
-            m_PooledItems.Clear();
         }
 
         /// <summary>

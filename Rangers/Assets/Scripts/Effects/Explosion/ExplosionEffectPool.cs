@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Effects
 {
-    public class ExplosionEffectPool : GenericObjectPool<ExplosionView>
+    public class ExplosionEffectPool : MonoBehaviourObjectPool<ExplosionView>
     {
         private ExplosionDataSO m_Data;
 
@@ -13,19 +13,10 @@ namespace BTG.Effects
             m_Data = data;
         }
 
-        public ExplosionView GetExplosionEffect()
-        {
-            ExplosionView view = GetItem();
-            view.gameObject.SetActive(true);
-            return view;
-        }
+        public ExplosionView GetExplosionEffect() => GetItem();
 
-        public void ReturnExplosionEffect(ExplosionView explosion)
-        {
-            explosion.gameObject.SetActive(false);
-            explosion.transform.SetParent(Container, Vector3.zero, Quaternion.identity);
-            ReturnItem(explosion);
-        }
+        public void ReturnExplosionEffect(ExplosionView explosion) => ReturnItem(explosion);
+
         protected override ExplosionView CreateItem()
         {
             ExplosionView view = new GameObject(m_Data.name).AddComponent<ExplosionView>();

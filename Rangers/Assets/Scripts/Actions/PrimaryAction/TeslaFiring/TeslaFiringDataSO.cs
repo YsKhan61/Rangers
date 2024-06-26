@@ -18,8 +18,8 @@ namespace BTG.Actions.PrimaryAction
         public TeslaBallView TeslaBallViewPrefab => m_TeslaBallViewPrefab;
 
         [SerializeField, Tooltip("This prefab is used in multiplayer")]
-        TeslaBallView m_NetworkTeslaBallViewPrefab;
-        public TeslaBallView NetworkTeslaBallViewPrefab => m_NetworkTeslaBallViewPrefab;
+        NetworkTeslaBallView m_NetworkTeslaBallViewPrefab;
+        public NetworkTeslaBallView NetworkTeslaBallViewPrefab => m_NetworkTeslaBallViewPrefab;
 
         [SerializeField]
         int m_ChargeTime;

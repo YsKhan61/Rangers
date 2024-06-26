@@ -6,15 +6,12 @@ namespace BTG.Actions.PrimaryAction
 {
     public class  TeslaBallPool : MonoBehaviourObjectPool<TeslaBallView>
     {
-        protected TeslaFiringDataSO m_Data;
+        private TeslaBallView m_Prefab;
 
         [Inject]
         protected IObjectResolver m_Resolver;
 
-        public TeslaBallPool(TeslaFiringDataSO data)
-        {
-            m_Data = data;
-        }
+        public TeslaBallPool(TeslaBallView prefab) => m_Prefab = prefab;
 
         public virtual TeslaBallView GetTeslaBall() => GetItem();
 
@@ -22,7 +19,7 @@ namespace BTG.Actions.PrimaryAction
 
         protected override TeslaBallView CreateItem()
         {
-            TeslaBallView view = Object.Instantiate(m_Data.TeslaBallViewPrefab, Container);
+            TeslaBallView view = Object.Instantiate(m_Prefab, Container);
             view.SetPool(this);
             m_Resolver.Inject(view);
             return view;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.AudioSystem
 {
-    public class AudioPool : GenericObjectPool<AudioView>
+    public class AudioPool : MonoBehaviourObjectPool<AudioView>
     {
         /// <summary>
         /// Get the audio view from the pool

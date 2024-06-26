@@ -1,28 +1,35 @@
-﻿using Unity.Netcode;
+﻿using BTG.Utilities;
 using UnityEngine;
+using VContainer;
+
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class NetworkTeslaBallPool : TeslaBallPool
+    public class NetworkTeslaBallPool : MonoBehaviourObjectPool<NetworkTeslaBallView>
     {
-        public NetworkTeslaBallPool(TeslaFiringDataSO data) : base(data) { }
+        private NetworkTeslaBallView m_Prefab;
 
-        public override TeslaBallView GetTeslaBall()
+        [Inject]
+        protected IObjectResolver m_Resolver;
+
+        public NetworkTeslaBallPool(NetworkTeslaBallView prefab) => m_Prefab = prefab;
+
+        public NetworkTeslaBallView GetTeslaBall()
         {
-            TeslaBallView item = base.GetTeslaBall();
-            item.GetComponent<NetworkObject>().Spawn();
+            NetworkTeslaBallView item = base.GetItem();
+            item.NetworkObject.Spawn(true);
             return item;
         }
 
-        public override void ReturnTeslaBall(TeslaBallView item)
+        public void ReturnTeslaBall(NetworkTeslaBallView item)
         {
-            item.GetComponent<NetworkObject>().Despawn(true);
-            base.ReturnTeslaBall(item);
+            item.NetworkObject.Despawn(true);
+            base.ReturnItem(item);
         }
 
-        protected override TeslaBallView CreateItem()
+        protected override NetworkTeslaBallView CreateItem()
         {
-            TeslaBallView view = Object.Instantiate(m_Data.NetworkTeslaBallViewPrefab, Container);
+            NetworkTeslaBallView view = Object.Instantiate(m_Prefab, Container);
             view.SetPool(this);
             m_Resolver.Inject(view);
             return view;

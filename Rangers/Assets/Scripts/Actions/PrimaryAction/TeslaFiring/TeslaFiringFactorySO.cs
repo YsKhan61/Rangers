@@ -16,9 +16,9 @@ namespace BTG.Actions.PrimaryAction
         TeslaBallPool m_Pool;
         TeslaBallPool Pool => m_Pool ??= InitializePool();
 
-        TeslaBallPool m_NetworkPool;
-        TeslaBallPool NetworkPool => m_NetworkPool ??= InitializeNetworkPool();
-        
+        NetworkTeslaBallPool m_NetworkPool;
+        NetworkTeslaBallPool NetworkPool => m_NetworkPool ??= InitializeNetworkPool();
+
 
         public override IPrimaryAction GetItem()
         {
@@ -29,7 +29,7 @@ namespace BTG.Actions.PrimaryAction
 
         public override IPrimaryAction GetNetworkItem()
         {
-            TeslaFiring tf = new (m_Data, NetworkPool);
+            NetworkTeslaFiring tf = new(m_Data, NetworkPool);
             m_Resolver.Inject(tf);
             return tf;
         }
@@ -41,9 +41,9 @@ namespace BTG.Actions.PrimaryAction
             return pool;
         }
 
-        TeslaBallPool InitializeNetworkPool()
+        NetworkTeslaBallPool InitializeNetworkPool()
         {
-            var pool = new TeslaBallPool(m_Data.NetworkTeslaBallViewPrefab);
+            var pool = new NetworkTeslaBallPool(m_Data.NetworkTeslaBallViewPrefab);
             m_Resolver.Inject(pool);
             return pool;
         }

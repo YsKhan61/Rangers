@@ -19,7 +19,7 @@ namespace BTG.Enemy
 
         protected override EnemyController CreateItem()
         {
-            EnemyView view = Object.Instantiate(m_Data.EnemyPrefab, Container);
+            EnemyView view = Object.Instantiate(m_Data.EnemyPrefab);
             NavMeshAgent agent = (NavMeshAgent)view.gameObject.GetOrAddComponent<NavMeshAgent>();
             EnemyTankStateMachine stateMachine = new EnemyTankStateMachine();
 

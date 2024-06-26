@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Effects
 {
-    public class RagdollPool : GenericObjectPool<RagdollView>
+    public class RagdollPool : MonoBehaviourObjectPool<RagdollView>
     {
         private RagdollDataSO m_Data;
 

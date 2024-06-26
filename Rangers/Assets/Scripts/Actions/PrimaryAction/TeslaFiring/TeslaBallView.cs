@@ -35,16 +35,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void OnTriggerEnter(Collider other) => OnHitSomething(other);
 
-        private void OnHitSomething(Collider other)
-        {
-            if (other.TryGetComponent(out IDamageableView damageable))
-            {
-                damageable.Damage(m_Damage);
-            }
-
-            DoExplosionAudio();
-            Reset();
-        }
+        
 
         /// <summary>
         /// Set the owner of the tesla ball
@@ -72,6 +63,31 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         public void SetDamage(int damage) => m_Damage = damage;
 
+        public virtual void Show()
+        {
+            gameObject.SetActive(true);
+            m_ParticleSytem.Play();
+            m_Collider.enabled = true;
+        }
+
+        protected virtual void Hide()
+        {
+            m_ParticleSytem.Stop();
+            gameObject.SetActive(false);
+            m_Collider.enabled = false;
+        }
+
+        private void OnHitSomething(Collider other)
+        {
+            if (other.TryGetComponent(out IDamageableView damageable))
+            {
+                damageable.Damage(m_Damage);
+            }
+
+            DoExplosionAudio();
+            Reset();
+        }
+
         private void DoExplosionAudio()
         {
             m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
@@ -89,19 +105,7 @@ namespace BTG.Actions.PrimaryAction
             m_Pool.ReturnTeslaBall(this);
         }
 
-        public void Show()
-        {
-            gameObject.SetActive(true);
-            m_ParticleSytem.Play();
-            m_Collider.enabled = true;
-        }
-
-        private void Hide()
-        {
-            m_ParticleSytem.Stop();
-            gameObject.SetActive(false);
-            m_Collider.enabled = false;
-        }
+        
 
 #if UNITY_EDITOR
 
@@ -110,5 +114,8 @@ namespace BTG.Actions.PrimaryAction
 
 #endif
     }
+
+
+
 }
 
