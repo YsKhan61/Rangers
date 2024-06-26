@@ -1,6 +1,6 @@
-using BTG.Factory;
 using UnityEngine;
 using VContainer;
+
 
 namespace BTG.Actions.PrimaryAction
 {
@@ -14,18 +14,10 @@ namespace BTG.Actions.PrimaryAction
         ChargedFiringDataSO m_Data;
 
         ProjectilePool m_Pool;
-        ProjectilePool Pool
-        {
-            get
-            {
-                if (m_Pool == null)
-                {
-                    m_Pool = new ProjectilePool(m_Data);
-                    m_Resolver.Inject(m_Pool);
-                }
-                return m_Pool;
-            }
-        }
+        ProjectilePool Pool => m_Pool ??= InitializePool();
+
+        NetworkProjectilePool m_NetworkPool;
+        NetworkProjectilePool NetworkPool => m_NetworkPool ??= InitializeNetworkPool();
 
         public override IPrimaryAction GetItem()
         {
@@ -36,7 +28,23 @@ namespace BTG.Actions.PrimaryAction
 
         public override IPrimaryAction GetNetworkItem()
         {
-            return GetItem();
+            NetworkChargedFiring ncf = new (m_Data, NetworkPool);
+            m_Resolver.Inject(ncf);
+            return ncf;
+        }
+
+        ProjectilePool InitializePool()
+        {
+            var pool = new ProjectilePool(m_Data.ViewPrefab);
+            m_Resolver.Inject(pool);
+            return pool;
+        }
+
+        NetworkProjectilePool InitializeNetworkPool()
+        {
+            var pool = new NetworkProjectilePool(m_Data.NetworkViewPrefab);
+            m_Resolver.Inject(pool);
+            return pool;
         }
     }
 }

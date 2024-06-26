@@ -23,10 +23,9 @@ namespace BTG.Actions.PrimaryAction
             NetworkTeslaBallView view = Object.Instantiate(m_Prefab);
             view.SetPool(this);
             m_Resolver.Inject(view);
+            view.NetworkObject.Spawn(true);
             return view;
         }
-
-        public void ClearPool() => m_PooledItems.Clear();
     }
 }
 

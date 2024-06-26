@@ -15,6 +15,8 @@ MonoBehaviour:
   m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
   m_ViewPrefab: {fileID: 2128233426004463209, guid: 736c872dc6fd53c4cb7ca160774fb574,
     type: 3}
+  m_NetworkViewPrefab: {fileID: -1186482412257946698, guid: ea13509cb13d61b408d8d52037e5d3c5,
+    type: 3}
   m_ChargeTime: 4
   m_MinInitialSpeed: 10
   m_MaxInitialSpeed: 60

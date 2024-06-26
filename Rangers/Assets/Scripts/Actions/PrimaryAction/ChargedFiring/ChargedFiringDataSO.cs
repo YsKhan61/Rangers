@@ -13,9 +13,13 @@ namespace BTG.Actions.PrimaryAction
         TagSO m_Tag;
         public TagSO Tag => m_Tag;
 
-        [SerializeField, FormerlySerializedAs("m_ProjectileViewPrefab")]
+        [SerializeField, Tooltip("This view is for singleplayer")]
         ProjectileView m_ViewPrefab;
         public ProjectileView ViewPrefab => m_ViewPrefab;
+
+        [SerializeField, Tooltip("The view for multiplayer")]
+        NetworkProjectileView m_NetworkViewPrefab;
+        public NetworkProjectileView NetworkViewPrefab => m_NetworkViewPrefab;
 
         [SerializeField]
         int m_ChargeTime;

@@ -69,7 +69,6 @@ namespace BTG.Actions.PrimaryAction
         [ClientRpc]
         private void Show_ClientRpc()
         {
-            // gameObject.SetActive(true);
             m_ParticleSytem.Play();
             
             if (IsServer)
@@ -87,7 +86,6 @@ namespace BTG.Actions.PrimaryAction
         private void Hide_ClientRpc()
         {
             m_ParticleSytem.Stop();
-            // gameObject.SetActive(false);
             
             if (IsServer)
                 m_Collider.enabled = false;
@@ -102,7 +100,8 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            DoExplosionAudio();
+            // DoExplosionEffect();
+            // DoExplosionAudio;
             Reset();
         }
 
@@ -117,7 +116,6 @@ namespace BTG.Actions.PrimaryAction
             m_TeslaFiring = null;
 
             Hide();
-            NetworkObject.Despawn(false);
             m_Pool.ReturnTeslaBall(this);
         }
     }

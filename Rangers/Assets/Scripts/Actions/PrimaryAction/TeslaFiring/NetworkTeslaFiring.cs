@@ -69,7 +69,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            PlayChargingClip();
+            // PlayChargingClip();
 
             SpawnBall();
         }
@@ -87,7 +87,6 @@ namespace BTG.Actions.PrimaryAction
 
             if (m_Actor.IsPlayer)
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
-            // EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
             // PlayShotFiredClip();
             ResetCharging();
@@ -159,7 +158,6 @@ namespace BTG.Actions.PrimaryAction
             m_BallInCharge.SetTeslaFiring(this);
             m_BallInCharge.transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
             m_BallInCharge.transform.localScale = Vector3.one * m_Data.MinTeslaBallScale;
-            m_BallInCharge.NetworkObject.Spawn();
             m_BallInCharge.Show();
         }
 

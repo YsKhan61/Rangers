@@ -1,4 +1,4 @@
-using BTG.AudioSystem;
+﻿using BTG.AudioSystem;
 using BTG.Events;
 using BTG.Utilities;
 using System;
@@ -9,10 +9,7 @@ using VContainer;
 
 namespace BTG.Actions.PrimaryAction
 {
-    /// <summary>
-    /// Firing happens by charging the projectile and releasing it.
-    /// </summary>
-    public class ChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
+    public class NetworkChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
@@ -22,7 +19,7 @@ namespace BTG.Actions.PrimaryAction
         private AudioPool m_AudioPool;
 
         private IPrimaryActor m_Actor;
-        private ProjectilePool m_ProjectilePool;
+        private NetworkProjectilePool m_ProjectilePool;
         private ChargedFiringDataSO m_Data;
         private AudioSource m_FiringAudioSource;
         private CancellationTokenSource m_Cts;
@@ -31,7 +28,7 @@ namespace BTG.Actions.PrimaryAction
         private bool m_IsCharging;
         private float m_ChargeAmount;
 
-        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool)
+        public NetworkChargedFiring(ChargedFiringDataSO data, NetworkProjectilePool projectilePool)
         {
             m_Data = data;
             m_ProjectilePool = projectilePool;
@@ -102,7 +99,6 @@ namespace BTG.Actions.PrimaryAction
 
             if (m_Actor.IsPlayer)
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
-                // EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
             OnPrimaryActionExecuted?.Invoke();
 
@@ -116,7 +112,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_Cts = new CancellationTokenSource();
 
-            _ = HelperMethods.InvokeAfterAsync(stopTime , () =>
+            _ = HelperMethods.InvokeAfterAsync(stopTime, () =>
             {
                 StopAction();
             }, m_Cts.Token);
@@ -155,15 +151,15 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnProjectile(out ProjectileController projectile)
         {
             projectile = CreateProjectile();
-            projectile.Init();
             projectile.Transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
             projectile.SetOwnerOfView(m_Actor.Transform);
+            projectile.Init();
             projectile.ShowView();
         }
 
         private ProjectileController CreateProjectile()
         {
-            ProjectileView view = m_ProjectilePool.GetProjectile();
+            NetworkProjectileView view = m_ProjectilePool.GetProjectile();
             ProjectileController pc = new ProjectileController(m_Data, view);
             view.SetController(pc);
             pc.SetAudioPool(m_AudioPool);

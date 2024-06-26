@@ -1,30 +1,25 @@
 using BTG.Utilities;
-using VContainer;
+using UnityEngine;
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class ProjectilePool : GenericObjectPool<ProjectileController>
+
+
+    public class ProjectilePool : GenericObjectPool<ProjectileView>
     {
-        private ChargedFiringDataSO m_ProjectileData;
+        private ProjectileView m_Prefab;
 
-        [Inject]
-        private IObjectResolver m_Resolver;
+        public ProjectilePool(ProjectileView prefab) => m_Prefab = prefab;
 
-        public ProjectilePool(ChargedFiringDataSO projectileData)
+        public ProjectileView GetProjectile() => GetItem();
+
+        public void ReturnProjectile(ProjectileView projectile) => ReturnItem(projectile);
+
+        protected override ProjectileView CreateItem()
         {
-            m_ProjectileData = projectileData;
-        }
-
-        public ProjectileController GetProjectile() => GetItem();
-
-
-        public void ReturnProjectile(ProjectileController projectile) => ReturnItem(projectile);
-
-        protected override ProjectileController CreateItem()
-        {
-            ProjectileController pc = new (m_ProjectileData, this);
-            m_Resolver.Inject(pc);
-            return pc;
+            ProjectileView view = Object.Instantiate(m_Prefab);
+            view.SetPool(this);
+            return view;
         }
     }
 }

@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 972334730
+  GlobalObjectIdHash: 286022578
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -136,7 +136,7 @@ MonoBehaviour:
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
   InLocalSpace: 0
-  Interpolate: 1
+  Interpolate: 0
   SlerpPosition: 0
 --- !u!114 &4301871373903670722
 MonoBehaviour:
@@ -165,7 +165,6 @@ MonoBehaviour:
   m_Rigidbody: {fileID: 1717063421127572835}
   m_ParticleSytem: {fileID: 3334966660481239480}
   m_Collider: {fileID: 8475186318282147916}
-  m_NetworkObject: {fileID: 2188144250535709270}
 --- !u!1001 &8615362466560781761
 PrefabInstance:
   m_ObjectHideFlags: 0

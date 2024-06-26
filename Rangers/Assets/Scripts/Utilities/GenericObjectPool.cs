@@ -14,6 +14,8 @@ namespace BTG.Utilities
         /// </summary>
         protected internal List<PooledItem<T>> m_PooledItems = new List<PooledItem<T>>();
 
+        public void ClearPool() => m_PooledItems.Clear();
+
         /// <summary>
         /// Get an item from the pool
         /// </summary>
