@@ -1,4 +1,5 @@
 using BTG.Events;
+using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using UnityEngine;
 using State = BTG.Actions.UltimateAction.IUltimateAction.State;
@@ -63,23 +64,41 @@ namespace BTG.Actions.UltimateAction
             OnFullyCharged?.Invoke();
         }
 
-        protected virtual void InitVisual()
+        private void InitVisual()
         {
             m_View = Object.Instantiate(selfShieldData.SelfShieldViewPrefab, Actor.Transform);
             m_View.SetOwner(Actor.Transform, Actor.IsPlayer);
 
-            EventBus<EffectEventData>.Invoke(new EffectEventData
-            {
-                FollowTarget = Actor.Transform,
-                EffectTag = selfShieldData.Tag,
-                Duration = selfShieldData.Duration
-            });
+            InvokeEffectEvent();
         }
 
-        protected virtual void DeInitVisual()
+        private void DeInitVisual()
         {
             Object.Destroy(m_View.gameObject);
             m_View = null;
+        }
+
+        private void InvokeEffectEvent()
+        {
+            if (Actor.IsNetworkPlayer)
+            {
+                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+                {
+                    FollowNetworkObject = true,
+                    FollowNetowrkObjectId = Actor.NetworkObjectId,
+                    EffectTagNetworkGuid = selfShieldData.Tag.Guid.ToNetworkGuid(),
+                    Duration = selfShieldData.Duration
+                });
+            }
+            else
+            {
+                EventBus<EffectEventData>.Invoke(new EffectEventData
+                {
+                    FollowTarget = Actor.Transform,
+                    EffectTag = selfShieldData.Tag,
+                    Duration = selfShieldData.Duration
+                });
+            }
         }
     }
 }

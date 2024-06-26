@@ -13,9 +13,5 @@ namespace BTG.Actions.UltimateAction
         [SerializeField, Tooltip("This view is for single player mode.")] 
         private SelfShieldView m_SelfShieldViewPrefab;
         public SelfShieldView SelfShieldViewPrefab => m_SelfShieldViewPrefab;
-
-        [SerializeField, Tooltip("This view is for multiplayer mode.")]
-        private SelfShieldView m_NetworkSelfShieldViewPrefab;
-        public SelfShieldView NetworkSelfShieldViewPrefab => m_NetworkSelfShieldViewPrefab;
     }
 }
