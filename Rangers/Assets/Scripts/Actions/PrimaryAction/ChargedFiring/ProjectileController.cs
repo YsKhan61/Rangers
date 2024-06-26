@@ -35,6 +35,8 @@ namespace BTG.Actions.PrimaryAction
         public void ShowView() => m_View.Show();
 
         public void SetOwnerOfView(Transform owner) => m_View.SetOwner(owner);
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => 
+            m_View.SetPositionAndRotation(position, rotation);
 
         public void Destroy()
         {

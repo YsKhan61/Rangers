@@ -1,16 +1,15 @@
-﻿using BTG.Utilities;
-using Unity.Netcode;
+﻿using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
 
 namespace BTG.Actions.PrimaryAction
 {
-    [RequireComponent(typeof(NetworkObject), typeof(Rigidbody), typeof(NetworkRigidbody))]
+    [RequireComponent(typeof(NetworkTransform))]
     public class NetworkProjectileView : NetworkBehaviour, IProjectileView
     {
         [SerializeField]
-        GameObject m_Graphics;
+        GameObject[] m_Graphics;
 
         [SerializeField]
         Rigidbody m_Rigidbody;
@@ -19,11 +18,15 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField] 
         Collider m_Collider;
 
+        [SerializeField]
+        NetworkTransform m_NetworkTransform;
+
         public Transform Owner { get; private set; }
         public Transform Transform => transform;
 
         private ProjectileController m_Controller;
         private NetworkProjectilePool m_Pool;
+
 
 
         /// <summary>
@@ -43,6 +46,11 @@ namespace BTG.Actions.PrimaryAction
         public void SetController(ProjectileController controller) => m_Controller = controller;
         public void SetPool(NetworkProjectilePool pool) => m_Pool = pool;
         public void SetOwner(Transform owner) => Owner = owner;
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
+        {
+            if (!IsServer) return;
+            m_NetworkTransform.Teleport(position, rotation, Vector3.one);
+        }
 
         public void ReturnToPool()
         {
@@ -60,7 +68,7 @@ namespace BTG.Actions.PrimaryAction
         [ClientRpc]
         private void Show_ClientRpc()
         {
-            m_Graphics.SetActive(true);
+            ToggleGraphics(true);
 
             if (IsServer)
                 m_Collider.enabled = true;
@@ -75,10 +83,21 @@ namespace BTG.Actions.PrimaryAction
         [ClientRpc]
         private void Hide_ClientRpc()
         {
-            m_Graphics.SetActive(false);
+            ToggleGraphics(false);
 
             if (IsServer)
                 m_Collider.enabled = false;
+        }
+
+        private void ToggleGraphics(bool show)
+        {
+            if (m_Graphics == null)
+                return;
+
+            foreach (var item in m_Graphics)
+            {
+                item.SetActive(show);
+            }
         }
 
         private void InvokeEffectEvents()

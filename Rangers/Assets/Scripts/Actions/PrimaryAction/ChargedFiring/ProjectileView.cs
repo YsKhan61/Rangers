@@ -38,8 +38,8 @@ namespace BTG.Actions.PrimaryAction
 
         public void SetPool(ProjectilePool pool) => m_Pool = pool;
         public void SetController(ProjectileController controller) => m_Controller = controller;
-
         public void SetOwner(Transform owner) => Owner = owner;
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => transform.SetPositionAndRotation(position, rotation);
 
         public void Show() => gameObject.SetActive(true);
         
