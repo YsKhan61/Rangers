@@ -25,10 +25,9 @@ namespace BTG.Actions.PrimaryAction
         private AudioPool m_AudioPool;*/
 
         private NetworkTeslaBallPool m_Pool;
-
         private NetworkTeslaFiring m_TeslaFiring;
-
         private int m_Damage;
+
 
         private void OnCollisionEnter(Collision collision) => OnHitSomething(collision.collider);
 
@@ -62,7 +61,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Show()
         {
-            if (IsServer) return;
+            if (!IsServer) return;
 
             Show_ClientRpc();
         }
@@ -70,12 +69,14 @@ namespace BTG.Actions.PrimaryAction
         [ClientRpc]
         private void Show_ClientRpc()
         {
-            gameObject.SetActive(true);
+            // gameObject.SetActive(true);
             m_ParticleSytem.Play();
-            m_Collider.enabled = true;
+            
+            if (IsServer)
+                m_Collider.enabled = true;
         }
 
-        public void Hide()
+        private void Hide()
         {
             if (!IsServer) return;
 
@@ -86,12 +87,16 @@ namespace BTG.Actions.PrimaryAction
         private void Hide_ClientRpc()
         {
             m_ParticleSytem.Stop();
-            gameObject.SetActive(false);
-            m_Collider.enabled = false;
+            // gameObject.SetActive(false);
+            
+            if (IsServer)
+                m_Collider.enabled = false;
         }
 
         private void OnHitSomething(Collider other)
         {
+            Debug.Log("Hit something: " + other.gameObject.name);
+
             if (other.TryGetComponent(out IDamageableView damageable))
             {
                 damageable.Damage(m_Damage);
@@ -109,12 +114,10 @@ namespace BTG.Actions.PrimaryAction
         private void Reset()
         {
             m_Rigidbody.Sleep();
-            transform.position = Vector3.zero;
-            transform.rotation = Quaternion.identity;
             m_TeslaFiring = null;
 
             Hide();
-
+            NetworkObject.Despawn(false);
             m_Pool.ReturnTeslaBall(this);
         }
     }

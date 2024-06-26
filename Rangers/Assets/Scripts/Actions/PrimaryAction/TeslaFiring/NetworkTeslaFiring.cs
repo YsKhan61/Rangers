@@ -2,7 +2,7 @@
 using BTG.Utilities;
 using System.Threading;
 using UnityEngine;
-using VContainer;
+
 
 namespace BTG.Actions.PrimaryAction
 {
@@ -24,7 +24,6 @@ namespace BTG.Actions.PrimaryAction
         private bool m_IsEnabled;
         private bool m_IsCharging;
         private float m_ChargeAmount;
-
 
 
         public NetworkTeslaFiring(TeslaFiringDataSO data, NetworkTeslaBallPool pool)
@@ -58,7 +57,7 @@ namespace BTG.Actions.PrimaryAction
             // DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
-
+            m_TeslaBallPool.ClearPool();
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
@@ -108,7 +107,6 @@ namespace BTG.Actions.PrimaryAction
 
         private void SetDamageToBallAndShoot()
         {
-            m_BallInCharge.transform.SetParent(m_TeslaBallPool.Container);
             m_BallInCharge.Rigidbody.isKinematic = false;
             CalculateBallDamage(out int damage);
             m_BallInCharge?.SetDamage(damage);
@@ -129,6 +127,9 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
+            m_BallInCharge.transform.position = m_Actor.FirePoint.position;
+            m_BallInCharge.transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
+            
             // UpdateChargingClipPitch(m_ChargeAmount);
         }
 
@@ -152,14 +153,13 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnBall()
         {
             m_BallInCharge = m_TeslaBallPool.GetTeslaBall();
-            m_BallInCharge.NetworkObject.Spawn(true);
             m_BallInCharge.Rigidbody.WakeUp();
             m_BallInCharge.Rigidbody.isKinematic = true;
             m_BallInCharge.SetOwner(m_Actor.Transform);
             m_BallInCharge.SetTeslaFiring(this);
-            m_BallInCharge.transform.SetParent(m_Actor.FirePoint);
-            m_BallInCharge.transform.position = m_Actor.FirePoint.position;
-            m_BallInCharge.transform.rotation = m_Actor.FirePoint.rotation;
+            m_BallInCharge.transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
+            m_BallInCharge.transform.localScale = Vector3.one * m_Data.MinTeslaBallScale;
+            m_BallInCharge.NetworkObject.Spawn();
             m_BallInCharge.Show();
         }
 

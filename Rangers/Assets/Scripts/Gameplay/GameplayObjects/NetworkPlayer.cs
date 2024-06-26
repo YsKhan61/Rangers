@@ -416,7 +416,7 @@ namespace BTG.Gameplay.GameplayObjects
         [ServerRpc]
         private void StopPrimaryAction_ServerRpc()
         {
-            m_EntityBrain?.StartPrimaryAction();
+            m_EntityBrain?.StopPrimaryAction();
         }
 
         private void TryExecuteUltimate()

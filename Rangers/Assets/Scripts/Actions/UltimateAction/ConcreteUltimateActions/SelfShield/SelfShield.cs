@@ -47,6 +47,7 @@ namespace BTG.Actions.UltimateAction
         public override void Destroy()
         {
             OnFullyCharged = null;
+            DeInitVisual();
             base.Destroy();
         }
 

@@ -5,7 +5,7 @@ using VContainer;
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class NetworkTeslaBallPool : MonoBehaviourObjectPool<NetworkTeslaBallView>
+    public class NetworkTeslaBallPool : GenericObjectPool<NetworkTeslaBallView>
     {
         private NetworkTeslaBallView m_Prefab;
 
@@ -14,26 +14,19 @@ namespace BTG.Actions.PrimaryAction
 
         public NetworkTeslaBallPool(NetworkTeslaBallView prefab) => m_Prefab = prefab;
 
-        public NetworkTeslaBallView GetTeslaBall()
-        {
-            NetworkTeslaBallView item = base.GetItem();
-            item.NetworkObject.Spawn(true);
-            return item;
-        }
+        public NetworkTeslaBallView GetTeslaBall() => GetItem();
 
-        public void ReturnTeslaBall(NetworkTeslaBallView item)
-        {
-            item.NetworkObject.Despawn(true);
-            base.ReturnItem(item);
-        }
+        public void ReturnTeslaBall(NetworkTeslaBallView item) => ReturnItem(item);
 
         protected override NetworkTeslaBallView CreateItem()
         {
-            NetworkTeslaBallView view = Object.Instantiate(m_Prefab, Container);
+            NetworkTeslaBallView view = Object.Instantiate(m_Prefab);
             view.SetPool(this);
             m_Resolver.Inject(view);
             return view;
         }
+
+        public void ClearPool() => m_PooledItems.Clear();
     }
 }
 
