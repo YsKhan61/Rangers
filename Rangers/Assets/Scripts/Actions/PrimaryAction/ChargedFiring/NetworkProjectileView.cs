@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using System.Collections;
+using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
 
@@ -62,6 +63,12 @@ namespace BTG.Actions.PrimaryAction
         public void Show()
         {
             if (!IsServer) return;
+            StartCoroutine(StartWithDelay());
+        }
+
+        IEnumerator StartWithDelay()
+        {
+            yield return new WaitForSeconds(0.1f);
             Show_ClientRpc();
         }
 

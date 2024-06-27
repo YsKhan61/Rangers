@@ -3,6 +3,7 @@ using BTG.Events;
 using BTG.Utilities;
 using System;
 using System.Threading;
+using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 
@@ -151,8 +152,8 @@ namespace BTG.Actions.PrimaryAction
         private void SpawnProjectile(out ProjectileController projectile)
         {
             projectile = CreateProjectile();
+            projectile.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
             projectile.Init();
-            projectile.Transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
             projectile.SetOwnerOfView(m_Actor.Transform);
             projectile.ShowView();
         }
