@@ -318,8 +318,13 @@ namespace BTG.Gameplay.GameplayObjects
         /// </summary>
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
         {
-            if (IsServer)
-                mn_Health.Value = currentHealth;
+            if (!IsServer) return;
+
+            mn_Health.Value = currentHealth;
+            if (currentHealth <= 0)
+            {
+                // The entity is dead
+            }
         }
 
         private void OnPlayerHealthUpdateInNetwork(int prevHealth, int newHealth)
