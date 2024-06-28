@@ -38,7 +38,7 @@ namespace BTG.Gameplay.GameState
         private List<Transform> m_PlayerSpawnPointsList = null;
 
         [Inject]
-        private IObjectResolver m_ObjectResolver;
+        private SceneNameListSO m_SceneNameList;
 
 
         protected override void Awake()
@@ -114,14 +114,13 @@ namespace BTG.Gameplay.GameState
             if (clientId == NetworkManager.Singleton.LocalClientId)
             {
                 // This client (which is a server) disconnects. We should go back to the character select screen.
-                SceneLoaderWrapper.Instance.LoadScene("CharSelect", useNetworkSceneManager: true);
+                SceneLoaderWrapper.Instance.LoadScene(m_SceneNameList.CharSelectScene, useNetworkSceneManager: true);
             }
         }
 
         void SpawnNetworkPlayerForEachClients(ulong clientId, bool lateJoin)
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
-
             NetworkObject newPlayer = Instantiate(m_PlayerPrefab);
 
             var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);

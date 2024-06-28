@@ -231,8 +231,8 @@ namespace BTG.Tank
             m_Model.Reset();
             m_Pool.ReturnTank(m_View);
 
-            OnEntityInitialized = null;
-            OnEntityVisibilityToggled = null;
+            // OnEntityInitialized = null;
+            // OnEntityVisibilityToggled = null;
         }
 
         public void ToggleActorVisibility(bool value)

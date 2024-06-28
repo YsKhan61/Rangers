@@ -36,7 +36,6 @@ namespace BTG.Actions.PrimaryAction
         private void OnCollisionEnter(Collision collision)
         {
             m_Controller.OnHitSomething(collision.collider);
-            InvokeEffectEvents();
         }
 
         private void OnTriggerEnter(Collider other)
@@ -105,11 +104,6 @@ namespace BTG.Actions.PrimaryAction
             {
                 item.SetActive(show);
             }
-        }
-
-        private void InvokeEffectEvents()
-        {
-            // Invoke the effect events such as explosion effect and audio
         }
     }
 }

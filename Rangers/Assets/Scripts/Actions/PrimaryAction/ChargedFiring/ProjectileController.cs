@@ -1,6 +1,8 @@
 using BTG.AudioSystem;
 using BTG.Effects;
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System.Threading;
 using UnityEngine;
 
@@ -14,6 +16,7 @@ namespace BTG.Actions.PrimaryAction
         private IProjectileView m_View;
         private CancellationTokenSource m_Cts;
         public Transform Transform { get; private set; }
+        public IPrimaryActor Actor { get; private set; }
 
         public ProjectileController(ChargedFiringDataSO projectileData, IProjectileView view)
         {
@@ -31,12 +34,11 @@ namespace BTG.Actions.PrimaryAction
         }
 
         public void SetAudioPool(AudioPool audioPool) => m_AudioPool = audioPool;
-
         public void ShowView() => m_View.Show();
-
         public void SetOwnerOfView(Transform owner) => m_View.SetOwner(owner);
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => 
             m_View.SetPositionAndRotation(position, rotation);
+        public void SetActor(IPrimaryActor actor) => Actor = actor;
 
         public void Destroy()
         {
@@ -59,14 +61,12 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Data.Damage);
             }
 
+            InvokeEffectEvent();
             // DoExplosionAudio();
             ResetProjectile();
         }
 
-        /*private void DoExplosionAudio()
-        {
-            m_AudioPool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
-        }*/
+        
 
         private void ResetProjectile()
         {
@@ -79,6 +79,33 @@ namespace BTG.Actions.PrimaryAction
 
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
+
+        private void InvokeEffectEvent()
+        {
+            if (Actor.IsNetworkPlayer)
+            {
+                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+                {
+                    OwnerClientOnly = false,
+                    FollowNetworkObject = false,
+                    EffectTagNetworkGuid = m_Data.Tag.Guid.ToNetworkGuid(),
+                    EffectPosition = Transform.position
+                });
+            }
+            else
+            {
+                EventBus<EffectEventData>.Invoke(new EffectEventData
+                {
+                    EffectTag = m_Data.Tag,
+                    EffectPosition = Transform.position
+                });
+            }
+        }
+
+        /*private void DoExplosionAudio()
+        {
+            m_AudioPool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
+        }*/
     }
 }
 

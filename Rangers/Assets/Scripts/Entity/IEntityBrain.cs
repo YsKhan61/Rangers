@@ -63,10 +63,16 @@ namespace BTG.Entity
         public void Init();
 
         /// <summary>
-        /// De-initialize the brain.
+        /// De-initialize the brain and return the
+        /// view to the pool
         /// </summary>
         public void DeInit();
 
+        /// <summary>
+        /// This method helps in multiplayer mode.
+        /// It deinitializes the specific initialized properties of the entity and 
+        /// return the view to the pool
+        /// </summary>
         public void DeInitNonServer();
 
         /// <summary>

@@ -40,6 +40,8 @@ namespace BTG.Tank
         public void Reset()
         {
             IsPlayer = false;
+            IsNetworkPlayer = false;
+            NetworkObjectId = default(ulong);
             OppositionLayer = 0;
         }
     }

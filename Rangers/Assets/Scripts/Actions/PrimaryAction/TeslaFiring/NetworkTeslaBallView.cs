@@ -1,4 +1,6 @@
-﻿using BTG.Utilities;
+﻿using BTG.Events;
+using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -100,15 +102,26 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            // DoExplosionEffect();
+            DoExplosionEffect();
             // DoExplosionAudio;
             Reset();
         }
 
-        private void DoExplosionAudio()
+        private void DoExplosionEffect()
         {
-            // m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
+            EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+            {
+                OwnerClientOnly = false,
+                FollowNetworkObject = false,
+                EffectTagNetworkGuid = m_TeslaFiring.Data.Tag.Guid.ToNetworkGuid(),
+                EffectPosition = transform.position
+            });
         }
+
+        /*private void DoExplosionAudio()
+        {
+            m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
+        }*/
 
         private void Reset()
         {

@@ -22,7 +22,6 @@ namespace BTG.Player
         public bool IsAlive;
 
         // caches
-        
         public int EntityMaxSpeed;
         public int EntityRotateSpeed;
         public float EntityAcceleration;

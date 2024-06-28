@@ -72,10 +72,7 @@ namespace BTG.Actions.PrimaryAction
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
-        public void SetActor(IPrimaryActor actor)
-        {
-            m_Actor = actor;
-        }
+        public void SetActor(IPrimaryActor actor) => m_Actor = actor;
 
         public void StartAction()
         {
@@ -155,6 +152,7 @@ namespace BTG.Actions.PrimaryAction
             projectile.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
             projectile.Init();
             projectile.SetOwnerOfView(m_Actor.Transform);
+            projectile.SetActor(m_Actor);
             projectile.ShowView();
         }
 

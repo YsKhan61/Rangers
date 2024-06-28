@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: ChargedFiringExplosionFactory
   m_EditorClassIdentifier: 
   m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
-  m_Data: {fileID: 11400000, guid: f2ac399b275f6814e992aae5b5bdeca7, type: 2}
+  m_Data: {fileID: 11400000, guid: 230019567ccce9a47ad63331882bbed5, type: 2}

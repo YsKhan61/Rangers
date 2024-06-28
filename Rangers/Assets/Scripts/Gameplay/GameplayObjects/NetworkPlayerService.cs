@@ -76,7 +76,6 @@ namespace BTG.Gameplay.GameplayObjects
                 playerInputs.Initialize();
                 networkPlayer.SetPlayerInputs(playerInputs);
                 networkPlayer.SetPlayerService(this);
-                networkPlayer.Init();
             }
 
             ConfigureEntityWithDelay(networkPlayer);
@@ -95,11 +94,11 @@ namespace BTG.Gameplay.GameplayObjects
             OnEntityTagSelectionChanged_ServerRpc(m_OwnerNetworkPlayer.OwnerClientId, entityData.Guid.ToNetworkGuid());
         }
 
-        /// This time delay will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
         private async void ConfigureEntityWithDelay(NetworkPlayer networkPlayer)
         {
+            // NOTE - This time delay will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
             await Task.Delay(1000);
-            networkPlayer.ConfigureEntity();
+            networkPlayer.Configure();
         }
     }
 }

@@ -4,7 +4,6 @@ using BTG.Events;
 using BTG.Player;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
-using System;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
@@ -52,7 +51,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         private NetworkVariable<float> mn_MoveValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<float> mn_RotateValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
-        private NetworkVariable<bool> mn_IsAlive = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
+        private NetworkVariable<bool> mn_IsAlive = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<int> mn_Health = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
 
         private void Awake()
@@ -70,7 +69,7 @@ namespace BTG.Gameplay.GameplayObjects
                 return;
             }
             m_NetworkEntityGuidState = m_PersistentPlayer.NetworkEntityGuidState;
-            m_NetworkEntityGuidState.OnEntityDataRegistered += ConfigureEntity;
+            m_NetworkEntityGuidState.OnEntityDataRegistered += Configure;
             if (IsOwner)
             {
                 mn_Health.OnValueChanged += OnPlayerHealthUpdateInNetwork;
@@ -94,7 +93,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             base.OnDestroy();
 
-            m_NetworkEntityGuidState.OnEntityDataRegistered -= ConfigureEntity;
+            m_NetworkEntityGuidState.OnEntityDataRegistered -= Configure;
 
             if (IsOwner)
             {
@@ -104,12 +103,35 @@ namespace BTG.Gameplay.GameplayObjects
             
             if (IsServer)
             {
-                DeInit();
+                DeInitServerEntity();
+                mn_IsAlive.Value = false;
             }
             else
             {
                 DeInitNonServerEntity();
             }
+        }
+
+        public void Configure()
+        {
+            if (IsServer)
+            {
+                DeInitServerEntity();
+                InitServerEntity();
+
+                mn_IsAlive.Value = true;
+            }
+            else
+            {
+                DeInitNonServerEntity();
+                InitNonServerEntity();
+            }
+
+            if (IsOwner)
+            {
+                SetCamera();
+            }
+            
         }
 
         public void SetPlayerModel(PlayerModel model) => m_Model = model;
@@ -120,41 +142,14 @@ namespace BTG.Gameplay.GameplayObjects
             SubscribeToInputEvents();
         }
 
-        public void ConfigureEntity()
-        {
-            Debug.Log($"OwnerClientId {OwnerClientId} Configuring entity for player.");
-
-            if (IsServer)
-            {
-                DeInitServerEntity();
-                InitServerEntity();
-            }
-            else
-            {
-                DeInitNonServerEntity();
-                InitNonServerEntity();
-            }
-
-
-            // Set specific events for owners
-            if (IsOwner)
-            {
-                // Camera target can only be set after the entity is initialized as the entity view contains the camera target
-                m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
-            }
-        }
+        
 
         /// <summary>
         /// Set the entity
         /// </summary>
         private void InitServerEntity()
         {
-            EntityFactorySO factory = m_EntityFactoryContainer.GetEntityFactory(RegisteredEntityData.Tag);
-            if (factory == null)
-            {
-                Debug.LogError("Entity factory is not of type EntityFactorySO");
-                return;
-            }
+            if (!TryGetEntityFactory(out EntityFactorySO factory)) return;
             m_EntityBrain = factory.GetServerItem();
 
             m_EntityBrain.Model.IsPlayer = true;
@@ -179,72 +174,42 @@ namespace BTG.Gameplay.GameplayObjects
             CacheEntityDatas();
 
             ConfigureEntityWithHealthController();
-            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
-            m_EntityHealthController.SetMaxHealth();
 
             m_EntityBrain.Init();
         }
 
-        public void Init()
-        {
-            mn_IsAlive.Value = true;    // for now this gets the input from the owner.
-        }
-
         public void InitNonServerEntity()
         {
-            EntityFactorySO factory = m_EntityFactoryContainer.GetEntityFactory(RegisteredEntityData.Tag);
-            if (factory == null)
-            {
-                Debug.LogError("Entity factory is not of type EntityFactorySO");
-                return;
-            }
+            if (!TryGetEntityFactory(out EntityFactorySO factory)) return;
             m_EntityBrain = factory.GetNonServerItem();
-
-            if (IsOwner)
-            {
-                m_EntityBrain.Model.IsPlayer = true;
-                m_EntityBrain.Model.IsNetworkPlayer = true;
-            }
-
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
-            // m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
-
-            ConfigureEntityWithHealthController();
-        }
-
-        public void DeInitNonServerEntity()
-        {
-            if (m_EntityBrain == null)
-                return;
-
-            m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
-            m_EntityBrain.DeInitNonServer();
-            m_EntityBrain = null;
         }
 
         public void OnEntityDied()
         {
             m_EntityBrain.OnDead();
 
-            DeInit();
-            m_PlayerService.OnPlayerDeath();
-        }
-
-        /// <summary>
-        /// Deinitialize the controller and it's entity brain.
-        /// </summary>
-        public void DeInit()
-        {
-            mn_IsAlive.Value = false;
             DeInitServerEntity();
+            // mn_IsAlive.Value = false;
+            m_PlayerService.OnPlayerDeath();
         }
 
         public void DeInitServerEntity()
         {
-            // If the entity brain is null, then the entity is already deinitialized.
+            // If the entity brain is null, then the entity is already deinitialized. It may happen at the start of the game.
             if (m_EntityBrain == null) return;
-            m_EntityBrain.DeInit();
+
             UnsubscribeFromEntityEvents();
+            m_EntityBrain.DeInit();
+            m_EntityBrain = null;
+        }
+
+        public void DeInitNonServerEntity()
+        {
+            // This check is necessary as the entity brain may already be deinitialized. at start of game.
+            if (m_EntityBrain == null) return;      
+
+            m_EntityBrain.DeInitNonServer();
             m_EntityBrain = null;
         }
 
@@ -343,6 +308,9 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             /// The m_EntityBrain has already been initialized, so we need to set the visibility of the health controller
             m_EntityHealthController.SetVisible(true);
+
+            m_EntityHealthController.OnHealthUpdated += OnEntityHealthUpdated;
+            m_EntityHealthController.SetMaxHealth();
         }
 
         /// <summary>
@@ -387,7 +355,6 @@ namespace BTG.Gameplay.GameplayObjects
             if (!mn_IsAlive.Value)
                 return;
 
-            // m_Model.RotateInputValue = value;
             mn_RotateValue.Value = value;
         }
 
@@ -489,7 +456,6 @@ namespace BTG.Gameplay.GameplayObjects
         private void OnPlayerCameraShake(CameraShakeEventData data)
         {
             if (!IsServer) return;
-
             OnPlayerCamShake_ClientRpc(new NetworkCamShakeEventData(data.ShakeAmount, data.ShakeDuration));
         }
 
@@ -511,6 +477,23 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (IsServer) return; // no need to do anything on the server as we already did it in EntityBrain after invoking event.
             m_EntityBrain.ToggleActorVisibility(show);
+        }
+
+        private bool TryGetEntityFactory(out EntityFactorySO factory)
+        {
+            factory = m_EntityFactoryContainer.GetEntityFactory(RegisteredEntityData.Tag);
+            if (factory == null)
+            {
+                Debug.LogError("Entity factory is not of type EntityFactorySO");
+                return false;
+            }
+            return true;
+        }
+
+        private void SetCamera()
+        {
+            // Camera target can only be set after the entity is initialized as the entity view contains the camera target
+            m_PlayerService.PVCamera.SetFollowTarget(CameraTarget);
         }
 
         internal struct NetworkCamShakeEventData : INetworkSerializable

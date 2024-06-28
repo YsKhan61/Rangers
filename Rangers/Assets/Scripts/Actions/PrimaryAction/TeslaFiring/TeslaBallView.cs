@@ -1,5 +1,7 @@
 ﻿using BTG.AudioSystem;
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using UnityEngine;
 using VContainer;
 
@@ -84,14 +86,24 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            DoExplosionAudio();
+            DoExplosionEffect();
+            // DoExplosionAudio();
             Reset();
         }
 
-        private void DoExplosionAudio()
+        private void DoExplosionEffect()
+        {
+            EventBus<EffectEventData>.Invoke(new EffectEventData
+            {
+                EffectTag = m_TeslaFiring.Data.Tag,
+                EffectPosition = transform.position
+            });
+        }
+
+        /*private void DoExplosionAudio()
         {
             m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
-        }
+        }*/
 
         private void Reset()
         {

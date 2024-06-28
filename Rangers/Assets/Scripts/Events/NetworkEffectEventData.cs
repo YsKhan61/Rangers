@@ -17,6 +17,7 @@ namespace BTG.Events
         
         /// <summary>
         /// Id of the owner client.
+        /// Only needed if OwnerClientOnly is true.
         /// </summary>
         public ulong OwnerClientId;
         
@@ -27,6 +28,7 @@ namespace BTG.Events
         
         /// <summary>
         /// Id of the network object to follow.
+        /// Only needed if FollowNetworkObject is true.
         /// </summary>
         public ulong FollowNetowrkObjectId;
         
@@ -41,6 +43,7 @@ namespace BTG.Events
         public Vector3 EffectPosition;
 
         /// <summary>
+        /// Optional
         /// Duration of the effect.
         /// </summary>
         public int Duration;
