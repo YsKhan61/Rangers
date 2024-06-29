@@ -5,6 +5,7 @@ using BTG.Effects;
 using BTG.Entity;
 using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
 using UnityEngine;
 using VContainer;
@@ -254,7 +255,7 @@ namespace BTG.Tank
 
         public bool TryExecuteUltimate() => UltimateAction.TryExecute();
 
-        /// <summary>
+        /*/// <summary>
         /// This will be invoked by a ragdolleffect event
         /// </summary>
         public void ExecuteRagdollEffect()
@@ -264,17 +265,39 @@ namespace BTG.Tank
             effect.SetOwner(this);
             effect.transform.SetPositionAndRotation(Transform.position, Transform.rotation);
             effect.Play();
-        }
+        }*/
 
-        public void OnDead()
+        /*public void OnDead()
         {
             ExecuteRagdollEffect();
             ExecuteDeadAudio();
+        }*/
+
+        public void ExecuteRagdollEffectEvent()
+        {
+            if (m_Model.IsNetworkPlayer)
+            {
+                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
+                {
+                    OwnerClientOnly = false,
+                    FollowNetworkObject = false,
+                    EffectTagNetworkGuid = m_Model.TankData.Tag.Guid.ToNetworkGuid(),
+                    EffectPosition = Transform.position,
+                });
+            }
+            else
+            {
+                EventBus<EffectEventData>.Invoke(new EffectEventData
+                {
+                    EffectTag = m_Model.TankData.Tag,
+                    EffectPosition = Transform.position,
+                });
+            }
         }
 
         public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData) => OnPlayerCameraShake?.Invoke(camShakeData);
 
-        private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
+        // private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
         
         private void UpdateState()
         {

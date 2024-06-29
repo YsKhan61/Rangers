@@ -225,7 +225,7 @@ namespace BTG.Enemy
 
         public void OnEntityDied()
         {
-            m_EntityBrain.OnDead();
+            m_EntityBrain.ExecuteRagdollEffectEvent();
 
             m_StateMachine.OnEntityDead();
             m_EntityBrain.DeInit();

@@ -187,11 +187,24 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void OnEntityDied()
         {
-            m_EntityBrain.OnDead();
+            mn_IsAlive.Value = false;
+            OnEntityDied_ClientRpc();
+        }
 
-            DeInitServerEntity();
-            // mn_IsAlive.Value = false;
-            m_PlayerService.OnPlayerDeath();
+        [ClientRpc]
+        private void OnEntityDied_ClientRpc()
+        {
+            m_EntityBrain.ExecuteRagdollEffectEvent();
+
+            if (IsServer)
+            {
+                DeInitServerEntity();
+                m_PlayerService.OnPlayerDeath();
+            }
+            else
+            {
+                DeInitNonServerEntity();
+            }
         }
 
         public void DeInitServerEntity()
@@ -319,12 +332,7 @@ namespace BTG.Gameplay.GameplayObjects
         private void OnEntityHealthUpdated(int currentHealth, int maxHealth)
         {
             if (!IsServer) return;
-
             mn_Health.Value = currentHealth;
-            if (currentHealth <= 0)
-            {
-                // The entity is dead
-            }
         }
 
         private void OnPlayerHealthUpdateInNetwork(int prevHealth, int newHealth)

@@ -60,10 +60,10 @@ namespace BTG.Player
         {
             m_PlayerStats.DeathCount.Value++;
 
-            Respawn();
+            ShowHeroSelectionUI();
         }
 
-        private void Respawn()
+        private void ShowHeroSelectionUI()
         {
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY, 
@@ -86,6 +86,7 @@ namespace BTG.Player
             EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = 0f, ShakeDuration = 0f });
 
             /// If there is a player entity already, deinit it.
+            m_Controller.DeInitEntity();
             m_Controller.DeInit();
 
             _ = HelperMethods.InvokeInNextFrame(SpawnPlayerEntity);

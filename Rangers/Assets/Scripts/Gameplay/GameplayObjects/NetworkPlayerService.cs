@@ -1,7 +1,9 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
+using BTG.EventSystem;
 using BTG.Player;
 using BTG.Utilities;
+using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
@@ -12,6 +14,8 @@ namespace BTG.Gameplay.GameplayObjects
 {
     public class NetworkPlayerService : NetworkBehaviour
     {
+        private const int RESPAWN_DELAY = 2;
+
         [SerializeField]
         private PlayerVirtualCamera m_PVCamera;
         public PlayerVirtualCamera PVCamera => m_PVCamera;
@@ -33,15 +37,19 @@ namespace BTG.Gameplay.GameplayObjects
         public PlayerStatsSO PlayerStats => m_PlayerStats;
 
         private NetworkPlayer m_OwnerNetworkPlayer;
+        private CancellationTokenSource m_CTS;
 
         public override void OnNetworkSpawn()
         {
+            m_CTS = new CancellationTokenSource();
+            m_PlayerStats.ResetStats();
             m_PlayerStats.EntityTagSelected.OnValueChanged += OnEntityTagSelectedChanged;
         }
 
         public override void OnNetworkDespawn()
         {
             m_PlayerStats.EntityTagSelected.OnValueChanged -= OnEntityTagSelectedChanged;
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -83,9 +91,22 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void OnPlayerDeath()
         {
+            if (!IsServer) return;
+
             m_PlayerStats.DeathCount.Value++;
 
-            // Respawn
+            ShowHeroSelectionUI_ClientRpc();
+        }
+
+        [ClientRpc]
+        private void ShowHeroSelectionUI_ClientRpc()
+        {
+            if(!IsOwner) return;
+
+            _ = HelperMethods.InvokeAfterAsync(
+                RESPAWN_DELAY,
+                () => EventService.Instance.OnShowHeroSelectionUI.InvokeEvent(),
+                m_CTS.Token);
         }
 
         private void OnEntityTagSelectedChanged()

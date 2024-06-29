@@ -14,7 +14,7 @@ namespace BTG.Entity
     /// An interface for the brain of an entity.
     /// Any entity of the game should have a brain that implements this interface.
     /// </summary>
-    public interface IEntityBrain : ITransform, IFactoryItem, IPrimaryActor, IUltimateActor, IRagdollOwner, IUpdatable, IDestroyable
+    public interface IEntityBrain : ITransform, IFactoryItem, IPrimaryActor, IUltimateActor, IUpdatable, IDestroyable // IRagdollOwner,
     {
         public event Action<Sprite> OnEntityInitialized;
         public event Action<bool> OnEntityVisibilityToggled;
@@ -79,7 +79,7 @@ namespace BTG.Entity
         /// It is called when the entity is dead.
         /// It is separate from DeInit.
         /// </summary>
-        public void OnDead();
+        public void ExecuteRagdollEffectEvent();
     }
 
 }
