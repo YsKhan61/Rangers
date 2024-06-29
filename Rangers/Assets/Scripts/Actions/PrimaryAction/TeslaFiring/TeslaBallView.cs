@@ -24,8 +24,8 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
-        [Inject]
-        private AudioPool m_AudioPool;
+        /*[Inject]
+        private AudioPool m_AudioPool;*/
 
         private TeslaFiring m_TeslaFiring;
         private TeslaBallPool m_Pool;

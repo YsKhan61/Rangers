@@ -14,7 +14,8 @@ namespace BTG.Effects
 
         private CancellationTokenSource m_CTS;
 
-        internal void Initialize(ParticleSystem particleSystem, AudioSource source, ExplosionEffectPool pool)
+        internal void Initialize(
+            ParticleSystem particleSystem, AudioSource source, ExplosionEffectPool pool)
         {
             gameObject.name = particleSystem.gameObject.name;
             m_ParticleSystem = particleSystem;

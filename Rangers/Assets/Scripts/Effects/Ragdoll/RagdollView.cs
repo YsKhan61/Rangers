@@ -29,7 +29,17 @@ namespace BTG.Effects
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
-        public void SetOwner(IRagdollOwner owner) => m_Owner = owner;
+        /// <summary>
+        /// This method is called when the ragdoll is created
+        /// It is called by the pool only one time
+        /// </summary>
+        internal void Initialize()
+        {
+            m_Cts = new CancellationTokenSource();
+            StoreInitialLocalPoses();
+            Hide();
+            ToggleRigidbodyKinematics(true);
+        }
 
         /// <summary>
         /// Execute the ragdoll effect
@@ -43,27 +53,6 @@ namespace BTG.Effects
             {
                 ResetView();
             }, m_Cts.Token);
-        }
-
-        /*/// <summary>
-        /// Execute the ragdoll effect with the owner
-        /// </summary>
-        public void ExecuteRagdollEffect(IRagdollOwner owner)
-        {
-            SetOwner(owner);
-            Execute(new Pose(owner.Transform.position, owner.Transform.rotation));
-        }*/
-
-        /// <summary>
-        /// This method is called when the ragdoll is created
-        /// It is called by the pool only one time
-        /// </summary>
-        internal void Initialize()
-        {
-            m_Cts = new CancellationTokenSource();
-            StoreInitialLocalPoses();
-            Hide();
-            ToggleRigidbodyKinematics(true);
         }
 
         internal void SetPool(RagdollPool pool) => m_Pool = pool;

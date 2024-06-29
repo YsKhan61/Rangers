@@ -7,6 +7,7 @@ namespace BTG.Effects
     public class ExplosionEffectPool : MonoBehaviourObjectPool<ExplosionView>
     {
         private ExplosionDataSO m_Data;
+        public ExplosionDataSO Data => m_Data;
 
         public ExplosionEffectPool(ExplosionDataSO data)
         {

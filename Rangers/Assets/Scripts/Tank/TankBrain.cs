@@ -58,8 +58,8 @@ namespace BTG.Tank
         [Inject]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
 
-        [Inject]
-        private AudioPool m_AudioPool;
+        /*[Inject]
+        private AudioPool m_AudioPool;*/
 
         private TankPool m_Pool;
 

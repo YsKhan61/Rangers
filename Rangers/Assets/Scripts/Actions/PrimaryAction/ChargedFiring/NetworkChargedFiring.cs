@@ -1,11 +1,8 @@
-﻿using BTG.AudioSystem;
-using BTG.Events;
+﻿using BTG.Events;
 using BTG.Utilities;
 using System;
 using System.Threading;
-using Unity.Netcode;
 using UnityEngine;
-using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -16,8 +13,8 @@ namespace BTG.Actions.PrimaryAction
 
         public event Action OnPrimaryActionExecuted;
 
-        [Inject]
-        private AudioPool m_AudioPool;
+        /*[Inject]
+        private AudioPool m_AudioPool;*/
 
         private IPrimaryActor m_Actor;
         private NetworkProjectilePool m_ProjectilePool;
@@ -39,7 +36,7 @@ namespace BTG.Actions.PrimaryAction
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
-            InitializeFiringAudio();
+            // InitializeFiringAudio();
 
             m_IsEnabled = true;
         }
@@ -57,7 +54,7 @@ namespace BTG.Actions.PrimaryAction
         public void Disable()
         {
             ResetCharging();
-            DeInitializeFiringAudio();
+            // DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
 
@@ -80,7 +77,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            PlayChargingClip();
+            // PlayChargingClip();
         }
 
         public void StopAction()
@@ -100,7 +97,7 @@ namespace BTG.Actions.PrimaryAction
 
             OnPrimaryActionExecuted?.Invoke();
 
-            PlayShotFiredClip();
+            // PlayShotFiredClip();
             ResetCharging();
         }
 
@@ -123,7 +120,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
-            UpdateChargingClipPitch(m_ChargeAmount);
+            // UpdateChargingClipPitch(m_ChargeAmount);
         }
 
         private void ShootOnFullyCharged()
@@ -143,7 +140,7 @@ namespace BTG.Actions.PrimaryAction
         private void ResetCharging()
         {
             m_ChargeAmount = 0f;
-            StopChargingClip();
+            // StopChargingClip();
         }
 
         private void SpawnProjectile(out ProjectileController projectile)
@@ -161,7 +158,7 @@ namespace BTG.Actions.PrimaryAction
             NetworkProjectileView view = m_ProjectilePool.GetProjectile();
             ProjectileController pc = new ProjectileController(m_Data, view);
             view.SetController(pc);
-            pc.SetAudioPool(m_AudioPool);
+            // pc.SetAudioPool(m_AudioPool);
             return pc;
         }
 
@@ -173,7 +170,7 @@ namespace BTG.Actions.PrimaryAction
                 m_ChargeAmount) + m_Actor.CurrentMoveSpeed;
         }
 
-        private void PlayChargingClip()
+        /*private void PlayChargingClip()
         {
             m_FiringAudioSource.clip = m_Data.ChargeClip;
             m_FiringAudioSource.Play();
@@ -200,7 +197,7 @@ namespace BTG.Actions.PrimaryAction
             m_FiringAudioSource.gameObject.SetActive(true);
         }
 
-        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());*/
     }
 
 

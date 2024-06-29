@@ -1,4 +1,5 @@
-﻿using BTG.Utilities;
+﻿using BTG.Events;
+using BTG.Utilities;
 using System.Threading;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ namespace BTG.AudioSystem
     /// The AudioPool is used to store, create and get the audio views
     /// </summary>
     [RequireComponent(typeof(AudioSource))]
-    public class AudioView : MonoBehaviour
+    internal class AudioView : MonoBehaviour
     {
         private AudioSource m_AudioSource;
         public AudioSource AudioSource => m_AudioSource;
@@ -31,7 +32,7 @@ namespace BTG.AudioSystem
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Play once the audio clip
         /// And return the audio view to the pool after the clip is played
         /// Play the audio clip at the given position
@@ -45,13 +46,29 @@ namespace BTG.AudioSystem
             {
                 m_Pool.ReturnAudio(this);
             }, m_Cts.Token);
+        }*/
+
+        internal void Play(AudioDataSO data, AudioEventData eventData)
+        {
+            m_AudioSource.clip = data.Clip;
+            m_AudioSource.loop = data.Loop;
+            m_AudioSource.spatialBlend = data.SpatialBlend;
+            transform.position = eventData.Position;
+            m_AudioSource.Play();
+
+            int duration = data.Loop ? data.Duration : (int)data.Clip.length;
+
+            _ = HelperMethods.InvokeAfterAsync(duration, () =>
+            {
+                m_Pool.ReturnAudio(this);
+            }, m_Cts.Token);
         }
 
         /// <summary>
         /// Show the audio view
         /// unmute the audio source
         /// </summary>
-        public void Show()
+        internal void Show()
         {
             gameObject.SetActive(true);
             m_AudioSource.mute = false;
@@ -61,7 +78,7 @@ namespace BTG.AudioSystem
         /// Hide the audio view
         /// Mute the audio source
         /// </summary>
-        public void Hide()
+        internal void Hide()
         {
             m_AudioSource.Stop();
             gameObject.SetActive(false);

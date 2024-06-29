@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace BTG.AudioSystem
 {
-    public class AudioPool : MonoBehaviourObjectPool<AudioView>
+    internal class AudioPool : MonoBehaviourObjectPool<AudioView>
     {
         /// <summary>
         /// Get the audio view from the pool
         /// </summary>
-        public AudioView GetAudioView()
+        internal AudioView GetAudioView()
         {
             AudioView view = GetItem();
             view.Show();
@@ -19,7 +19,7 @@ namespace BTG.AudioSystem
         /// <summary>
         /// Return the audio view to the pool
         /// </summary>
-        public void ReturnAudio(AudioView audioView)
+        internal void ReturnAudio(AudioView audioView)
         {
             audioView.Hide();
             audioView.transform.SetParent(Container);

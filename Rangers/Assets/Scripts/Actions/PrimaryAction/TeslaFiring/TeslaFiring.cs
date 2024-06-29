@@ -1,9 +1,6 @@
-﻿using BTG.AudioSystem;
-using BTG.Events;
+﻿using BTG.Events;
 using BTG.Utilities;
-using BTG.Utilities.EventBus;
 using System.Threading;
-using Unity.Netcode;
 using UnityEngine;
 using VContainer;
 
@@ -19,8 +16,8 @@ namespace BTG.Actions.PrimaryAction
         private TeslaFiringDataSO m_Data;
         public TeslaFiringDataSO Data => m_Data;
 
-        [Inject]
-        private AudioPool m_AudioPool;
+        /*[Inject]
+        private AudioPool m_AudioPool;*/
 
         private IPrimaryActor m_Actor;
         private TeslaBallPool m_TeslaBallPool;
@@ -43,7 +40,7 @@ namespace BTG.Actions.PrimaryAction
         public void Enable()
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
-            InitializeFiringAudio();
+            // InitializeFiringAudio();
 
             m_IsEnabled = true;
         }
@@ -62,7 +59,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void Disable()
         {
-            DeInitializeFiringAudio();
+            // DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
 
@@ -77,7 +74,7 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            PlayChargingClip();
+            // PlayChargingClip();
 
             SpawnBall();
         }
@@ -97,7 +94,7 @@ namespace BTG.Actions.PrimaryAction
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
                 // EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
-            PlayShotFiredClip();
+            // PlayShotFiredClip();
             ResetCharging();
         }
 
@@ -125,7 +122,7 @@ namespace BTG.Actions.PrimaryAction
         private void ResetCharging()
         {
             m_ChargeAmount = 0;
-            StopChargingClip();
+            // StopChargingClip();
             m_BallInCharge = null;
         }
 
@@ -136,7 +133,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
-            UpdateChargingClipPitch(m_ChargeAmount);
+            // UpdateChargingClipPitch(m_ChargeAmount);
         }
 
         private void UpdateBallSize()
@@ -182,7 +179,7 @@ namespace BTG.Actions.PrimaryAction
             damage = (int)Mathf.Lerp(m_Data.MinDamage, m_Data.MaxDamage, m_ChargeAmount);
         }
 
-        private void PlayChargingClip()
+        /*private void PlayChargingClip()
         {
             m_FiringAudioSource.clip = m_Data.ChargingClip;
             m_FiringAudioSource.Play();
@@ -209,7 +206,7 @@ namespace BTG.Actions.PrimaryAction
             m_FiringAudioSource.gameObject.SetActive(true);
         }
 
-        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());*/
     }
 }
 

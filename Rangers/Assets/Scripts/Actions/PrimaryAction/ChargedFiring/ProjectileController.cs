@@ -11,7 +11,7 @@ namespace BTG.Actions.PrimaryAction
 {
     public class ProjectileController : IDestroyable
     {
-        private AudioPool m_AudioPool;
+        // private AudioPool m_AudioPool;
         private ChargedFiringDataSO m_Data;
         private IProjectileView m_View;
         private CancellationTokenSource m_Cts;
@@ -33,7 +33,7 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.isKinematic = false;
         }
 
-        public void SetAudioPool(AudioPool audioPool) => m_AudioPool = audioPool;
+        // public void SetAudioPool(AudioPool audioPool) => m_AudioPool = audioPool;
         public void ShowView() => m_View.Show();
         public void SetOwnerOfView(Transform owner) => m_View.SetOwner(owner);
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => 
