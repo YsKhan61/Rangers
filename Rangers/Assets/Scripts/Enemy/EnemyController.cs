@@ -33,6 +33,7 @@ namespace BTG.Enemy
         /// Get the transform of the enemy
         /// </summary>
         public Transform Transform => m_View.transform;
+        public Vector3 Velocity => Rigidbody.velocity;
 
         /// <summary>
         /// Get the target view that is in range and detected
@@ -148,8 +149,8 @@ namespace BTG.Enemy
             }
 
             m_EntityBrain.Model.IsPlayer = false;
+            m_EntityBrain.SetController(this);
             m_EntityBrain.SetParentOfView(m_View.transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
 

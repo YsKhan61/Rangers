@@ -36,15 +36,15 @@ namespace BTG.Entity
         public Collider DamageCollider { get; }
 
         /// <summary>
+        /// Set the controller of the Entity
+        /// </summary>
+        public void SetController(IEntityController controller);
+
+        /// <summary>
         /// Set the parent of the tank view.
         /// It is used to set the parent of the tank view to the tank container or Player/Enemy View
         /// </summary>
         public void SetParentOfView(Transform parent, Vector3 position, Quaternion rotation);
-
-        /// <summary>
-        /// Set the rigidbody of the tank.
-        /// </summary>
-        public void SetRigidbody(Rigidbody rb);
 
         /// <summary>
         /// Set the damageable of the tank.
@@ -61,6 +61,12 @@ namespace BTG.Entity
         /// It should be called after the brain is created or gotten from the pool
         /// </summary>
         public void Init();
+
+        /// <summary>
+        /// This method helps in multiplayer mode.
+        /// It initializes the specific properties of the entity such as audiosource, animator etc.
+        /// </summary>
+        public void InitNonServer();
 
         /// <summary>
         /// De-initialize the brain and return the

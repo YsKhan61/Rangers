@@ -35,6 +35,7 @@ namespace BTG.Gameplay.GameplayObjects
         public EntityDataSO RegisteredEntityData => m_NetworkEntityGuidState.RegisteredEntityData; // This changes at runtime
 
         public int MaxHealth => m_EntityBrain.Model.MaxHealth;
+        public Vector3 Velocity => mn_Velocity.Value;
 
         public Transform CameraTarget
         {
@@ -53,6 +54,7 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkVariable<float> mn_RotateValue = new NetworkVariable<float>(writePerm: NetworkVariableWritePermission.Owner, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<bool> mn_IsAlive = new NetworkVariable<bool>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
         private NetworkVariable<int> mn_Health = new NetworkVariable<int>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
+        private NetworkVariable<Vector3> mn_Velocity = new NetworkVariable<Vector3>(writePerm: NetworkVariableWritePermission.Server, readPerm: NetworkVariableReadPermission.Everyone);
 
         private void Awake()
         {
@@ -87,6 +89,24 @@ namespace BTG.Gameplay.GameplayObjects
             Rotate();
 
             MoveWithForce();
+        }
+
+        private void Update()
+        {
+            UpdateEntityVelocity();
+
+            
+        }
+
+        private void UpdateEntityVelocity()
+        {
+            if (!IsServer)
+                return;
+
+            if (!mn_IsAlive.Value)
+                return;
+
+            mn_Velocity.Value = m_Rigidbody.velocity;
         }
 
         public override void OnNetworkDespawn()
@@ -156,8 +176,8 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.Model.IsNetworkPlayer = true;
             m_EntityBrain.Model.NetworkObjectId = NetworkObjectId;
 
+            m_EntityBrain.SetController(this);
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetRigidbody(m_Rigidbody);
 
             // Here we set the opposition layer mask to the player's layer as 
             // the clients will have to fight against each other.
@@ -182,7 +202,9 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (!TryGetEntityFactory(out EntityFactorySO factory)) return;
             m_EntityBrain = factory.GetNonServerItem();
+            m_EntityBrain.SetController(this);
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
+            m_EntityBrain.InitNonServer();
         }
 
         public void OnEntityDied()

@@ -34,6 +34,7 @@ namespace BTG.Tank
 
         private TankModel m_Model;
         public IEntityModel Model => m_Model;
+        public IEntityController Controller { get; private set; }
         private TankView m_View;
         private IPrimaryAction m_PrimaryAction;
         public IPrimaryAction PrimaryAction => m_PrimaryAction;
@@ -41,7 +42,6 @@ namespace BTG.Tank
         public IUltimateAction UltimateAction => m_UltimateAction;
         public Transform Transform => m_View.transform;
         public Transform CameraTarget => m_View.CameraTarget;
-        public Rigidbody Rigidbody { get; private set; }
         public Transform FirePoint => m_View.FirePoint;
         public LayerMask OppositionLayerMask => m_Model.OppositionLayer;
         public Collider DamageCollider => m_View.DamageCollider;
@@ -50,16 +50,13 @@ namespace BTG.Tank
         public bool IsPlayer => m_Model.IsPlayer;
         public bool IsNetworkPlayer => m_Model.IsNetworkPlayer;
         public ulong NetworkObjectId => m_Model.NetworkObjectId;
-        public float CurrentMoveSpeed => Rigidbody.velocity.magnitude;
+        public float CurrentMoveSpeed => Controller.Velocity.magnitude;
 
         [Inject]
         private PrimaryActionFactoryContainerSO m_PrimaryActionFactoryContainer;
 
         [Inject]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
-
-        [Inject]
-        private EffectFactoryContainerSO m_EffectFactoryContainer;
 
         [Inject]
         private AudioPool m_AudioPool;
@@ -113,12 +110,7 @@ namespace BTG.Tank
         public void Init()
         {
             m_Model.State = TankState.Idle;
-
             OnTankStateChangedToIdle();
-
-            Rigidbody.WakeUp();
-            Rigidbody.velocity = Vector3.zero;
-            Rigidbody.angularVelocity = Vector3.zero;
 
             m_PrimaryAction.Enable();
             m_UltimateAction.Enable();
@@ -128,6 +120,47 @@ namespace BTG.Tank
 
             _ = HelperMethods.InvokeInNextFrame(() => OnEntityInitialized?.Invoke(m_Model.Icon));
         }
+
+        public void InitNonServer()
+        {
+            m_Model.State = TankState.Idle;
+            OnTankStateChangedToIdle();
+
+            UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
+        }
+
+        public void DeInit()
+        {
+            m_Model.Reset();
+
+            m_PrimaryAction.Disable();
+            m_UltimateAction.Disable();
+
+            m_View.AudioView.StopEngineAudio();
+
+            OnEntityInitialized = null;
+            OnEntityVisibilityToggled = null;
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
+
+            m_Pool.ReturnTank(m_View);
+        }
+
+        public void DeInitNonServer()
+        {
+            m_Model.Reset();
+
+            m_View.AudioView.StopEngineAudio();
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
+
+            m_Pool.ReturnTank(m_View);
+        }
+
+        public void SetController(IEntityController controller) => Controller = controller;
 
         public void CreatePrimaryAction(TagSO primaryTag = null)
         {
@@ -154,8 +187,6 @@ namespace BTG.Tank
 
             m_PrimaryAction.SetActor(this);
         }
-
-        
 
         /// <summary>
         /// Create the ultimate action for the tank.
@@ -187,9 +218,6 @@ namespace BTG.Tank
 
             m_UltimateAction.SetActor(this);
         }
-        
-
-        public void SetRigidbody(Rigidbody rb) => Rigidbody = rb;
 
         public void SetDamageable(IDamageableView damageable) => Damageable = damageable;
 
@@ -204,33 +232,6 @@ namespace BTG.Tank
         public void Destroy()
         {
             OnEntityInitialized = null;
-        }
-
-        public void DeInit()
-        {
-            m_Model.State = TankState.Deactive;
-
-            Rigidbody.Sleep();
-
-            m_Model.Reset();
-            m_PrimaryAction.Disable();
-            m_UltimateAction.Disable();
-
-            m_View.AudioView.StopEngineAudio();
-
-            OnEntityInitialized = null;
-            OnEntityVisibilityToggled = null;
-
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
-            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
-
-            m_Pool.ReturnTank(m_View);
-        }
-        
-        public void DeInitNonServer() 
-        {
-            m_Model.Reset();
-            m_Pool.ReturnTank(m_View);
         }
 
         public void ToggleActorVisibility(bool value)
@@ -283,14 +284,14 @@ namespace BTG.Tank
             switch (m_Model.State)
             {
                 case TankState.Idle:
-                    if (Rigidbody.velocity.sqrMagnitude > 0.05f)
+                    if (CurrentMoveSpeed > 0.05f)
                     {
                         m_Model.State = TankState.Moving;
                         OnTankStateChangedToDriving();
                     }
                     break;
                 case TankState.Moving:
-                    if (Rigidbody.velocity.sqrMagnitude <= 0.05f)
+                    if (CurrentMoveSpeed <= 0.05f)
                     {
                         m_Model.State = TankState.Idle;
                         OnTankStateChangedToIdle();

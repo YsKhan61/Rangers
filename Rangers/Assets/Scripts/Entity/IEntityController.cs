@@ -1,4 +1,5 @@
 ﻿using BTG.Utilities;
+using UnityEngine;
 
 namespace BTG.Entity
 {
@@ -12,6 +13,11 @@ namespace BTG.Entity
         /// Get the max health of the entity
         /// </summary>
         public int MaxHealth { get; }
+
+        /// <summary>
+        /// Get the current velocity of the entity
+        /// </summary>
+        public Vector3 Velocity { get; }
 
         /// <summary>
         /// This method is used to inform that the entity has died.

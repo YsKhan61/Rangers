@@ -14,6 +14,7 @@ namespace BTG.Player
         private IEntityBrain m_EntityBrain;
         private EntityHealthController m_EntityHealthController;
         public Rigidbody Rigidbody => m_View.Rigidbody;
+        public Vector3 Velocity => Rigidbody.velocity;
         public Transform Transform => m_Transform;
 
         public Transform CameraTarget => m_EntityBrain.CameraTarget;
@@ -108,8 +109,8 @@ namespace BTG.Player
             }
 
             m_EntityBrain.Model.IsPlayer = true;
+            m_EntityBrain.SetController(this);
             m_EntityBrain.SetParentOfView(Transform, Vector3.zero, Quaternion.identity);
-            m_EntityBrain.SetRigidbody(Rigidbody);
             m_EntityBrain.SetDamageable(m_EntityHealthController);
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 

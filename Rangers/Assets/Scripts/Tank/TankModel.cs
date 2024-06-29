@@ -43,6 +43,7 @@ namespace BTG.Tank
             IsNetworkPlayer = false;
             NetworkObjectId = default(ulong);
             OppositionLayer = 0;
+            State = TankBrain.TankState.Deactive;
         }
     }
 }
