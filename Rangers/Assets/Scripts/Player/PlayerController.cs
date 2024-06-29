@@ -139,12 +139,14 @@ namespace BTG.Player
         /// </summary>
         public void DeInit()
         {
-            // If the entity brain is null, then the entity is already deinitialized.
-            if (m_EntityBrain == null) return;
-
             m_Model.IsAlive = false;
-            m_EntityBrain.DeInit();
+        }
+
+        public void DeInitEntity()
+        {
+            if (m_EntityBrain == null) return;
             UnsubscribeFromEvents();
+            m_EntityBrain.DeInit();
             m_EntityBrain = null;
         }
 
@@ -208,8 +210,8 @@ namespace BTG.Player
 
         public void OnEntityDied()
         {
-            m_EntityBrain.OnDead();
-
+            m_EntityBrain.ExecuteRagdollEffectEvent();
+            DeInitEntity();
             DeInit();
             m_PlayerService.OnPlayerDeath();
         }
