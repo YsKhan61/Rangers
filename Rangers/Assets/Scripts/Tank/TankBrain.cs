@@ -231,9 +231,6 @@ namespace BTG.Tank
         {
             m_Model.Reset();
             m_Pool.ReturnTank(m_View);
-
-            // OnEntityInitialized = null;
-            // OnEntityVisibilityToggled = null;
         }
 
         public void ToggleActorVisibility(bool value)
@@ -254,24 +251,6 @@ namespace BTG.Tank
         public void AutoStartStopPrimaryAction(int stopTime) => m_PrimaryAction.AutoStartStopAction(stopTime);
 
         public bool TryExecuteUltimate() => UltimateAction.TryExecute();
-
-        /*/// <summary>
-        /// This will be invoked by a ragdolleffect event
-        /// </summary>
-        public void ExecuteRagdollEffect()
-        {        
-            RagdollFactorySO factory = m_EffectFactoryContainer.GetFactory(m_Model.TankData.Tag) as RagdollFactorySO;
-            RagdollView effect = factory.GetItem() as RagdollView;
-            effect.SetOwner(this);
-            effect.transform.SetPositionAndRotation(Transform.position, Transform.rotation);
-            effect.Play();
-        }*/
-
-        /*public void OnDead()
-        {
-            ExecuteRagdollEffect();
-            ExecuteDeadAudio();
-        }*/
 
         public void ExecuteRagdollEffectEvent()
         {

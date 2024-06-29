@@ -29,6 +29,7 @@ namespace BTG.Actions.PrimaryAction
         private NetworkTeslaBallPool m_Pool;
         private NetworkTeslaFiring m_TeslaFiring;
         private int m_Damage;
+        private TagSO m_EffectTag;
 
 
         private void OnCollisionEnter(Collision collision) => OnHitSomething(collision.collider);
@@ -95,14 +96,17 @@ namespace BTG.Actions.PrimaryAction
 
         private void OnHitSomething(Collider other)
         {
-            Debug.Log("Hit something: " + other.gameObject.name);
+            // Debug.Log("Hit something: " + other.gameObject.name);
+
+            // NOTE - This need to happen before the damage is done, as we need the data of the TeslaFiring to do the effect
+            // If the damageable.Damage is called first, there is a chance that the entity is destroyed and the data is lost
+            DoExplosionEffect();
 
             if (other.TryGetComponent(out IDamageableView damageable))
             {
                 damageable.Damage(m_Damage);
             }
 
-            DoExplosionEffect();
             // DoExplosionAudio;
             Reset();
         }

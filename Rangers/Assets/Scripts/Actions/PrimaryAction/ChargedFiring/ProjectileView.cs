@@ -26,12 +26,12 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
-            m_Controller.OnHitSomething(collision.collider);
+            m_Controller?.OnHitSomething(collision.collider);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            m_Controller.OnHitSomething(other);
+            m_Controller?.OnHitSomething(other);
         }
 
         public void SetPool(ProjectilePool pool) => m_Pool = pool;

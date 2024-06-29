@@ -52,6 +52,10 @@ namespace BTG.Actions.PrimaryAction
 
         public void OnHitSomething(Collider other)
         {
+            // NOTE - This need to happen before the damage is done, as we need the data of the TeslaFiring to do the effect
+            // If the damageable.Damage is called first, there is a chance that the entity is destroyed and the data is lost
+            InvokeEffectEvent();
+
             if (other.TryGetComponent(out IDamageableView damageable))
             {
                 if (damageable.Owner == m_View.Owner)

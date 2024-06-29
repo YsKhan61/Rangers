@@ -5,6 +5,8 @@ using Unity.Netcode;
 using System;
 using BTG.Utilities;
 using VContainer;
+using BTG.Factory;
+
 
 
 namespace BTG.Effects
@@ -52,19 +54,20 @@ namespace BTG.Effects
         private void InvokeEffect_ClientRpc(NetworkEffectEventData data, ClientRpcParams clientRpcParams = default)
         {
             Guid guid = data.EffectTagNetworkGuid.ToGuid();
-            ExplosionFactorySO factory = m_EffectFactoryContainer.GetFactory(guid) as ExplosionFactorySO;
-            if (factory == null)
+
+            if (!TryGetFactory(guid, out FactorySO<EffectView> factory))
             {
-                Debug.LogError($"No factory found for effect guid {guid}");
                 return;
             }
 
-            EffectView effect = factory.GetItem();
-            
+            if (!TryGetEffect(factory, out EffectView effect))
+            {
+                return;
+            }
+
             if (data.FollowNetworkObject)
             {
-                NetworkObject objectToFollow = NetworkManager.Singleton.SpawnManager.SpawnedObjects[data.FollowNetowrkObjectId];
-                effect.transform.SetParent(objectToFollow.transform, Vector3.zero, Quaternion.identity);
+                SetNetworkObjectAsPareant(effect.transform, data.FollowNetowrkObjectId);
             }
             else
             {
@@ -72,6 +75,42 @@ namespace BTG.Effects
             }
 
             effect.Play();
+        }
+
+        
+
+        private bool TryGetFactory(Guid guid, out FactorySO<EffectView> factory)
+        {
+            factory = m_EffectFactoryContainer.GetFactory(guid);
+            if (factory == null)
+            {
+                Debug.LogError($"No factory found for effect guid {guid}");
+                return false;
+            }
+            return true;
+        }
+
+        private bool TryGetEffect(FactorySO<EffectView> factory, out EffectView effect)
+        {
+            effect = factory.GetItem();
+            if (effect == null)
+            {
+                Debug.LogError("Failed to get effect from factory.");
+                return false;
+            }
+            return true;
+        }
+
+        private void SetNetworkObjectAsPareant(Transform effect, ulong parentId)
+        {
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(parentId, out NetworkObject objectToFollow))
+            {
+                effect.SetParent(objectToFollow.transform, true);
+            }
+            else
+            {
+                Debug.LogError($"Failed to find network object with ID {parentId}");
+            }
         }
     }
 

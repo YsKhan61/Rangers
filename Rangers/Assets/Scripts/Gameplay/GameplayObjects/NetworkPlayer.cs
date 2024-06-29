@@ -199,11 +199,15 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsServer)
             {
                 DeInitServerEntity();
-                m_PlayerService.OnPlayerDeath();
             }
             else
             {
                 DeInitNonServerEntity();
+            }
+
+            if (IsOwner)
+            {
+                m_PlayerService.OnPlayerDeath();
             }
         }
 
