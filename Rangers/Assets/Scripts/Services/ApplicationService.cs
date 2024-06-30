@@ -93,6 +93,9 @@ namespace BTG.Services
         private UltimateActionDataContainerSO _ultimateActionDataContainer;
 
         [SerializeField]
+        private AudioDataContainerSO _audioDataContainer;
+
+        [SerializeField]
         private WaveConfigSO _enemyWaveConfig;
 
         [SerializeField]
@@ -126,6 +129,7 @@ namespace BTG.Services
             builder.RegisterComponent(_tagContainer);
             builder.RegisterComponent(_primaryActionDataContainer);
             builder.RegisterComponent(_ultimateActionDataContainer);
+            builder.RegisterComponent(_audioDataContainer);
             builder.RegisterComponent(_enemyWaveConfig);
             builder.RegisterComponent(_enemyDeathCount);
 

@@ -1,5 +1,6 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
 using System.Threading;
 using UnityEngine;
@@ -87,10 +88,8 @@ namespace BTG.Actions.PrimaryAction
             SetDamageToBallAndShoot();
             // PlayShotFiredClip();
             OnActionExecuted?.Invoke();
-
-            if (m_Actor.IsPlayer)
-                m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
-
+            InvokeCameraShake();
+            InvokeShootAudioEvent();
             ResetCharging();
         }
 
@@ -173,6 +172,23 @@ namespace BTG.Actions.PrimaryAction
         private void CalculateBallDamage(out int damage)
         {
             damage = (int)Mathf.Lerp(m_Data.MinDamage, m_Data.MaxDamage, m_ChargeAmount);
+        }
+
+        private void InvokeCameraShake()
+        {
+            if (m_Actor.IsPlayer)
+                m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
+        }
+
+        private void InvokeShootAudioEvent()
+        {
+            EventBus<NetworkAudioEventData>.Invoke(new NetworkAudioEventData
+            {
+                OwnerClientOnly = false,
+                FollowNetworkObject = false,
+                AudioTagNetworkGuid = m_Data.Tag.Guid.ToNetworkGuid(),
+                Position = m_Actor.FirePoint.position
+            });
         }
 
         /*private void PlayChargingClip()

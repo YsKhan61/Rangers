@@ -64,6 +64,22 @@ namespace BTG.AudioSystem
             }, m_Cts.Token);
         }
 
+        internal void Play(AudioDataSO data, NetworkAudioEventData eventData)
+        {
+            m_AudioSource.clip = data.Clip;
+            m_AudioSource.loop = data.Loop;
+            m_AudioSource.spatialBlend = data.SpatialBlend;
+            transform.position = eventData.Position;
+            m_AudioSource.Play();
+
+            int duration = data.Loop ? data.Duration : (int)data.Clip.length;
+
+            _ = HelperMethods.InvokeAfterAsync(duration, () =>
+            {
+                m_Pool.ReturnAudio(this);
+            }, m_Cts.Token);
+        }
+
         /// <summary>
         /// Show the audio view
         /// unmute the audio source

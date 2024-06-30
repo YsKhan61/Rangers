@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BTG.AudioSystem
 {
     [CreateAssetMenu(fileName = "AudioData", menuName = "ScriptableObjects/AudioData")]
-    internal class AudioDataSO : ScriptableObject
+    public class AudioDataSO : ScriptableObject
     {
         [SerializeField]
         private TagSO m_Tag;

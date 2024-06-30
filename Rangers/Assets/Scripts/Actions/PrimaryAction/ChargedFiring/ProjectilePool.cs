@@ -5,7 +5,7 @@ namespace BTG.Actions.PrimaryAction
 {
 
 
-    public class ProjectilePool : GenericObjectPool<ProjectileView>
+    public class ProjectilePool : MonoBehaviourObjectPool<ProjectileView>
     {
         private ProjectileView m_Prefab;
 

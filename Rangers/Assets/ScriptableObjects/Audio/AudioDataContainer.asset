@@ -12,4 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d027ead2ac4e8440b51e205713653e3, type: 3}
   m_Name: AudioDataContainer
   m_EditorClassIdentifier: 
-  m_AudioDatas: []
+  m_AudioDatas:
+  - {fileID: 11400000, guid: c407c0b41aa3deb41a770be01e4d5437, type: 2}
+  - {fileID: 11400000, guid: 719b3f615caf1804b94adcb6dc2b113f, type: 2}

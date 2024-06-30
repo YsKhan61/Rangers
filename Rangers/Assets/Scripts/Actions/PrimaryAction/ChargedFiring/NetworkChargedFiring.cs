@@ -1,13 +1,11 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
-using System;
-using System.Threading;
-using UnityEngine;
+using BTG.Utilities.EventBus;
 
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class NetworkChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
+    /*public class NetworkChargedFiring : IPrimaryAction, IUpdatable, IDestroyable
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
@@ -18,8 +16,8 @@ namespace BTG.Actions.PrimaryAction
 
         public PrimaryActionDataSO Data => m_Data;
 
-        /*[Inject]
-        private AudioPool m_AudioPool;*/
+        [Inject]
+        private AudioPool m_AudioPool;
 
         private IPrimaryActor m_Actor;
         private NetworkProjectilePool m_ProjectilePool;
@@ -96,12 +94,10 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             SpawnProjectileAndShoot();
-
-            if (m_Actor.IsPlayer)
-                m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
-
-            // PlayShotFiredClip();
             OnActionExecuted?.Invoke();
+            InvokeCameraShake();
+            // PlayShotFiredClip();
+            InvokeShootAudioEvent();
             ResetCharging();
         }
 
@@ -174,8 +170,24 @@ namespace BTG.Actions.PrimaryAction
                 m_Data.MaxInitialSpeed,
                 m_ChargeAmount) + m_Actor.CurrentMoveSpeed;
         }
+        private void InvokeCameraShake()
+        {
+            if (m_Actor.IsPlayer)
+                m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
+        }
 
-        /*private void PlayChargingClip()
+        private void InvokeShootAudioEvent()
+        {
+            EventBus<NetworkAudioEventData>.Invoke(new NetworkAudioEventData
+            {
+                OwnerClientOnly = false,
+                FollowNetworkObject = false,
+                AudioTagNetworkGuid = m_Data.Tag.Guid.ToNetworkGuid(),
+                Position = m_Actor.FirePoint.position
+            });
+        }
+        
+        private void PlayChargingClip()
         {
             m_FiringAudioSource.clip = m_Data.ChargeClip;
             m_FiringAudioSource.Play();
@@ -202,8 +214,43 @@ namespace BTG.Actions.PrimaryAction
             m_FiringAudioSource.gameObject.SetActive(true);
         }
 
-        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());*/
+        private void DeInitializeFiringAudio() => m_AudioPool.ReturnAudio(m_FiringAudioSource.GetComponent<AudioView>());
     }
+*/
 
+    public class NetworkChargedFiring : ChargedFiringBase
+    {
+        private NetworkProjectilePool m_Pool;
 
+        public NetworkChargedFiring(ChargedFiringDataSO data, NetworkProjectilePool projectilePool) : base(data)
+        {
+            m_Pool = projectilePool;
+        }
+
+        public override void Destroy()
+        {
+            m_Pool.ClearPool();
+            base.Destroy();
+        }
+
+        protected override ProjectileController CreateProjectile()
+        {
+
+            NetworkProjectileView view = m_Pool.GetProjectile();
+            ProjectileController pc = new ProjectileController(chargedFiringData, view);
+            view.SetController(pc);
+            return pc;
+        }
+
+        protected override void InvokeShootAudioEvent()
+        {
+            EventBus<NetworkAudioEventData>.Invoke(new NetworkAudioEventData
+            {
+                OwnerClientOnly = false,
+                FollowNetworkObject = false,
+                AudioTagNetworkGuid = chargedFiringData.Tag.Guid.ToNetworkGuid(),
+                Position = actor.FirePoint.position
+            });
+        }
+    }
 }

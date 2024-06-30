@@ -1,12 +1,13 @@
 ﻿using BTG.Events;
 using BTG.Utilities.EventBus;
 using UnityEngine;
+using VContainer;
 
 namespace BTG.AudioSystem
 {
     internal class AudioService : MonoBehaviour
     {
-        [SerializeField]
+        [Inject]
         private AudioDataContainerSO m_AudioDataContainer;
 
         private EventBinding<AudioEventData> m_AudioEventBinding;
@@ -27,12 +28,19 @@ namespace BTG.AudioSystem
 
         private void PlayAudio(AudioEventData eventData)
         {
-            bool found = m_AudioDataContainer.TryGetAudioData(eventData.Tag, out AudioDataSO data);
+            bool found = m_AudioDataContainer.TryGetAudioData(eventData.AudioTag, out AudioDataSO data);
             if (!found)
             {
                 return;
             }
-            m_Pool.GetAudioView().Play(data, eventData);
+
+            AudioView view = m_Pool.GetAudioView();
+            if (eventData.FollowTarget != null)
+            {
+                view.transform.SetParent(eventData.FollowTarget);
+            }
+
+            view.Play(data, eventData);
         }
     }
 }

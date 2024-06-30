@@ -14,7 +14,7 @@ namespace BTG.Effects
     /// <summary>
     /// This service is responsible for handling all the effects in the multiplayer scene.
     /// </summary>
-    public class NetworkEffectService : NetworkBehaviour
+    internal class NetworkEffectService : NetworkBehaviour
     {
         private EventBinding<NetworkEffectEventData> m_EffectEventBinding;
 

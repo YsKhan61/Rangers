@@ -10,15 +10,15 @@ namespace BTG.Events
     public struct EffectEventData : IEvent
     {
         /// <summary>
+        /// The tag of the effect.
+        /// </summary>
+        public TagSO EffectTag;
+
+        /// <summary>
         /// The parent of the effect. 
         /// If null, the effect will be spawned at the EffectPosition.
         /// </summary>
         public Transform FollowTarget;
-
-        /// <summary>
-        /// The tag of the effect.
-        /// </summary>
-        public TagSO EffectTag;
 
         /// <summary>
         /// If the effect dont have a parent, this is the position where the effect will be spawned.

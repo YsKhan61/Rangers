@@ -98,8 +98,6 @@ namespace BTG.Gameplay.GameplayObjects
         private void Update()
         {
             UpdateEntityVelocity();
-
-            
         }
 
         private void UpdateEntityVelocity()
