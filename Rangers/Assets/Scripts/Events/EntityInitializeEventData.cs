@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Events
 {
-    public struct PlayerEntityInitialized : IEvent 
+    public struct EntityInitializeEventData : IEvent 
     {
         public Sprite Sprite;
     }
