@@ -3,9 +3,7 @@ using UnityEngine;
 
 namespace BTG.Actions.PrimaryAction
 {
-
-
-    public class ProjectilePool : MonoBehaviourObjectPool<ProjectileView>
+    public class ProjectilePool : GenericObjectPool<ProjectileView>
     {
         private ProjectileView m_Prefab;
 

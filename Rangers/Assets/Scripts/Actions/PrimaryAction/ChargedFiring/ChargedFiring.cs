@@ -14,7 +14,6 @@ namespace BTG.Actions.PrimaryAction
 
         public override void Destroy()
         {
-            m_Pool.ClearPool();
             base.Destroy();
         }
 

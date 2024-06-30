@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BTG.Effects
 {
-    public class RagdollPool : MonoBehaviourObjectPool<RagdollView>
+    public class RagdollPool : GenericObjectPool<RagdollView>
     {
         private RagdollDataSO m_Data;
 
@@ -18,7 +18,7 @@ namespace BTG.Effects
 
         protected override RagdollView CreateItem()
         {
-            RagdollView view = Object.Instantiate(m_Data.RagdollPrefab, Container);
+            RagdollView view = Object.Instantiate(m_Data.RagdollPrefab);
             view.Initialize();
             view.SetPool(this);
             return view;

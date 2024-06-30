@@ -20,7 +20,7 @@ using VContainer;
 using VContainer.Unity;
 
 
-namespace BTG.Services
+namespace BTG.Bootstrap
 {
     /// <summary>
     /// An entry point to the application, where we bind all the common dependencies to the root DI Scope

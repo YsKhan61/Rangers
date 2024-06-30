@@ -1,4 +1,5 @@
 ﻿using BTG.Events;
+using BTG.Factory;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using UnityEngine;
@@ -35,10 +36,8 @@ namespace BTG.Effects
 
         private void InvokeEffect(EffectEventData effectEvent)
         {
-            ExplosionFactorySO factory = m_EffectFactoryContainer.GetFactory(effectEvent.EffectTag) as ExplosionFactorySO;
-            if (factory == null)
+            if (!TryGetFactory(effectEvent.EffectTag, out FactorySO<EffectView> factory))
             {
-                Debug.LogError($"No factory found for effect tag {effectEvent.EffectTag}");
                 return;
             }
 
@@ -52,6 +51,17 @@ namespace BTG.Effects
                 effect.transform.SetPositionAndRotation(effectEvent.EffectPosition, Quaternion.identity);
             }
             effect.Play();
+        }
+
+        private bool TryGetFactory(TagSO tag, out FactorySO<EffectView> factory)
+        {
+            factory = m_EffectFactoryContainer.GetFactory(tag);
+            if (factory == null)
+            {
+                Debug.LogError($"No factory found for effect tag {tag}");
+                return false;
+            }
+            return true;
         }
     }
 

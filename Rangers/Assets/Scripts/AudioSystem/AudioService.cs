@@ -1,5 +1,6 @@
 ﻿using BTG.Events;
 using BTG.Utilities.EventBus;
+using BTG.Utilities;
 using UnityEngine;
 using VContainer;
 
@@ -37,7 +38,7 @@ namespace BTG.AudioSystem
             AudioView view = m_Pool.GetAudioView();
             if (eventData.FollowTarget != null)
             {
-                view.transform.SetParent(eventData.FollowTarget);
+                view.transform.SetParent(eventData.FollowTarget, Vector3.zero, Quaternion.identity);
             }
 
             view.Play(data, eventData);

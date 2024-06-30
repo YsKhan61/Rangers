@@ -53,7 +53,7 @@ namespace BTG.Actions.PrimaryAction
             ShootOnFullyCharged();
         }
 
-        public virtual void Disable()
+        public void Disable()
         {
             m_IsEnabled = false;
             m_Cts?.Cancel();

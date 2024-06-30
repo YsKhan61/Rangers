@@ -14,15 +14,8 @@ namespace BTG.Actions.PrimaryAction
             m_Pool = projectilePool;
         }
 
-        public override void Destroy()
-        {
-            m_Pool.ClearPool();
-            base.Destroy();
-        }
-
         protected override ProjectileController CreateProjectile()
         {
-
             NetworkProjectileView view = m_Pool.GetProjectile();
             ProjectileController pc = new ProjectileController(chargedFiringData, view);
             view.SetController(pc);

@@ -1,15 +1,11 @@
 ﻿using BTG.Utilities;
 using UnityEngine;
-using VContainer;
 
 namespace BTG.Actions.PrimaryAction
 {
     public class NetworkProjectilePool : GenericObjectPool<NetworkProjectileView>
     {
         private NetworkProjectileView m_Prefab;
-
-        [Inject]
-        private IObjectResolver m_Resolver;
 
         public NetworkProjectilePool(NetworkProjectileView prefab) => m_Prefab = prefab;
 

@@ -1,6 +1,5 @@
 ﻿using BTG.Utilities;
 using UnityEngine;
-using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -8,9 +7,6 @@ namespace BTG.Actions.PrimaryAction
     public class NetworkTeslaBallPool : GenericObjectPool<NetworkTeslaBallView>
     {
         private NetworkTeslaBallView m_Prefab;
-
-        [Inject]
-        protected IObjectResolver m_Resolver;
 
         public NetworkTeslaBallPool(NetworkTeslaBallView prefab) => m_Prefab = prefab;
 
@@ -22,7 +18,6 @@ namespace BTG.Actions.PrimaryAction
         {
             NetworkTeslaBallView view = Object.Instantiate(m_Prefab);
             view.SetPool(this);
-            m_Resolver.Inject(view);
             view.NetworkObject.Spawn(true);
             return view;
         }

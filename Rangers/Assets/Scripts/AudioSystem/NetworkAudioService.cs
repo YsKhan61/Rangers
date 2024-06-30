@@ -75,7 +75,7 @@ namespace BTG.AudioSystem
         {
             if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out NetworkObject networkObject))
             {
-                transform.SetParent(networkObject.transform);
+                transform.SetParent(networkObject.transform, Vector3.zero, Quaternion.identity);
             }
             else
             {

@@ -1,5 +1,5 @@
 using UnityEngine;
-using VContainer;
+using UnityEngine.SceneManagement;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -7,9 +7,6 @@ namespace BTG.Actions.PrimaryAction
     [CreateAssetMenu(fileName = "Charged Firing Factory", menuName = "ScriptableObjects/Factory/PrimaryActionFactory/ChargedFiringFactorySO")]
     public class ChargedFiringFactorySO : PrimaryActionFactorySO
     {
-        [Inject]
-        private IObjectResolver m_Resolver;
-
         [SerializeField]
         ChargedFiringDataSO m_Data;
 
@@ -19,32 +16,29 @@ namespace BTG.Actions.PrimaryAction
         NetworkProjectilePool m_NetworkPool;
         NetworkProjectilePool NetworkPool => m_NetworkPool ??= InitializeNetworkPool();
 
-        public override IPrimaryAction GetItem()
-        {
-            ChargedFiring cf = new (m_Data, Pool);
-            m_Resolver.Inject(cf);
-            return cf;
-        }
+        public override IPrimaryAction GetItem() => new ChargedFiring(m_Data, Pool);
 
-        public override IPrimaryAction GetNetworkItem()
-        {
-            NetworkChargedFiring ncf = new (m_Data, NetworkPool);
-            m_Resolver.Inject(ncf);
-            return ncf;
-        }
+        public override IPrimaryAction GetNetworkItem() => new NetworkChargedFiring(m_Data, NetworkPool);
 
         ProjectilePool InitializePool()
         {
+            SceneManager.activeSceneChanged += OnSceneChanged;
             var pool = new ProjectilePool(m_Data.ViewPrefab);
-            m_Resolver.Inject(pool);
             return pool;
         }
 
         NetworkProjectilePool InitializeNetworkPool()
         {
+            SceneManager.activeSceneChanged += OnSceneChanged;
             var pool = new NetworkProjectilePool(m_Data.NetworkViewPrefab);
-            m_Resolver.Inject(pool);
             return pool;
+        }
+
+        void OnSceneChanged(Scene scene1, Scene scene2)
+        {
+            SceneManager.activeSceneChanged -= OnSceneChanged;
+            m_Pool?.ClearPool();
+            m_NetworkPool?.ClearPool();
         }
     }
 }

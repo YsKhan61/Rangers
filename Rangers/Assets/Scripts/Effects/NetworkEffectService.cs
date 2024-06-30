@@ -105,7 +105,7 @@ namespace BTG.Effects
         {
             if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(parentId, out NetworkObject objectToFollow))
             {
-                effect.SetParent(objectToFollow.transform, true);
+                effect.SetParent(objectToFollow.transform, Vector3.zero, Quaternion.identity);
             }
             else
             {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BTG.Effects
 {
-    public class ExplosionEffectPool : MonoBehaviourObjectPool<ExplosionView>
+    public class ExplosionEffectPool : GenericObjectPool<ExplosionView>
     {
         private ExplosionDataSO m_Data;
         public ExplosionDataSO Data => m_Data;
@@ -21,7 +21,6 @@ namespace BTG.Effects
         protected override ExplosionView CreateItem()
         {
             ExplosionView view = new GameObject(m_Data.name).AddComponent<ExplosionView>();
-            view.transform.SetParent(Container);
             ParticleSystem ps = Object.Instantiate(m_Data.ParticleSystemPrefab, view.transform);
             AudioSource audioSource = view.gameObject.AddComponent<AudioSource>();
             audioSource.clip = m_Data.AudioClip;

@@ -8,7 +8,7 @@ namespace BTG.Tank
     /// A pool for the TankBrain
     /// </summary>
 
-    public class TankPool : MonoBehaviourObjectPool<TankView>
+    public class TankPool : GenericObjectPool<TankView>
     {
         private TankView m_Prefab;
 
@@ -26,7 +26,7 @@ namespace BTG.Tank
 
         protected override TankView CreateItem()
         {
-            return Object.Instantiate(m_Prefab, Container);
+            return Object.Instantiate(m_Prefab);
         }
 
     }

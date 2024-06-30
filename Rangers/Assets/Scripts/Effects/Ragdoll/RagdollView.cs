@@ -1,5 +1,4 @@
-﻿using BTG.Factory;
-using BTG.Utilities;
+﻿using BTG.Utilities;
 using System.Threading;
 using UnityEngine;
 
@@ -14,7 +13,6 @@ namespace BTG.Effects
     public class RagdollView : EffectView
     {
         private RagdollPool m_Pool;
-        private IRagdollOwner m_Owner;      // maybe needed for resetting early during revive
         private const int DESTROY_DELAY = 2; // This can be passed from either owner, or the factory
 
         [SerializeField, Tooltip("The rigidbodies of the ragdoll")]

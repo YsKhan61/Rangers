@@ -13,12 +13,6 @@ namespace BTG.Actions.PrimaryAction
             m_Pool = pool;
         }
 
-        public override void Disable()
-        {
-            m_Pool.ClearPool();
-            base.Disable();
-        }
-
         protected override void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();

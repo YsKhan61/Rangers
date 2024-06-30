@@ -1,15 +1,12 @@
 ﻿using BTG.Utilities;
 using UnityEngine;
-using VContainer;
+
 
 namespace BTG.Actions.PrimaryAction
 {
-    public class  TeslaBallPool : MonoBehaviourObjectPool<TeslaBallView>
+    public class  TeslaBallPool : GenericObjectPool<TeslaBallView>
     {
         private TeslaBallView m_Prefab;
-
-        [Inject]
-        protected IObjectResolver m_Resolver;
 
         public TeslaBallPool(TeslaBallView prefab) => m_Prefab = prefab;
 
@@ -19,9 +16,8 @@ namespace BTG.Actions.PrimaryAction
 
         protected override TeslaBallView CreateItem()
         {
-            TeslaBallView view = Object.Instantiate(m_Prefab, Container);
+            TeslaBallView view = Object.Instantiate(m_Prefab);
             view.SetPool(this);
-            m_Resolver.Inject(view);
             return view;
         }
     }
