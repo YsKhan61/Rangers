@@ -1184,7 +1184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parentReference:
-    TypeName: BTG.Services.ApplicationService
+    TypeName: BTG.Bootstrap.ApplicationService
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 1960048333}
