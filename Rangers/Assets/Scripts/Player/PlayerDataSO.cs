@@ -37,6 +37,50 @@ namespace BTG.Player
         /// </summary>
         public IntIntEventChannelSO OnPlayerHealthUpdated => m_OnPlayerHealthUpdated;
 
+
+        [Space(10)]
+
+
+        [Header("Primary action Event Channels")]
+
+        [Space(5)]
+
+        [SerializeField, Tooltip("Event channel which will be raised when Entity's Primary Action is assigned")]
+        private TagEventChannelSO m_OnPrimaryActionAssigned;
+        /// <summary>
+        /// Event channel which will be raised when Entity's Primary Action is assigned
+        /// </summary>
+        public TagEventChannelSO OnPrimaryActionAssigned => m_OnPrimaryActionAssigned;
+
+        [SerializeField, Tooltip("Event channel which will be raised when Entity's Primary Action starts")]
+        private VoidEventChannelSO m_OnPrimaryActionStarted;
+        /// <summary>
+        /// Event channel which will be raised when Entity's Primary Action starts
+        /// </summary>
+        public VoidEventChannelSO OnPrimaryActionStarted => m_OnPrimaryActionStarted;
+
+        [SerializeField, Tooltip("Event channel which will be raised when Entity's Primary Action charge amount is updated")]
+        private FloatEventChannelSO m_OnPrimaryActionChargeUpdated;
+        /// <summary>
+        /// Event channel which will be raised when Entity's Primary Action charge amount is updated
+        /// </summary>
+        public FloatEventChannelSO OnPrimaryActionChargeUpdated => m_OnPrimaryActionChargeUpdated;
+
+        [SerializeField, Tooltip("Event channel which will be raised when Entity's Primary Action is executed")]
+        private VoidEventChannelSO m_OnPrimaryActionExecuted;
+        /// <summary>
+        /// Event channel which will be raised when Entity's Primary Action is executed
+        /// </summary>
+        public VoidEventChannelSO OnPrimaryActionExecuted => m_OnPrimaryActionExecuted;
+
+
+        [Space(10)]
+
+
+        [Header("Ultimate Action Event Channels")]
+
+        [Space(5)]
+
         [SerializeField, Tooltip("Event Channel which will be raised when Entity's Ultimate is assigned")]
         private TagEventChannelSO m_OnUltimateAssigned;
         /// <summary>

@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85b2c9c30cfe8f64e9fca7973e67b1da, type: 3}
-  m_Name: TeslaFiringProjectile
+  m_Script: {fileID: 11500000, guid: 82fb4a0b9a1a4e047b78ce9b1bb01013, type: 3}
+  m_Name: PlayerPrimaryActionUpdatedEventChannel
   m_EditorClassIdentifier: 

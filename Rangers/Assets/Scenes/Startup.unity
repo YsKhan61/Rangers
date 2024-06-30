@@ -797,6 +797,8 @@ MonoBehaviour:
   _tagContainer: {fileID: 11400000, guid: 8ba09dd3d7c0c274e877343bceaed367, type: 2}
   _entityDataContainer: {fileID: 11400000, guid: 78a2d4320bff4534aa8d9bc2666294d6,
     type: 2}
+  _primaryActionDataContainer: {fileID: 11400000, guid: 5c8c1ad7c9f4ef74f8b9a34f9269770f,
+    type: 2}
   _ultimateActionDataContainer: {fileID: 11400000, guid: 58ee7c96c78400c4891477f191208291,
     type: 2}
   _enemyWaveConfig: {fileID: 11400000, guid: 11beb4bc5b018064f924ca498e423c84, type: 2}

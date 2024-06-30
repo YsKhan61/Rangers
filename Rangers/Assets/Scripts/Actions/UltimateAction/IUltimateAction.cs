@@ -22,7 +22,7 @@ namespace BTG.Actions.UltimateAction
         /// Invoked after the ultimate action is assigned. 
         /// It contains the tag of the ultimate action
         /// </summary>
-        public event System.Action<TagSO> OnUltimateActionAssigned;
+        public event System.Action<TagSO> OnActionAssigned;
 
         /// <summary>
         /// Invoked when the charge is updated.
@@ -38,7 +38,7 @@ namespace BTG.Actions.UltimateAction
         /// <summary>
         /// Invoked when the ultimate action is executed
         /// </summary>
-        public event System.Action OnUltimateActionExecuted;
+        public event System.Action OnActionExecuted;
 
         /// <summary>
         /// Get the tag of the ultimate action

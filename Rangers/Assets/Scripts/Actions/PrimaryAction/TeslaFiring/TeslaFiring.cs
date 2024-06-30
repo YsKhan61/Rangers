@@ -11,7 +11,10 @@ namespace BTG.Actions.PrimaryAction
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
-        public event System.Action OnPrimaryActionExecuted;
+        public event System.Action<TagSO> OnActionAssigned;
+        public event System.Action OnActionStarted;
+        public event System.Action<float> OnActionChargeUpdated;
+        public event System.Action OnActionExecuted;
 
         private TeslaFiringDataSO m_Data;
         public TeslaFiringDataSO Data => m_Data;
@@ -40,9 +43,9 @@ namespace BTG.Actions.PrimaryAction
         public void Enable()
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
-            // InitializeFiringAudio();
-
             m_IsEnabled = true;
+            // InitializeFiringAudio();
+            OnActionAssigned?.Invoke(m_Data.Tag);
         }
 
         public void Update()
@@ -62,7 +65,7 @@ namespace BTG.Actions.PrimaryAction
             // DeInitializeFiringAudio();
             m_IsEnabled = false;
             m_Cts?.Cancel();
-
+            m_TeslaBallPool.ClearPool();
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
         }
 
@@ -74,9 +77,9 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            // PlayChargingClip();
-
             SpawnBall();
+            // PlayChargingClip();
+            OnActionStarted?.Invoke();
         }
 
         public void StopAction()
@@ -85,16 +88,13 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = false;
-
             SetDamageToBallAndShoot();
-
-            OnPrimaryActionExecuted?.Invoke();
+            // PlayShotFiredClip();
+            OnActionExecuted?.Invoke();
 
             if (m_Actor.IsPlayer)
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
-                // EventBus<CameraShakeEventData>.Invoke(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
-            // PlayShotFiredClip();
             ResetCharging();
         }
 
@@ -112,7 +112,7 @@ namespace BTG.Actions.PrimaryAction
 
         private void SetDamageToBallAndShoot()
         {
-            m_BallInCharge.transform.SetParent(m_TeslaBallPool.Container);
+            // m_BallInCharge.transform.SetParent(m_TeslaBallPool.Container);
             m_BallInCharge.Rigidbody.isKinematic = false;
             CalculateBallDamage(out int damage);
             m_BallInCharge?.SetDamage(damage);
@@ -133,6 +133,8 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
+            m_BallInCharge.transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
+            OnActionChargeUpdated?.Invoke(m_ChargeAmount);
             // UpdateChargingClipPitch(m_ChargeAmount);
         }
 

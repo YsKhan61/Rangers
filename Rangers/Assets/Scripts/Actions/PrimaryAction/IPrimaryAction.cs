@@ -1,4 +1,6 @@
+using System;
 using BTG.Factory;
+using BTG.Utilities;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -8,7 +10,10 @@ namespace BTG.Actions.PrimaryAction
     /// </summary>
     public interface IPrimaryAction : IFactoryItem
     {
-        public event System.Action OnPrimaryActionExecuted;
+        public event Action<TagSO> OnActionAssigned;
+        public event Action OnActionStarted;
+        public event Action<float> OnActionChargeUpdated;
+        public event Action OnActionExecuted;
 
         /// <summary>
         /// Enable the action.

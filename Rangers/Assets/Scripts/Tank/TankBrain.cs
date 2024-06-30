@@ -1,7 +1,5 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
-using BTG.AudioSystem;
-using BTG.Effects;
 using BTG.Entity;
 using BTG.Events;
 using BTG.Utilities;

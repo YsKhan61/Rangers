@@ -18,6 +18,14 @@ MonoBehaviour:
     type: 3}
   m_OnPlayerHealthUpdated: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
     type: 2}
+  m_OnPrimaryActionAssigned: {fileID: 11400000, guid: 5c9e254d43256354ebc33db2f77f3559,
+    type: 2}
+  m_OnPrimaryActionStarted: {fileID: 11400000, guid: 7b3388849e5d2d842971471dd50550a2,
+    type: 2}
+  m_OnPrimaryActionChargeUpdated: {fileID: 11400000, guid: 466f8fe637989b6449616bbf9c5ce2fd,
+    type: 2}
+  m_OnPrimaryActionExecuted: {fileID: 11400000, guid: d1c9e35e180da7244bbdcf8f575c2ef6,
+    type: 2}
   m_OnUltimateAssigned: {fileID: 11400000, guid: 1cf157a38c10e194c90c3d6bb90ae0e0,
     type: 2}
   m_OnUltimateChargeUpdated: {fileID: 11400000, guid: ac13916834dfd274c91df097160439d0,

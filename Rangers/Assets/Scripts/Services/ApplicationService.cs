@@ -87,6 +87,9 @@ namespace BTG.Services
         private EntityDataContainerSO _entityDataContainer;
 
         [SerializeField]
+        private PrimaryActionDataContainerSO _primaryActionDataContainer;
+
+        [SerializeField]
         private UltimateActionDataContainerSO _ultimateActionDataContainer;
 
         [SerializeField]
@@ -121,6 +124,7 @@ namespace BTG.Services
             builder.RegisterComponent(_playerStats);
             builder.RegisterComponent(_entityDataContainer);
             builder.RegisterComponent(_tagContainer);
+            builder.RegisterComponent(_primaryActionDataContainer);
             builder.RegisterComponent(_ultimateActionDataContainer);
             builder.RegisterComponent(_enemyWaveConfig);
             builder.RegisterComponent(_enemyDeathCount);

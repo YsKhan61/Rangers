@@ -1,11 +1,8 @@
-using BTG.AudioSystem;
 using BTG.Events;
 using BTG.Utilities;
-using BTG.Utilities.EventBus;
 using System;
 using System.Threading;
 using UnityEngine;
-using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
@@ -17,7 +14,10 @@ namespace BTG.Actions.PrimaryAction
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
-        public event Action OnPrimaryActionExecuted;
+        public event Action<TagSO> OnActionAssigned;
+        public event Action OnActionStarted;
+        public event Action<float> OnActionChargeUpdated;
+        public event Action OnActionExecuted;
 
         /*[Inject]
         private AudioPool m_AudioPool;*/
@@ -36,7 +36,6 @@ namespace BTG.Actions.PrimaryAction
         {
             m_Data = data;
             m_ProjectilePool = projectilePool;
-
             // CreateFiringAudio();
         }
 
@@ -44,9 +43,9 @@ namespace BTG.Actions.PrimaryAction
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
             UnityMonoBehaviourCallbacks.Instance.RegisterToDestroy(this);
-            // InitializeFiringAudio();
-
             m_IsEnabled = true;
+            // InitializeFiringAudio();
+            OnActionAssigned?.Invoke(m_Data.Tag);
         }
 
         public void Update()
@@ -55,7 +54,6 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             UpdateChargeAmount();
-
             ShootOnFullyCharged();
         }
 
@@ -86,6 +84,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_IsCharging = true;
             // PlayChargingClip();
+            OnActionStarted?.Invoke();
         }
 
         public void StopAction()
@@ -103,9 +102,8 @@ namespace BTG.Actions.PrimaryAction
             if (m_Actor.IsPlayer)
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
-            OnPrimaryActionExecuted?.Invoke();
-
             // PlayShotFiredClip();
+            OnActionExecuted?.Invoke();
             ResetCharging();
         }
 
@@ -129,6 +127,7 @@ namespace BTG.Actions.PrimaryAction
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
             // UpdateChargingClipPitch(m_ChargeAmount);
+            OnActionChargeUpdated?.Invoke(m_ChargeAmount);
         }
 
         private void ShootOnFullyCharged()

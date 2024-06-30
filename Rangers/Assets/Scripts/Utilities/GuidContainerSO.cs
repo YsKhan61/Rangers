@@ -11,7 +11,6 @@ namespace BTG.Utilities
         public bool TryGetData(Guid guid, out T data)
         {
             data = Array.Find(m_DataList, d => d.Guid == guid);
-
             return data != null;
         }
 

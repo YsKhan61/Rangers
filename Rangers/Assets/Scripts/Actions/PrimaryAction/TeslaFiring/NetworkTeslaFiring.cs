@@ -1,5 +1,6 @@
 ﻿using BTG.Events;
 using BTG.Utilities;
+using System;
 using System.Threading;
 using UnityEngine;
 
@@ -10,7 +11,10 @@ namespace BTG.Actions.PrimaryAction
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 
-        public event System.Action OnPrimaryActionExecuted;
+        public event Action<TagSO> OnActionAssigned;
+        public event Action OnActionStarted;
+        public event Action<float> OnActionChargeUpdated;
+        public event Action OnActionExecuted;
 
         private TeslaFiringDataSO m_Data;
         public TeslaFiringDataSO Data => m_Data;
@@ -35,9 +39,9 @@ namespace BTG.Actions.PrimaryAction
         public void Enable()
         {
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
-            // InitializeFiringAudio();
-
             m_IsEnabled = true;
+            // InitializeFiringAudio();
+            OnActionAssigned?.Invoke(m_Data.Tag);
         }
 
         public void Update()
@@ -69,9 +73,9 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = true;
-            // PlayChargingClip();
-
             SpawnBall();
+            // PlayChargingClip();
+            OnActionStarted?.Invoke();
         }
 
         public void StopAction()
@@ -80,15 +84,13 @@ namespace BTG.Actions.PrimaryAction
                 return;
 
             m_IsCharging = false;
-
             SetDamageToBallAndShoot();
-
-            OnPrimaryActionExecuted?.Invoke();
+            // PlayShotFiredClip();
+            OnActionExecuted?.Invoke();
 
             if (m_Actor.IsPlayer)
                 m_Actor.RaisePlayerCamShakeEvent(new CameraShakeEventData { ShakeAmount = m_ChargeAmount, ShakeDuration = 0.5f });
 
-            // PlayShotFiredClip();
             ResetCharging();
         }
 
@@ -126,9 +128,8 @@ namespace BTG.Actions.PrimaryAction
 
             m_ChargeAmount += Time.deltaTime / m_Data.ChargeTime;
             m_ChargeAmount = Mathf.Clamp01(m_ChargeAmount);
-            m_BallInCharge.transform.position = m_Actor.FirePoint.position;
             m_BallInCharge.transform.SetPositionAndRotation(m_Actor.FirePoint.position, m_Actor.FirePoint.rotation);
-            
+            OnActionChargeUpdated?.Invoke(m_ChargeAmount);
             // UpdateChargingClipPitch(m_ChargeAmount);
         }
 
@@ -174,11 +175,11 @@ namespace BTG.Actions.PrimaryAction
             damage = (int)Mathf.Lerp(m_Data.MinDamage, m_Data.MaxDamage, m_ChargeAmount);
         }
 
-        private void PlayChargingClip()
+        /*private void PlayChargingClip()
         {
-            /*m_FiringAudioSource.clip = m_Data.ChargingClip;
-            m_FiringAudioSource.Play();*/
-        }
+            m_FiringAudioSource.clip = m_Data.ChargingClip;
+            m_FiringAudioSource.Play();
+        }*/
 
         // private void UpdateChargingClipPitch(float amount) => m_FiringAudioSource.pitch = 0.5f + amount;
         // private void StopChargingClip() => m_FiringAudioSource.Stop();

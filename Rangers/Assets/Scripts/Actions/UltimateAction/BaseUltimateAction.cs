@@ -15,10 +15,10 @@ namespace BTG.Actions.UltimateAction
     {
         public const int FULL_CHARGE = 100;
 
-        public event System.Action<TagSO> OnUltimateActionAssigned;
+        public event System.Action<TagSO> OnActionAssigned;
         public abstract event System.Action OnFullyCharged;
         public event System.Action<int> OnChargeUpdated;
-        public event System.Action OnUltimateActionExecuted;        
+        public event System.Action OnActionExecuted;        
 
         public TagSO Tag => ultimateActionData.Tag;
         public State CurrentState { get; protected set; }
@@ -48,7 +48,7 @@ namespace BTG.Actions.UltimateAction
 
             Charge(-FULL_CHARGE);
 
-            OnUltimateActionAssigned = null;
+            OnActionAssigned = null;
             OnChargeUpdated = null;
 
             ChangeState(State.Disabled);
@@ -93,17 +93,17 @@ namespace BTG.Actions.UltimateAction
         {
             HelperMethods.CancelAndDisposeCancellationTokenSource(cts);
             
-            OnUltimateActionAssigned = null;
+            OnActionAssigned = null;
             OnChargeUpdated = null;
         }
 
         protected void RaiseUltimateActionAssignedEvent()
-            => OnUltimateActionAssigned?.Invoke(Tag);
+            => OnActionAssigned?.Invoke(Tag);
 
         protected abstract void RaiseFullyChargedEvent();
 
         protected void RaiseUltimateActionExecutedEvent()
-            => OnUltimateActionExecuted?.Invoke();
+            => OnActionExecuted?.Invoke();
 
         protected void RestartAfterDuration(int duration)
             => _ = HelperMethods.InvokeAfterAsync(duration, () => Restart(), cts.Token);

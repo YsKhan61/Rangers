@@ -154,8 +154,8 @@ namespace BTG.Enemy
             m_EntityBrain.SetDamageable(m_EntityHealthController as IDamageableView);
             m_EntityBrain.SetOppositionLayerMask(m_Data.OppositionLayerMask);
 
-            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted += m_StateMachine.OnPrimaryActionExecuted;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += OnUltimateExecuted;
+            m_EntityBrain.PrimaryAction.OnActionExecuted += m_StateMachine.OnPrimaryActionExecuted;
+            m_EntityBrain.UltimateAction.OnActionExecuted += OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged += OnUltimateFullyCharged;
 
             /// This need to be subscribed here, to ensure that when the entity is initialized, the visibility of the UI is toggled
@@ -284,8 +284,8 @@ namespace BTG.Enemy
 
         private void UnsubscribeFromEvents()
         {
-            m_EntityBrain.PrimaryAction.OnPrimaryActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= OnUltimateExecuted;
+            m_EntityBrain.PrimaryAction.OnActionExecuted -= m_StateMachine.OnPrimaryActionExecuted;
+            m_EntityBrain.UltimateAction.OnActionExecuted -= OnUltimateExecuted;
             m_EntityBrain.UltimateAction.OnFullyCharged -= OnUltimateFullyCharged;
             
             m_EntityHealthController.OnDamageTaken -= OnDamageTaken;

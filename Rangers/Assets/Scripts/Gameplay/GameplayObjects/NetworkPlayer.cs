@@ -1,4 +1,5 @@
-﻿using BTG.Actions.UltimateAction;
+﻿using BTG.Actions.PrimaryAction;
+using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Events;
 using BTG.Player;
@@ -22,6 +23,9 @@ namespace BTG.Gameplay.GameplayObjects
 
         [Inject]
         private UltimateActionDataContainerSO m_UltimateActionDataContainer;
+
+        [Inject]
+        private PrimaryActionDataContainerSO m_PrimaryActionDataContainer;
 
         private Rigidbody m_Rigidbody;
         private Pose m_SpawnPose;
@@ -184,10 +188,11 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.SetOppositionLayerMask(1 << m_Model.PlayerData.SelfLayer);
 
             m_EntityBrain.OnEntityInitialized += InformOnEntityInitialized;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned += InformUltimateAssigned;
+            m_EntityBrain.PrimaryAction.OnActionAssigned += InformPrimaryActionAssigned;
+            m_EntityBrain.UltimateAction.OnActionAssigned += InformUltimateAssigned;
             m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted += InformUltimateActionExecuted;
+            m_EntityBrain.UltimateAction.OnActionExecuted += InformUltimateActionExecuted;
             m_EntityBrain.OnPlayerCameraShake += OnPlayerCameraShake;
             m_EntityBrain.OnEntityVisibilityToggled += OnEntityVisibilityToggled;
 
@@ -267,6 +272,22 @@ namespace BTG.Gameplay.GameplayObjects
             }
         }
 
+        private void InformPrimaryActionAssigned(TagSO tag)
+        {
+            InformPrimaryActionAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
+        }
+
+        [ClientRpc]
+        private void InformPrimaryActionAssigned_ClientRpc(NetworkGuid ng)
+        {
+            if (IsOwner)
+            {
+                bool found = m_PrimaryActionDataContainer.TryGetPrimaryActionTagByGuid(ng.ToGuid(), out TagSO tag);
+                if (!found) return;
+                m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent(tag);
+            }
+        }
+
         private void InformUltimateAssigned(TagSO tag)
         {
             InformUltimateAssigned_ClientRpc(tag.Guid.ToNetworkGuid());
@@ -277,7 +298,8 @@ namespace BTG.Gameplay.GameplayObjects
         {
             if (IsOwner)
             {
-                TagSO tag = m_UltimateActionDataContainer.GetUltimateActionTagByGuid(ngTag.ToGuid());
+                bool found = m_UltimateActionDataContainer.TryGetUltimateActionTagByGuid(ngTag.ToGuid(), out TagSO tag);
+                if (!found) return;
                 m_Model.PlayerData.OnUltimateAssigned.RaiseEvent(tag);
             }
         }
@@ -477,10 +499,10 @@ namespace BTG.Gameplay.GameplayObjects
             
             m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
-            m_EntityBrain.UltimateAction.OnUltimateActionAssigned -= InformUltimateAssigned;
+            m_EntityBrain.UltimateAction.OnActionAssigned -= InformUltimateAssigned;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;
-            m_EntityBrain.UltimateAction.OnUltimateActionExecuted -= InformUltimateActionExecuted;
+            m_EntityBrain.UltimateAction.OnActionExecuted -= InformUltimateActionExecuted;
             m_EntityBrain.OnPlayerCameraShake -= OnPlayerCameraShake;
             m_EntityBrain.OnEntityVisibilityToggled -= OnEntityVisibilityToggled;
 

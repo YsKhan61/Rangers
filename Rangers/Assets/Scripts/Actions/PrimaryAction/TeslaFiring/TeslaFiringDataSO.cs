@@ -7,12 +7,8 @@ namespace BTG.Actions.PrimaryAction
 {
 
     [CreateAssetMenu(fileName = "TeslaFiringData", menuName = "ScriptableObjects/PrimaryAction/TeslaFiringDataSO")]
-    public class TeslaFiringDataSO : ScriptableObject
+    public class TeslaFiringDataSO : PrimaryActionDataSO
     {
-        [SerializeField]
-        TagSO m_Tag;
-        public TagSO Tag => m_Tag;
-
         [SerializeField, Tooltip("This prefab is used in single player")]
         TeslaBallView m_TeslaBallViewPrefab;
         public TeslaBallView TeslaBallViewPrefab => m_TeslaBallViewPrefab;
