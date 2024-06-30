@@ -285,12 +285,18 @@ namespace BTG.Gameplay.GameplayObjects
         [ClientRpc]
         private void InformPrimaryActionAssigned_ClientRpc(NetworkGuid ng)
         {
+            bool found = m_PrimaryActionDataContainer.TryGetPrimaryActionTagByGuid(ng.ToGuid(), out TagSO tag);
+            if (!found) return;
+
             if (IsOwner)
             {
-                bool found = m_PrimaryActionDataContainer.TryGetPrimaryActionTagByGuid(ng.ToGuid(), out TagSO tag);
-                if (!found) return;
                 m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent(tag);
             }
+
+            found = m_PrimaryActionDataContainer.TryGetPrimaryActionDataByTag(tag, out PrimaryActionDataSO data);
+            if (!found) return;
+
+            m_EntityBrain.InitializeChargingAndShootingClips(data.ChargeClip, data.ShotFiredClip);
         }
 
         private void InformPrimaryActionStarted()
@@ -305,6 +311,7 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionStarted.RaiseEvent();
             }
+            m_EntityBrain.PlayChargingClip();
         }
 
         private void InformPrimaryActionChargeUpdated(float amount)
@@ -319,6 +326,7 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionChargeUpdated.RaiseEvent(amount);
             }
+            m_EntityBrain.UpdateChargingClipPitch(amount);
         }
 
         private void InformPrimaryActionExecuted()
@@ -333,6 +341,7 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionExecuted.RaiseEvent();
             }
+            m_EntityBrain.PlayShotFiredClip();
         }
 
         private void InformUltimateAssigned(TagSO tag)
@@ -547,6 +556,9 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
             m_EntityBrain.PrimaryAction.OnActionAssigned -= InformPrimaryActionAssigned;
+            m_EntityBrain.PrimaryAction.OnActionStarted -= InformPrimaryActionStarted;
+            m_EntityBrain.PrimaryAction.OnActionChargeUpdated -= InformPrimaryActionChargeUpdated;
+            m_EntityBrain.PrimaryAction.OnActionExecuted -= InformPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnActionAssigned -= InformUltimateAssigned;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;

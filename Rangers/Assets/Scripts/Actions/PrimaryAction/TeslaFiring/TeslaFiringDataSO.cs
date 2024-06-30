@@ -18,10 +18,6 @@ namespace BTG.Actions.PrimaryAction
         public NetworkTeslaBallView NetworkTeslaBallViewPrefab => m_NetworkTeslaBallViewPrefab;
 
         [SerializeField]
-        int m_ChargeTime;
-        public int ChargeTime => m_ChargeTime;
-
-        [SerializeField]
         int m_MinInitialSpeed;
         public int MinInitialSpeed => m_MinInitialSpeed;
 
@@ -37,7 +33,6 @@ namespace BTG.Actions.PrimaryAction
         float m_MaxScale;
         public float MaxTeslaBallScale => m_MaxScale;
 
-
         [SerializeField, Tooltip("Min Damage done by the Tesla Ball")]
         int m_MinDamage;
         public int MinDamage => m_MinDamage;
@@ -45,22 +40,6 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField, Tooltip("Max Damage done by the Tesla Ball")]
         int m_MaxDamage;
         public int MaxDamage => m_MaxDamage;
-
-        [SerializeField]
-        AudioClip m_ShotFiredClip;
-        public AudioClip ShotFiredClip => m_ShotFiredClip;
-
-        [SerializeField, Tooltip("The charging sound clip")]
-        AudioClip m_ChargingClip;
-        public AudioClip ChargingClip => m_ChargingClip;
-
-        [SerializeField, Tooltip("The sound clip when bullet hits or other action views hit")]
-        AudioClip m_ActionImpactclip;
-        public AudioClip ActionImpactClip => m_ActionImpactclip;
-
-        [SerializeField]
-        ExplosionFactorySO m_ExplosionFactory;
-        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;
     }
 }
 

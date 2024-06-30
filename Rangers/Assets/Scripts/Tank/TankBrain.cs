@@ -275,6 +275,14 @@ namespace BTG.Tank
 
         public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData) => OnPlayerCameraShake?.Invoke(camShakeData);
 
+        public void InitializeChargingAndShootingClips(AudioClip chargingClip, AudioClip shotFiredClip)
+            => m_View.AudioView.InitializeChargingAndShootingClips(chargingClip, shotFiredClip);
+
+        public void PlayChargingClip() => m_View.AudioView.PlayChargingClip();
+        
+        public void UpdateChargingClipPitch(float amount) => m_View.AudioView.UpdateChargingClipPitch(amount);
+        
+        public void PlayShotFiredClip() => m_View.AudioView.PlayShotFiredClip();
         // private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
         
         private void UpdateState()

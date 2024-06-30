@@ -16,6 +16,8 @@ namespace BTG.Actions.PrimaryAction
         public event Action<float> OnActionChargeUpdated;
         public event Action OnActionExecuted;
 
+        public PrimaryActionDataSO Data => m_Data;
+
         /*[Inject]
         private AudioPool m_AudioPool;*/
 

@@ -31,5 +31,20 @@ namespace BTG.Actions.PrimaryAction
             Debug.Assert(false, $"UltimateActionTag with guid {guid} not found in {name}");
             return false;
         }
+
+        public bool TryGetPrimaryActionDataByTag(TagSO tag, out PrimaryActionDataSO primaryActionData)
+        {
+            foreach (var data in DataList)
+            {
+                if (data.Tag == tag)
+                {
+                    primaryActionData = data;
+                    return true;
+                }
+            }
+            primaryActionData = null;
+            Debug.LogError($"PrimaryActionData with tag {tag} not found in {name}");
+            return false;
+        }
     }
 }

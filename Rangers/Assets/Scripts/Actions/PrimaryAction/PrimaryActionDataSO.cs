@@ -12,5 +12,21 @@ namespace BTG.Actions.PrimaryAction
         /// The tag of the primary action. Every primary action data scriptable object should have a unique tag
         /// </summary>
         public TagSO Tag => m_Tag;
+
+        [SerializeField, Tooltip("Damage done by the projectile")]
+        int m_Damage;
+        public int Damage => m_Damage;
+
+        [SerializeField]
+        int m_ChargeTime;
+        public int ChargeTime => m_ChargeTime;
+
+        [SerializeField]
+        AudioClip m_ChargeClip;
+        public AudioClip ChargeClip => m_ChargeClip;
+
+        [SerializeField]
+        AudioClip m_ShotFiredClip;
+        public AudioClip ShotFiredClip => m_ShotFiredClip;
     }
 }
