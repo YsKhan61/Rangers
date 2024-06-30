@@ -8,8 +8,9 @@ using UnityEngine;
 namespace BTG.Actions.PrimaryAction
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class NetworkTeslaBallView : NetworkBehaviour, IFiringView
+    public class NetworkTeslaBallView : NetworkBehaviour, ITeslaBallView
     {
+        public Transform Transform => transform;
         public Transform Owner { get; private set; }
 
         [SerializeField]
@@ -23,11 +24,8 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
-        /*[Inject]
-        private AudioPool m_AudioPool;*/
-
         private NetworkTeslaBallPool m_Pool;
-        private NetworkTeslaFiring m_TeslaFiring;
+        private ITeslaFiring m_TeslaFiring;
         private int m_Damage;
         private TagSO m_EffectTag;
 
@@ -44,7 +42,7 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
         /// </summary>
-        public void SetTeslaFiring(NetworkTeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
+        public void SetTeslaFiring(ITeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
 
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
@@ -109,7 +107,6 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            // DoExplosionAudio;
             Reset();
         }
 
@@ -123,11 +120,6 @@ namespace BTG.Actions.PrimaryAction
                 EffectPosition = transform.position
             });
         }
-
-        /*private void DoExplosionAudio()
-        {
-            m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
-        }*/
 
         private void Reset()
         {

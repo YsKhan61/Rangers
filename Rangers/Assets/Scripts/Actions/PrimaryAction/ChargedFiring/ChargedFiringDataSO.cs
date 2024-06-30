@@ -1,7 +1,4 @@
-using BTG.Effects;
-using BTG.Utilities;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 
 namespace BTG.Actions.PrimaryAction

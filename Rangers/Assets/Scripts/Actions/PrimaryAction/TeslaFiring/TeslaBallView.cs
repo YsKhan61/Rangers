@@ -1,16 +1,16 @@
-﻿using BTG.AudioSystem;
-using BTG.Events;
+﻿using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using UnityEngine;
-using VContainer;
 
 
 namespace BTG.Actions.PrimaryAction
 {
     [RequireComponent(typeof(Rigidbody), typeof(SphereCollider))]
-    public class TeslaBallView : MonoBehaviour, IFiringView
+    public class TeslaBallView : MonoBehaviour, ITeslaBallView
     {
+        public Transform Transform => transform;
+
         public Transform Owner { get; private set; }
 
         [SerializeField]
@@ -24,20 +24,14 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
-        /*[Inject]
-        private AudioPool m_AudioPool;*/
-
-        private TeslaFiring m_TeslaFiring;
+        private ITeslaFiring m_TeslaFiring;
         private TeslaBallPool m_Pool;
-
         private int m_Damage;
 
 
         private void OnCollisionEnter(Collision collision) => OnHitSomething(collision.collider);
 
         private void OnTriggerEnter(Collider other) => OnHitSomething(other);
-
-        
 
         /// <summary>
         /// Set the owner of the tesla ball
@@ -47,7 +41,7 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
         /// </summary>
-        public void SetTeslaFiring(TeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
+        public void SetTeslaFiring(ITeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
 
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
@@ -90,7 +84,6 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            // DoExplosionAudio();
             Reset();
         }
 
@@ -102,11 +95,6 @@ namespace BTG.Actions.PrimaryAction
                 EffectPosition = transform.position
             });
         }
-
-        /*private void DoExplosionAudio()
-        {
-            m_AudioPool.GetAudioView().PlayOneShot(m_TeslaFiring.Data.ActionImpactClip, transform.position);
-        }*/
 
         private void Reset()
         {
@@ -129,8 +117,6 @@ namespace BTG.Actions.PrimaryAction
 
 #endif
     }
-
-
 
 }
 
