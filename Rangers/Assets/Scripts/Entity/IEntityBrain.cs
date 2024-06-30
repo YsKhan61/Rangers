@@ -86,27 +86,6 @@ namespace BTG.Entity
         /// It is separate from DeInit.
         /// </summary>
         public void ExecuteRagdollEffectEvent();
-
-        /// <summary>
-        /// This method helps in setting the visibility of the entity.
-        /// </summary>
-        public void InitializeChargingAndShootingClips(AudioClip chargingClip, AudioClip shootClip);
-
-        /// <summary>
-        /// This method helps in playing the charging clip of the primary action of the entity.
-        /// </summary>
-        public void PlayChargingClip();
-
-        /// <summary>
-        /// This method helps in updating the pitch of the charging clip of the primary action of the entity.
-        /// </summary>
-        public void UpdateChargingClipPitch(float amount);
-
-        /// <summary>
-        /// This method helps in playing the shot fired clip of the primary action of the entity.
-        /// </summary>
-        /// <param name="clip"></param>
-        public void PlayShotFiredClip();
     }
 
 }

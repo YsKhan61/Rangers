@@ -35,11 +35,15 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         private void OnCollisionEnter(Collision collision)
         {
+            if (!IsServer) return;
+
             m_Controller?.OnHitSomething(collision.collider);
         }
 
         private void OnTriggerEnter(Collider other)
         {
+            if (!IsServer) return;
+
             m_Controller?.OnHitSomething(other);
         }
 

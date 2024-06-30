@@ -96,6 +96,8 @@ namespace BTG.Actions.PrimaryAction
 
         private void OnHitSomething(Collider other)
         {
+            if (!IsServer) return;
+
             // Debug.Log("Hit something: " + other.gameObject.name);
 
             // NOTE - This need to happen before the damage is done, as we need the data of the TeslaFiring to do the effect

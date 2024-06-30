@@ -292,11 +292,6 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent(tag);
             }
-
-            found = m_PrimaryActionDataContainer.TryGetPrimaryActionDataByTag(tag, out PrimaryActionDataSO data);
-            if (!found) return;
-
-            m_EntityBrain.InitializeChargingAndShootingClips(data.ChargeClip, data.ShotFiredClip);
         }
 
         private void InformPrimaryActionStarted()
@@ -311,7 +306,6 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionStarted.RaiseEvent();
             }
-            m_EntityBrain.PlayChargingClip();
         }
 
         private void InformPrimaryActionChargeUpdated(float amount)
@@ -326,7 +320,6 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionChargeUpdated.RaiseEvent(amount);
             }
-            m_EntityBrain.UpdateChargingClipPitch(amount);
         }
 
         private void InformPrimaryActionExecuted()
@@ -341,7 +334,6 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_Model.PlayerData.OnPrimaryActionExecuted.RaiseEvent();
             }
-            m_EntityBrain.PlayShotFiredClip();
         }
 
         private void InformUltimateAssigned(TagSO tag)
