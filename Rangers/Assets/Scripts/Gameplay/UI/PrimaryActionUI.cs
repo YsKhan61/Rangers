@@ -61,6 +61,7 @@ namespace BTG.Gameplay.UI
         private void OnActionExecuted()
         {
             m_IsCharging = false;
+            m_ChargeSlider.value = 0;
         }
     }
 }

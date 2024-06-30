@@ -189,6 +189,9 @@ namespace BTG.Gameplay.GameplayObjects
 
             m_EntityBrain.OnEntityInitialized += InformOnEntityInitialized;
             m_EntityBrain.PrimaryAction.OnActionAssigned += InformPrimaryActionAssigned;
+            m_EntityBrain.PrimaryAction.OnActionStarted += InformPrimaryActionStarted;
+            m_EntityBrain.PrimaryAction.OnActionChargeUpdated += InformPrimaryActionChargeUpdated;
+            m_EntityBrain.PrimaryAction.OnActionExecuted += InformPrimaryActionExecuted;
             m_EntityBrain.UltimateAction.OnActionAssigned += InformUltimateAssigned;
             m_EntityBrain.UltimateAction.OnChargeUpdated += InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged += InformUltimateFullyCharged;
@@ -210,6 +213,27 @@ namespace BTG.Gameplay.GameplayObjects
             m_EntityBrain.SetController(this);
             m_EntityBrain.SetParentOfView(transform, Vector3.zero, Quaternion.identity);
             m_EntityBrain.InitNonServer();
+        }
+
+        
+
+        public void DeInitServerEntity()
+        {
+            // If the entity brain is null, then the entity is already deinitialized. It may happen at the start of the game.
+            if (m_EntityBrain == null) return;
+
+            UnsubscribeFromEntityEvents();
+            m_EntityBrain.DeInit();
+            m_EntityBrain = null;
+        }
+
+        public void DeInitNonServerEntity()
+        {
+            // This check is necessary as the entity brain may already be deinitialized. at start of game.
+            if (m_EntityBrain == null) return;      
+
+            m_EntityBrain.DeInitNonServer();
+            m_EntityBrain = null;
         }
 
         public void OnEntityDied()
@@ -236,25 +260,6 @@ namespace BTG.Gameplay.GameplayObjects
             {
                 m_PlayerService.OnPlayerDeath();
             }
-        }
-
-        public void DeInitServerEntity()
-        {
-            // If the entity brain is null, then the entity is already deinitialized. It may happen at the start of the game.
-            if (m_EntityBrain == null) return;
-
-            UnsubscribeFromEntityEvents();
-            m_EntityBrain.DeInit();
-            m_EntityBrain = null;
-        }
-
-        public void DeInitNonServerEntity()
-        {
-            // This check is necessary as the entity brain may already be deinitialized. at start of game.
-            if (m_EntityBrain == null) return;      
-
-            m_EntityBrain.DeInitNonServer();
-            m_EntityBrain = null;
         }
 
         private void InformOnEntityInitialized(Sprite icon)
@@ -285,6 +290,48 @@ namespace BTG.Gameplay.GameplayObjects
                 bool found = m_PrimaryActionDataContainer.TryGetPrimaryActionTagByGuid(ng.ToGuid(), out TagSO tag);
                 if (!found) return;
                 m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent(tag);
+            }
+        }
+
+        private void InformPrimaryActionStarted()
+        {
+            InformPrimaryActionStarted_ClientRpc();
+        }
+
+        [ClientRpc]
+        private void InformPrimaryActionStarted_ClientRpc()
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnPrimaryActionStarted.RaiseEvent();
+            }
+        }
+
+        private void InformPrimaryActionChargeUpdated(float amount)
+        {
+            InformPrimaryActionChargeUpdated_ClientRpc(amount);
+        }
+
+        [ClientRpc]
+        private void InformPrimaryActionChargeUpdated_ClientRpc(float amount)
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnPrimaryActionChargeUpdated.RaiseEvent(amount);
+            }
+        }
+
+        private void InformPrimaryActionExecuted()
+        {
+            InformPrimaryActionExecuted_ClientRpc();
+        }
+
+        [ClientRpc]
+        private void InformPrimaryActionExecuted_ClientRpc()
+        {
+            if (IsOwner)
+            {
+                m_Model.PlayerData.OnPrimaryActionExecuted.RaiseEvent();
             }
         }
 
@@ -499,6 +546,7 @@ namespace BTG.Gameplay.GameplayObjects
             
             m_EntityBrain.OnEntityInitialized -= InformOnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled += m_EntityHealthController.SetVisible;
+            m_EntityBrain.PrimaryAction.OnActionAssigned -= InformPrimaryActionAssigned;
             m_EntityBrain.UltimateAction.OnActionAssigned -= InformUltimateAssigned;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= InformUltimateChargeUpdated;
             m_EntityBrain.UltimateAction.OnFullyCharged -= InformUltimateFullyCharged;
