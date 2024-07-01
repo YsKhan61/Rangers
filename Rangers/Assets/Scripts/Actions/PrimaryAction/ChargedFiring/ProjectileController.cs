@@ -32,8 +32,12 @@ namespace BTG.Actions.PrimaryAction
 
         public void ShowView() => m_View.Show();
         public void SetOwnerOfView(Transform owner) => m_View.SetOwner(owner);
-        public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => 
-            m_View.Transform.SetPositionAndRotation(position, rotation);
+
+        /// <summary>
+        /// NOTE - Dont call m_View.transform.SetPositionAndRotation, as it will not work for networked objects
+        /// NetworkObjects need to use NetworkObject.Teleport
+        /// </summary>
+        public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => m_View.SetPositionAndRotation(position, rotation); 
         public void SetActor(IPrimaryActor actor) => Actor = actor;
 
         public void Destroy() => HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
