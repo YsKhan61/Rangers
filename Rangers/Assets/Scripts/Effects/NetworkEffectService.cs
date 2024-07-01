@@ -53,9 +53,9 @@ namespace BTG.Effects
         [ClientRpc]
         private void InvokeEffect_ClientRpc(NetworkEffectEventData data, ClientRpcParams clientRpcParams = default)
         {
-            Guid guid = data.EffectTagNetworkGuid.ToGuid();
+            Guid guid = data.TagNetworkGuid.ToGuid();
 
-            if (!TryGetFactory(guid, out FactorySO<EffectView> factory))
+            if (!TryGetFactory(guid, out EffectFactorySO factory))
             {
                 return;
             }
@@ -65,23 +65,36 @@ namespace BTG.Effects
                 return;
             }
 
-            if (data.FollowNetworkObject)
+            NetworkObject objectToFollow = null;
+
+            if (data.FollowNetworkObject && TryGetNetworkObject(data.FollowNetowrkObjectId, out objectToFollow))
             {
-                SetNetworkObjectAsPareant(effect.transform, data.FollowNetowrkObjectId);
+                effect.transform.SetParent(objectToFollow.transform, Vector3.zero, Quaternion.identity);
             }
             else
             {
                 effect.transform.SetPositionAndRotation(data.EffectPosition, Quaternion.identity);
             }
 
+            effect.SetDuration(data.Duration);
             effect.Play();
+
+            if (factory.Data.HasAudio)
+            {
+                EventBus<AudioEventData>.Invoke(new AudioEventData
+                {
+                    Tag = factory.Tag,
+                    FollowTarget = data.FollowNetworkObject ? objectToFollow.transform : null,
+                    Position = data.EffectPosition
+                });
+            }
         }
 
         
 
-        private bool TryGetFactory(Guid guid, out FactorySO<EffectView> factory)
+        private bool TryGetFactory(Guid guid, out EffectFactorySO factory)
         {
-            factory = m_EffectFactoryContainer.GetFactory(guid);
+            factory = m_EffectFactoryContainer.GetFactory(guid) as EffectFactorySO;
             if (factory == null)
             {
                 Debug.LogError($"No factory found for effect guid {guid}");
@@ -101,16 +114,14 @@ namespace BTG.Effects
             return true;
         }
 
-        private void SetNetworkObjectAsPareant(Transform effect, ulong parentId)
+        private bool TryGetNetworkObject(ulong networkObjectId, out NetworkObject networkObject)
         {
-            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(parentId, out NetworkObject objectToFollow))
+            if (NetworkManager.Singleton.SpawnManager.SpawnedObjects.TryGetValue(networkObjectId, out networkObject))
             {
-                effect.SetParent(objectToFollow.transform, Vector3.zero, Quaternion.identity);
+                return true;
             }
-            else
-            {
-                Debug.LogError($"Failed to find network object with ID {parentId}");
-            }
+            Debug.LogError($"Failed to find network object with ID {networkObjectId}");
+            return false;
         }
     }
 

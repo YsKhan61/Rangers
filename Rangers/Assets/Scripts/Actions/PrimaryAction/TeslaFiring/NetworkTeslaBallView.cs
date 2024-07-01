@@ -116,7 +116,7 @@ namespace BTG.Actions.PrimaryAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                EffectTagNetworkGuid = m_TeslaFiring.Data.Tag.Guid.ToNetworkGuid(),
+                TagNetworkGuid = m_TeslaFiring.Data.Tag.Guid.ToNetworkGuid(),
                 EffectPosition = transform.position
             });
         }

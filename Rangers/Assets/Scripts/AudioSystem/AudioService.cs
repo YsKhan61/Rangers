@@ -29,7 +29,7 @@ namespace BTG.AudioSystem
 
         private void PlayAudio(AudioEventData eventData)
         {
-            bool found = m_AudioDataContainer.TryGetAudioData(eventData.AudioTag, out AudioDataSO data);
+            bool found = m_AudioDataContainer.TryGetAudioData(eventData.Tag, out AudioDataSO data);
             if (!found)
             {
                 return;

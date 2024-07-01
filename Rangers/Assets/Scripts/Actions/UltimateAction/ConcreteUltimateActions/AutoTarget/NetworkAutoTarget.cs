@@ -23,7 +23,7 @@ namespace BTG.Actions.UltimateAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                EffectTagNetworkGuid = autoTargetData.ExplosionTag.Guid.ToNetworkGuid(),
+                TagNetworkGuid = autoTargetData.ExplosionTag.Guid.ToNetworkGuid(),
                 EffectPosition = position,
             });
         }

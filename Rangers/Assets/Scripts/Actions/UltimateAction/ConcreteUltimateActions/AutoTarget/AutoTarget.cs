@@ -76,8 +76,8 @@ namespace BTG.Actions.UltimateAction
         {
             EventBus<EffectEventData>.Invoke(new EffectEventData
             {
-                EffectTag = autoTargetData.ExplosionTag,
-                EffectPosition = position
+                Tag = autoTargetData.ExplosionTag,
+                Position = position
             });
         }
 

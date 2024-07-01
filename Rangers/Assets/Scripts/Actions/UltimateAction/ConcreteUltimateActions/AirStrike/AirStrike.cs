@@ -148,7 +148,7 @@ namespace BTG.Actions.UltimateAction
                     OwnerClientOnly = false,
                     FollowNetworkObject = true,
                     FollowNetowrkObjectId = Actor.NetworkObjectId,
-                    EffectTagNetworkGuid = m_AirStrikeData.Tag.Guid.ToNetworkGuid(),
+                    TagNetworkGuid = m_AirStrikeData.Tag.Guid.ToNetworkGuid(),
                     Duration = m_AirStrikeData.Duration
                 });
             }
@@ -156,8 +156,8 @@ namespace BTG.Actions.UltimateAction
             {
                 EventBus<EffectEventData>.Invoke(new EffectEventData 
                 { 
-                    EffectTag = m_AirStrikeData.Tag, 
-                    EffectPosition = Actor.Transform.position, 
+                    Tag = m_AirStrikeData.Tag, 
+                    Position = Actor.Transform.position, 
                     Duration = m_AirStrikeData.Duration 
                 });
             }

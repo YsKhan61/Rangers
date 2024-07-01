@@ -1,10 +1,11 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
 namespace BTG.Actions.PrimaryAction
 {
     [CreateAssetMenu(fileName = "ChargedFiringData", menuName = "ScriptableObjects/PrimaryAction/ChargedFiringDataSO")]
-    public class ChargedFiringDataSO : PrimaryActionDataSO
+    public class ProjectileDataSO : PrimaryActionDataSO
     {
         [SerializeField, Tooltip("This view is for singleplayer")]
         ProjectileView m_ViewPrefab;
@@ -21,6 +22,14 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField, Tooltip("Maximum initial speed of the projectile at most charge")]
         float m_MaxInitialSpeed;
         public float MaxInitialSpeed => m_MaxInitialSpeed;
+
+        [SerializeField, Tooltip("The tag that will be used to send shoot effect event data")]
+        private TagSO m_ShootEffectTag;
+        public TagSO ShootEffectTag => m_ShootEffectTag;
+
+        [SerializeField, Tooltip("The tag that will be used to send hit effect event data")]
+        private TagSO m_HitEffectTag;
+        public TagSO HitEffectTag => m_HitEffectTag;
     }
 }
 

@@ -19,8 +19,7 @@ namespace BTG.Effects
         protected override RagdollView CreateItem()
         {
             RagdollView view = Object.Instantiate(m_Data.RagdollPrefab);
-            view.Initialize();
-            view.SetPool(this);
+            view.Initialize(m_Data, this);
             return view;
         }
     }

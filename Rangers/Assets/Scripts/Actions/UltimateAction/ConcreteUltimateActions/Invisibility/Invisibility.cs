@@ -85,14 +85,14 @@ namespace BTG.Actions.UltimateAction
                     OwnerClientOnly = false,
                     FollowNetworkObject = true,
                     FollowNetowrkObjectId = Actor.NetworkObjectId,
-                    EffectTagNetworkGuid = effectTag.Guid.ToNetworkGuid(),
+                    TagNetworkGuid = effectTag.Guid.ToNetworkGuid(),
                 });
             }
             else
             {
                 EventBus<EffectEventData>.Invoke(new EffectEventData
                 {
-                    EffectTag = effectTag,
+                    Tag = effectTag,
                     FollowTarget = Actor.Transform,
                 });
             }

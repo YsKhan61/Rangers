@@ -1,5 +1,4 @@
 ﻿using BTG.Events;
-using BTG.Factory;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using UnityEngine;
@@ -36,7 +35,7 @@ namespace BTG.Effects
 
         private void InvokeEffect(EffectEventData effectEvent)
         {
-            if (!TryGetFactory(effectEvent.EffectTag, out FactorySO<EffectView> factory))
+            if (!TryGetFactory(effectEvent.Tag, out EffectFactorySO factory))
             {
                 return;
             }
@@ -48,14 +47,25 @@ namespace BTG.Effects
             }
             else
             {
-                effect.transform.SetPositionAndRotation(effectEvent.EffectPosition, Quaternion.identity);
+                effect.transform.SetPositionAndRotation(effectEvent.Position, Quaternion.identity);
             }
+            effect.SetDuration(effectEvent.Duration);
             effect.Play();
+
+            if (factory.Data.HasAudio)
+            {
+                EventBus<AudioEventData>.Invoke(new AudioEventData
+                {
+                    Tag = effectEvent.Tag,
+                    FollowTarget = effectEvent.FollowTarget,
+                    Position = effectEvent.Position
+                });
+            }
         }
 
-        private bool TryGetFactory(TagSO tag, out FactorySO<EffectView> factory)
+        private bool TryGetFactory(TagSO tag, out EffectFactorySO factory)
         {
-            factory = m_EffectFactoryContainer.GetFactory(tag);
+            factory = m_EffectFactoryContainer.GetFactory(tag) as EffectFactorySO;
             if (factory == null)
             {
                 Debug.LogError($"No factory found for effect tag {tag}");

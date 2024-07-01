@@ -35,7 +35,8 @@ namespace BTG.Events
         /// <summary>
         /// The tag of the effect converted to a network guid.
         /// </summary>
-        public NetworkGuid EffectTagNetworkGuid;
+        public NetworkGuid TagNetworkGuid;
+
         
         /// <summary>
         /// Position of the effect to spawn.
@@ -45,6 +46,7 @@ namespace BTG.Events
         /// <summary>
         /// Optional
         /// Duration of the effect.
+        /// Default = 0
         /// </summary>
         public int Duration;
 
@@ -55,7 +57,7 @@ namespace BTG.Events
             serializer.SerializeValue(ref FollowNetworkObject);
             serializer.SerializeValue(ref FollowNetowrkObjectId);
             serializer.SerializeValue(ref OwnerClientId);
-            serializer.SerializeValue(ref EffectTagNetworkGuid);
+            serializer.SerializeValue(ref TagNetworkGuid);
             serializer.SerializeValue(ref EffectPosition);
             serializer.SerializeValue(ref Duration);
         }
@@ -68,6 +70,7 @@ namespace BTG.Events
             ulong followNetworkObjectId,
             
             TagSO effectTag, 
+            bool hasAudio,
             Vector3 effectPosition, 
             int duration)
         {
@@ -77,7 +80,7 @@ namespace BTG.Events
             FollowNetworkObject = followNetworkObject;
             FollowNetowrkObjectId = followNetworkObjectId;
             
-            EffectTagNetworkGuid = effectTag.Guid.ToNetworkGuid();
+            TagNetworkGuid = effectTag.Guid.ToNetworkGuid();
             EffectPosition = effectPosition;
             Duration = duration;
         }

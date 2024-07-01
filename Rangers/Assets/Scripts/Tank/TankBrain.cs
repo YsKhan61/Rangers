@@ -259,7 +259,7 @@ namespace BTG.Tank
                 {
                     OwnerClientOnly = false,
                     FollowNetworkObject = false,
-                    EffectTagNetworkGuid = m_Model.TankData.Tag.Guid.ToNetworkGuid(),
+                    TagNetworkGuid = m_Model.TankData.Tag.Guid.ToNetworkGuid(),
                     EffectPosition = Transform.position,
                 });
             }
@@ -267,8 +267,8 @@ namespace BTG.Tank
             {
                 EventBus<EffectEventData>.Invoke(new EffectEventData
                 {
-                    EffectTag = m_Model.TankData.Tag,
-                    EffectPosition = Transform.position,
+                    Tag = m_Model.TankData.Tag,
+                    Position = Transform.position,
                 });
             }
         }

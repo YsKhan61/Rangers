@@ -7,7 +7,7 @@ namespace BTG.Actions.PrimaryAction
     public class ChargedFiring : ChargedFiringBase
     {
         private ProjectilePool m_Pool;
-        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool) : base(data)
+        public ChargedFiring(ProjectileDataSO data, ProjectilePool projectilePool) : base(data)
         {
             m_Pool = projectilePool;
         }
@@ -29,7 +29,7 @@ namespace BTG.Actions.PrimaryAction
         {
             EventBus<AudioEventData>.Invoke(new AudioEventData
             {
-                AudioTag = chargedFiringData.Tag,
+                Tag = chargedFiringData.Tag,
                 Position = actor.FirePoint.position
             });
         }

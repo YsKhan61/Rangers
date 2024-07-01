@@ -19,7 +19,7 @@ namespace BTG.Actions.PrimaryAction
         public event Action<float> OnActionChargeUpdated;
         public event Action OnActionExecuted;
 
-        protected ChargedFiringDataSO chargedFiringData;
+        protected ProjectileDataSO chargedFiringData;
         protected IPrimaryActor actor;
 
         private AudioSource m_FiringAudioSource;
@@ -28,7 +28,7 @@ namespace BTG.Actions.PrimaryAction
         private bool m_IsCharging;
         private float m_ChargeAmount;
 
-        public ChargedFiringBase(ChargedFiringDataSO data)
+        public ChargedFiringBase(ProjectileDataSO data)
         {
             chargedFiringData = data;
         }

@@ -9,7 +9,7 @@ namespace BTG.Events
         /// <summary>
         /// Tag of the audio data
         /// </summary>
-        public TagSO AudioTag;
+        public TagSO Tag;
 
         /// <summary>
         /// The parent of the audio clip.

@@ -13,13 +13,12 @@ namespace BTG.Effects
     public class RagdollView : EffectView
     {
         private RagdollPool m_Pool;
-        private const int DESTROY_DELAY = 2; // This can be passed from either owner, or the factory
 
         [SerializeField, Tooltip("The rigidbodies of the ragdoll")]
         private Rigidbody[] m_Rigidbodies;
 
+        private RagdollDataSO m_Data;
         private Pose[] m_InitialPoses;
-
         private CancellationTokenSource m_Cts;
 
         private void OnDestroy()
@@ -31,9 +30,11 @@ namespace BTG.Effects
         /// This method is called when the ragdoll is created
         /// It is called by the pool only one time
         /// </summary>
-        internal void Initialize()
+        internal void Initialize(RagdollDataSO data, RagdollPool pool)
         {
             m_Cts = new CancellationTokenSource();
+            m_Data = data;
+            m_Pool = pool;
             StoreInitialLocalPoses();
             Hide();
             ToggleRigidbodyKinematics(true);
@@ -47,7 +48,7 @@ namespace BTG.Effects
             ToggleRigidbodyKinematics(false);
             Show();
 
-            _ = HelperMethods.InvokeAfterAsync(DESTROY_DELAY, () =>
+            _ = HelperMethods.InvokeAfterAsync(m_Data.Duration, () =>
             {
                 ResetView();
             }, m_Cts.Token);

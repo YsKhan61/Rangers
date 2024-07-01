@@ -8,10 +8,11 @@ namespace BTG.Effects
     /// A factory to create the explosion effect depending on data.
     /// </summary>
     [CreateAssetMenu(fileName = "Explosion Factory", menuName = "ScriptableObjects/Factory/Effects Factory/ExplosionFactorySO")]
-    public class ExplosionFactorySO : FactorySO<EffectView>
+    public class ExplosionFactorySO : EffectFactorySO
     {
         [SerializeField]
         private ExplosionDataSO m_Data;
+        public override EffectDataSO Data => m_Data;
 
         private ExplosionEffectPool m_Pool;
         public ExplosionEffectPool Pool => m_Pool ??= new ExplosionEffectPool(m_Data);

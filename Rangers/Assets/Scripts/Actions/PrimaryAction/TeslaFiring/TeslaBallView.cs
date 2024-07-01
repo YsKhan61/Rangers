@@ -91,8 +91,8 @@ namespace BTG.Actions.PrimaryAction
         {
             EventBus<EffectEventData>.Invoke(new EffectEventData
             {
-                EffectTag = m_TeslaFiring.Data.Tag,
-                EffectPosition = transform.position
+                Tag = m_TeslaFiring.Data.Tag,
+                Position = transform.position
             });
         }
 

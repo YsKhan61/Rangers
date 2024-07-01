@@ -8,20 +8,17 @@ namespace BTG.Effects
     public class ExplosionView : EffectView
     {
         private ParticleSystem m_ParticleSystem;
-        private AudioSource m_AudioSource;
+        private ExplosionDataSO m_Data;
         private ExplosionEffectPool m_Pool;
-        private int m_Duration;
-
         private CancellationTokenSource m_CTS;
 
         internal void Initialize(
-            ParticleSystem particleSystem, AudioSource source, ExplosionEffectPool pool)
+            ParticleSystem particleSystem, ExplosionEffectPool pool, ExplosionDataSO data)
         {
             gameObject.name = particleSystem.gameObject.name;
             m_ParticleSystem = particleSystem;
-            m_AudioSource = source;
             m_Pool = pool;
-            m_Duration = (int)m_ParticleSystem.main.duration;
+            m_Data = data;
 
             m_CTS = new ();
         }
@@ -31,24 +28,28 @@ namespace BTG.Effects
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
         }
 
-        public void SetDuration(int duration) => m_Duration = duration;
-
         public override void Play()
         {
             m_ParticleSystem.Play();
-            m_AudioSource.Play();
-
-            _ = HelperMethods.InvokeAfterAsync(m_Duration, () => Stop(), m_CTS.Token); 
+            _ = HelperMethods.InvokeAfterAsync(GetDuration(), () => Stop(), m_CTS.Token); 
         }
 
         public void Stop()
         {
             m_ParticleSystem.Stop();
-            m_AudioSource.Stop();
             m_Pool.ReturnExplosionEffect(this);
 
-            Debug.Log("Explosion stopped and returned to pool." + gameObject.name);
+            // Debug.Log("Explosion stopped and returned to pool." + gameObject.name);
         }
+
+        /// <summary>
+        /// If the duration is overriden, return the overriden duration.
+        /// else if the duration is set in the data, return the data duration.
+        /// else return the duration of the particle system.
+        /// </summary>
+        private int GetDuration() =>
+            (overridenDuration > 0) ? 
+            overridenDuration : (m_Data.Duration > 0) ? m_Data.Duration : (int) m_ParticleSystem.main.duration;
     }
 
 }

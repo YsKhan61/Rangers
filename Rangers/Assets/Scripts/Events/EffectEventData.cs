@@ -12,7 +12,7 @@ namespace BTG.Events
         /// <summary>
         /// The tag of the effect.
         /// </summary>
-        public TagSO EffectTag;
+        public TagSO Tag;
 
         /// <summary>
         /// The parent of the effect. 
@@ -23,7 +23,7 @@ namespace BTG.Events
         /// <summary>
         /// If the effect dont have a parent, this is the position where the effect will be spawned.
         /// </summary>
-        public Vector3 EffectPosition;
+        public Vector3 Position;
 
         /// <summary>
         /// Duration of the effect.

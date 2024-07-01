@@ -10,6 +10,13 @@ namespace BTG.Effects
     /// </summary>
     public abstract class EffectView : MonoBehaviour, IFactoryItem
     {
+        protected int overridenDuration;
+
         public abstract void Play();
+
+        /// <summary>
+        /// This method overrides the default duration of the effect data
+        /// </summary>
+        public void SetDuration(int duration) => this.overridenDuration = duration;
     }
 }

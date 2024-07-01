@@ -87,7 +87,7 @@ namespace BTG.Actions.UltimateAction
                 {
                     FollowNetworkObject = true,
                     FollowNetowrkObjectId = Actor.NetworkObjectId,
-                    EffectTagNetworkGuid = selfShieldData.Tag.Guid.ToNetworkGuid(),
+                    TagNetworkGuid = selfShieldData.Tag.Guid.ToNetworkGuid(),
                     Duration = selfShieldData.Duration
                 });
             }
@@ -96,7 +96,7 @@ namespace BTG.Actions.UltimateAction
                 EventBus<EffectEventData>.Invoke(new EffectEventData
                 {
                     FollowTarget = Actor.Transform,
-                    EffectTag = selfShieldData.Tag,
+                    Tag = selfShieldData.Tag,
                     Duration = selfShieldData.Duration
                 });
             }

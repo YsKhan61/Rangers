@@ -847,6 +847,7 @@ GameObject:
   - component: {fileID: 1466694021}
   - component: {fileID: 1466694022}
   - component: {fileID: 1466694023}
+  - component: {fileID: 1466694025}
   - component: {fileID: 1466694024}
   m_Layer: 0
   m_Name: MultiplayState
@@ -970,6 +971,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 496a44efc4bb5a94bbfbe2cda513645e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1466694025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1466694017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1055fc85e019a514c8bbbd8df0cd0582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1894154696

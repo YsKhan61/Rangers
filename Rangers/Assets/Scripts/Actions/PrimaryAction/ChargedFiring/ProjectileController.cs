@@ -9,14 +9,13 @@ namespace BTG.Actions.PrimaryAction
 {
     public class ProjectileController : IDestroyable
     {
-        // private AudioPool m_AudioPool;
-        private ChargedFiringDataSO m_Data;
+        private ProjectileDataSO m_Data;
         private IProjectileView m_View;
         private CancellationTokenSource m_Cts;
         public Transform Transform { get; private set; }
         public IPrimaryActor Actor { get; private set; }
 
-        public ProjectileController(ChargedFiringDataSO projectileData, IProjectileView view)
+        public ProjectileController(ProjectileDataSO projectileData, IProjectileView view)
         {
             m_Cts = new CancellationTokenSource();
             m_Data = projectileData;
@@ -31,28 +30,22 @@ namespace BTG.Actions.PrimaryAction
             m_View.Rigidbody.isKinematic = false;
         }
 
-        // public void SetAudioPool(AudioPool audioPool) => m_AudioPool = audioPool;
         public void ShowView() => m_View.Show();
         public void SetOwnerOfView(Transform owner) => m_View.SetOwner(owner);
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation) => 
-            m_View.SetPositionAndRotation(position, rotation);
+            m_View.Transform.SetPositionAndRotation(position, rotation);
         public void SetActor(IPrimaryActor actor) => Actor = actor;
 
-        public void Destroy()
-        {
-            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
-        }
+        public void Destroy() => HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
 
-        public void AddImpulseForce(float initialSpeed)
-        {
+        public void AddImpulseForce(float initialSpeed) => 
             m_View.Rigidbody.AddForce(Transform.forward * initialSpeed, ForceMode.Impulse);
-        }
 
         public void OnHitSomething(Collider other)
         {
             // NOTE - This need to happen before the damage is done, as we need the data of the TeslaFiring to do the effect
             // If the damageable.Damage is called first, there is a chance that the entity is destroyed and the data is lost
-            InvokeEffectEvent();
+            InvokeHitEffect();
 
             if (other.TryGetComponent(out IDamageableView damageable))
             {
@@ -63,12 +56,8 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Data.Damage);
             }
 
-            InvokeEffectEvent();
-            // DoExplosionAudio();
             ResetProjectile();
         }
-
-        
 
         private void ResetProjectile()
         {
@@ -82,7 +71,7 @@ namespace BTG.Actions.PrimaryAction
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
-        private void InvokeEffectEvent()
+        private void InvokeHitEffect()
         {
             if (Actor.IsNetworkPlayer)
             {
@@ -90,7 +79,7 @@ namespace BTG.Actions.PrimaryAction
                 {
                     OwnerClientOnly = false,
                     FollowNetworkObject = false,
-                    EffectTagNetworkGuid = m_Data.Tag.Guid.ToNetworkGuid(),
+                    TagNetworkGuid = m_Data.HitEffectTag.Guid.ToNetworkGuid(),
                     EffectPosition = Transform.position
                 });
             }
@@ -98,16 +87,11 @@ namespace BTG.Actions.PrimaryAction
             {
                 EventBus<EffectEventData>.Invoke(new EffectEventData
                 {
-                    EffectTag = m_Data.Tag,
-                    EffectPosition = Transform.position
+                    Tag = m_Data.HitEffectTag,
+                    Position = Transform.position
                 });
             }
         }
-
-        /*private void DoExplosionAudio()
-        {
-            m_AudioPool.GetAudioView().PlayOneShot(m_Data.ActionImpactClip, Transform.position);
-        }*/
     }
 }
 
