@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Tag: {fileID: 11400000, guid: b559a5ef8a4e2f8439ceccb35d49a423, type: 2}
   m_HasAudio: 1
-  m_Duration: 0
+  m_Duration: 2
   m_RagdollPrefab: {fileID: 3964854068381461754, guid: f067a6908a379f648b3aa51789215546,
     type: 3}
