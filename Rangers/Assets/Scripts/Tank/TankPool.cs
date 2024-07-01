@@ -24,10 +24,7 @@ namespace BTG.Tank
         /// </summary>
         public void ReturnTank(TankView tank) => ReturnItem(tank);
 
-        protected override TankView CreateItem()
-        {
-            return Object.Instantiate(m_Prefab);
-        }
+        protected override TankView CreateItem() => Object.Instantiate(m_Prefab);
 
     }
 }
