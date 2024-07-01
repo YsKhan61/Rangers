@@ -250,25 +250,6 @@ namespace BTG.Tank
 
         public void ExecuteRagdollEffectEvent()
         {
-            /*if (m_Model.IsNetworkPlayer)
-            {
-                EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
-                {
-                    OwnerClientOnly = false,
-                    FollowNetworkObject = false,
-                    TagNetworkGuid = m_Model.TankData.Tag.Guid.ToNetworkGuid(),
-                    EffectPosition = Transform.position,
-                });
-            }
-            else
-            {
-                EventBus<EffectEventData>.Invoke(new EffectEventData
-                {
-                    Tag = m_Model.TankData.Tag,
-                    Position = Transform.position,
-                });
-            }*/
-
             EventBus<EffectEventData>.Invoke(new EffectEventData
             {
                 Tag = m_Model.TankData.Tag,
