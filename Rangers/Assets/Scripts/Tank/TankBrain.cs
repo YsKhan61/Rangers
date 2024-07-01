@@ -56,9 +56,6 @@ namespace BTG.Tank
         [Inject]
         private UltimateActionFactoryContainerSO m_UltimateActionFactoryContainer;
 
-        /*[Inject]
-        private AudioPool m_AudioPool;*/
-
         private TankPool m_Pool;
 
         private TankBrain() { }
@@ -274,8 +271,6 @@ namespace BTG.Tank
         }
 
         public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData) => OnPlayerCameraShake?.Invoke(camShakeData);
-
-        // private void ExecuteDeadAudio() => m_AudioPool.GetAudioView().PlayOneShot(m_Model.TankData.DeathSoundClip, Transform.position);
         
         private void UpdateState()
         {
