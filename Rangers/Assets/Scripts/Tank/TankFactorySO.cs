@@ -1,5 +1,6 @@
 using BTG.Entity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 
@@ -19,18 +20,7 @@ namespace BTG.Tank
         TankDataSO m_Data;
 
         TankPool m_Pool;
-        public TankPool Pool
-        {
-            get
-            {
-                if (m_Pool == null)
-                {
-                    m_Pool = new(m_Data.TankViewPrefab);
-                    m_Resolver.Inject(m_Pool);
-                }
-                return m_Pool;
-            }
-        }
+        public TankPool Pool => m_Pool ??= InitializePool();
 
         public override IEntityBrain GetItem()
         {
@@ -85,10 +75,22 @@ namespace BTG.Tank
                 .Build();
 
             m_Resolver.Inject(brain);
-
-            // create primary action
-            // brain.CreateUltimateAction();
             return brain;
+        }
+
+        TankPool InitializePool()
+        {
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+
+            var pool = new TankPool(m_Data.TankViewPrefab);
+            return pool;
+        }
+
+        void OnActiveSceneChanged(Scene current, Scene next)
+        {
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+
+            m_Pool?.ClearPool();
         }
     }
 }
