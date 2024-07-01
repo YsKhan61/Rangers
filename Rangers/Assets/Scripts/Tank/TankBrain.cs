@@ -250,7 +250,7 @@ namespace BTG.Tank
 
         public void ExecuteRagdollEffectEvent()
         {
-            if (m_Model.IsNetworkPlayer)
+            /*if (m_Model.IsNetworkPlayer)
             {
                 EventBus<NetworkEffectEventData>.Invoke(new NetworkEffectEventData
                 {
@@ -267,7 +267,13 @@ namespace BTG.Tank
                     Tag = m_Model.TankData.Tag,
                     Position = Transform.position,
                 });
-            }
+            }*/
+
+            EventBus<EffectEventData>.Invoke(new EffectEventData
+            {
+                Tag = m_Model.TankData.Tag,
+                Position = Transform.position,
+            });
         }
 
         public void RaisePlayerCamShakeEvent(CameraShakeEventData camShakeData) => OnPlayerCameraShake?.Invoke(camShakeData);
