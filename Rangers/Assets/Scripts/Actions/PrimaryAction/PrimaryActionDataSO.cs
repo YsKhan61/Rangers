@@ -20,13 +20,5 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField]
         int m_ChargeTime;
         public int ChargeTime => m_ChargeTime;
-
-        [SerializeField]
-        AudioClip m_ChargeClip;
-        public AudioClip ChargeClip => m_ChargeClip;
-
-        [SerializeField]
-        AudioClip m_ShotFiredClip;
-        public AudioClip ShotFiredClip => m_ShotFiredClip;
     }
 }

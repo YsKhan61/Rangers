@@ -9,11 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73919861c5325694fb3b5edf9bd8d748, type: 3}
-  m_Name: AutoTargetExplosion
+  m_Script: {fileID: 11500000, guid: 85b2c9c30cfe8f64e9fca7973e67b1da, type: 3}
+  m_Name: ProjectileHit
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 0}
-  m_HasAudio: 1
-  m_Duration: 0
-  m_ParticleSystemPrefab: {fileID: 19807510, guid: 89e78efe92dfe5a42837b392cdb0bf9e,
-    type: 3}

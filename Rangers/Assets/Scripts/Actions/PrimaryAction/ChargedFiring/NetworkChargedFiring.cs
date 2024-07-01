@@ -9,7 +9,7 @@ namespace BTG.Actions.PrimaryAction
     {
         private NetworkProjectilePool m_Pool;
 
-        public NetworkChargedFiring(ProjectileDataSO data, NetworkProjectilePool projectilePool) : base(data)
+        public NetworkChargedFiring(ChargedFiringDataSO data, NetworkProjectilePool projectilePool) : base(data)
         {
             m_Pool = projectilePool;
         }

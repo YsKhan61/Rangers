@@ -9,13 +9,13 @@ namespace BTG.Actions.PrimaryAction
 {
     public class ProjectileController : IDestroyable
     {
-        private ProjectileDataSO m_Data;
+        private ChargedFiringDataSO m_Data;
         private IProjectileView m_View;
         private CancellationTokenSource m_Cts;
         public Transform Transform { get; private set; }
         public IPrimaryActor Actor { get; private set; }
 
-        public ProjectileController(ProjectileDataSO projectileData, IProjectileView view)
+        public ProjectileController(ChargedFiringDataSO projectileData, IProjectileView view)
         {
             m_Cts = new CancellationTokenSource();
             m_Data = projectileData;

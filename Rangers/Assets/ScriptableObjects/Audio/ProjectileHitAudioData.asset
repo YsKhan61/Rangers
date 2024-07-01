@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4325ea02721aee142ad25a5eb8e2e4f8, type: 3}
-  m_Name: ChargedFireShoot
+  m_Name: ProjectileHitAudioData
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
-  m_Clip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_Tag: {fileID: 11400000, guid: a81c5445bf5da9f49966a95f6546b17e, type: 2}
+  m_Clip: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
   m_Loop: 0
   m_SpatialBlend: 1
   m_Duration: 0

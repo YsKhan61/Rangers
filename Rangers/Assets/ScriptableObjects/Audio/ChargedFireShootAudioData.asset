@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841545e3fc7238a4a9e087fef258fcd1, type: 3}
-  m_Name: ChargedFiringExplosionFactory
+  m_Script: {fileID: 11500000, guid: 4325ea02721aee142ad25a5eb8e2e4f8, type: 3}
+  m_Name: ChargedFireShootAudioData
   m_EditorClassIdentifier: 
   m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
-  m_Data: {fileID: 11400000, guid: 230019567ccce9a47ad63331882bbed5, type: 2}
+  m_Clip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_Loop: 0
+  m_SpatialBlend: 1
+  m_Duration: 0

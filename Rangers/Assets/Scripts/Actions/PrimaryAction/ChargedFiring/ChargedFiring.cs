@@ -7,7 +7,7 @@ namespace BTG.Actions.PrimaryAction
     public class ChargedFiring : ChargedFiringBase
     {
         private ProjectilePool m_Pool;
-        public ChargedFiring(ProjectileDataSO data, ProjectilePool projectilePool) : base(data)
+        public ChargedFiring(ChargedFiringDataSO data, ProjectilePool projectilePool) : base(data)
         {
             m_Pool = projectilePool;
         }

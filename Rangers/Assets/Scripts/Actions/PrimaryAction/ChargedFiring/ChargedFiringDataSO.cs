@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BTG.Actions.PrimaryAction
 {
     [CreateAssetMenu(fileName = "ChargedFiringData", menuName = "ScriptableObjects/PrimaryAction/ChargedFiringDataSO")]
-    public class ProjectileDataSO : PrimaryActionDataSO
+    public class ChargedFiringDataSO : PrimaryActionDataSO
     {
         [SerializeField, Tooltip("This view is for singleplayer")]
         ProjectileView m_ViewPrefab;

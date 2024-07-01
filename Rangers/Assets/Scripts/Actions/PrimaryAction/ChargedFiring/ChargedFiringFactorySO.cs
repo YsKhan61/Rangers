@@ -8,7 +8,7 @@ namespace BTG.Actions.PrimaryAction
     public class ChargedFiringFactorySO : PrimaryActionFactorySO
     {
         [SerializeField]
-        ProjectileDataSO m_Data;
+        ChargedFiringDataSO m_Data;
 
         ProjectilePool m_Pool;
         ProjectilePool Pool => m_Pool ??= InitializePool();
