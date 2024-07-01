@@ -20,7 +20,7 @@ MonoBehaviour:
     type: 3}
   m_NetworkViewPrefab: {fileID: -1186482412257946698, guid: ea13509cb13d61b408d8d52037e5d3c5,
     type: 3}
-  m_Damage: 50
+  m_Damage: 100
   m_MinInitialSpeed: 10
   m_MaxInitialSpeed: 30
   m_ShootEffectTag: {fileID: 11400000, guid: cd90e7a0b5ffd78419a0fbb8d8c42fee, type: 2}
