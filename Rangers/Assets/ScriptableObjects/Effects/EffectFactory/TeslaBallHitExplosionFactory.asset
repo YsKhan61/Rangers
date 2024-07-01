@@ -9,9 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73919861c5325694fb3b5edf9bd8d748, type: 3}
-  m_Name: TeslaFiringShock
+  m_Script: {fileID: 11500000, guid: 841545e3fc7238a4a9e087fef258fcd1, type: 3}
+  m_Name: TeslaBallHitExplosionFactory
   m_EditorClassIdentifier: 
-  m_ParticleSystemPrefab: {fileID: 6642199199589531581, guid: 354b6251e950209409c75ab984acf000,
-    type: 3}
-  m_AudioClip: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
+  m_Tag: {fileID: 11400000, guid: 5a83fb2bf0328b24e9936029686cf919, type: 2}
+  m_Data: {fileID: 11400000, guid: 983e3b066fe486949812a82a7e5d3ba6, type: 2}

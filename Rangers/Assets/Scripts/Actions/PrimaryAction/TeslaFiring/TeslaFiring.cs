@@ -23,7 +23,7 @@ namespace BTG.Actions.PrimaryAction
         {
             EventBus<AudioEventData>.Invoke(new AudioEventData
             {
-                Tag = teslaFringData.Tag,
+                Tag = teslaFringData.ShootEffectTag,
                 Position = actor.FirePoint.position
             });
         }

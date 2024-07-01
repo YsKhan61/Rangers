@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841545e3fc7238a4a9e087fef258fcd1, type: 3}
-  m_Name: TeslaFiringShockFactory
+  m_Script: {fileID: 11500000, guid: 85b2c9c30cfe8f64e9fca7973e67b1da, type: 3}
+  m_Name: TeslaBallHit
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 11400000, guid: d9e19b7c219517d40a8455a93ab43d9d, type: 2}
-  m_Data: {fileID: 11400000, guid: 983e3b066fe486949812a82a7e5d3ba6, type: 2}

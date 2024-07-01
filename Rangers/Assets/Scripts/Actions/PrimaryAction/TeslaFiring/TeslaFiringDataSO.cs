@@ -1,3 +1,4 @@
+using BTG.Utilities;
 using UnityEngine;
 
 
@@ -38,6 +39,14 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField, Tooltip("Max Damage done by the Tesla Ball")]
         int m_MaxDamage;
         public int MaxDamage => m_MaxDamage;
+
+        [SerializeField, Tooltip("The tag that will be used to send shoot effect event data")]
+        private TagSO m_ShootEffectTag;
+        public TagSO ShootEffectTag => m_ShootEffectTag;
+
+        [SerializeField, Tooltip("The tag that will be used to send hit effect event data")]
+        private TagSO m_HitEffectTag;
+        public TagSO HitEffectTag => m_HitEffectTag;
     }
 }
 

@@ -12,19 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a217ae8c354c7e747b1dc473e27e57c0, type: 3}
   m_Name: TeslaFiringData
   m_EditorClassIdentifier: 
+  m_InstanceName: TeslaFiringData
+  m_Guid: 9e43530a8ef8797bacbbadd0b397b934
   m_Tag: {fileID: 11400000, guid: d9e19b7c219517d40a8455a93ab43d9d, type: 2}
+  m_ChargeTime: 3
   m_TeslaBallViewPrefab: {fileID: 7449926087737942210, guid: c5d676d9573a76d4ab378f6d825d637d,
     type: 3}
   m_NetworkTeslaBallViewPrefab: {fileID: 1941561646064980668, guid: 09beecdb585466e469cd9f9f061ed157,
     type: 3}
-  m_ChargeTime: 3
   m_MinInitialSpeed: 10
   m_MaxInitialSpeed: 50
   m_MinScale: 0.2
   m_MaxScale: 1
-  m_MinDamage: 10
-  m_MaxDamage: 80
-  m_ShotFiredClip: {fileID: 8300000, guid: 5c27182a28a7eb942a362e6d198fe0e6, type: 3}
-  m_ChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
-  m_ActionImpactclip: {fileID: 8300000, guid: 3a77defcde1caaa40b6f7502547e0c4e, type: 3}
-  m_ExplosionFactory: {fileID: 11400000, guid: ba47f56c150137543af4a66e80fd7292, type: 2}
+  m_MinDamage: 5
+  m_MaxDamage: 30
+  m_ShootEffectTag: {fileID: 11400000, guid: 85aa27a95d495bd4284a0d35d68156ea, type: 2}
+  m_HitEffectTag: {fileID: 11400000, guid: 5a83fb2bf0328b24e9936029686cf919, type: 2}

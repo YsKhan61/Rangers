@@ -15,6 +15,10 @@ namespace BTG.Actions.PrimaryAction
         NetworkProjectileView m_NetworkViewPrefab;
         public NetworkProjectileView NetworkViewPrefab => m_NetworkViewPrefab;
 
+        [SerializeField, Tooltip("Damage done by the projectile")]
+        int m_Damage;
+        public int Damage => m_Damage;
+
         [SerializeField, Tooltip("Minimum initial speed of the projectile at least charge")]
         float m_MinInitialSpeed;
         public float MinInitialSpeed => m_MinInitialSpeed;

@@ -26,6 +26,7 @@ namespace BTG.Actions.PrimaryAction
 
         private NetworkTeslaBallPool m_Pool;
         private ITeslaFiring m_TeslaFiring;
+        private TeslaFiringDataSO m_Data;
         private int m_Damage;
         private TagSO m_EffectTag;
 
@@ -42,8 +43,11 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
         /// </summary>
-        public void SetTeslaFiring(ITeslaFiring teslaFiring) => m_TeslaFiring = teslaFiring;
-
+        public void SetTeslaFiring(ITeslaFiring teslaFiring)
+        {
+            m_TeslaFiring = teslaFiring;
+            m_Data = m_TeslaFiring.Data;
+        }
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
         /// </summary>
@@ -116,7 +120,7 @@ namespace BTG.Actions.PrimaryAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                TagNetworkGuid = m_TeslaFiring.Data.Tag.Guid.ToNetworkGuid(),
+                TagNetworkGuid = m_TeslaFiring.Data.HitEffectTag.Guid.ToNetworkGuid(),
                 EffectPosition = transform.position
             });
         }

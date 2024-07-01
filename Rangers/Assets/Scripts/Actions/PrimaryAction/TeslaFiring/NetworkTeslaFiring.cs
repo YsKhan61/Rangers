@@ -26,7 +26,7 @@ namespace BTG.Actions.PrimaryAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                AudioTagNetworkGuid = Data.Tag.Guid.ToNetworkGuid(),
+                AudioTagNetworkGuid = Data.ShootEffectTag.Guid.ToNetworkGuid(),
                 Position = actor.FirePoint.position
             });
         }

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4325ea02721aee142ad25a5eb8e2e4f8, type: 3}
-  m_Name: TeslaBallShoot
+  m_Name: TeslaBallHitAudioData
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 11400000, guid: 85aa27a95d495bd4284a0d35d68156ea, type: 2}
+  m_Tag: {fileID: 11400000, guid: 5a83fb2bf0328b24e9936029686cf919, type: 2}
   m_Clip: {fileID: 8300000, guid: 5c27182a28a7eb942a362e6d198fe0e6, type: 3}
   m_Loop: 0
   m_SpatialBlend: 1
