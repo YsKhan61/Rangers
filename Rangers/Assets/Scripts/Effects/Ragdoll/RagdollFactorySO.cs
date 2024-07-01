@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace BTG.Effects
@@ -11,8 +12,23 @@ namespace BTG.Effects
         public override EffectDataSO Data => m_Data;
 
         private RagdollPool m_Pool;
-        private RagdollPool Pool => m_Pool ??= new RagdollPool(m_Data);
+        private RagdollPool Pool => m_Pool ??= InitializePool();
 
         public override EffectView GetItem() => Pool.GetRagdoll();
+
+        RagdollPool InitializePool()
+        {
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+
+            var pool = new RagdollPool(m_Data);
+            return pool;
+        }
+
+        void OnActiveSceneChanged(Scene current, Scene next)
+        {
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+
+            m_Pool?.ClearPool();
+        }
     }
 }
