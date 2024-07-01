@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: Red Tank Ragdoll Data
   m_EditorClassIdentifier: 
   m_Tag: {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
+  m_HasAudio: 1
+  m_Duration: 0
   m_RagdollPrefab: {fileID: 3964854068381461754, guid: 240277803fa6d7a40b409a83513cd116,
     type: 3}

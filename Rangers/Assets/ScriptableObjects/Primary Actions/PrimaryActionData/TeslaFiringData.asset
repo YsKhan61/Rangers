@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MaxInitialSpeed: 50
   m_MinScale: 0.2
   m_MaxScale: 1
-  m_MinDamage: 5
-  m_MaxDamage: 30
+  m_MinDamage: 50
+  m_MaxDamage: 100
   m_ShootEffectTag: {fileID: 11400000, guid: 85aa27a95d495bd4284a0d35d68156ea, type: 2}
   m_HitEffectTag: {fileID: 11400000, guid: 5a83fb2bf0328b24e9936029686cf919, type: 2}
