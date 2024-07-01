@@ -162,11 +162,5 @@ namespace BTG.Actions.PrimaryAction
                 chargedFiringData.MaxInitialSpeed,
                 m_ChargeAmount) + actor.CurrentMoveSpeed;
         }
-
-        /*private void PlayChargingClip()
-        {
-            m_FiringAudioSource.clip = chargedFiringData.ChargeClip;
-            m_FiringAudioSource.Play();
-        }*/
     }
 }
