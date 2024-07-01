@@ -17,12 +17,20 @@ namespace BTG.Tank
         /// <summary>
         /// Get a tank from the pool
         /// </summary>
-        public TankView GetTankView() => GetItem();
-
+        public TankView GetTankView()
+        {
+            TankView view = GetItem();
+            view.gameObject.SetActive(true);
+            return view;
+        }
         /// <summary>
         /// Returns the tank to the pool
         /// </summary>
-        public void ReturnTank(TankView tank) => ReturnItem(tank);
+        public void ReturnTank(TankView tank)
+        {
+            tank.gameObject.SetActive(false);
+            ReturnItem(tank);
+        }
 
         protected override TankView CreateItem() => Object.Instantiate(m_Prefab);
 
