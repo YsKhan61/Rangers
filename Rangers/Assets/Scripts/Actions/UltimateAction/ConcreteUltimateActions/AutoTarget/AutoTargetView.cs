@@ -1,4 +1,5 @@
 using BTG.Utilities;
+using System.Threading;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ namespace BTG.Actions.UltimateAction
 
         private bool m_IsLaunched = false;
         private Quaternion m_FinalRotation;
+        private CancellationTokenSource m_Cts;
 
         public void Configure(AutoTarget controller, Transform target, float speed, Transform owner)
         {
@@ -36,6 +38,13 @@ namespace BTG.Actions.UltimateAction
 
             m_IsLaunched = true;
         }
+
+        public void AutoDestroy(int delay)
+        {
+            m_Cts = new CancellationTokenSource();
+            _ = HelperMethods.InvokeAfterAsync(delay, () =>Despawn(), m_Cts.Token);
+        }
+
         private void Update()
         {
             UpdateProjectilePosition();
@@ -46,6 +55,7 @@ namespace BTG.Actions.UltimateAction
             CheckHitForFiringVieww(collision.collider);
             CheckHitForDamageableView(collision.collider);
             m_Controller.CreateExplosion(transform.position);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
             Despawn();
         }
 
@@ -53,6 +63,7 @@ namespace BTG.Actions.UltimateAction
         {
             CheckHitForDamageableView(other);
             m_Controller.CreateExplosion(transform.position);
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
             Despawn();
         }
 

@@ -149,6 +149,7 @@ namespace BTG.Actions.UltimateAction
             AutoTargetView projectile = Object.Instantiate(autoTargetData.AutoTargetViewPrefab, Actor.FirePoint.position, Actor.FirePoint.rotation);
             projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
             projectile.Launch();
+            projectile.AutoDestroy(autoTargetData.BulletDuration);
         }
     }
 }

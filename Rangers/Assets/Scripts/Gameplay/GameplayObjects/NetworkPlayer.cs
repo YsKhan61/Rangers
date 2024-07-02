@@ -8,6 +8,7 @@ using BTG.Utilities.EventBus;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
+using static UnityEditor.PlayerSettings;
 
 
 namespace BTG.Gameplay.GameplayObjects
@@ -257,6 +258,7 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsOwner)
             {
                 m_PlayerService.OnPlayerDeath();
+                m_PlayerService.ShowHeroSelectionUI();
             }
         }
 

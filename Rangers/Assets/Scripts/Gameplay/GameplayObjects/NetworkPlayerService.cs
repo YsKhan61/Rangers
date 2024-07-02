@@ -94,15 +94,10 @@ namespace BTG.Gameplay.GameplayObjects
             if (!IsServer) return;
 
             m_PlayerStats.DeathCount.Value++;
-
-            ShowHeroSelectionUI_ClientRpc();
         }
 
-        [ClientRpc]
-        private void ShowHeroSelectionUI_ClientRpc()
+        public void ShowHeroSelectionUI()
         {
-            if(!IsOwner) return;
-
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY,
                 () => EventService.Instance.OnShowHeroSelectionUI.InvokeEvent(),

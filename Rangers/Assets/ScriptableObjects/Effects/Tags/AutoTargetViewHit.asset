@@ -9,8 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 841545e3fc7238a4a9e087fef258fcd1, type: 3}
-  m_Name: AutoTargetExplosionFactory
+  m_Script: {fileID: 11500000, guid: 85b2c9c30cfe8f64e9fca7973e67b1da, type: 3}
+  m_Name: AutoTargetViewHit
   m_EditorClassIdentifier: 
-  m_Tag: {fileID: 11400000, guid: c870c7b306ed73b4599bdf7791ac8982, type: 2}
-  m_Data: {fileID: 11400000, guid: f2ac399b275f6814e992aae5b5bdeca7, type: 2}

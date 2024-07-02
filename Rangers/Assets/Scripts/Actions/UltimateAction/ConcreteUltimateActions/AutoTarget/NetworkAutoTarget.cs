@@ -34,6 +34,7 @@ namespace BTG.Actions.UltimateAction
             projectile.Configure(this, targetTransform, autoTargetData.ProjectileSpeed, Actor.Transform);
             projectile.GetComponent<NetworkObject>().Spawn(true);
             projectile.Launch();
+            projectile.AutoDestroy(autoTargetData.BulletDuration);
         }
     }
 }

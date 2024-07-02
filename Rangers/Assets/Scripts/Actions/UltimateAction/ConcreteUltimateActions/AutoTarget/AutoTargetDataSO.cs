@@ -39,8 +39,9 @@ namespace BTG.Actions.UltimateAction
         private TagSO m_ExplosionTag;
         public TagSO ExplosionTag => m_ExplosionTag;
 
-        /*[SerializeField]
-        ExplosionFactorySO m_ExplosionFactory;
-        public ExplosionFactorySO ExplosionFactory => m_ExplosionFactory;*/
+        [SerializeField, Tooltip("How long the bullets will stay following the target before self destroy!")]
+        private int m_BulletDuration;
+        public int BulletDuration => m_BulletDuration;
+
     }
 }
