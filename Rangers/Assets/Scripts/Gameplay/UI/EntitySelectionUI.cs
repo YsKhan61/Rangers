@@ -1,5 +1,6 @@
-using BTG.EventSystem;
+using BTG.Events;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,9 +25,13 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         private bool m_ShowAtStart = true;
 
+        private EventBinding<ShowEntitySelectUIEventData> m_ShowEntitySelectUIEventBinding;
+
         private void OnEnable()
         {
-            EventService.Instance.OnShowHeroSelectionUI.AddListener(OnHeroSelectionEventInvoked);
+            m_ShowEntitySelectUIEventBinding = new EventBinding<ShowEntitySelectUIEventData>(OnHeroSelectionEventInvoked);
+            EventBus<ShowEntitySelectUIEventData>.Register(m_ShowEntitySelectUIEventBinding);
+
             m_InputActionReference.action.performed += OnToggleVisibilityInputPerformed;
             m_InputActionReference.action.Enable();
         }
@@ -35,7 +40,7 @@ namespace BTG.Gameplay.UI
 
         private void OnDisable()
         {
-            EventService.Instance.OnShowHeroSelectionUI.RemoveListener(OnHeroSelectionEventInvoked);
+            EventBus<ShowEntitySelectUIEventData>.Unregister(m_ShowEntitySelectUIEventBinding);
             m_InputActionReference.action.performed -= OnToggleVisibilityInputPerformed;
             m_InputActionReference.action.Disable();
         }
@@ -52,7 +57,7 @@ namespace BTG.Gameplay.UI
             TogglePanel(false);
         }
 
-        private void OnHeroSelectionEventInvoked() => TogglePanel(true);
+        private void OnHeroSelectionEventInvoked(ShowEntitySelectUIEventData data) => TogglePanel(true);
 
         private void TogglePanel(bool show = false) => m_Panel.SetActive(show);
 

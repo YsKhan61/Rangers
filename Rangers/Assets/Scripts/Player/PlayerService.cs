@@ -1,6 +1,5 @@
 using BTG.Entity;
 using BTG.Events;
-using BTG.EventSystem;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
 using System.Threading;
@@ -67,7 +66,7 @@ namespace BTG.Player
         {
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY, 
-                () => EventService.Instance.OnShowHeroSelectionUI.InvokeEvent(), 
+                () => EventBus<ShowEntitySelectUIEventData>.Invoke(new ShowEntitySelectUIEventData { }), 
                 m_CTS.Token);
         }
 

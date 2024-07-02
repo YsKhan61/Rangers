@@ -1,8 +1,9 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
-using BTG.EventSystem;
+using BTG.Events;
 using BTG.Player;
 using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -100,7 +101,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY,
-                () => EventService.Instance.OnShowHeroSelectionUI.InvokeEvent(),
+                () => EventBus<ShowEntitySelectUIEventData>.Invoke(new ShowEntitySelectUIEventData { }),
                 m_CTS.Token);
         }
 
