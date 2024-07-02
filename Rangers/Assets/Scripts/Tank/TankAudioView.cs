@@ -19,6 +19,7 @@ namespace BTG.Tank
         {
             m_EngineAudioSource.clip = clip;
             m_EngineAudioSource.loop = true;
+            m_EngineAudioSource.pitch = 0.3f;
             m_EngineAudioSource.Play();
         }
 
