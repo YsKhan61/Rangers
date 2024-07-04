@@ -114,7 +114,7 @@ namespace BTG.Actions.PrimaryAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                TagNetworkGuid = m_TeslaFiring.Data.HitEffectTag.Guid.ToNetworkGuid(),
+                TagNetworkGuid = m_Data.HitEffectTag.Guid.ToNetworkGuid(),
                 EffectPosition = transform.position
             });
         }
