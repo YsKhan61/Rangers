@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 using VContainer;
 
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     /// <summary>
     /// This factory is responsible for creating the tanks.

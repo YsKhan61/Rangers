@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     public class TankAudioView : MonoBehaviour
     {

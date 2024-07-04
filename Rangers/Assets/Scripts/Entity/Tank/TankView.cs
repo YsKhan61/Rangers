@@ -2,7 +2,7 @@ using BTG.Entity;
 using UnityEngine;
 
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     public class TankView : MonoBehaviour, IEntityView
     {

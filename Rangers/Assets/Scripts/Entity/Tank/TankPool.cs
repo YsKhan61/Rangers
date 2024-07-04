@@ -2,7 +2,7 @@ using BTG.Utilities;
 using UnityEngine;
 
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     /// <summary>
     /// A pool for the TankBrain

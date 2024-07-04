@@ -1,5 +1,5 @@
 {
-    "name": "BTG.Tank",
+    "name": "BTG.Entity.Tank",
     "rootNamespace": "",
     "references": [
         "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",

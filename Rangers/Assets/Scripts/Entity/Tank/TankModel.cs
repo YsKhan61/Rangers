@@ -2,7 +2,7 @@ using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     public class TankModel : IEntityModel
     {

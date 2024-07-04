@@ -3,7 +3,7 @@ using BTG.Utilities;
 using UnityEngine;
 
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     [CreateAssetMenu(fileName = "TankData", menuName = "ScriptableObjects/TankDataSO")]
     public class TankDataSO : EntityDataSO

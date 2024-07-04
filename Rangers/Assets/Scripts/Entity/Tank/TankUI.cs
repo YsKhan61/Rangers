@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     public class TankUI : MonoBehaviour
     {

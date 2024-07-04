@@ -9,7 +9,7 @@ using UnityEngine;
 using VContainer;
 
 
-namespace BTG.Tank
+namespace BTG.Entity.Tank
 {
     /// <summary>
     /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
