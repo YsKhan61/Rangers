@@ -67,7 +67,7 @@ namespace BTG.Actions.PrimaryAction
         public void Show()
         {
             if (!IsServer) return;
-
+            m_Collider.enabled = true;
             Show_ClientRpc();
         }
 
@@ -75,15 +75,12 @@ namespace BTG.Actions.PrimaryAction
         private void Show_ClientRpc()
         {
             m_ParticleSytem.Play();
-            
-            if (IsServer)
-                m_Collider.enabled = true;
         }
 
         private void Hide()
         {
             if (!IsServer) return;
-
+            m_Collider.enabled = false;
             Hide_ClientRpc();
         }
 
@@ -91,9 +88,6 @@ namespace BTG.Actions.PrimaryAction
         private void Hide_ClientRpc()
         {
             m_ParticleSytem.Stop();
-            
-            if (IsServer)
-                m_Collider.enabled = false;
         }
 
         private void OnHitSomething(Collider other)
@@ -127,7 +121,6 @@ namespace BTG.Actions.PrimaryAction
 
         private void Reset()
         {
-            m_Rigidbody.Sleep();
             m_TeslaFiring = null;
 
             Hide();
