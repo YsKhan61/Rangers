@@ -1,4 +1,4 @@
-# Tank Rangers
+# Rangers
 This is a fun project where we have tank rangers of various abilities who can fight among each other.
 
 # Rangers
