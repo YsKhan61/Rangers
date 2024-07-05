@@ -18,6 +18,7 @@ namespace BTG.Actions.PrimaryAction
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
             m_BallInCharge.SetTeslaFiring(this);
+            (m_BallInCharge as INetworkTeslaBallView).SetActorOwnerClientId(actor.OwnerClientId);
         }
 
         protected override void InvokeShootAudioEvent()

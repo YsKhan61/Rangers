@@ -8,7 +8,7 @@ using UnityEngine;
 namespace BTG.Actions.PrimaryAction
 {
     [RequireComponent(typeof(NetworkObject))]
-    public class NetworkTeslaBallView : NetworkBehaviour, ITeslaBallView
+    public class NetworkTeslaBallView : NetworkBehaviour, INetworkTeslaBallView
     {
         public Transform Transform => transform;
         public Transform Owner { get; private set; }
@@ -23,6 +23,8 @@ namespace BTG.Actions.PrimaryAction
         [SerializeField]
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
+
+        public ulong ActorOwnerClientId { get; private set; }
 
         private NetworkTeslaBallPool m_Pool;
         private ITeslaFiring m_TeslaFiring;
@@ -39,6 +41,7 @@ namespace BTG.Actions.PrimaryAction
         /// Set the owner of the tesla ball
         /// </summary>
         public void SetOwner(Transform owner) => Owner = owner;
+        public void SetActorOwnerClientId(ulong clientId) => ActorOwnerClientId = clientId;
 
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
@@ -102,7 +105,7 @@ namespace BTG.Actions.PrimaryAction
 
             if (other.TryGetComponent(out IDamageableView damageable))
             {
-                damageable.Damage(m_Damage);
+                damageable.Damage(ActorOwnerClientId, m_Damage);
             }
 
             Reset();
