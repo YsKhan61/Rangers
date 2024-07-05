@@ -67,7 +67,7 @@ namespace BTG.Actions.UltimateAction
             AutoCharge();
         }
 
-        public void OnHitDamageable(IDamageableView damageable) => damageable.Damage(autoTargetData.Damage);
+        public virtual void OnHitDamageable(IDamageableView damageable) => damageable.Damage(autoTargetData.Damage);
 
         /// <summary>
         /// In case of Singleplayer - Explosion creation event invoked by the projectile on collision.

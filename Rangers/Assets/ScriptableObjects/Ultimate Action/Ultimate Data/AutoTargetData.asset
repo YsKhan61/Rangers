@@ -21,9 +21,9 @@ MonoBehaviour:
   m_FireRate: 2
   m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
     type: 3}
-  m_NetworkAutoTargetView: {fileID: 1293401678989881611, guid: 069d449019275ab48b0dd8503c477bbd,
+  m_NetworkAutoTargetView: {fileID: 8720886088232821963, guid: 069d449019275ab48b0dd8503c477bbd,
     type: 3}
   m_ProjectileSpeed: 7
-  m_Damage: 50
+  m_Damage: 100
   m_ExplosionTag: {fileID: 11400000, guid: c870c7b306ed73b4599bdf7791ac8982, type: 2}
   m_BulletDuration: 5

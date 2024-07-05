@@ -10,7 +10,7 @@ namespace BTG.Actions.UltimateAction
     {
         public Transform Owner { get; private set; }
 
-        private AutoTarget m_Controller;
+        protected AutoTarget m_Controller;
 
         private float m_Speed;
         private Transform m_Target;

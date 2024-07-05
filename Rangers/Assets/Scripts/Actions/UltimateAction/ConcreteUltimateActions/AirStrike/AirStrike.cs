@@ -135,7 +135,15 @@ namespace BTG.Actions.UltimateAction
                     continue;
                 }
 
-                damageable.Damage(m_AirStrikeData.Damage);
+                if (Actor.IsNetworkPlayer)
+                {
+
+                   damageable.Damage(Actor.OwnerClientId, m_AirStrikeData.Damage);
+                }
+                else
+                {
+                    damageable.Damage(m_AirStrikeData.Damage);
+                }
             }
         }
 

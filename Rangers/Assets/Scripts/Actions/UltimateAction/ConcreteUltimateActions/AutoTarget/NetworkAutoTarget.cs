@@ -28,6 +28,18 @@ namespace BTG.Actions.UltimateAction
             });
         }
 
+        public override void OnHitDamageable(IDamageableView damageable)
+        {
+            if (Actor.IsNetworkPlayer)
+            {
+                damageable.Damage(Actor.OwnerClientId, autoTargetData.Damage);
+            }
+            else
+            {
+                base.OnHitDamageable(damageable);
+            }
+        }
+
         protected override void SpawnConfigureLaunchProjectile(Transform targetTransform)
         {
             AutoTargetView projectile = Object.Instantiate(autoTargetData.NetworkAutoTargetView, Actor.FirePoint.position, Actor.FirePoint.rotation);
