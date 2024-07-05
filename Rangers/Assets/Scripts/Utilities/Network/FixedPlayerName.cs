@@ -1,6 +1,5 @@
 using Unity.Collections;
 using Unity.Netcode;
-using UnityEngine;
 
 namespace BTG.Utilities
 {
@@ -23,14 +22,5 @@ namespace BTG.Utilities
 
         public static implicit operator string(FixedPlayerName s) => s.ToString();
         public static implicit operator FixedPlayerName(string s) => new FixedPlayerName() { _name = new FixedString32Bytes(s) };
-    }
-
-    /// <summary>
-    /// NetworkBehaviour containing only one NetworkVariableString which represents this object's name.
-    /// </summary>
-    public class NetworkNameState : NetworkBehaviour
-    {
-        [HideInInspector]
-        public NetworkVariable<FixedPlayerName> Name = new();
     }
 }
