@@ -5,7 +5,6 @@ using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -103,9 +102,7 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void OnPlayerDeath()
         {
-            if (!IsServer) return;
-
-            m_PlayerStats.DeathCount.Value++;
+            // Hide the owner UIs (primary, ultimate, icon, health etc)
         }
 
         public void ShowHeroSelectionUI()

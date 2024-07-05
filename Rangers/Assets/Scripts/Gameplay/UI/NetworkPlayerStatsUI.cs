@@ -1,11 +1,9 @@
 ﻿using TMPro;
-using Unity.Netcode;
 using UnityEngine.InputSystem;
 using UnityEngine;
-using System;
 using BTG.Gameplay.GameplayObjects;
 using System.Collections.Generic;
-using UnityEditor.PackageManager;
+using System;
 
 
 namespace BTG.Gameplay.UI
@@ -27,7 +25,7 @@ namespace BTG.Gameplay.UI
         [SerializeField]
         private PlayerStatsRowUI playerStatsRowUIPrefab;
 
-        private List<PlayerStatsRowUI> _playerStatsRowUIList = new List<PlayerStatsRowUI>();
+        private readonly List<PlayerStatsRowUI> _playerStatsRowUIList = new();
 
         private void OnEnable()
         {
@@ -46,31 +44,77 @@ namespace BTG.Gameplay.UI
             HidePanel();
         }
 
+        /// <summary>
+        /// Adds a new row to the player stats panel for the given client ID.
+        /// </summary>
+        /// <param name="clientId">the client ID of the player to add</param>
         public void AddPlayerStatRow(ulong clientId)
         {
             if (!_persistentPlayerRuntimeData.TryGetPlayer(clientId, out var persistentPlayer))
             {
-                Debug.LogError("Could not find player with clientId: " + clientId);
                 return;
             }
 
             var playerStatsRowUI = Instantiate(playerStatsRowUIPrefab, m_StatsContainer);
             _playerStatsRowUIList.Add(playerStatsRowUI);
+            playerStatsRowUI.ClientId = clientId;
             var playerName = persistentPlayer.NetworkNameState.Name.Value;
             playerStatsRowUI.NameText.text = playerName;
+
+            RegisterToPersistentPlayer(persistentPlayer);
         }
 
+        /// <summary>
+        /// Removes the row for the given client ID from the player stats panel.
+        /// </summary>
+        /// <param name="clientId">the client ID of the player to remove</param>
         public void RemovePlayerStatRow(ulong clientId)
         {
             foreach (var playerStatsRowUI in _playerStatsRowUIList)
             {
                 if (playerStatsRowUI.ClientId == clientId)
                 {
+                    if (!_persistentPlayerRuntimeData.TryGetPlayer(clientId, out var persistentPlayer))
+                    {
+                        return;
+                    }
+                    UnregisterFromPersistentPlayer(persistentPlayer);
+
                     _playerStatsRowUIList.Remove(playerStatsRowUI);
                     Destroy(playerStatsRowUI.gameObject);
                     break;
                 }
             }
+        }
+
+        private void RegisterToPersistentPlayer(PersistentPlayer persistentPlayer)
+        {
+            persistentPlayer.NetworkStatsState.OnKillsChanged += NetworkStatsState_OnKillsChanged;
+            persistentPlayer.NetworkStatsState.OnDeathsChanged += NetworkStatsState_OnDeathsChanged;
+        }
+
+        private void UnregisterFromPersistentPlayer(PersistentPlayer persistentPlayer)
+        {
+            persistentPlayer.NetworkStatsState.OnKillsChanged -= NetworkStatsState_OnKillsChanged;
+            persistentPlayer.NetworkStatsState.OnDeathsChanged -= NetworkStatsState_OnDeathsChanged;
+        }
+
+        private void NetworkStatsState_OnKillsChanged(ulong clientId, int value)
+        {
+            if (!TryGetPlayerStatsRowUI(clientId, out var playerStatsRowUI))
+            {
+                return;
+            }
+            playerStatsRowUI.KillText.text = value.ToString();
+        }
+
+        private void NetworkStatsState_OnDeathsChanged(ulong clientId, int value)
+        {
+            if (!TryGetPlayerStatsRowUI(clientId, out var playerStatsRowUI))
+            {
+                return;
+            }
+            playerStatsRowUI.DeathText.text = value.ToString();
         }
 
         private void OnInputActionPerformed(InputAction.CallbackContext context)
@@ -84,6 +128,23 @@ namespace BTG.Gameplay.UI
         private void ShowPanel() => m_PlayerStatsPanel.SetActive(true);
         
         private void HidePanel() => m_PlayerStatsPanel.SetActive(false);
+
+        private bool TryGetPlayerStatsRowUI(ulong clientId, out PlayerStatsRowUI playerStatsRowUI)
+        {
+            foreach (var rowUI in _playerStatsRowUIList)
+            {
+                if (rowUI.ClientId == clientId)
+                {
+                    playerStatsRowUI = rowUI;
+                    return true;
+                }
+            }
+
+            Debug.LogError($"Could not find player stats row for clientId: {clientId}");
+
+            playerStatsRowUI = null;
+            return false;
+        }
     }
 
 }

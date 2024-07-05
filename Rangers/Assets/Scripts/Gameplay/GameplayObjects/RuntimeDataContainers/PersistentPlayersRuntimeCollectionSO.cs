@@ -21,6 +21,8 @@ namespace BTG.Gameplay.GameplayObjects
                 }
             }
 
+            Debug.LogError("Could not find player with clientId: " + clientId);
+
             persistentPlayer = null;
             return false;
         }

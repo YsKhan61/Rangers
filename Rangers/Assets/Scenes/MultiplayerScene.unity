@@ -3348,6 +3348,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 784169326584091180, guid: 31e40c38da5f5154d872e6638e2a6274,
+        type: 3}
+      propertyPath: m_text
+      value: DEATHS
+      objectReference: {fileID: 0}
     - target: {fileID: 944372434927329103, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -3852,6 +3857,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5869576145151422882, guid: 31e40c38da5f5154d872e6638e2a6274,
+        type: 3}
+      propertyPath: m_text
+      value: KILLS
       objectReference: {fileID: 0}
     - target: {fileID: 5883498195901239967, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}

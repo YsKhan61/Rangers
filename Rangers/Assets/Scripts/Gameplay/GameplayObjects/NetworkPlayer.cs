@@ -237,7 +237,11 @@ namespace BTG.Gameplay.GameplayObjects
 
         public void OnEntityDied()
         {
+            if (!IsServer) return;
+
             mn_IsAlive.Value = false;
+            m_PersistentPlayer.NetworkStatsState.IncrementDeaths();
+
             OnEntityDied_ClientRpc();
         }
 

@@ -21,6 +21,7 @@ namespace BTG.Gameplay.GameplayObjects
     [RequireComponent(typeof(NetworkObject))]
     [RequireComponent(typeof(NetworkNameState))]
     [RequireComponent(typeof(NetworkEntityGuidState))]
+    [RequireComponent(typeof(NetworkStatsState))]
     public class PersistentPlayer : NetworkBehaviour
     {
         [SerializeField]
@@ -32,10 +33,14 @@ namespace BTG.Gameplay.GameplayObjects
         private NetworkEntityGuidState _networkEntityGuidState;
         public NetworkEntityGuidState NetworkEntityGuidState => _networkEntityGuidState;
 
+        private NetworkStatsState _networkStatsState;
+        public NetworkStatsState NetworkStatsState => _networkStatsState;
+
         private void Awake()
         {
             _networkNameState = GetComponent<NetworkNameState>();
             _networkEntityGuidState = GetComponent<NetworkEntityGuidState>();
+            _networkStatsState = GetComponent<NetworkStatsState>();
         }
 
         public override void OnNetworkSpawn()
