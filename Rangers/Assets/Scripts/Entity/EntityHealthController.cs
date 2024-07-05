@@ -1,4 +1,6 @@
-﻿using BTG.Utilities;
+﻿using BTG.Events;
+using BTG.Utilities;
+using BTG.Utilities.EventBus;
 using System;
 using UnityEngine;
 
@@ -62,6 +64,24 @@ namespace BTG.Entity
             }
         }
 
+        public void Damage(ulong actorOwnerClientId, int damage)
+        {
+            if (!IsEnabled)
+            {
+                return;
+            }
+
+            AddHealth(-damage);
+            OnDamageTaken?.Invoke();
+
+            if (m_CurrentHealth == 0)
+            {
+                m_Controller.OnEntityDied();
+                IsEnabled = false;
+                
+                EventBus<KillDeathEventData>.Invoke(new KillDeathEventData(actorOwnerClientId, (m_Controller as INetworkEntityController).OwnerClientId));
+            }
+        }
 
         /// <summary>
         /// Set the max health of the entity.

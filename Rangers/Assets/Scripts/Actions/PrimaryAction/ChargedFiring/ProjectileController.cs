@@ -57,7 +57,15 @@ namespace BTG.Actions.PrimaryAction
                 {
                     return;
                 }
-                damageable.Damage(m_Data.Damage);
+
+                if (Actor.IsNetworkPlayer)
+                {
+                    damageable.Damage(Actor.OwnerClientId, m_Data.Damage);
+                }
+                else
+                {
+                    damageable.Damage(m_Data.Damage);
+                }
             }
 
             ResetProjectile();

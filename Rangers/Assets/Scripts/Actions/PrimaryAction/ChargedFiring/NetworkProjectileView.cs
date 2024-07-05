@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BTG.Actions.PrimaryAction
 {
     [RequireComponent(typeof(NetworkTransform))]
-    public class NetworkProjectileView : NetworkBehaviour, IProjectileView
+    public class NetworkProjectileView : NetworkBehaviour, INetworkProjectileView
     {
         [SerializeField]
         GameObject[] m_Graphics;
@@ -23,6 +23,7 @@ namespace BTG.Actions.PrimaryAction
         NetworkTransform m_NetworkTransform;
 
         public Transform Owner { get; private set; }
+        public ulong ActorOwnerClientId { get; private set; }
         public Transform Transform => transform;
 
         private ProjectileController m_Controller;
@@ -50,6 +51,7 @@ namespace BTG.Actions.PrimaryAction
         public void SetController(ProjectileController controller) => m_Controller = controller;
         public void SetPool(NetworkProjectilePool pool) => m_Pool = pool;
         public void SetOwner(Transform owner) => Owner = owner;
+        public void SetActorOwnerClientId(ulong clientId) => ActorOwnerClientId = clientId;
         public void SetPositionAndRotation(Vector3 position, Quaternion rotation)
         {
             if (!IsServer) return;

@@ -21,6 +21,11 @@ namespace BTG.Actions.PrimaryAction
         public bool IsNetworkPlayer { get; }
 
         /// <summary>
+        /// Get the owner client id of the actor
+        /// </summary>
+        public ulong OwnerClientId { get; }
+
+        /// <summary>
         /// The network object id of the actor, if it is a network player
         /// </summary>
         public ulong NetworkObjectId { get; }

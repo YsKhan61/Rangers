@@ -19,6 +19,7 @@ namespace BTG.Actions.PrimaryAction
             NetworkProjectileView view = m_Pool.GetProjectile();
             ProjectileController pc = new ProjectileController(chargedFiringData, view);
             view.SetController(pc);
+            view.SetActorOwnerClientId(actor.OwnerClientId);
             return pc;
         }
 

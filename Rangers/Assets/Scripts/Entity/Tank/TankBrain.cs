@@ -47,6 +47,7 @@ namespace BTG.Entity.Tank
 
         public bool IsPlayer => m_Model.IsPlayer;
         public bool IsNetworkPlayer => m_Model.IsNetworkPlayer;
+        public ulong OwnerClientId => m_Model.OwnerClientId;
         public ulong NetworkObjectId => m_Model.NetworkObjectId;
         public float CurrentMoveSpeed => Controller.Velocity.magnitude;
 

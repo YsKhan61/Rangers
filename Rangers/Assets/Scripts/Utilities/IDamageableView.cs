@@ -37,6 +37,8 @@ namespace BTG.Utilities
         /// </summary>
         public void Damage(int damage);
 
+        public void Damage(ulong actorOwnerClientId, int damage);
+
         /// <summary>
         /// Set whether the object is visible.
         /// </summary>

@@ -18,6 +18,11 @@ namespace BTG.Entity
         public bool IsNetworkPlayer { get; set; }
 
         /// <summary>
+        /// Get the owner client id of the Entity
+        /// </summary>
+        public ulong OwnerClientId { get; set; }
+
+        /// <summary>
         /// The network object id of the actor, if it is a network player
         /// </summary>
         public ulong NetworkObjectId { get; set; }

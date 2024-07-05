@@ -8,7 +8,6 @@ using BTG.Utilities.EventBus;
 using Unity.Netcode;
 using UnityEngine;
 using VContainer;
-using static UnityEditor.PlayerSettings;
 
 
 namespace BTG.Gameplay.GameplayObjects
@@ -17,7 +16,7 @@ namespace BTG.Gameplay.GameplayObjects
     /// This is a fused script of SinglePlayer's PlayerTankController and PlayerView
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
-    public class NetworkPlayer : NetworkBehaviour, IEntityController
+    public class NetworkPlayer : NetworkBehaviour, IEntityController, INetworkEntityController
     {
         [Inject]
         private EntityFactoryContainerSO m_EntityFactoryContainer;
@@ -177,6 +176,7 @@ namespace BTG.Gameplay.GameplayObjects
 
             m_EntityBrain.Model.IsPlayer = true;
             m_EntityBrain.Model.IsNetworkPlayer = true;
+            m_EntityBrain.Model.OwnerClientId = OwnerClientId;
             m_EntityBrain.Model.NetworkObjectId = NetworkObjectId;
 
             m_EntityBrain.SetController(this);
@@ -240,8 +240,6 @@ namespace BTG.Gameplay.GameplayObjects
             if (!IsServer) return;
 
             mn_IsAlive.Value = false;
-            m_PersistentPlayer.NetworkStatsState.IncrementDeaths();
-
             OnEntityDied_ClientRpc();
         }
 

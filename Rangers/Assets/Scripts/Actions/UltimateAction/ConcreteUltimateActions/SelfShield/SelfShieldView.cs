@@ -28,6 +28,11 @@ namespace BTG.Actions.UltimateAction
         {
             // Do nothing for now.
         }
+
+        public void Damage(ulong actorOwnerClientId, int damage)
+        {
+            // Do nothing for now
+        }
     }
 
 }
