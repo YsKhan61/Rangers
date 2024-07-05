@@ -91,9 +91,6 @@ namespace BTG.Gameplay.GameState
                 //getting spawned while joining. But that's not something we can fully address by changes in
                 //ServerMultiplayGameState.
                 SpawnNetworkPlayerForEachClients(clientId, true);
-
-                Debug.Log("Now need to reconfig the network player view");
-                // After spawning network player we need to inform NetworkPlayerService to reconfig the network player view
             }
         }
 

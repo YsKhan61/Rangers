@@ -1,9 +1,11 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
 using BTG.Events;
+using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -20,6 +22,9 @@ namespace BTG.Gameplay.GameplayObjects
         [SerializeField]
         private PlayerVirtualCamera m_PVCamera;
         public PlayerVirtualCamera PVCamera => m_PVCamera;
+
+        [SerializeField]
+        private NetworkPlayerStatsUI m_NetworkPlayerStatsUI;
 
         [Inject]
         private PlayerDataSO m_PlayerData;
@@ -45,12 +50,16 @@ namespace BTG.Gameplay.GameplayObjects
             m_CTS = new CancellationTokenSource();
             m_PlayerStats.ResetStats();
             m_PlayerStats.EntityTagSelected.OnValueChanged += OnEntityTagSelectedChanged;
+
+            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
         }
 
         public override void OnNetworkDespawn()
         {
             m_PlayerStats.EntityTagSelected.OnValueChanged -= OnEntityTagSelectedChanged;
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+
+            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnect;
         }
 
         [ServerRpc(RequireOwnership = false)]
@@ -88,6 +97,8 @@ namespace BTG.Gameplay.GameplayObjects
             }
 
             ConfigureEntityWithDelay(networkPlayer);
+
+            m_NetworkPlayerStatsUI.AddPlayerStatRow(clientId);
         }
 
         public void OnPlayerDeath()
@@ -116,6 +127,11 @@ namespace BTG.Gameplay.GameplayObjects
             // NOTE - This time delay will be sufficient for the network player to subscribe to required events on OnNetworkSpawn
             await Task.Delay(1000);
             networkPlayer.Configure();
+        }
+
+        private void OnClientDisconnect(ulong clientId)
+        {
+            m_NetworkPlayerStatsUI.RemovePlayerStatRow(clientId);
         }
     }
 }
