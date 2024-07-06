@@ -27,7 +27,7 @@ namespace BTG.Actions.PrimaryAction
         public ulong ActorOwnerClientId { get; private set; }
 
         private NetworkTeslaBallPool m_Pool;
-        private ITeslaFiring m_TeslaFiring;
+        private TeslaFiringBase m_TeslaFiring;
         private TeslaFiringDataSO m_Data;
         private int m_Damage;
         private TagSO m_EffectTag;
@@ -46,7 +46,7 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
         /// </summary>
-        public void SetTeslaFiring(ITeslaFiring teslaFiring)
+        public void SetTeslaFiring(TeslaFiringBase teslaFiring)
         {
             m_TeslaFiring = teslaFiring;
             m_Data = m_TeslaFiring.Data;

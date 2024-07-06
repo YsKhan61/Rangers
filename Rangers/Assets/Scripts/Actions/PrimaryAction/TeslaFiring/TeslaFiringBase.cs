@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BTG.Actions.PrimaryAction
 {
-    public abstract class TeslaFiringBase : ITeslaFiring
+    public abstract class TeslaFiringBase : IPrimaryAction, IUpdatable
     {
         private const string FIRING_AUDIO_SOURCE_NAME = "FiringAudioSource";
 

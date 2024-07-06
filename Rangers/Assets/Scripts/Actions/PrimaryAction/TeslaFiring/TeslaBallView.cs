@@ -24,7 +24,7 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
-        private ITeslaFiring m_TeslaFiring;
+        private TeslaFiringBase m_TeslaFiring;
         private TeslaFiringDataSO m_Data;
         private TeslaBallPool m_Pool;
         private int m_Damage;
@@ -42,7 +42,7 @@ namespace BTG.Actions.PrimaryAction
         /// <summary>
         /// Set the tesla firing that fired the tesla ball
         /// </summary>
-        public void SetTeslaFiring(ITeslaFiring teslaFiring)
+        public void SetTeslaFiring(TeslaFiringBase teslaFiring)
         {
             m_TeslaFiring = teslaFiring;
             m_Data = m_TeslaFiring.Data;
