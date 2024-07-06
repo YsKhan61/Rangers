@@ -41,7 +41,7 @@ namespace BTG.Gameplay.GameState
             InitializePlayerService();
             InitializeEnemyService();
 
-            GetPlayerName();
+            SetPlayerNameToUI();
         }
         
         private void InitializePlayerService()
@@ -50,7 +50,9 @@ namespace BTG.Gameplay.GameState
             m_PlayerService.SetPlayerVirtualCamera(m_PVC);
         }
 
-        private async void GetPlayerName() => await _authServiceFacade.GetPlayerName();
+        private async void SetPlayerNameToUI() => 
+            m_PlayerStatsData.PlayerName.Value = await _authServiceFacade.GetPlayerName();
+
         private void InitializeEnemyService() => m_EnemyService.Initialize();
     }
 
