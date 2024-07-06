@@ -211,7 +211,7 @@ namespace BTG.Enemy
         internal void OnEntityDead()
         {
             ChangeState(EnemyTankState.Dead);
-            DeInit();
+            // DeInit();
         }
 
 
