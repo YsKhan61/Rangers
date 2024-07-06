@@ -1,4 +1,5 @@
 using BTG.Utilities;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace BTG.Player
@@ -29,6 +30,11 @@ namespace BTG.Player
         /// The prefab of PlayerView
         /// </summary>
         public PlayerView Prefab => m_Prefab;
+
+        [SerializeField]
+        [Tooltip("The prefab of Player in Multiplayer. Make sure this is included in the NetworkManager's list of prefabs!")]
+        private NetworkObject m_NetworkPrefab;
+        public NetworkObject NetworkPrefab => m_NetworkPrefab;
 
         [SerializeField, Tooltip("Event Channel which will be raised when player's health is updated")]
         private IntIntEventChannelSO m_OnPlayerHealthUpdated;

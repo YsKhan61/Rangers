@@ -1,5 +1,6 @@
 ﻿using BTG.ConnectionManagement;
 using BTG.Gameplay.GameplayObjects;
+using BTG.Player;
 using BTG.Utilities;
 using System.Collections.Generic;
 using Unity.Multiplayer.Samples.BossRoom;
@@ -16,10 +17,6 @@ namespace BTG.Gameplay.GameState
     [RequireComponent(typeof(NetcodeHooks))]
     public class ServerMultiplayGameState : GameStateBehaviour
     {
-        [SerializeField]
-        [Tooltip("Make sure this is included in the NetworkManager's list of prefabs!")]
-        private NetworkObject m_PlayerPrefab;
-
         [SerializeField]
         private NetworkPlayerService m_NetworkPlayerService;
 
@@ -39,6 +36,9 @@ namespace BTG.Gameplay.GameState
 
         [Inject]
         private SceneNameListSO m_SceneNameList;
+
+        [Inject]
+        private PlayerDataSO m_PlayerDataSO;
 
 
         protected override void Awake()
@@ -118,7 +118,7 @@ namespace BTG.Gameplay.GameState
         void SpawnNetworkPlayerForEachClients(ulong clientId, bool lateJoin)
         {
             NetworkObject playerNetworkObject = NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(clientId);
-            NetworkObject newPlayer = Instantiate(m_PlayerPrefab);
+            NetworkObject newPlayer = Instantiate(m_PlayerDataSO.NetworkPrefab);
 
             var persistentPlayerExists = playerNetworkObject.TryGetComponent(out PersistentPlayer persistentPlayer);
             Assert.IsTrue(persistentPlayerExists,
