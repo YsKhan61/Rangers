@@ -1,5 +1,7 @@
 using BTG.Enemy;
 using BTG.Player;
+using BTG.UnityServices.Auth;
+using BTG.Utilities;
 using UnityEngine;
 using VContainer;
 
@@ -9,7 +11,13 @@ namespace BTG.Gameplay.GameState
     public class SinglePlayerGameState : GameStateBehaviour
     {
         [SerializeField]
-        private PlayerVirtualCamera m_PVC;
+        PlayerVirtualCamera m_PVC;
+
+        [Inject]
+        PlayerStatsSO m_PlayerStatsData;
+
+        [Inject]
+        AuthenticationServiceFacade _authServiceFacade;
 
         PlayerService m_PlayerService;
         EnemyService m_EnemyService;
@@ -32,20 +40,18 @@ namespace BTG.Gameplay.GameState
 
             InitializePlayerService();
             InitializeEnemyService();
-        }
-       
 
+            GetPlayerName();
+        }
+        
         private void InitializePlayerService()
         {
             m_PlayerService.Initialize();
             m_PlayerService.SetPlayerVirtualCamera(m_PVC);
         }
 
-
-        private void InitializeEnemyService()
-        {
-            m_EnemyService.Initialize();
-        }
+        private async void GetPlayerName() => await _authServiceFacade.GetPlayerName();
+        private void InitializeEnemyService() => m_EnemyService.Initialize();
     }
 
 }
