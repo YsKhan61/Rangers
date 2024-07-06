@@ -53,5 +53,8 @@ Ultimate Abilities
 ![AutoTarget](https://github.com/YsKhan61/Tank_Rangers/assets/30847550/88ce33d5-a54f-4ea6-a968-bf167c9e2221)
 
 Flow Diagram
-![ChargedFiring Diagram](https://github.com/YsKhan61/Rangers/assets/30847550/5d6432c6-307f-4407-bcba-44a09b38dabf)
+- CHarged Firing Primary Action Flow Diagram
+  ![ChargedFiring PrimaryAction Diagram](https://github.com/YsKhan61/Rangers/assets/30847550/64551fd1-0504-4e49-855a-0461774f2908)
 
+- Tesla Firing Primary Action Flow Diagram
+![TeslaFiring PrimaryAction Diagram](https://github.com/YsKhan61/Rangers/assets/30847550/87bb953c-8ab9-4e23-a407-63f8307392fc)
