@@ -249,11 +249,11 @@ namespace BTG.Bootstrap
 #endif
         }
 
-        private void Logs()
+        /*private void Logs()
         {
             Container.Resolve<EntityDataContainerSO>().LogGuid();
             Container.Resolve<TagContainerSO>().LogGuid();
             Container.Resolve<UltimateActionDataContainerSO>().LogGuid();
-        }
+        }*/
     }
 }
