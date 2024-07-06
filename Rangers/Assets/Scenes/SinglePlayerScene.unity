@@ -264,6 +264,7 @@ MonoBehaviour:
     TypeName: BTG.Bootstrap.ApplicationService
   autoRun: 1
   autoInjectGameObjects:
+  - {fileID: 836039772}
   - {fileID: 5282029357601126307}
   m_PVC: {fileID: 1894154699}
 --- !u!114 &836039775
@@ -3755,12 +3756,12 @@ PrefabInstance:
     - target: {fileID: 6796266755712061602, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1300
       objectReference: {fileID: 0}
     - target: {fileID: 6796266755712061602, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 6796266755712061602, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
@@ -3805,7 +3806,7 @@ PrefabInstance:
     - target: {fileID: 8008469139444748733, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_Name
-      value: PlayerCanvas
+      value: PlayerCanvas - SinglePlayer
       objectReference: {fileID: 0}
     - target: {fileID: 8220920299649786490, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
@@ -3935,12 +3936,12 @@ PrefabInstance:
     - target: {fileID: 9070743880088395847, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1300
       objectReference: {fileID: 0}
     - target: {fileID: 9070743880088395847, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 9070743880088395847, guid: 31e40c38da5f5154d872e6638e2a6274,
         type: 3}
