@@ -47,6 +47,9 @@ namespace BTG.Entity
             Owner = owner;
         }
 
+        /// <summary>
+        /// Singleplayer - Any entity can call this method.
+        /// </summary>
         public void Damage(int damage)
         {
             if (!IsEnabled)
@@ -64,6 +67,12 @@ namespace BTG.Entity
             }
         }
 
+        /// <summary>
+        /// Multiplayer - Only the server can call this method.
+        /// It requires the actor owner client id and the damage amount.
+        /// </summary>
+        /// <param name="actorOwnerClientId">the OwnerClientId of the Network Client</param>
+        /// <param name="damage">The amount of damage done by the actor</param>
         public void Damage(ulong actorOwnerClientId, int damage)
         {
             if (!IsEnabled)
