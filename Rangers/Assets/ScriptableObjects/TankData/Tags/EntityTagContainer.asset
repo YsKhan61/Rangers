@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 39ab99226d8ff7a4fa1e5542025e4d82, type: 3}
-  m_Name: TagContainer
+  m_Name: EntityTagContainer
   m_EditorClassIdentifier: 
   m_DataList:
   - {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d, type: 2}
