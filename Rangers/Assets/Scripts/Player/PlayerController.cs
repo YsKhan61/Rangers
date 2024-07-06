@@ -115,6 +115,12 @@ namespace BTG.Player
             m_EntityBrain.SetOppositionLayerMask(m_Model.PlayerData.OppositionLayerMask);
 
             m_EntityBrain.OnEntityInitialized += m_PlayerService.OnEntityInitialized;
+
+            m_EntityBrain.PrimaryAction.OnActionAssigned += m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionStarted += m_Model.PlayerData.OnPrimaryActionStarted.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionChargeUpdated += m_Model.PlayerData.OnPrimaryActionChargeUpdated.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionExecuted += m_Model.PlayerData.OnPrimaryActionExecuted.RaiseEvent;
+
             m_EntityBrain.UltimateAction.OnActionAssigned += m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated += m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged += m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
@@ -285,6 +291,12 @@ namespace BTG.Player
         {
             m_EntityBrain.OnEntityInitialized -= m_PlayerService.OnEntityInitialized;
             m_EntityBrain.OnEntityVisibilityToggled -= m_EntityHealthController.SetVisible;
+
+            m_EntityBrain.PrimaryAction.OnActionAssigned -= m_Model.PlayerData.OnPrimaryActionAssigned.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionStarted -= m_Model.PlayerData.OnPrimaryActionStarted.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionChargeUpdated -= m_Model.PlayerData.OnPrimaryActionChargeUpdated.RaiseEvent;
+            m_EntityBrain.PrimaryAction.OnActionExecuted -= m_Model.PlayerData.OnPrimaryActionExecuted.RaiseEvent;
+
             m_EntityBrain.UltimateAction.OnActionAssigned -= m_Model.PlayerData.OnUltimateAssigned.RaiseEvent;
             m_EntityBrain.UltimateAction.OnChargeUpdated -= m_Model.PlayerData.OnUltimateChargeUpdated.RaiseEvent;
             m_EntityBrain.UltimateAction.OnFullyCharged -= m_Model.PlayerData.OnUltimateFullyCharged.RaiseEvent;
