@@ -114,6 +114,18 @@ namespace BTG.Player
         /// Event Channel which will be raised when Entity's Ultimate is executed
         /// </summary>
         public VoidEventChannelSO OnUltimateExecuted => m_OnUltimateExecuted;
-    
+
+
+        [Space(10)]
+
+
+        [Header("Other Event Channels")]
+
+        [Space(5)]
+
+        [SerializeField, Tooltip("Event Channel which will be raised to show Hero Selection UI")]
+        private VoidEventChannelSO m_ShowHeroSelectionUI;
+        public VoidEventChannelSO ShowHeroSelectionUI => m_ShowHeroSelectionUI;
+
     }
 }

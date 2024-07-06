@@ -3151,6 +3151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Panel: {fileID: 3283392772649605364}
+  m_ShowEntitySelectUIEventChannel: {fileID: 11400000, guid: 7fd3ecd46dd6b7148b43b2720214e138,
+    type: 2}
   m_EntityTagSelected: {fileID: 11400000, guid: 21bbdbf9b8393284585bd57c4c0acc8d,
     type: 2}
   m_InputActionReference: {fileID: -1760529668008292023, guid: dce30368c114aca4080cd3a58b2379c9,

@@ -66,7 +66,7 @@ namespace BTG.Player
         {
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY, 
-                () => EventBus<ShowEntitySelectUIEventData>.Invoke(new ShowEntitySelectUIEventData { }), 
+                () => m_PlayerData.ShowHeroSelectionUI.RaiseEvent(),
                 m_CTS.Token);
         }
 

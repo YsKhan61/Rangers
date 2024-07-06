@@ -1,10 +1,8 @@
 ﻿using BTG.Actions.UltimateAction;
 using BTG.Entity;
-using BTG.Events;
 using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.Utilities;
-using BTG.Utilities.EventBus;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -47,7 +45,6 @@ namespace BTG.Gameplay.GameplayObjects
         public override void OnNetworkSpawn()
         {
             m_CTS = new CancellationTokenSource();
-            m_PlayerStats.ResetStats();
             m_PlayerStats.EntityTagSelected.OnValueChanged += OnEntityTagSelectedChanged;
 
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
@@ -109,7 +106,7 @@ namespace BTG.Gameplay.GameplayObjects
         {
             _ = HelperMethods.InvokeAfterAsync(
                 RESPAWN_DELAY,
-                () => EventBus<ShowEntitySelectUIEventData>.Invoke(new ShowEntitySelectUIEventData { }),
+                () => m_PlayerData.ShowHeroSelectionUI.RaiseEvent(),
                 m_CTS.Token);
         }
 
