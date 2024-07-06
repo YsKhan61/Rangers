@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7ea3f13f049e574ea1cb93e4858447c, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  m_TankIDSelected: {fileID: 11400000, guid: 8b0c58c2ef2afa94b857b31f535be511, type: 2}
   m_TankTagSelected: {fileID: 11400000, guid: 21bbdbf9b8393284585bd57c4c0acc8d, type: 2}
+  m_PlayerName: {fileID: 11400000, guid: b052f75e825a664498bb828687e6cc1c, type: 2}
   m_PlayerIcon: {fileID: 11400000, guid: e729e63cec64afe44b1371335cdf0016, type: 2}
+  m_PlayerHealthEventChannel: {fileID: 11400000, guid: ed6a9f9df77f059459162f0f9dffc650,
+    type: 2}
   m_DeathCount: {fileID: 11400000, guid: c590489f9a1f6f6419cdb0d0263323ae, type: 2}
   m_EliminatedEnemiesCount: {fileID: 11400000, guid: 5f30b61b42d928541b0ca790e6b83a5a,
     type: 2}

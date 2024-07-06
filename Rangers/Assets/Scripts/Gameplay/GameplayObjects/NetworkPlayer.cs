@@ -275,7 +275,12 @@ namespace BTG.Gameplay.GameplayObjects
             if (IsOwner)
             {
                 m_NetworkEntityGuidState.EntityDataContainer.TryGetData(ng.ToGuid(), out EntityDataSO entityData);
-                m_PlayerService.PlayerStats.PlayerIcon.Value = entityData.Icon;
+                if (entityData == null) { Debug.LogError("Entity data is null!"); return; }
+
+                PlayerStatsSO playerStats = m_PlayerService.PlayerStats;
+                playerStats.PlayerName.Value = m_PersistentPlayer.NetworkNameState.Name.Value;
+                playerStats.PlayerIcon.Value = entityData.Icon;
+                playerStats.PlayerHealthEventChannel.RaiseEvent(RegisteredEntityData.MaxHealth, RegisteredEntityData.MaxHealth);
             }
         }
 
