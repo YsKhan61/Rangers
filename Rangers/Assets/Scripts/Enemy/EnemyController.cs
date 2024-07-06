@@ -232,17 +232,17 @@ namespace BTG.Enemy
             m_EntityBrain.DeInit();
             UnsubscribeFromEvents();
             m_EntityBrain = null;
-            m_View.ToggleView(false);
             m_Pool.ReturnEnemy(this);
 
             m_Service.OnEnemyDeath();
         }
 
+        public void ShowView() => m_View.ToggleView(true);
+        public void HideView() => m_View.ToggleView(false);
 
         private void InitializeController()
         {
             IsUltimateReady = false;
-            m_View.ToggleView(true);
         }
 
         private void InitializeHealthAndDamage()

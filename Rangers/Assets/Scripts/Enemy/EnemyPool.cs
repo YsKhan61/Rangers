@@ -13,9 +13,18 @@ namespace BTG.Enemy
         [Inject]
         private IObjectResolver m_Resolver;
 
-        public EnemyController GetEnemy() => GetItem();
+        public EnemyController GetEnemy()
+        {
+            EnemyController controller = GetItem();
+            controller.ShowView();
+            return controller;
+        }
 
-        public void ReturnEnemy(EnemyController enemy) => ReturnItem(enemy);
+        public void ReturnEnemy(EnemyController enemy)
+        {
+            enemy.HideView();
+            ReturnItem(enemy);
+        }
 
         protected override EnemyController CreateItem()
         {
