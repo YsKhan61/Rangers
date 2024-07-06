@@ -9,21 +9,21 @@ namespace BTG.Gameplay.UI
     public class PlayerStatsUI : MonoBehaviour
     {
         [SerializeField, Tooltip("The UI panel that shows the player stats")]
-        private GameObject m_PlayerStatsPanel;
+        GameObject m_PlayerStatsPanel;
 
         [SerializeField]
-        private PlayerStatsSO m_PlayerStatsData;
+        PlayerStatsSO m_PlayerStatsData;
 
         [SerializeField]
-        private TextMeshProUGUI m_DeathCountText;
+        TextMeshProUGUI m_DeathCountText;
 
         [SerializeField]
-        private TextMeshProUGUI m_EliminatedEnemiesCountText;
+        TextMeshProUGUI m_EliminatedEnemiesCountText;
 
         [SerializeField]
         InputActionReference m_InputActionReference;
 
-        private void OnEnable()
+        void OnEnable()
         {
             m_PlayerStatsData.DeathCount.OnValueChanged += OnDeathCountChanged;
             m_PlayerStatsData.EliminatedEnemiesCount.OnValueChanged += OnEliminatedEnemiesCountChanged;
@@ -32,7 +32,7 @@ namespace BTG.Gameplay.UI
             m_InputActionReference.action.performed += OnInputActionPerformed;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             m_InputActionReference.action.performed -= OnInputActionPerformed;
             m_InputActionReference.action.Disable();
@@ -41,21 +41,21 @@ namespace BTG.Gameplay.UI
             m_PlayerStatsData.EliminatedEnemiesCount.OnValueChanged -= OnEliminatedEnemiesCountChanged;
         }
 
-        private void Start()
+        void Start()
         {
             HidePanel();
         }
 
-        private void ShowPanel() => m_PlayerStatsPanel.SetActive(true);
+        void ShowPanel() => m_PlayerStatsPanel.SetActive(true);
 
-        private void HidePanel() => m_PlayerStatsPanel.SetActive(false);
+        void HidePanel() => m_PlayerStatsPanel.SetActive(false);
 
-        private void OnDeathCountChanged() => m_DeathCountText.text = m_PlayerStatsData.DeathCount.Value.ToString();
+        void OnDeathCountChanged() => m_DeathCountText.text = m_PlayerStatsData.DeathCount.Value.ToString();
 
-        private void OnEliminatedEnemiesCountChanged() 
+        void OnEliminatedEnemiesCountChanged() 
             => m_EliminatedEnemiesCountText.text = m_PlayerStatsData.EliminatedEnemiesCount.Value.ToString();
     
-        private void OnInputActionPerformed(InputAction.CallbackContext context)
+        void OnInputActionPerformed(InputAction.CallbackContext context)
         {
             if (m_PlayerStatsPanel.activeSelf)
                 HidePanel();
