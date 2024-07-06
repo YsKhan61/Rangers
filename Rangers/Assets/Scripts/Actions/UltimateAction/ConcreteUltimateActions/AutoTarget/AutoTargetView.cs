@@ -15,7 +15,7 @@ namespace BTG.Actions.UltimateAction
         private float m_Speed;
         private Transform m_Target;
 
-        private bool m_IsLaunched = false;
+        protected bool isLaunched = false;
         private Quaternion m_FinalRotation;
         private CancellationTokenSource m_Cts;
 
@@ -25,7 +25,7 @@ namespace BTG.Actions.UltimateAction
             m_Target = target;
             m_Speed = speed;
             Owner = owner;
-            m_IsLaunched = false;
+            isLaunched = false;
         }
 
         public void Launch()
@@ -36,7 +36,7 @@ namespace BTG.Actions.UltimateAction
                 return;
             }
 
-            m_IsLaunched = true;
+            isLaunched = true;
         }
 
         public void AutoDestroy(int delay)
@@ -86,16 +86,16 @@ namespace BTG.Actions.UltimateAction
             }
         }
 
-        private void Despawn()
+        protected virtual void Despawn()
         {
             // later we will use object pooling
-            m_IsLaunched = false;
-            GetComponent<NetworkObject>().Despawn(true);
+            isLaunched = false;
+            Destroy(gameObject);
         }
 
         private void UpdateProjectilePosition()
         {
-            if (!m_IsLaunched)
+            if (!isLaunched)
             {
                 return;
             }
