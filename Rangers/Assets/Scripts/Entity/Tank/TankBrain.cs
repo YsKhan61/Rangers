@@ -12,8 +12,8 @@ using VContainer;
 namespace BTG.Entity.Tank
 {
     /// <summary>
-    /// The TankBrain for the tank. It handles the communications between Model, View and other controllers such as 
-    /// PrimaryAction, UltimateAction.
+    /// The TankBrain for the tank entities. It handles the communications between Model, View and other controllers such as 
+    /// PrimaryAction, UltimateAction. It acts as a Mediator.
     /// </summary>
     public class TankBrain : IEntityBrain
     {
