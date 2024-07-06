@@ -20,9 +20,6 @@ namespace BTG.Utilities
         /// Method to raise the event
         /// </summary>
         /// <param name="value">value to be passed through the event</param>
-        public virtual void RaiseEvent(T value)
-        {
-            OnEventRaised?.Invoke(value);
-        }
+        public virtual void RaiseEvent(T value) => OnEventRaised?.Invoke(value);
     }
 }
