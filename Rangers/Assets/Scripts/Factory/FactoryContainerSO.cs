@@ -12,6 +12,8 @@ namespace BTG.Factory
     /// The item types must implement the IFactoryItem interface
     /// </summary>
     /// <typeparam name="T">Type of the item that will be created</typeparam>
+    /// <remarks> NOTE - We cannot create asset menu for this scriptable object, as it is generic. 
+    /// Create concreate types for creating assets in editor</remarks>
     public abstract class FactoryContainerSO<T> : ScriptableObject
         where T : IFactoryItem
     {
@@ -33,6 +35,9 @@ namespace BTG.Factory
             }
         }
 
+        /// <summary>
+        /// Get the factory based on the tag
+        /// </summary>
         public FactorySO<T> GetFactory(TagSO tag)
         {
             foreach (var factory in m_Factories)
