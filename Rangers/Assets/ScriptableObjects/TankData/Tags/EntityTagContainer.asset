@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: EntityTagContainer
   m_EditorClassIdentifier: 
   m_DataList:
-  - {fileID: 11400000, guid: 7e3afa666a195e340945b3f1c439667d, type: 2}
-  - {fileID: 11400000, guid: ff449acedbb99664dae572a6d2a39ccd, type: 2}
-  - {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c, type: 2}
-  - {fileID: 11400000, guid: bfe2cbf5ccbcf0148a045f79622904c5, type: 2}
   - {fileID: 11400000, guid: b2a59197b7f46df42af7dac80f024442, type: 2}
   - {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
   - {fileID: 11400000, guid: a607b5790b877e84da73dcb4a0497711, type: 2}
