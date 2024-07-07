@@ -39,6 +39,12 @@ This is a fun project where we have tank rangers of various abilities who can fi
 Tank Selection Panel
  ![TankSelection UI](https://github.com/YsKhan61/Tank_Rangers/assets/30847550/ea05850b-1e8e-4044-bd5b-857b08c8c587)
 
+ Entity Flow Diagram
+ ![Entity Flow Diagram](https://github.com/YsKhan61/Rangers/assets/30847550/085b504e-af1e-436c-8fd7-5cd40e958a26)
+
+ Tank Entity Flow Diagram
+ ![Tank Entity Flow Diagram](https://github.com/YsKhan61/Rangers/assets/30847550/c1c57f34-0684-4a58-a8b2-e69f7c9b73fa)
+
 
 Ultimate Actions Abilities
 - Air Strike
