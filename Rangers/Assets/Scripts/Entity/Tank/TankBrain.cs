@@ -20,13 +20,6 @@ namespace BTG.Entity.Tank
         public event Action<bool> OnEntityVisibilityToggled;
         public event Action<CameraShakeEventData> OnPlayerCameraShake;
 
-        public enum TankState
-        {
-            Idle,
-            Moving,
-            Deactive
-        }
-
         public TagSO Tag => m_Model.TankData.Tag;
 
         private TankModel m_Model;
@@ -104,7 +97,7 @@ namespace BTG.Entity.Tank
         /// </summary>
         public void Init()
         {
-            m_Model.State = TankState.Idle;
+            m_Model.State = TankModel.TankState.Idle;
             OnTankStateChangedToIdle();
 
             m_PrimaryAction.Enable();
@@ -118,7 +111,7 @@ namespace BTG.Entity.Tank
 
         public void InitNonServer()
         {
-            m_Model.State = TankState.Idle;
+            m_Model.State = TankModel.TankState.Idle;
             OnTankStateChangedToIdle();
 
             UnityMonoBehaviourCallbacks.Instance.RegisterToUpdate(this);
@@ -263,17 +256,17 @@ namespace BTG.Entity.Tank
         {
             switch (m_Model.State)
             {
-                case TankState.Idle:
+                case TankModel.TankState.Idle:
                     if (CurrentMoveSpeed > 0.05f)
                     {
-                        m_Model.State = TankState.Moving;
+                        m_Model.State = TankModel.TankState.Moving;
                         OnTankStateChangedToDriving();
                     }
                     break;
-                case TankState.Moving:
+                case TankModel.TankState.Moving:
                     if (CurrentMoveSpeed <= 0.05f)
                     {
-                        m_Model.State = TankState.Idle;
+                        m_Model.State = TankModel.TankState.Idle;
                         OnTankStateChangedToIdle();
                     }
                     break;
@@ -282,7 +275,7 @@ namespace BTG.Entity.Tank
 
         private void UpdateMoveSound()
         {
-            if (m_Model.State != TankState.Moving)
+            if (m_Model.State != TankModel.TankState.Moving)
                 return;
 
             m_View.AudioView.UpdateEngineDrivingClipPitch(

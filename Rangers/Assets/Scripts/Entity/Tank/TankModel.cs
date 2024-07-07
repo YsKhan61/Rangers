@@ -1,4 +1,3 @@
-using BTG.Entity;
 using BTG.Utilities;
 using UnityEngine;
 
@@ -6,6 +5,13 @@ namespace BTG.Entity.Tank
 {
     public class TankModel : IEntityModel
     {
+        public enum TankState
+        {
+            Idle,
+            Moving,
+            Deactive
+        }
+
         public bool IsPlayer { get; set; }
         public bool IsNetworkPlayer { get; set; }
         public ulong OwnerClientId { get; set; }
@@ -14,7 +20,7 @@ namespace BTG.Entity.Tank
         private TankDataSO m_TankData;
         public TankDataSO TankData => m_TankData;
 
-        public TankBrain.TankState State;
+        public TankState State;
 
         public int MaxHealth => m_TankData.MaxHealth;
         public float Acceleration => m_TankData.Acceleration;
@@ -44,7 +50,7 @@ namespace BTG.Entity.Tank
             IsNetworkPlayer = false;
             NetworkObjectId = default(ulong);
             OppositionLayer = 0;
-            State = TankBrain.TankState.Deactive;
+            State = TankState.Deactive;
         }
     }
 }

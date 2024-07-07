@@ -1,6 +1,5 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
-using BTG.Effects;
 using BTG.Events;
 using BTG.Factory;
 using BTG.Utilities;

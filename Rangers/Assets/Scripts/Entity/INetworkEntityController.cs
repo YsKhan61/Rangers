@@ -1,5 +1,8 @@
 ﻿namespace BTG.Entity
 {
+    /// <summary>
+    /// This interface is used to define the controller of a network entity
+    /// </summary>
     public interface INetworkEntityController
     {
         /// <summary>
