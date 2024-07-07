@@ -43,7 +43,13 @@ namespace BTG.Gameplay.GameState
 
             SetPlayerNameToUI();
         }
-        
+
+        public void OnDisable()
+        {
+            m_PlayerService.DeInitialize();
+            m_EnemyService.DeInitialize();
+        }
+
         private void InitializePlayerService()
         {
             m_PlayerService.Initialize();

@@ -23,7 +23,11 @@ namespace BTG.Entity.Tank
             m_EngineAudioSource.Play();
         }
 
-        public void StopEngineAudio() => m_EngineAudioSource.Stop();
+        public void StopEngineAudio()
+        {
+            if (m_EngineAudioSource != null && m_EngineAudioSource.isPlaying)
+                m_EngineAudioSource.Stop();
+        }
 
         public void PlayEngineDrivingClip(AudioClip clip)
         {

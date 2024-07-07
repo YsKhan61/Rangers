@@ -37,11 +37,6 @@ namespace BTG.Enemy
             m_Cts = new CancellationTokenSource();
         }
 
-        ~EnemyService()
-        {
-            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
-        }
-
         /// <summary>
         /// This method initializes the enemy service.
         /// It creates the enemy pool and starts the first wave.
@@ -54,6 +49,12 @@ namespace BTG.Enemy
             m_ObjectResolver.Inject(m_EnemyPool);
 
             StartNextWaveWithEntityTags();
+        }
+
+        public void DeInitialize()
+        {
+            HelperMethods.CancelAndDisposeCancellationTokenSource(m_Cts);
+            m_EnemyPool.ClearPool();
         }
 
         /// <summary>

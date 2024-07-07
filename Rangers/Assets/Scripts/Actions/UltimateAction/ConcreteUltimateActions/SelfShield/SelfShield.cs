@@ -75,8 +75,12 @@ namespace BTG.Actions.UltimateAction
 
         private void DeInitVisual()
         {
+            if (m_View == null)
+            {
+                return;
+            }
+
             Object.Destroy(m_View.gameObject);
-            m_View = null;
         }
 
         private void InvokeEffectEvent()

@@ -10,7 +10,7 @@ namespace BTG.Enemy
     /// <summary>
     /// A Controller for the enemy tank
     /// </summary>
-    public class EnemyController : IEntityController
+    public class EnemyController : IEntityController, IDestroyable
     {
         private EnemyDataSO m_Data;
         /// <summary>
@@ -235,6 +235,16 @@ namespace BTG.Enemy
             m_Pool.ReturnEnemy(this);
 
             m_Service.OnEnemyDeath();
+        }
+
+        public void Destroy()
+        {
+            m_StateMachine.DeInit();
+            m_StateMachine = null;
+            // m_EntityBrain.DeInit();
+            UnsubscribeFromEvents();
+            m_EntityBrain = null;
+
         }
 
         public void ShowView() => m_View.ToggleView(true);

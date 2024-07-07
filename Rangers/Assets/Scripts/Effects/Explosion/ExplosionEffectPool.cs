@@ -22,12 +22,6 @@ namespace BTG.Effects
         {
             ExplosionView view = new GameObject(m_Data.name).AddComponent<ExplosionView>();
             ParticleSystem ps = Object.Instantiate(m_Data.ParticleSystemPrefab, view.transform);
-            /*AudioSource audioSource = view.gameObject.AddComponent<AudioSource>();
-            audioSource.clip = m_Data.AudioClip;
-            audioSource.loop = false;
-            audioSource.spatialBlend = 1;
-            audioSource.playOnAwake = false;*/
-            // view.Initialize(ps, audioSource, this);
             view.Initialize(ps, this, m_Data);
             return view;
         }

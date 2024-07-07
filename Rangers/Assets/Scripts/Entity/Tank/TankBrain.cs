@@ -220,6 +220,11 @@ namespace BTG.Entity.Tank
         public void Destroy()
         {
             OnEntityInitialized = null;
+            OnEntityInitialized = null;
+            OnEntityVisibilityToggled = null;
+
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+            UnityMonoBehaviourCallbacks.Instance.UnregisterFromDestroy(this);
         }
 
         public void ToggleActorVisibility(bool value)

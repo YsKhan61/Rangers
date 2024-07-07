@@ -51,7 +51,9 @@ namespace BTG.Actions.PrimaryAction
             SceneManager.activeSceneChanged -= OnActiveSceneChanged;
 
             m_Pool?.ClearPool();
+            m_Pool = null;
             m_NetworkPool?.ClearPool();
+            m_NetworkPool = null;
         }
     }
 }

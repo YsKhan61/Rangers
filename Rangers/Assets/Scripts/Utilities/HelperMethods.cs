@@ -48,7 +48,7 @@ namespace BTG.Utilities
         /// <param name="cancellationTokenSource"> the CancellationTokenSource to dispose</param>
         public static void CancelAndDisposeCancellationTokenSource(CancellationTokenSource cancellationTokenSource)
         {
-            if (cancellationTokenSource != null)
+            if (cancellationTokenSource != null && !cancellationTokenSource.IsCancellationRequested)
             {
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();

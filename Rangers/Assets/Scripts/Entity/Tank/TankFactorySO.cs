@@ -89,8 +89,8 @@ namespace BTG.Entity.Tank
         void OnActiveSceneChanged(Scene current, Scene next)
         {
             SceneManager.activeSceneChanged -= OnActiveSceneChanged;
-
             m_Pool?.ClearPool();
+            m_Pool = null;
         }
     }
 }

@@ -39,10 +39,14 @@ namespace BTG.Player
             m_PlayerStats.EntityTagSelected.OnValueChanged += OnPlayerTankIDSelected;
         }
 
-        ~PlayerService()
+        public void DeInitialize()
         {
             m_PlayerStats.EntityTagSelected.OnValueChanged -= OnPlayerTankIDSelected;
             HelperMethods.CancelAndDisposeCancellationTokenSource(m_CTS);
+
+            // m_Controller.DeInitEntity();
+            m_Controller.DeInit();
+            m_Controller = null;
         }
 
         public void SetPlayerVirtualCamera(PlayerVirtualCamera pvc)

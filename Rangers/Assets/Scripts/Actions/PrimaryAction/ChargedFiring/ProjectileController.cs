@@ -73,8 +73,8 @@ namespace BTG.Actions.PrimaryAction
 
         private void ResetProjectile()
         {
-            m_View.Rigidbody.velocity = Vector3.zero;
-            m_View.Rigidbody.angularVelocity = Vector3.zero;
+            /*m_View.Rigidbody.velocity = Vector3.zero;
+            m_View.Rigidbody.angularVelocity = Vector3.zero;*/
             m_View.Rigidbody.isKinematic = true;
 
             m_View.Hide();

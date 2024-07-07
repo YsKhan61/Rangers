@@ -33,6 +33,7 @@ namespace BTG.Effects
             SceneManager.activeSceneChanged -= OnActiveSceneChanged;
 
             m_Pool?.ClearPool();
+            m_Pool = null;
         }
     }
 }
