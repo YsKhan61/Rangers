@@ -1,5 +1,4 @@
-﻿using BTG.Actions.UltimateAction;
-using BTG.Entity;
+﻿using BTG.Entity;
 using BTG.Gameplay.UI;
 using BTG.Player;
 using BTG.Utilities;
@@ -31,9 +30,6 @@ namespace BTG.Gameplay.GameplayObjects
 
         [Inject]
         private EntityDataContainerSO m_EntityDataContainer;
-
-        [Inject]
-        private UltimateActionDataContainerSO m_UltimateActionDataContainer;
 
         [Inject]
         private PlayerStatsSO m_PlayerStats;

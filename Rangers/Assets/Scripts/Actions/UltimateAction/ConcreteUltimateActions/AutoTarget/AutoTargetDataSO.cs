@@ -24,8 +24,8 @@ namespace BTG.Actions.UltimateAction
         public AutoTargetView AutoTargetViewPrefab => m_AutoTargetViewPrefab;
 
         [SerializeField, Tooltip("This will be the actual network visual")]
-        private AutoTargetView m_NetworkAutoTargetView;
-        public AutoTargetView NetworkAutoTargetView => m_NetworkAutoTargetView;
+        private NetworkAutoTargetView m_NetworkAutoTargetView;
+        public NetworkAutoTargetView NetworkAutoTargetView => m_NetworkAutoTargetView;
 
         [SerializeField]
         private int m_ProjectileSpeed;

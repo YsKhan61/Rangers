@@ -11,10 +11,6 @@ namespace BTG.Actions.UltimateAction
         private int m_Duration;
         public int Duration => m_Duration;
 
-        [SerializeField] 
-        private InvisibilityView m_InvisibilityViewPrefab;
-        public InvisibilityView InvisibilityViewPrefab => m_InvisibilityViewPrefab;
-
         [SerializeField, Tooltip("The tag of the effect that executes before the actor will become invisible")] 
         private TagSO m_InvisibleEffectTag;
         public TagSO InvisibleEffectTag => m_InvisibleEffectTag;

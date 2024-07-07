@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace BTG.Actions.UltimateAction
 {
+    /// <summary>
+    /// Data for the AirStrike ultimate action
+    /// </summary>
     [CreateAssetMenu(fileName = "AirStrike", menuName = "ScriptableObjects/UltimateAction/AirStrikeDataSO")]
     public class AirStrikeDataSO : UltimateActionDataSO
     {

@@ -1,6 +1,5 @@
 using BTG.Actions.PrimaryAction;
 using BTG.Actions.UltimateAction;
-using BTG.Entity;
 using BTG.Events;
 using BTG.Utilities;
 using BTG.Utilities.EventBus;
