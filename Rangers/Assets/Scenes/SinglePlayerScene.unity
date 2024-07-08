@@ -664,12 +664,12 @@ GameObject:
   - component: {fileID: 1304999366}
   - component: {fileID: 1304999367}
   m_Layer: 0
-  m_Name: Audio
+  m_Name: ' Background Audio'
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1304999366
 Transform:
   m_ObjectHideFlags: 0
