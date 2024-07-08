@@ -14,6 +14,8 @@ namespace BTG.Actions.PrimaryAction
         public void SetDamage(int damage);
         public void AddImpulseForce(float force);
         public void Show();
+        public void Hide();
+        public void ReturnToPool();
     }
 
 }

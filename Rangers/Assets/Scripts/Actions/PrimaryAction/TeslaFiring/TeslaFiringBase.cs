@@ -58,6 +58,11 @@ namespace BTG.Actions.PrimaryAction
             m_IsEnabled = false;
             m_Cts?.Cancel();
             UnityMonoBehaviourCallbacks.Instance.UnregisterFromUpdate(this);
+
+            if (m_BallInCharge != null)
+            {
+                m_BallInCharge.ReturnToPool();
+            }
         }
 
         public void SetActor(IPrimaryActor actor) => this.actor = actor;

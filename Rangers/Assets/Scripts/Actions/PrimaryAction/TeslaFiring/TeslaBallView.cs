@@ -64,18 +64,25 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         public void SetDamage(int damage) => m_Damage = damage;
 
-        public virtual void Show()
+        public void Show()
         {
             gameObject.SetActive(true);
             m_ParticleSytem.Play();
             m_Collider.enabled = true;
         }
 
-        protected virtual void Hide()
+        public void Hide()
         {
             m_ParticleSytem.Stop();
             gameObject.SetActive(false);
             m_Collider.enabled = false;
+        }
+
+        public void ReturnToPool()
+        {
+            m_TeslaFiring = null;
+            Hide();
+            m_Pool.ReturnTeslaBall(this);
         }
 
         private void OnHitSomething(Collider other)
@@ -89,7 +96,7 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(m_Damage);
             }
 
-            Reset();
+            ReturnToPool();
         }
 
         private void DoExplosionEffect()
@@ -101,17 +108,12 @@ namespace BTG.Actions.PrimaryAction
             });
         }
 
-        private void Reset()
+        /*private void ResetRigidbody()
         {
             m_Rigidbody.Sleep();
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
-            m_TeslaFiring = null;
-
-            Hide();
-
-            m_Pool.ReturnTeslaBall(this);
-        }
+        }*/
 
         
 

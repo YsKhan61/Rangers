@@ -80,7 +80,7 @@ namespace BTG.Actions.PrimaryAction
             m_ParticleSytem.Play();
         }
 
-        private void Hide()
+        public void Hide()
         {
             if (!IsServer) return;
             m_Collider.enabled = false;
@@ -91,6 +91,13 @@ namespace BTG.Actions.PrimaryAction
         private void Hide_ClientRpc()
         {
             m_ParticleSytem.Stop();
+        }
+
+        public void ReturnToPool()
+        {
+            m_TeslaFiring = null;
+            Hide();
+            m_Pool.ReturnTeslaBall(this);
         }
 
         private void OnHitSomething(Collider other)
@@ -108,7 +115,7 @@ namespace BTG.Actions.PrimaryAction
                 damageable.Damage(ActorOwnerClientId, m_Damage);
             }
 
-            Reset();
+            ReturnToPool();
         }
 
         private void DoExplosionEffect()
@@ -120,14 +127,6 @@ namespace BTG.Actions.PrimaryAction
                 TagNetworkGuid = m_Data.HitEffectTag.Guid.ToNetworkGuid(),
                 EffectPosition = transform.position
             });
-        }
-
-        private void Reset()
-        {
-            m_TeslaFiring = null;
-
-            Hide();
-            m_Pool.ReturnTeslaBall(this);
         }
     }
 
