@@ -1,0 +1,26 @@
+{
+    "name": "BTG.ConnectionManagement",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b",
+        "GUID:e9e5562f77c754b2ca364915385b3d43",
+        "GUID:f2d49d9fa7e7eb3418e39723a7d3b92f",
+        "GUID:03058786646e84a4587858e9302c3f41",
+        "GUID:5540e30183c82e84b954c033c388e06c",
+        "GUID:4c3f49d89436d478ea78315c03159dcc",
+        "GUID:fe25561d224ed4743af4c60938a59d0b",
+        "GUID:c2633c40320e242449b2934fd5f80311"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

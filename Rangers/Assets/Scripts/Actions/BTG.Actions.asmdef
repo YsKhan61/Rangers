@@ -1,0 +1,20 @@
+{
+    "name": "BTG.Actions",
+    "rootNamespace": "",
+    "references": [
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:6bbdedd56c6c71344b5a6f18913279d0",
+        "GUID:5bbdbd3d1d0b81949b3f81b5188e2c1c",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:3b8ed52f1b5c64994af4c4e0aa4b6c4b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

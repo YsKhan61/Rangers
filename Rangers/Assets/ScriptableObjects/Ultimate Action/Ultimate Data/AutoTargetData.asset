@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 628c5f15370d6dd43aad0e685b1b1527, type: 3}
+  m_Name: AutoTargetData
+  m_EditorClassIdentifier: 
+  m_InstanceName: AutoTargetData
+  m_Guid: db4f398f4bb2c10f7716e25bde8b295d
+  m_Tag: {fileID: 11400000, guid: ff449acedbb99664dae572a6d2a39ccd, type: 2}
+  m_ChargeRate: 10
+  m_CenterOffset: 12
+  m_ImpactRadius: 15
+  m_FireRate: 2
+  m_AutoTargetViewPrefab: {fileID: 5104044539190100694, guid: 0970d6bb9cadb6a4896e60d0fce40db9,
+    type: 3}
+  m_NetworkAutoTargetView: {fileID: 8720886088232821963, guid: 069d449019275ab48b0dd8503c477bbd,
+    type: 3}
+  m_ProjectileSpeed: 7
+  m_Damage: 100
+  m_ExplosionTag: {fileID: 11400000, guid: c870c7b306ed73b4599bdf7791ac8982, type: 2}
+  m_BulletDuration: 5

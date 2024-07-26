@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5bbf5d671e1634ebfb6000b3d558be, type: 3}
+  m_Name: ChargedFiringData
+  m_EditorClassIdentifier: 
+  m_InstanceName: ChargedFiringData
+  m_Guid: d1a040bf4869f888742db4de31022485
+  m_Tag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
+  m_ChargeTime: 3
+  m_ViewPrefab: {fileID: 2128233426004463209, guid: 736c872dc6fd53c4cb7ca160774fb574,
+    type: 3}
+  m_NetworkViewPrefab: {fileID: -1186482412257946698, guid: ea13509cb13d61b408d8d52037e5d3c5,
+    type: 3}
+  m_Damage: 100
+  m_MinInitialSpeed: 10
+  m_MaxInitialSpeed: 30
+  m_ShootEffectTag: {fileID: 11400000, guid: cd90e7a0b5ffd78419a0fbb8d8c42fee, type: 2}
+  m_HitEffectTag: {fileID: 11400000, guid: a81c5445bf5da9f49966a95f6546b17e, type: 2}

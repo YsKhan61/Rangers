@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46f03ec6b60c01444ad1ba4942255c58, type: 3}
+  m_Name: GreenTankData
+  m_EditorClassIdentifier: 
+  m_Guid: 05ef316ba0459f45a0e99ba36f9b973c
+  m_Tag: {fileID: 11400000, guid: 7156caa8e35937248816b62b57aa56fb, type: 2}
+  m_Icon: {fileID: 21300000, guid: bdfe32dda5d992641a216786db1f1d4c, type: 3}
+  m_CharSelectSeatIndex: 1
+  m_TankViewPrefab: {fileID: 9016891696666167597, guid: 262561cd920f4c0469f11498a5309dde,
+    type: 3}
+  m_Graphics: {fileID: 6822843081197360788, guid: 984eeb0dadd658f42bc2d0f966c568a6,
+    type: 3}
+  m_MaxHealth: 150
+  m_Acceleration: 16
+  m_MaxSpeed: 20
+  m_RotateSpeed: 34
+  m_EngineIdleClip: {fileID: 8300000, guid: 4932ab25b84dd7649b80af68a9660ddc, type: 3}
+  m_EngineDrivingClip: {fileID: 8300000, guid: d7ca9fb5aa30155449192b23d7fb3336, type: 3}
+  m_ShotFiringClip: {fileID: 8300000, guid: 672a9941361ad494a99fba36759eca80, type: 3}
+  m_ShotChargingClip: {fileID: 8300000, guid: c17f124fcdc0f5446a72f793898bd74b, type: 3}
+  m_PrimaryActionTag: {fileID: 11400000, guid: 18e463d1e42fb2242a95caed72bde504, type: 2}
+  m_UltimateActionTag: {fileID: 11400000, guid: bcedb84cb0400a446a076e8966cb1f9c,
+    type: 2}
+  m_DeathSoundClip: {fileID: 8300000, guid: 5499847ca6ad2d844ba052ade29491e4, type: 3}

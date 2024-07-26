@@ -1,0 +1,30 @@
+{
+    "name": "BTG.Bootstrap",
+    "rootNamespace": "",
+    "references": [
+        "GUID:e467f712023d4e945a5089624b530858",
+        "GUID:b2145a4258701264d90cbc9ba54f8f92",
+        "GUID:0d4e6f139c28b45469d79a061684c314",
+        "GUID:a7f2be3a97c90de4f8c0e9a95ab0c256",
+        "GUID:b8cfd3c941086ef44b0ebc4e848b418f",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:574719a83b0dac7458607cd8602d7d79",
+        "GUID:4e2d5ff5feff06c45b50638295c59a19",
+        "GUID:09eeaced67e53d04a9cb3fe423386034",
+        "GUID:1491147abca9d7d4bb7105af628b223e",
+        "GUID:c957296194fb0164eab1f662ec2d809e",
+        "GUID:c2633c40320e242449b2934fd5f80311",
+        "GUID:e0cd26848372d4e5c891c569017e11f1",
+        "GUID:3ee0f82e6688e274ebecc0261e33d4a8",
+        "GUID:5bbdbd3d1d0b81949b3f81b5188e2c1c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
