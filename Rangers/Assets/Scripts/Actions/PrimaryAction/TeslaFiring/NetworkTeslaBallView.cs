@@ -27,7 +27,6 @@ namespace BTG.Actions.PrimaryAction
         public ulong ActorOwnerClientId { get; private set; }
 
         private NetworkTeslaBallPool m_Pool;
-        private TeslaFiringBase m_TeslaFiring;
         private TeslaFiringDataSO m_Data;
         private int m_Damage;
         private TagSO m_EffectTag;
@@ -41,16 +40,11 @@ namespace BTG.Actions.PrimaryAction
         /// Set the owner of the tesla ball
         /// </summary>
         public void SetOwner(Transform owner) => Owner = owner;
+
         public void SetActorOwnerClientId(ulong clientId) => ActorOwnerClientId = clientId;
 
-        /// <summary>
-        /// Set the tesla firing that fired the tesla ball
-        /// </summary>
-        public void SetTeslaFiring(TeslaFiringBase teslaFiring)
-        {
-            m_TeslaFiring = teslaFiring;
-            m_Data = m_TeslaFiring.Data;
-        }
+        public void SetTeslaFiringData(TeslaFiringDataSO data) => m_Data = data;
+
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
         /// </summary>
@@ -95,7 +89,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void ReturnToPool()
         {
-            m_TeslaFiring = null;
+            // m_TeslaFiring = null;
             Hide();
             m_Pool.ReturnTeslaBall(this);
         }

@@ -17,7 +17,7 @@ namespace BTG.Actions.PrimaryAction
         protected override void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
-            m_BallInCharge.SetTeslaFiring(this);
+            m_BallInCharge.SetTeslaFiringData(teslaFringData);
             (m_BallInCharge as INetworkTeslaBallView).SetActorOwnerClientId(actor.OwnerClientId);
         }
 
@@ -27,7 +27,7 @@ namespace BTG.Actions.PrimaryAction
             {
                 OwnerClientOnly = false,
                 FollowNetworkObject = false,
-                AudioTagNetworkGuid = Data.ShootEffectTag.Guid.ToNetworkGuid(),
+                AudioTagNetworkGuid = teslaFringData.ShootEffectTag.Guid.ToNetworkGuid(),
                 Position = actor.FirePoint.position
             });
         }

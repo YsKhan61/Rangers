@@ -16,7 +16,7 @@ namespace BTG.Actions.PrimaryAction
         protected override void SpawnBall()
         {
             m_BallInCharge = m_Pool.GetTeslaBall();
-            m_BallInCharge.SetTeslaFiring(this);
+            m_BallInCharge.SetTeslaFiringData(teslaFringData);
         }
 
         protected override void InvokeShootAudioEvent()

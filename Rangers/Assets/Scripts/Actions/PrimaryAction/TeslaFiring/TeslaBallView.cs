@@ -24,7 +24,6 @@ namespace BTG.Actions.PrimaryAction
         SphereCollider m_Collider;
         public SphereCollider Collider => m_Collider;
 
-        private TeslaFiringBase m_TeslaFiring;
         private TeslaFiringDataSO m_Data;
         private TeslaBallPool m_Pool;
         private int m_Damage;
@@ -39,14 +38,7 @@ namespace BTG.Actions.PrimaryAction
         /// </summary>
         public void SetOwner(Transform owner) => Owner = owner;
 
-        /// <summary>
-        /// Set the tesla firing that fired the tesla ball
-        /// </summary>
-        public void SetTeslaFiring(TeslaFiringBase teslaFiring)
-        {
-            m_TeslaFiring = teslaFiring;
-            m_Data = m_TeslaFiring.Data;
-        }
+        public void SetTeslaFiringData(TeslaFiringDataSO data) => m_Data = data;
 
         /// <summary>
         /// Add impulse force to the tesla ball to move it forward
@@ -80,7 +72,7 @@ namespace BTG.Actions.PrimaryAction
 
         public void ReturnToPool()
         {
-            m_TeslaFiring = null;
+            // m_TeslaFiring = null;
             Hide();
             m_Pool.ReturnTeslaBall(this);
         }
@@ -103,18 +95,10 @@ namespace BTG.Actions.PrimaryAction
         {
             EventBus<EffectEventData>.Invoke(new EffectEventData
             {
-                Tag = m_TeslaFiring.Data.HitEffectTag,
+                Tag = m_Data.HitEffectTag,
                 Position = transform.position
             });
         }
-
-        /*private void ResetRigidbody()
-        {
-            m_Rigidbody.Sleep();
-            transform.position = Vector3.zero;
-            transform.rotation = Quaternion.identity;
-        }*/
-
         
 
 #if UNITY_EDITOR

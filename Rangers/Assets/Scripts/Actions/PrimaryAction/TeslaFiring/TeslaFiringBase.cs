@@ -16,8 +16,6 @@ namespace BTG.Actions.PrimaryAction
         public event System.Action OnActionExecuted;
 
         protected TeslaFiringDataSO teslaFringData;
-        public TeslaFiringDataSO Data => teslaFringData;
-
         protected IPrimaryActor actor;
         protected ITeslaBallView m_BallInCharge;
 
@@ -74,6 +72,7 @@ namespace BTG.Actions.PrimaryAction
 
             m_IsCharging = true;
             SpawnBall();
+            
             ConfigureBall();
             OnActionStarted?.Invoke();
         }
