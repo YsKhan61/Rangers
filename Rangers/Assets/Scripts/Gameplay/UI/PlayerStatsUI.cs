@@ -15,6 +15,9 @@ namespace BTG.Gameplay.UI
         PlayerStatsSO m_PlayerStatsData;
 
         [SerializeField]
+        TextMeshProUGUI m_PlayerNameText;
+
+        [SerializeField]
         TextMeshProUGUI m_DeathCountText;
 
         [SerializeField]
@@ -25,6 +28,7 @@ namespace BTG.Gameplay.UI
 
         void OnEnable()
         {
+            m_PlayerStatsData.PlayerName.OnValueChanged += OnPlayerNameChanged;
             m_PlayerStatsData.DeathCount.OnValueChanged += OnDeathCountChanged;
             m_PlayerStatsData.EliminatedEnemiesCount.OnValueChanged += OnEliminatedEnemiesCountChanged;
 
@@ -34,6 +38,7 @@ namespace BTG.Gameplay.UI
 
         void OnDisable()
         {
+            m_PlayerStatsData.PlayerName.OnValueChanged -= OnPlayerNameChanged;
             m_InputActionReference.action.performed -= OnInputActionPerformed;
             m_InputActionReference.action.Disable();
 
@@ -49,6 +54,8 @@ namespace BTG.Gameplay.UI
         void ShowPanel() => m_PlayerStatsPanel.SetActive(true);
 
         void HidePanel() => m_PlayerStatsPanel.SetActive(false);
+
+        void OnPlayerNameChanged() => m_PlayerNameText.text = m_PlayerStatsData.PlayerName.Value;
 
         void OnDeathCountChanged() => m_DeathCountText.text = m_PlayerStatsData.DeathCount.Value.ToString();
 
